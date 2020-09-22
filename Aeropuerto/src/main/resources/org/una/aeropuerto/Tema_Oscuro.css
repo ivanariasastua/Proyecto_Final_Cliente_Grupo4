@@ -1,0 +1,269 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20 sep 2020, 1:29:39
+    Author     : ivana
+*/
+/*
+    public static Color color1 = Color.FromArgb(172, 126, 241);
+    public static Color color2 = Color.FromArgb(249, 118, 176);
+    public static Color color3 = Color.FromArgb(253, 138, 114);
+    public static Color color4 = Color.FromArgb(95, 77, 221);
+    public static Color color5 = Color.FromArgb(249, 88, 155);
+    public static Color color6 = Color.FromArgb(24, 161, 251);
+    
+*/
+.raiz{
+    -fx-background-color: #2a2d4d;
+}
+
+.campos_texto_1{
+    -jfx-unfocus-color: #B2B2B2;
+    -fx-font: bold 16pt "Courier";
+    -jfx-focus-color: white;
+    -fx-text-fill: derive(white, 20%);
+}
+
+.button{ 
+    -fx-rippler-fill:firebrick;
+    -jfx-rippler-fill: transparent; 
+}
+
+.button_1{
+    -fx-text-fill: #B2B2B2;
+    -fx-font: bold 16pt "Courier";
+    -fx-border-color: #2b702b;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -jfx-button-type: FLAT;
+    -jfx-rippler-fill: red;
+}
+
+.button_1:hover{
+    -fx-background-color: #2b702b;
+}
+
+.button_2{
+    -fx-text-fill: #B2B2B2;
+    -fx-font: bold 16pt "Courier";
+    -fx-border-color: #990000;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -jfx-button-type: FLAT;
+    -jfx-rippler-fill: red;
+}
+
+.button_2:hover{
+    -fx-background-color: #990000;
+}
+
+.lblTitulo_1{
+    -fx-font: bold 22pt "Courier";
+    -fx-text-fill: white;
+    -fx-alignment: CENTER;
+}
+
+/*LogIn Exclusivo*/
+
+#imvCedula{
+    -fx-opacity: 0.8;
+    -fx-image:url('resources/id-card.png')
+}
+
+#imvPassword{
+    -fx-opacity: 0.8;
+    -fx-image:url('resources/key.png')
+}
+
+#imvLogIn{
+    -fx-opacity: 0.8;
+    -fx-image:url('resources/login.png')
+}
+
+#imvMinimizar{
+    -fx-opacity: 0.8;
+    -fx-image:url('resources/minimize.png')
+}
+/*Principal Exclusivo*/
+
+.marco{
+    -fx-background-color: #2a2746;
+}
+
+.titled-pane {
+    -fx-skin: "com.sun.javafx.scene.control.skin.TitledPaneSkin";    
+    -fx-text-fill: #B2B2B2;
+    -fx-font: bold 12pt "Courier";
+}
+
+.titled-pane:selected {
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 0 5;
+}
+
+.titled-pane:hover .title{
+    -fx-background-color: #2a2d4d;
+    -fx-border-color: #2a2d4d;
+    -fx-border-width: 0 0 0 5;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #2a2746;
+}
+
+
+.titled-pane > .title > .arrow-button {
+    -fx-background-color: null;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+.titled-pane:collapsed > .title > .arrow-button .arrow {
+    -fx-rotate: -90;
+}
+
+.titled-pane > *.content {
+    -fx-background-color: #2a2746;
+ }
+
+.titled-pane:focused > .title > .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+#imvInicio{
+    -fx-image:url('resources/home.png');
+}
+
+#imvEmpleados{
+    -fx-image:url('resources/employees.png');
+}
+
+#imvAreas{
+    -fx-image:url('resources/workplace.png');
+}
+
+#imvGastos{
+    -fx-image:url('resources/dollar.png');
+}
+
+#imvIncidentes{
+    -fx-image:url('resources/alert.png');
+}
+
+#imvReport{
+    -fx-image:url('resources/report.png');
+}
+
+#imvTrasaccion{
+    -fx-image:url('resources/data-transfer.png');
+}
+
+#imvCerrarSesion{
+    -fx-image:url('resources/logout.png');
+}
+
+#menu{
+   -fx-background-color: #2a2746;
+}
+
+#menu > .viewport {
+   -fx-background-color: #2a2746;
+}
+
+#accordioMenu{
+    -fx-border-width: 0;
+}
+
+#meno:focused{
+    -fx-color: #2a2746;
+}
+
+.scroll-bar:horizontal .track, .scroll-bar:vertical .track{
+    -fx-background-color: #6262b3;
+    -fx-border-color :#6262b3;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :2.0em;
+}
+
+
+.scroll-bar:horizontal .increment-button , .scroll-bar:horizontal .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button , .scroll-bar:vertical .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 10.0 0.0 0.0;
+
+}
+
+ .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : -4 4 4 -4;
+}
+
+ .scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : -4 4 4 -4;
+}
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color: #2a3167;
+}
+
+.scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
+    -fx-background-color : #2a4085;
+}
+
+
+#imvMaxRes{
+    -fx-image:url('resources/maximize-size-option.png');
+}
+
+#imvMin{
+    -fx-image:url('resources/minimize.png');
+}
+
+#imvClose{
+    -fx-image:url('resources/cancel.png');
+}
+
+.lblMarco{
+    -fx-background-radius: 10;
+}
+
+.lblMarco:hover{
+    -fx-background-color: #6262b3;
+    -fx-opacity: 0.8;
+}
+
+.button_3{
+    -fx-text-fill: white;
+    -fx-font: italic 14pt "Courier";
+    -fx-border-color: #6262b3;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+}
+
+.button_3:hover{
+    -fx-background-color: #6262b3;
+}
+
+#lblUser{
+    -fx-text-fill: white;
+    -fx-font: italic 14pt "Courier";
+    -fx-alignment: CENTER;
+}
+
+#hamMenu StackPane {
+    -fx-background-color: white;
+}

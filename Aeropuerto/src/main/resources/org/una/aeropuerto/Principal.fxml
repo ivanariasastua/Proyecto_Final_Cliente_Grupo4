@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane minHeight="700.0" minWidth="1100.0" prefHeight="700.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.PrincipalController">
+   <top>
+      <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="1100.0" styleClass="marco" BorderPane.alignment="CENTER">
+         <children>
+            <JFXHamburger fx:id="hamMenu" onMouseClicked="#accionDeslizarMenu">
+               <HBox.margin>
+                  <Insets left="2.0" right="2.0" />
+               </HBox.margin>
+            </JFXHamburger>
+            <Label fx:id="lblUser" prefHeight="50.0" prefWidth="254.0" text="Ivan Josue Arias Astua">
+               <HBox.margin>
+                  <Insets left="4.0" right="2.0" />
+               </HBox.margin>
+            </Label>
+            <Label layoutX="490.0" layoutY="10.0" prefHeight="50.0" prefWidth="664.0" styleClass="lblTitulo_1" text="SISTEMA AEROPUERTO">
+               <HBox.margin>
+                  <Insets left="2.0" right="2.0" />
+               </HBox.margin>
+            </Label>
+            <Label alignment="CENTER" onMouseClicked="#accionMinimizar" prefHeight="46.0" prefWidth="46.0" styleClass="lblMarco">
+               <graphic>
+                  <ImageView id="imvMin" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </Label>
+            <Label alignment="CENTER" layoutX="1082.0" layoutY="27.0" onMouseClicked="#accionMaximizarRestaurar" prefHeight="46.0" prefWidth="46.0" styleClass="lblMarco">
+               <graphic>
+                  <ImageView id="imvMaxRes" fx:id="imvMaximizarRestaurar" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </Label>
+            <Label alignment="CENTER" layoutX="1082.0" layoutY="27.0" onMouseClicked="#accionCerrar" prefHeight="46.0" prefWidth="46.0" styleClass="lblMarco">
+               <graphic>
+                  <ImageView id="imvClose" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+   <left>
+      <VBox prefHeight="650.0" prefWidth="300.0" styleClass="marco" BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane id="menu" hbarPolicy="NEVER" prefHeight="650.0" prefWidth="300.0">
+               <content>
+                  <Accordion id="accordioMenu" prefHeight="650.0" prefWidth="286.0">
+                     <panes>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" prefHeight="0.0" prefWidth="250.0" text="Inicio">
+                           <graphic>
+                              <ImageView id="imvInicio" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" text="Empleados">
+                           <graphic>
+                              <ImageView id="imvEmpleados" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" text="Areas de Trabajo">
+                           <graphic>
+                              <ImageView id="imvAreas" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="60.0" text="Gastos de Servicios">
+                           <graphic>
+                              <ImageView id="imvGastos" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                           <content>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionServicios" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Servicios">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionRegistrarGasto" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Registro de Gastos">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionSeguimientoGasto" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Seguimiento de Gastos">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="266.0" text="Incidentes">
+                           <graphic>
+                              <ImageView id="imvIncidentes" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                           <content>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionCategorias" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Categorias">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionRegistrarIncidente" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Registro de Incidentes">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="50.0" onAction="#accionSeguimientoIncidentes" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Seguimiento de Incidentes">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="291.0" text="Reportes">
+                           <content>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionReporteGastos" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Gastos de Servicios">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionReporteIncidentes" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Incidentes Registrados">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionHoraLaboradas" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Horas Laboradas">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </content>
+                           <graphic>
+                              <ImageView id="imvReport" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="316.0" text="Transacciones">
+                           <graphic>
+                              <ImageView id="imvTrasaccion" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="160.0" text="Cerrar Sesion">
+                           <graphic>
+                              <ImageView id="imvCerrarSesion" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                        </TitledPane>
+                     </panes>
+                  </Accordion>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </left>
+</BorderPane>
