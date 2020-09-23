@@ -13,6 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
+import org.una.aeropuerto.util.FlowController;
 
 /**
  * FXML Controller class
@@ -46,6 +48,9 @@ public class LogInController extends Controller implements Initializable {
 
     @FXML
     private void accionLogIn(ActionEvent event) {
+        
+        FlowController.getInstance().goViewInResizableWindow("Principal", 0, 1100, 0, 700, Boolean.TRUE, StageStyle.UNDECORATED);
+        this.closeWindow();
     }
 
     @FXML

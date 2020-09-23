@@ -18,7 +18,7 @@ import javafx.stage.Window;
 public class Mensaje {
     
 
-    public void show(AlertType tipo, String titulo, String mensaje) {
+    public static void show(AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
@@ -26,7 +26,7 @@ public class Mensaje {
         alert.showAndWait();
     }
 
-    public void showModal(AlertType tipo, String titulo, Window padre, String mensaje) {
+    public static void showModal(AlertType tipo, String titulo, Window padre, String mensaje) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
@@ -35,7 +35,7 @@ public class Mensaje {
         alert.showAndWait();
     }
     
-    public Boolean showConfirmation(String titulo, Window padre, String mensaje) {
+    public static Boolean showConfirmation(String titulo, Window padre, String mensaje) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);

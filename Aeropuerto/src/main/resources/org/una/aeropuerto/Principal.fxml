@@ -2,9 +2,12 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.ImageView?>
@@ -14,23 +17,51 @@
 
 <BorderPane minHeight="700.0" minWidth="1100.0" prefHeight="700.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.PrincipalController">
    <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="1100.0" styleClass="marco" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" minHeight="50.0" prefHeight="50.0" prefWidth="1100.0" styleClass="marco" BorderPane.alignment="CENTER">
          <children>
             <JFXHamburger fx:id="hamMenu" onMouseClicked="#accionDeslizarMenu">
                <HBox.margin>
                   <Insets left="2.0" right="2.0" />
                </HBox.margin>
             </JFXHamburger>
-            <Label fx:id="lblUser" prefHeight="50.0" prefWidth="254.0" text="Ivan Josue Arias Astua">
-               <HBox.margin>
-                  <Insets left="4.0" right="2.0" />
-               </HBox.margin>
-            </Label>
-            <Label layoutX="490.0" layoutY="10.0" prefHeight="50.0" prefWidth="664.0" styleClass="lblTitulo_1" text="SISTEMA AEROPUERTO">
+            <MenuButton fx:id="smUser" mnemonicParsing="false" prefHeight="52.0" prefWidth="256.0" text="User Name">
+              <items>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="240.0">
+                           <children>
+                              <Label fx:id="lblCedula1" text="Cedula: 1-1111-1111" />
+                              <Label fx:id="lblRol1" text="Rol: GESTOR" />
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="miCodigo1" mnemonicParsing="false">
+                     <graphic>
+                        <JFXButton onAction="#accionGenerarCodigo" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Generar Codigo" />
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <JFXButton onAction="#accionCerrarSecion" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Cerrar Sesion" />
+                     </graphic>
+                  </MenuItem>
+              </items>
+               <graphic>
+                  <ImageView id="imvUser" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
+            </MenuButton>
+            <Label fx:id="lblTitulo" layoutX="490.0" layoutY="10.0" prefHeight="50.0" prefWidth="501.0" styleClass="lblTitulo_1" text="SISTEMA AEROPUERTO">
                <HBox.margin>
                   <Insets left="2.0" right="2.0" />
                </HBox.margin>
             </Label>
+            <ImageView fx:id="imvDark" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+            <JFXToggleButton fx:id="tbTema" onAction="#accionTema" prefHeight="56.0" prefWidth="0.0" />
+            <ImageView fx:id="imvLight" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin></ImageView>
             <Label alignment="CENTER" onMouseClicked="#accionMinimizar" prefHeight="46.0" prefWidth="46.0" styleClass="lblMarco">
                <graphic>
                   <ImageView id="imvMin" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
@@ -52,28 +83,28 @@
    <left>
       <VBox prefHeight="650.0" prefWidth="300.0" styleClass="marco" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane id="menu" hbarPolicy="NEVER" prefHeight="650.0" prefWidth="300.0">
+            <ScrollPane id="menu" fx:id="spMenu" hbarPolicy="NEVER" prefHeight="650.0" prefWidth="300.0">
                <content>
                   <Accordion id="accordioMenu" prefHeight="650.0" prefWidth="286.0">
                      <panes>
                         <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" prefHeight="0.0" prefWidth="250.0" text="Inicio">
                            <graphic>
-                              <ImageView id="imvInicio" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvInicio" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" text="Empleados">
                            <graphic>
-                              <ImageView id="imvEmpleados" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvEmpleados" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" text="Areas de Trabajo">
                            <graphic>
-                              <ImageView id="imvAreas" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvAreas" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="60.0" text="Gastos de Servicios">
                            <graphic>
-                              <ImageView id="imvGastos" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvGastos" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
@@ -99,7 +130,7 @@
                         </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="266.0" text="Incidentes">
                            <graphic>
-                              <ImageView id="imvIncidentes" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvIncidentes" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
@@ -146,17 +177,17 @@
                               </VBox>
                            </content>
                            <graphic>
-                              <ImageView id="imvReport" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvReport" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="316.0" text="Transacciones">
                            <graphic>
-                              <ImageView id="imvTrasaccion" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvTrasaccion" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="160.0" text="Cerrar Sesion">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="518.0" text="Parametros del Sistema">
                            <graphic>
-                              <ImageView id="imvCerrarSesion" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false" />
+                              <ImageView id="imvParametros" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
                      </panes>
@@ -166,4 +197,7 @@
          </children>
       </VBox>
    </left>
+   <center>
+      <VBox fx:id="vbContenedor" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

@@ -122,12 +122,12 @@ public class FlowController {
         stage.getScene().setRoot(loader.getRoot());
     }
 
-    public void goViewInNoResizableWindow(String viewName, Boolean show, StageStyle style, double minWidth, double minHeight){
+    public void goViewInNoResizableWindow(String viewName, Boolean show, StageStyle style){
         FXMLLoader loader = getLoader(viewName);
         Controller controller = loader.getController();
-        Stage stage = new Stage();/*
-        stage.setTitle("");
-        stage.getIcons().add(new Image(""));
+        Stage stage = new Stage();
+        stage.setTitle("Sistema Aeropuerto");
+       /* stage.getIcons().add(new Image(""));
         */
         stage.setOnHidden((WindowEvent event) -> {
             controller.getStage().getScene().setRoot(new Pane());
@@ -139,13 +139,10 @@ public class FlowController {
         stage.centerOnScreen();
         stage.setResizable(Boolean.FALSE);
         stage.initStyle(style);
-        stage.setMinWidth(minWidth);
-        stage.setMinHeight(minHeight);
         stage.sizeToScene();
         controller.setStage(stage);
         controller.initialize();
         controller.initEvents();
-        System.out.println("Medidas: "+stage.getWidth()+" - "+stage.getHeight());
         if(show)
             stage.show();
         else
@@ -157,9 +154,8 @@ public class FlowController {
         Controller controller = loader.getController();
         Stage stage = new Stage();
         /*
-        stage.getIcons().add(new Image(""));
-        stage.setTitle("");
-        */
+        stage.getIcons().add(new Image(""));*/
+        stage.setTitle("Sitema Aeropuerto");
         if(maxHeight >= minHeight)
             stage.setMaxHeight(maxHeight+40);
         stage.setMinHeight(minHeight+40);
@@ -175,14 +171,16 @@ public class FlowController {
                 c.consume();
             });
         }
-        controller.setStage(stage);
-        controller.initialize();
         Parent root = loader.getRoot();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.setResizable(true);
         stage.sizeToScene();
+        stage.initStyle(style);
+        controller.setStage(stage);
+        controller.initialize();
+        controller.initEvents();
         if(show)
             stage.show();
         else

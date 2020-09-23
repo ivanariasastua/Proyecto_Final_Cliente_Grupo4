@@ -7,15 +7,7 @@ and open the template in the editor.
     Created on : 20 sep 2020, 1:29:39
     Author     : ivana
 */
-/*
-    public static Color color1 = Color.FromArgb(172, 126, 241);
-    public static Color color2 = Color.FromArgb(249, 118, 176);
-    public static Color color3 = Color.FromArgb(253, 138, 114);
-    public static Color color4 = Color.FromArgb(95, 77, 221);
-    public static Color color5 = Color.FromArgb(249, 88, 155);
-    public static Color color6 = Color.FromArgb(24, 161, 251);
-    
-*/
+
 .raiz{
     -fx-background-color: #2a2d4d;
 }
@@ -94,7 +86,6 @@ and open the template in the editor.
 }
 
 .titled-pane {
-    -fx-skin: "com.sun.javafx.scene.control.skin.TitledPaneSkin";    
     -fx-text-fill: #B2B2B2;
     -fx-font: bold 12pt "Courier";
 }
@@ -115,7 +106,6 @@ and open the template in the editor.
     -fx-background-color: #2a2746;
 }
 
-
 .titled-pane > .title > .arrow-button {
     -fx-background-color: null;
 }
@@ -130,6 +120,7 @@ and open the template in the editor.
 
 .titled-pane > *.content {
     -fx-background-color: #2a2746;
+    -fx-border-color: #2a3167;
  }
 
 .titled-pane:focused > .title > .arrow-button .arrow {
@@ -166,6 +157,14 @@ and open the template in the editor.
 
 #imvCerrarSesion{
     -fx-image:url('resources/logout.png');
+}
+
+#imvParametros{
+    -fx-image:url('resources/filter.png');
+}
+
+#imvUser{
+    -fx-image:url('resources/login.png');
 }
 
 #menu{
@@ -266,4 +265,47 @@ and open the template in the editor.
 
 #hamMenu StackPane {
     -fx-background-color: white;
+}
+
+.menu-item{
+    -fx-background-color: #2a2746;
+}
+
+#lblCedula, #lblRol{
+    -fx-text-fill: white;
+    -fx-font: italic 16pt "Courier";
+}
+
+#smUser{
+    -fx-background-color: #2a2746;
+}
+
+#smUser .label {
+    -fx-text-fill: white;
+    -fx-font: italic 13pt "Courier";
+    -fx-background-color: #2a2746;
+}
+
+#smUser .arrow {
+    -fx-background-color: #2a4085;
+}
+
+#smUser .context-menu {
+    -fx-background-color: #2a2746;
+}
+
+#smUser .menu-button {
+    -fx-background-color: red;
+}
+
+#imvDark{
+    -fx-image:url('resources/big-light.png');
+}
+
+#imvLight{
+    -fx-image:url('resources/black-lightbulb.png');
+}
+
+#tbTema{
+    -jfx-toggle-color: #2a4085;
 }
