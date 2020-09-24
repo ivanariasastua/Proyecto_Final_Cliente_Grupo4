@@ -7,8 +7,14 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXToggleButton;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -79,6 +84,18 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionTema(ActionEvent event) {
+        PrintWriter pw = null;
+        try {
+            String tema = tbTema.isSelected() ? "Tema_Claro.css" : "Tema_Oscuro.css";
+            FileWriter file = new FileWriter(App.class.getResource("resources/config.txt").getFile());
+            file.write(tema);
+            file.flush();
+            file.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error leyendo el archivo: [ " + ex +" ]");
+        } catch (IOException ex) {
+            System.out.println("Error leyendo el archivo: [ " + ex +" ]");
+        } 
     }
 
     @FXML

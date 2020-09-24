@@ -9,15 +9,15 @@ and open the template in the editor.
 */
 
 .raiz{
-    -fx-background-color: #2a2d4d;
+    -fx-background-color: #d3d3d3;
 }
 
 .campos_texto_1{
-    -jfx-unfocus-color: #B2B2B2;
-    -fx-prompt-text-fill: #B2B2B2;
+    -jfx-unfocus-color: #1d1d1d;
+    -fx-prompt-text-fill: #1d1d1d;
     -fx-font: bold 16pt "Courier";
-    -jfx-focus-color: white;
-    -fx-text-fill: derive(white, 20%);
+    -jfx-focus-color: #1496db;
+    -fx-text-fill: derive(#1d1d1d, 20%);
 }
 
 .button{ 
@@ -26,36 +26,38 @@ and open the template in the editor.
 }
 
 .button_1{
-    -fx-text-fill: #B2B2B2;
+    -fx-text-fill: white;
     -fx-font: bold 16pt "Courier";
     -fx-border-color: #2b702b;
     -fx-border-radius: 15px;
     -fx-background-radius: 15px;
     -jfx-button-type: FLAT;
     -jfx-rippler-fill: red;
-}
-
-.button_1:hover{
     -fx-background-color: #2b702b;
 }
 
+.button_1:hover{
+    -fx-opacity: 0.8;
+}
+
 .button_2{
-    -fx-text-fill: #B2B2B2;
+    -fx-text-fill: white;
     -fx-font: bold 16pt "Courier";
     -fx-border-color: #990000;
     -fx-border-radius: 15px;
     -fx-background-radius: 15px;
     -jfx-button-type: FLAT;
     -jfx-rippler-fill: red;
+    -fx-background-color: #990000;
 }
 
 .button_2:hover{
-    -fx-background-color: #990000;
+    -fx-opacity: 0.8;
 }
 
 .lblTitulo_1{
     -fx-font: bold 22pt "Courier";
-    -fx-text-fill: white;
+    -fx-text-fill: #1d1d1d;
     -fx-alignment: CENTER;
 }
 
@@ -63,31 +65,26 @@ and open the template in the editor.
 
 #imvCedula{
     -fx-opacity: 0.8;
-    -fx-image:url('resources/id-card.png')
+    -fx-image:url('resources/id-card2.png')
 }
 
 #imvPassword{
     -fx-opacity: 0.8;
-    -fx-image:url('resources/key.png')
-}
-
-#imvLogIn{
-    -fx-opacity: 0.8;
-    -fx-image:url('resources/login.png')
+    -fx-image:url('resources/key2.png')
 }
 
 #imvMinimizar{
     -fx-opacity: 0.8;
-    -fx-image:url('resources/minimize.png')
+    -fx-image:url('resources/minimize2.png')
 }
 /*Principal Exclusivo*/
 
 .marco{
-    -fx-background-color: #2a2746;
+    -fx-background-color: #1496db;
 }
 
 .titled-pane {
-    -fx-text-fill: #B2B2B2;
+    -fx-text-fill: #1d1d1d;
     -fx-font: bold 12pt "Courier";
 }
 
@@ -98,21 +95,21 @@ and open the template in the editor.
 }
 
 .titled-pane:hover .title{
-    -fx-background-color: #2a2d4d;
-    -fx-border-color: #2a2d4d;
+    -fx-background-color: #017fbe;
+    -fx-border-color: #017fbe;
     -fx-border-width: 0 0 0 5;
 }
 
 .titled-pane > .title {
-    -fx-background-color: #2a2746;
-}
+    -fx-background-color: #1496db
+;}
 
 .titled-pane > .title > .arrow-button {
     -fx-background-color: null;
 }
 
 .titled-pane > .title > .arrow-button .arrow {
-    -fx-background-color: white;
+    -fx-background-color: #1d1d1d;
 }
 
 .titled-pane:collapsed > .title > .arrow-button .arrow {
@@ -120,60 +117,60 @@ and open the template in the editor.
 }
 
 .titled-pane > *.content {
-    -fx-background-color: #2a2746;
-    -fx-border-color: #2a3167;
+    -fx-background-color: #1496db;
+    -fx-border-color: #1496db;
  }
 
 .titled-pane:focused > .title > .arrow-button .arrow {
-    -fx-background-color: white;
+    -fx-background-color: #1d1d1d;
 }
 
 #imvInicio{
-    -fx-image:url('resources/home.png');
+    -fx-image:url('resources/home2.png');
 }
 
 #imvEmpleados{
-    -fx-image:url('resources/employees.png');
+    -fx-image:url('resources/employees2.png');
 }
 
 #imvAreas{
-    -fx-image:url('resources/workplace.png');
+    -fx-image:url('resources/workplace2.png');
 }
 
 #imvGastos{
-    -fx-image:url('resources/dollar.png');
+    -fx-image:url('resources/dollar2.png');
 }
 
 #imvIncidentes{
-    -fx-image:url('resources/alert.png');
+    -fx-image:url('resources/alert2.png');
 }
 
 #imvReport{
-    -fx-image:url('resources/report.png');
+    -fx-image:url('resources/report2.png');
 }
 
 #imvTrasaccion{
-    -fx-image:url('resources/data-transfer.png');
+    -fx-image:url('resources/data-transfer2.png');
 }
 
 #imvCerrarSesion{
-    -fx-image:url('resources/logout.png');
+    -fx-image:url('resources/logout2.png');
 }
 
 #imvParametros{
-    -fx-image:url('resources/filter.png');
+    -fx-image:url('resources/filter2.png');
 }
 
 #imvUser{
-    -fx-image:url('resources/login.png');
+    -fx-image:url('resources/login2.png');
 }
 
 #menu{
-   -fx-background-color: #2a2746;
+   -fx-background-color: #1496db;
 }
 
 #menu > .viewport {
-   -fx-background-color: #2a2746;
+   -fx-background-color: #1496db;
 }
 
 #accordioMenu{
@@ -185,8 +182,8 @@ and open the template in the editor.
 }
 
 .scroll-bar:horizontal .track, .scroll-bar:vertical .track{
-    -fx-background-color: #6262b3;
-    -fx-border-color :#6262b3;
+    -fx-background-color: #66ccff;
+    -fx-border-color :#66ccff;
     -fx-background-radius : 0.0em;
     -fx-border-radius :2.0em;
 }
@@ -217,24 +214,24 @@ and open the template in the editor.
 }
 
 .scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
-    -fx-background-color: #2a3167;
+    -fx-background-color: #003366;
 }
 
 .scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
-    -fx-background-color : #2a4085;
+    -fx-background-color : #003366;
 }
 
 
 #imvMaxRes{
-    -fx-image:url('resources/maximize-size-option.png');
+    -fx-image:url('resources/maximize-size-option2.png');
 }
 
 #imvMin{
-    -fx-image:url('resources/minimize.png');
+    -fx-image:url('resources/minimize2.png');
 }
 
 #imvClose{
-    -fx-image:url('resources/cancel.png');
+    -fx-image:url('resources/cancel2.png');
 }
 
 .lblMarco{
@@ -247,29 +244,24 @@ and open the template in the editor.
 }
 
 .button_3{
-    -fx-text-fill: white;
+    -fx-text-fill: #1d1d1d;
     -fx-font: italic 14pt "Courier";
-    -fx-border-color: #6262b3;
+    -fx-border-color: #003366;
     -fx-border-radius: 15;
     -fx-background-radius: 15;
 }
 
 .button_3:hover{
-    -fx-background-color: #6262b3;
-}
-
-#lblUser{
+    -fx-background-color: #003366;
     -fx-text-fill: white;
-    -fx-font: italic 14pt "Courier";
-    -fx-alignment: CENTER;
 }
 
 #hamMenu StackPane {
-    -fx-background-color: white;
+    -fx-background-color: #1d1d1d;
 }
 
 .menu-item{
-    -fx-background-color: #2a2746;
+    -fx-background-color: #1496db;
 }
 
 #lblCedula, #lblRol{
@@ -278,13 +270,13 @@ and open the template in the editor.
 }
 
 #smUser{
-    -fx-background-color: #2a2746;
+    -fx-background-color: #1496db;
 }
 
 #smUser .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #1d1d1d;
     -fx-font: italic 13pt "Courier";
-    -fx-background-color: #2a2746;
+    -fx-background-color: #1496db;
 }
 
 #smUser .arrow {
@@ -292,21 +284,17 @@ and open the template in the editor.
 }
 
 #smUser .context-menu {
-    -fx-background-color: #2a2746;
-}
-
-#smUser .menu-button {
-    -fx-background-color: red;
+    -fx-background-color: #003366;
 }
 
 #imvDark{
-    -fx-image:url('resources/sun.png');
+    -fx-image:url('resources/sun2.png');
 }
 
 #imvLight{
-    -fx-image:url('resources/moon.png');
+    -fx-image:url('resources/moon2.png');
 }
 
 #tbTema{
-    -jfx-toggle-color: #2a4085;
+    -jfx-toggle-color: #1496db;
 }
