@@ -33,6 +33,7 @@ import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.App;
 import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -63,6 +64,9 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try{
+            miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE"));
+        }catch(Exception ex){}
         AppContext.getInstance().set("Contenedor", vbContenedor);
         FlowController.getInstance().goViewPanel(vbContenedor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);

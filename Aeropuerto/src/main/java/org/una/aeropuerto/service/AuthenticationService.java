@@ -10,6 +10,7 @@ import org.una.aeropuerto.dto.AuthenticationResponse;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  *
@@ -26,6 +27,7 @@ public class AuthenticationService {
                 return new Respuesta(false, request.getError(), "Iniciar Sesion: "+request.getMensajeRespuesta());
             }
             AuthenticationResponse usuario = (AuthenticationResponse) request.readEntity(AuthenticationResponse.class);
+            UserAuthenticated.getInstance().setData(usuario.getEmpleado(), usuario.getRol(), usuario.getJwt());
             AppContext.getInstance().set("UsuarioAutenticado", usuario);
             AppContext.getInstance().set("token", "bearer " + usuario.getJwt());
             return new Respuesta(true, "Usuario", usuario);
