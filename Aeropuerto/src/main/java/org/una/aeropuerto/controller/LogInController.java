@@ -12,9 +12,14 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
+import org.una.aeropuerto.service.AuthenticationService;
+import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Mensaje;
+import org.una.aeropuerto.util.Respuesta;
 
 /**
  * FXML Controller class
@@ -28,11 +33,13 @@ public class LogInController extends Controller implements Initializable {
     @FXML
     private JFXPasswordField txtPassword;
 
-    
+    private AuthenticationService service = new AuthenticationService();
+    private Mensaje alertas;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-    }    
+
+    }
 
     @Override
     public void initialize() {
@@ -40,9 +47,16 @@ public class LogInController extends Controller implements Initializable {
 
     @FXML
     private void accionLogIn(ActionEvent event) {
-        
-        FlowController.getInstance().goViewInResizableWindow("Principal", 0, 1100, 0, 700, Boolean.TRUE, StageStyle.UNDECORATED);
-        this.closeWindow();
+        if (camposValidos()) {
+            Respuesta respuesta = service.LogIn(txtUserName.getText(), txtPassword.getText());
+            if (respuesta.getEstado()) {
+                alertas.show(Alert.AlertType.INFORMATION, "Inicio de sesion", "Inicio de sesion: Sesion iniciada correctamente");
+                FlowController.getInstance().goViewInResizableWindow("Principal", 0, 1100, 0, 700, Boolean.TRUE, StageStyle.UNDECORATED);
+                this.closeWindow();
+            } else {
+                alertas.show(Alert.AlertType.ERROR, "Inicio de sesion", respuesta.getMensaje());
+            }
+        }
     }
 
     @FXML
@@ -54,5 +68,20 @@ public class LogInController extends Controller implements Initializable {
     private void accionMinimizar(MouseEvent event) {
         this.minimizeWindow();
     }
-    
+
+    private Boolean camposValidos() {
+        String mensaje = "";
+        if (txtUserName.getText() == null || txtPassword.getText().isEmpty()) {
+            mensaje = "Campo de texto cedula, esta vacío\n";
+        }
+        if (txtPassword.getText() == null || txtPassword.getText().isEmpty()) {
+            mensaje += "El campo de contraseña esta vacío";
+        }
+        if (mensaje.isEmpty()) {
+            return true;
+        }
+        alertas.show(Alert.AlertType.WARNING, "Inicio de sesion", mensaje);
+        return false;
+    }
+
 }
