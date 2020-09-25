@@ -61,7 +61,6 @@ public abstract class Controller {
         scene = stage.getScene();
         dragEvents();
         initListener();
-        resizableEvents();
     }
     
     public void initListener(){
@@ -180,25 +179,11 @@ public abstract class Controller {
         });
     }
     
-    public void resizableEvents(){
-        scene.widthProperty().addListener( width -> {
-            adjustWidth(scene.getWidth());
-        });
-        scene.heightProperty().addListener( height -> {
-            adjustHeigth(scene.getHeight());
-        });
-        
-    }
-    
     private void ejecutarAccion(Cursor cursor){
         scene.setCursor(cursor);
         scene.setOnMouseDragged(listener.get(cursor));
     }
     
     public abstract void initialize();
-    
-    public abstract void adjustWidth(double witdh);
-    
-    public abstract void adjustHeigth(double height);
 }
 

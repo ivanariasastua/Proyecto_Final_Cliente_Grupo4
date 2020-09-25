@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="700.0" minWidth="1100.0" prefHeight="700.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.PrincipalController">
+<BorderPane fx:id="bpPrincipal" minHeight="700.0" minWidth="1100.0" prefHeight="700.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.PrincipalController">
    <top>
       <HBox alignment="CENTER_RIGHT" minHeight="50.0" prefHeight="50.0" prefWidth="1100.0" styleClass="marco" BorderPane.alignment="CENTER">
          <children>
@@ -81,23 +81,23 @@
       </HBox>
    </top>
    <left>
-      <VBox fx:id="vbMenu" prefHeight="650.0" prefWidth="300.0" styleClass="marco" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbMenu" maxWidth="300.0" prefHeight="650.0" prefWidth="300.0" styleClass="marco" BorderPane.alignment="CENTER">
          <children>
             <ScrollPane id="menu" fx:id="spMenu" hbarPolicy="NEVER" prefHeight="650.0" prefWidth="300.0">
                <content>
                   <Accordion id="accordioMenu" prefHeight="650.0" prefWidth="286.0">
                      <panes>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" prefHeight="0.0" prefWidth="250.0" text="Inicio">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" onMouseClicked="#accionInicio" prefHeight="0.0" prefWidth="250.0" text="Inicio">
                            <graphic>
                               <ImageView id="imvInicio" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" text="Empleados">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" onMouseClicked="#accionEmpleados" text="Empleados">
                            <graphic>
                               <ImageView id="imvEmpleados" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" text="Areas de Trabajo">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" onMouseClicked="#accionAreasTrabajos" text="Areas de Trabajo">
                            <graphic>
                               <ImageView id="imvAreas" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
@@ -114,12 +114,12 @@
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionRegistrarGasto" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Registro de Gastos">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionRegistrarGasto" onMouseClicked="#accionRegistrarGastos" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Registro de Gastos">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionSeguimientoGasto" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Seguimiento de Gastos">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionSeguimientoGasto" onMouseClicked="#accionSeguimientoGastos" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Seguimiento de Gastos">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
@@ -180,12 +180,12 @@
                               <ImageView id="imvReport" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="316.0" text="Transacciones">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="316.0" onMouseClicked="#accionTransacciones" text="Transacciones">
                            <graphic>
                               <ImageView id="imvTrasaccion" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="518.0" text="Parametros del Sistema">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="518.0" onMouseClicked="#accionParametros" text="Parametros del Sistema">
                            <graphic>
                               <ImageView id="imvParametros" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" smooth="false" />
                            </graphic>
@@ -198,6 +198,6 @@
       </VBox>
    </left>
    <center>
-      <VBox fx:id="vbContenedor" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox fx:id="vbContenedor" prefHeight="650.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

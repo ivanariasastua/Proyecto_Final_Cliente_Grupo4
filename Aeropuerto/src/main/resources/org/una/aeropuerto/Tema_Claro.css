@@ -298,3 +298,7 @@ and open the template in the editor.
 #tbTema{
     -jfx-toggle-color: #1496db;
 }
+
+#imvHome{
+    -fx-opacity: 0.8;
+}

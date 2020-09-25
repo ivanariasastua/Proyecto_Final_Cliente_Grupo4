@@ -85,26 +85,6 @@ public class FlowController {
         }
     }
 
-    public void goMain() {
-        try {
-            AppContext.getInstance().set("mainStage", mainStage);
-            FXMLLoader loader = getLoader("Principal");
-            Controller controller = loader.getController();
-            mainStage.setScene(new Scene(loader.getRoot()));
-            controller.initialize();
-            controller.setStage(mainStage);
-            mainStage.setOnCloseRequest(E -> { E.consume(); });
-            mainStage.setMaximized(false);
-            mainStage.setResizable(true);
-            mainStage.setTitle("");
-            mainStage.centerOnScreen();
-            mainStage.show();
-            
-        } catch (Exception ex) {
-            System.out.println("Error en vista base: "+ex);
-        }
-    }
-
     public void goViewPanel(VBox panel, String viewName){
         FXMLLoader loader = getLoader(viewName);
         Controller controller = loader.getController();

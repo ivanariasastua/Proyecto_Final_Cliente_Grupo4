@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.exit;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
@@ -24,12 +25,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.App;
+import org.una.aeropuerto.util.AppContext;
 
 /**
  * FXML Controller class
@@ -51,18 +54,24 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML private Label lblTitulo;
     @FXML private ScrollPane spMenu;
     @FXML private VBox vbMenu;
+    @FXML private BorderPane bpPrincipal;
+    
     private HamburgerBackArrowBasicTransition deslizar;
-    private Boolean isShow;
+    private Boolean isShow = false;
     private TranslateTransition tt;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        AppContext.getInstance().set("Contenedor", vbContenedor);
+        FlowController.getInstance().goViewPanel(vbContenedor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
         tt =  new TranslateTransition(Duration.seconds(0.6));
         deslizar.setRate(1);
         deslizar.play();
         isShow = true;
         trasladar();
+        addListener();
     }    
 
     @FXML
@@ -75,9 +84,9 @@ public class PrincipalController extends Controller implements Initializable {
         }else{
             tt.setByX(-300);
             tt.setToX(0);
-            vbMenu.getChildren().add(spMenu);
-            vbMenu.setPrefWidth(300);
             vbContenedor.setPrefWidth(vbContenedor.getWidth() - 300);
+            vbMenu.setPrefWidth(300);
+            vbMenu.getChildren().add(spMenu);
         }
         tt.play();
     }
@@ -121,7 +130,8 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionCerrar(MouseEvent event) {
-        this.closeWindow();
+        if(Mensaje.showConfirmation("Cerrar Ventana", this.getStage(), "¿Seguro desea cerrar la ventana?"))
+            exit(1);
     }
 
     @FXML
@@ -164,20 +174,62 @@ public class PrincipalController extends Controller implements Initializable {
     public void initialize() {
     }
 
-    @Override
-    public void adjustWidth(double witdh) {
-        lblTitulo.setPrefWidth(witdh - 599);
+    @FXML
+    private void accionInicio(MouseEvent event) {
     }
 
-    @Override
+    @FXML
+    private void accionEmpleados(MouseEvent event) {
+    }
+
+    @FXML
+    private void accionAreasTrabajos(MouseEvent event) {
+    }
+
+    @FXML
+    private void accionRegistrarGastos(MouseEvent event) {
+    }
+
+    @FXML
+    private void accionSeguimientoGastos(MouseEvent event) {
+    }
+
+    @FXML
+    private void accionTransacciones(MouseEvent event) {
+    }
+
+    @FXML
+    private void accionParametros(MouseEvent event) {
+    }
+    
+    public void addListener(){
+        bpPrincipal.widthProperty().addListener( w -> {
+            adjustWidth(bpPrincipal.getWidth());
+        });
+        bpPrincipal.heightProperty().addListener( h -> {
+            adjustHeigth(bpPrincipal.getHeight());
+        });
+    }
+    
+    public void adjustWidth(double witdh) {
+        System.out.println(witdh);
+        lblTitulo.setPrefWidth(witdh - 599);
+        if(isShow){
+            vbContenedor.setPrefWidth(witdh - 300);
+        }else{
+            vbContenedor.setPrefWidth(witdh);
+        }
+    }
+
     public void adjustHeigth(double height) {
         spMenu.setPrefHeight(height - 50);
+        vbContenedor.setPrefHeight(height - 50);
     }
     
     private void trasladar(){
         tt.setAutoReverse(false);
         tt.setCycleCount(1);
-        tt.setDuration(Duration.seconds(1));
+        tt.setDuration(Duration.seconds(0.6));
         tt.setNode(vbMenu);
         tt.setOnFinished(ev -> {
             if(isShow){

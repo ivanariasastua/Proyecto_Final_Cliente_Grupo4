@@ -38,14 +38,6 @@ public class LogInController extends Controller implements Initializable {
     public void initialize() {
     }
 
-    @Override
-    public void adjustWidth(double witdh) {
-    }
-
-    @Override
-    public void adjustHeigth(double height) {
-    }
-
     @FXML
     private void accionLogIn(ActionEvent event) {
         
