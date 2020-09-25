@@ -34,7 +34,6 @@ public class LogInController extends Controller implements Initializable {
     private JFXPasswordField txtPassword;
 
     private AuthenticationService service = new AuthenticationService();
-    private Mensaje alertas;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -50,11 +49,11 @@ public class LogInController extends Controller implements Initializable {
         if (camposValidos()) {
             Respuesta respuesta = service.LogIn(txtUserName.getText(), txtPassword.getText());
             if (respuesta.getEstado()) {
-                alertas.show(Alert.AlertType.INFORMATION, "Inicio de sesion", "Inicio de sesion: Sesion iniciada correctamente");
+                Mensaje.show(Alert.AlertType.INFORMATION, "Inicio de sesion", "Inicio de sesion: Sesion iniciada correctamente");
                 FlowController.getInstance().goViewInResizableWindow("Principal", 0, 1100, 0, 700, Boolean.TRUE, StageStyle.UNDECORATED);
                 this.closeWindow();
             } else {
-                alertas.show(Alert.AlertType.ERROR, "Inicio de sesion", respuesta.getMensaje());
+                Mensaje.show(Alert.AlertType.ERROR, "Inicio de sesion", respuesta.getMensaje());
             }
         }
     }
@@ -80,7 +79,7 @@ public class LogInController extends Controller implements Initializable {
         if (mensaje.isEmpty()) {
             return true;
         }
-        alertas.show(Alert.AlertType.WARNING, "Inicio de sesion", mensaje);
+        Mensaje.show(Alert.AlertType.WARNING, "Inicio de sesion", mensaje);
         return false;
     }
 
