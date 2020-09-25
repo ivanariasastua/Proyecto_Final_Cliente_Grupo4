@@ -24,4 +24,11 @@ public class RolesDTO {
     private Long id;
     private String nombre;
     private boolean estado;
+    
+    
+    @Override
+    public String toString(){
+        return nombre;
+    }
+    
 }

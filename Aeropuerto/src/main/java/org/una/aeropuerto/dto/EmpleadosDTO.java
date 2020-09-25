@@ -27,4 +27,10 @@ public class EmpleadosDTO {
     private EmpleadosDTO jefe;
     private String contrasenaEncriptada;
     private RolesDTO rol;
+    
+    @Override
+    public String toString(){
+        return nombre;
+    }
+    
 }

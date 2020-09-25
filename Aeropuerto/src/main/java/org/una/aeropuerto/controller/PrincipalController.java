@@ -135,7 +135,7 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML
     private void accionCerrar(MouseEvent event) {
         if(Mensaje.showConfirmation("Cerrar Ventana", this.getStage(), "¿Seguro desea cerrar la ventana?"))
-            exit(1);
+            this.getStage().close();
     }
 
     @FXML
@@ -184,6 +184,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionEmpleados(MouseEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "Empleados");
     }
 
     @FXML

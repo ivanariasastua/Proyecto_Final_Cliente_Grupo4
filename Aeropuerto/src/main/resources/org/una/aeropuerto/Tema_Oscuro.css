@@ -19,6 +19,12 @@ and open the template in the editor.
     -jfx-focus-color: white;
     -fx-text-fill: derive(white, 20%);
 }
+.comboBox{
+    -fx-prompt-text-fill:white;
+    -fx-font: bold 14pt "Courier";
+    -fx-text-fill: white;
+    -jfx-unfocus-color: #B2B2B2;
+}
 
 .button{ 
     -fx-rippler-fill:firebrick;
@@ -318,4 +324,70 @@ and open the template in the editor.
 #lblHome{
     -fx-background-color: #1d1d1d;
     -fx-opacity: 0.7;
+}
+
+
+.table-view{
+    -fx-control-inner-background: whitesmoke;
+    -fx-font: bold 16px "Courier";
+    -fx-text-background-color: black;
+   /* -fx-focus-color: #3b427c;*/
+    -fx-border-color: #3b427c;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+}
+
+.table-view .column-header .label{
+    -fx-font: normal 12.60pt "Courier";
+    -fx-text-fill: white;
+}
+
+.table-view .column-header, .table-view .filler{
+    -fx-size: 30;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color:  #4c5389;
+    -fx-border-color: #3b427c;
+    -fx-border-insets: 0 10 0 10;
+    -fx-text-fill: #1d1d1d;
+}
+
+.table-row-cell{
+    -fx-background-color: whitesmoke;
+    -fx-text-fill: #1d1d1d;
+    -fx-font: bold 14px "Courier";
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected{
+    -fx-background-color: #4c5389;
+    -fx-opacity: 5;
+    -fx-text-background-color: white;
+    -fx-table-cell-border-color: #4c5389;
+    -fx-table-header-border-color: #4c5389;  
+    -fx-opacity: 0.9;
+}
+
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color: linear-gradient(to top, #6e78bf, #363f78 80%, #6e78bf);
+}
+
+.tab-pane {
+    -fx-tab-min-width:120px;
+    -fx-tab-max-width:120px;
+    -fx-tab-min-height:30px;
+    -fx-tab-max-height:30px;
+}
+
+.tab {
+    -fx-font-family: Arial;
+    -fx-font-size: 18;
+    -fx-background-color:#434c7f ;  
+}
+
+.tab-label{
+    -fx-text-fill: white;
+}
+
+.tab:selected {
+    -fx-background-color:#6e78bf ;
+    -fx-focus-color: #6e78bf;
 }
