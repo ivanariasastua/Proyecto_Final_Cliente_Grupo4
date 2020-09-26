@@ -87,6 +87,7 @@ public class AreasTrabajosService {
             Request request = new Request("areas_trabajos/nombre", "/{term}", parametros);
             request.get();
             if(request.isError()){
+                System.out.println("error "+request.getError()+ request.getMensajeRespuesta());
                 return new Respuesta(false, request.getError(), "Error al obtener las areas de trabjo");
             }
             List<AreasTrabajosDTO> result = (List<AreasTrabajosDTO>) request.readEntity(new GenericType<List<AreasTrabajosDTO>>(){});

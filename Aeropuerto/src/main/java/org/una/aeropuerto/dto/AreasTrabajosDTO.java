@@ -25,4 +25,9 @@ public class AreasTrabajosDTO {
     private String nombre;
     private String descripcion;
     private boolean estado;
+    
+    @Override
+    public String toString(){
+        return nombre;
+    }
 }

@@ -24,6 +24,7 @@ public class EmpleadosService {
             Request request = new Request("empleados/get");
             request.get();
             if (request.isError()) {
+                System.out.println("ERROR "+request.getError() +" "+request.getMensajeRespuesta());
                 return new Respuesta(false, request.getError(), "Error al obtener todos los empleados");
             }
             List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>() {

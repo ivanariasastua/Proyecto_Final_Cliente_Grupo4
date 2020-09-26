@@ -29,6 +29,7 @@ import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
 import org.una.aeropuerto.service.EmpleadosAreasTrabajosService;
+import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
@@ -57,28 +58,56 @@ public class AreasTrabajosController extends Controller implements Initializable
     private TableView tablaAsignarAreas;
 
     private AreasTrabajosService areasService = new AreasTrabajosService();
-    private List<AreasTrabajosDTO> listAreasT;
+    private List<AreasTrabajosDTO> listAreasT = new ArrayList<>();
+    private List<EmpleadosAreasTrabajosDTO> listEmpAreaT = new ArrayList<>();
     private AreasTrabajosDTO areaDto = new AreasTrabajosDTO();
     private AreasTrabajosDTO areaSeleccionada = new AreasTrabajosDTO();
+    private EmpleadosAreasTrabajosDTO empAreaSeleccionado = new EmpleadosAreasTrabajosDTO();
+    private EmpleadosAreasTrabajosDTO empTrabDTO = new EmpleadosAreasTrabajosDTO();
+    private EmpleadosAreasTrabajosService empTrabService = new EmpleadosAreasTrabajosService();
+    private List<EmpleadosDTO> listEmp = new ArrayList<>();
+    private EmpleadosService empleadoService = new EmpleadosService();
     /**
      * Initializes the controller class.
      */
     boolean areaSelec = false;
+    boolean empAreaSelec = false;
+    @FXML
+    private JFXTextField txtBuscarAreasT;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+    }
+
+    @Override
+    public void initialize() {
         listAreasT = new ArrayList<>();
         cargarTablaAreas();
         clickTablas();
+        llenarComboboxs();
+        cargarTablaAsignarAreasT();
     }
 
     public void llenarComboboxs() {
-
+        Respuesta res = empleadoService.getAll();
+        listEmp = (List<EmpleadosDTO>) res.getResultado("Empleados");
+        if (listEmp != null) {
+            ObservableList items = FXCollections.observableArrayList(listEmp);
+            cbxEmpleado.setItems(items);
+        }
+        Respuesta resp = areasService.getAll();
+        listAreasT = (List<AreasTrabajosDTO>) resp.getResultado("Areas_Trabajos");
+        if (listAreasT != null) {
+            ObservableList items = FXCollections.observableArrayList(listAreasT);
+            cbxAreaTrabajo.setItems(items);
+        }
     }
 
     @FXML
     private void actBuscarAreasTrabajos(ActionEvent event) {
+
     }
 
     public void clickTablas() {
@@ -88,6 +117,16 @@ public class AreasTrabajosController extends Controller implements Initializable
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     areaSelec = true;
                     areaSeleccionada = row.getItem();
+                }
+            });
+            return row;
+        });
+        tablaAsignarAreas.setRowFactory(tv -> {
+            TableRow<EmpleadosAreasTrabajosDTO> row = new TableRow();
+            row.setOnMouseClicked(e -> {
+                if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
+                    empAreaSelec = true;
+                    empAreaSeleccionado = row.getItem();
                 }
             });
             return row;
@@ -115,7 +154,6 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
                 cargarTablaAreas();
             }
-            areaSelec = false;
         } else {
             if (txtNombreArea.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Noombre es obligatorio");
@@ -158,16 +196,74 @@ public class AreasTrabajosController extends Controller implements Initializable
     }
 
     //tab de asignar areas de trabajo
+    public boolean validarCamposEmpleadosAreasT() {
+        if (cbxAreaTrabajo.getValue() == null || cbxEmpleado.getValue() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos son obligatorios");
+            return false;
+        }
+        return true;
+    }
+
+    public void cargarTablaAsignarAreasT() {
+        tablaAsignarAreas.getColumns().clear();
+        TableColumn<EmpleadosAreasTrabajosDTO, String> colEmpl = new TableColumn<>("Empleado");
+        colEmpl.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
+        TableColumn<EmpleadosAreasTrabajosDTO, String> colArea = new TableColumn<>("Area de Trabajo");
+        colArea.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getAreaTrabajo())));
+        tablaAsignarAreas.getColumns().addAll(colEmpl, colArea);
+        Respuesta res = empTrabService.getAll();
+
+        listEmpAreaT = (List<EmpleadosAreasTrabajosDTO>) res.getResultado("Empleados_Areas_Trabajos");
+        if (listEmpAreaT != null) {
+            ObservableList items = FXCollections.observableArrayList(listEmpAreaT);
+            tablaAsignarAreas.setItems(items);
+        } else {
+            tablaAsignarAreas.getItems().clear();
+        }
+    }
+
     @FXML
     private void actGuardarAsignacionArea(ActionEvent event) {
+        if (empAreaSelec == true) {
+            empTrabDTO.setId(empAreaSeleccionado.getId());
+            empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
+            empTrabDTO.setEmpleado(cbxEmpleado.getValue());
+            Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empTrabDTO);
+            if (res.getEstado()) {
+                Mensaje.show(Alert.AlertType.INFORMATION, "Editado ", "Asignacion de area de trabajo editada correctamente");
+                cargarTablaAsignarAreasT();
+            }
+        } else {
+            if (validarCamposEmpleadosAreasT()) {
+                empTrabDTO= new EmpleadosAreasTrabajosDTO();
+                empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
+                empTrabDTO.setEmpleado(cbxEmpleado.getValue());
+                Respuesta res = empTrabService.guardarEmpleadoAreaTrabajo(empTrabDTO);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado ", "Asignacion de area de trabajo guardada correctamente");
+                    cargarTablaAsignarAreasT();
+                }
+            }
+        }
+
     }
 
     @FXML
     private void actLimpiarCamposAsignarArea(ActionEvent event) {
+        cbxAreaTrabajo.setValue(null);
+        cbxEmpleado.setValue(null);
+        empAreaSelec = false;
+        empAreaSeleccionado = new EmpleadosAreasTrabajosDTO();
     }
 
-    @Override
-    public void initialize() {
+    @FXML
+    private void actEditarEmplAreasTrab(ActionEvent event) {
+        if (empAreaSelec == true) {
+            cbxAreaTrabajo.setValue(empAreaSeleccionado.getAreaTrabajo());
+            cbxEmpleado.setValue(empAreaSeleccionado.getEmpleado());
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Dato", "Debe seleccionar un dato de la tabla");
+        }
     }
 
 }

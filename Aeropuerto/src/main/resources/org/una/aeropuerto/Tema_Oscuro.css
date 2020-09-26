@@ -25,7 +25,7 @@ and open the template in the editor.
 }
 .comboBox{
     -fx-prompt-text-fill:white;
-    -fx-font: bold 12pt "Courier";
+    -fx-font: bold 11pt "Courier";
     -fx-text-fill: white;
     -jfx-unfocus-color: #B2B2B2;
 }

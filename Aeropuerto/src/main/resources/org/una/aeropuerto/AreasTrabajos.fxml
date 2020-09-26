@@ -39,7 +39,7 @@
                                     <Separator layoutX="576.0" layoutY="41.0" opacity="0.34" orientation="VERTICAL" prefHeight="450.0" prefWidth="0.0" />
                                     <JFXButton layoutX="441.0" layoutY="479.0" onAction="#actEditarAreasT" prefHeight="43.0" prefWidth="99.0" styleClass="button_3" text="Editar" />
                                     <JFXButton layoutX="457.0" layoutY="22.0" onAction="#actBuscarAreasTrabajos" prefHeight="43.0" prefWidth="83.0" styleClass="button_3" text="Buscar" />
-                                    <JFXTextField layoutX="25.0" layoutY="9.0" prefHeight="47.0" prefWidth="413.0" styleClass="campos_texto_1" />
+                                    <JFXTextField fx:id="txtBuscarAreasT" layoutX="25.0" layoutY="9.0" prefHeight="47.0" prefWidth="413.0" styleClass="campos_texto_1" />
                                     <JFXButton layoutX="974.0" layoutY="478.0" onAction="#actGuardarAreasTrabajo" prefHeight="43.0" prefWidth="104.0" styleClass="button_3" text="Guardar" />
                                     <JFXButton layoutX="860.0" layoutY="478.0" onAction="#actLimpiarCamposAreasTrabajo" prefHeight="43.0" prefWidth="104.0" styleClass="button_3" text="Limpiar" />
                                     <JFXTextField fx:id="txtNombreArea" layoutX="732.0" layoutY="147.0" prefHeight="47.0" prefWidth="322.0" styleClass="campos_texto_1" />
@@ -72,11 +72,11 @@
                                        </columnResizePolicy>
                                     </TableView>
                                     <Separator layoutX="572.0" layoutY="40.0" opacity="0.38" orientation="VERTICAL" prefHeight="455.0" prefWidth="0.0" />
-                                    <JFXButton layoutX="426.0" layoutY="481.0" prefHeight="43.0" prefWidth="107.0" styleClass="button_3" text="Editar" />
+                                    <JFXButton layoutX="426.0" layoutY="481.0" onAction="#actEditarEmplAreasTrab" prefHeight="43.0" prefWidth="107.0" styleClass="button_3" text="Editar" />
                                     <JFXTextField layoutX="21.0" layoutY="3.0" prefHeight="47.0" prefWidth="384.0" styleClass="campos_texto_1" />
                                     <JFXButton layoutX="430.0" layoutY="16.0" prefHeight="43.0" prefWidth="102.0" styleClass="button_3" text="Buscar" />
-                                    <JFXComboBox fx:id="cbxAreaTrabajo" layoutX="749.0" layoutY="153.0" prefHeight="25.0" prefWidth="301.0" styleClass="campos_texto_1" />
-                                    <JFXComboBox fx:id="cbxEmpleado" layoutX="749.0" layoutY="280.0" prefHeight="25.0" prefWidth="301.0" styleClass="campos_texto_1" />
+                                    <JFXComboBox fx:id="cbxAreaTrabajo" layoutX="749.0" layoutY="153.0" prefHeight="25.0" prefWidth="301.0" styleClass="comboBox" />
+                                    <JFXComboBox fx:id="cbxEmpleado" layoutX="749.0" layoutY="280.0" prefHeight="25.0" prefWidth="301.0" styleClass="comboBox" />
                                     <Label layoutX="605.0" layoutY="164.0" styleClass="texto" text="Area de Trabajo" />
                                     <Label layoutX="605.0" layoutY="291.0" styleClass="texto" text="Empleado" />
                                     <JFXButton layoutX="961.0" layoutY="474.0" onAction="#actGuardarAsignacionArea" prefHeight="43.0" prefWidth="113.0" styleClass="button_3" text="Guardar" />

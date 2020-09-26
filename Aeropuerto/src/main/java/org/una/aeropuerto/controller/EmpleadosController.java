@@ -53,7 +53,7 @@ public class EmpleadosController extends Controller implements Initializable {
     /**
      * Initializes the controller class.
      */
-    private EmpleadosService empleadoService;
+    private EmpleadosService empleadoService = new EmpleadosService();
     private List<EmpleadosDTO> listEmpleados;
     private List<EmpleadosHorariosDTO> listHorariosEmp;
     private List<EmpleadosDTO> listJefes = new ArrayList<>();
@@ -120,11 +120,10 @@ public class EmpleadosController extends Controller implements Initializable {
         empSeleccionado = false;
         horarSeleccionado = false;
         listEmpleados = new ArrayList<>();
-        listHorariosEmp =new ArrayList<>();
+        listHorariosEmp = new ArrayList<>();
         horarioService = new EmpleadosHorariosService();
         empleadoService = new EmpleadosService();
         cargarTablaEmpleados();
-        cargarTablaHorarios();
         llenarComboBoxs();
         clickTablas();
     }
@@ -196,7 +195,6 @@ public class EmpleadosController extends Controller implements Initializable {
         tablaEmpleados.getColumns().addAll(colNombre, colCedula, colJefe, colrol);
         Respuesta res = empleadoService.getAll();
         listEmpleados = (List<EmpleadosDTO>) res.getResultado("Empleados");
-
         if (listEmpleados != null) {
             ObservableList items = FXCollections.observableArrayList(listEmpleados);
             tablaEmpleados.setItems(items);
@@ -255,6 +253,7 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actBuscarEmpleados(ActionEvent event) {
+ 
     }
 
     void limpiarCampos() {
@@ -272,9 +271,8 @@ public class EmpleadosController extends Controller implements Initializable {
         } else if (tabCrear.isSelected() && empSeleccionado == false) {
             limpiarCampos();
         } else if (tabHorarios.isSelected()) {
-      //      cargarTablaHorarios();
-            llenarComboBoxs();
-            llenarRelojs();
+              //    cargarTablaHorarios();
+
         }
     }
 
@@ -324,61 +322,15 @@ public class EmpleadosController extends Controller implements Initializable {
         salidaHoras.setItems(items2);
     }
 
-
     @FXML
     private void actGuardarHorario(ActionEvent event) {
-       
+
     }
 
     @FXML
     private void actLimpiarCamposHorario(ActionEvent event) {
         cbxDias.setValue(null);
         cbxEmpleados.setValue(null);
-//        tpEntrada.setValue(null);
-//        tpSalida.setValue(null);
     }
 
-    public String mostrarDias(String dia) {
-        if (dia.equals("1")) {
-            return "Lunes";
-        } else if (dia.equals("2")) {
-            return "Martes";
-        } else if (dia.equals("3")) {
-            return "Miercoles";
-        } else if (dia.equals("4")) {
-            return "Jueves";
-        } else if (dia.equals("5")) {
-            return "Viernes";
-        } else if (dia.equals("6")) {
-            return "Sabado";
-        } else if (dia.equals("7")) {
-            return "Domingo";
-        }
-        return "";
-    }
-
-    public void cargarTablaHorarios() {
-//        tablaHorarios.getColumns().clear();
-//        TableColumn<EmpleadosHorariosDTO, String> colEmpleado = new TableColumn<>("Empleado");
-//        colEmpleado.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
-//        TableColumn<EmpleadosHorariosDTO, String> colDia = new TableColumn<>("Dia");
-//        colDia.setCellValueFactory((p) -> new SimpleStringProperty(mostrarDias(String.valueOf(p.getValue().getDia()))));
-//        TableColumn<EmpleadosHorariosDTO, String> colEntrada = new TableColumn<>("Hora de Entrada");
-//        colEntrada.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getHoraEntrada())));
-//        TableColumn<EmpleadosHorariosDTO, String> colSalida = new TableColumn<>("Hora de Salida");
-//        colSalida.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getHoraSalida())));
-//        tablaHorarios.getColumns().addAll(colEmpleado, colEntrada, colSalida);
-//        Respuesta res = horarioService.getAll();
-//        System.out.println(res.getMensaje()+"   "+res.getMensajeInterno());
-//        listHorariosEmp = (List<EmpleadosHorariosDTO>) res.getResultado("Empleados_Horarios");
-//
-//        if (listHorariosEmp != null) {
-//            ObservableList items = FXCollections.observableArrayList(listHorariosEmp);
-//            tablaHorarios.setItems(items);
-//        } else {
-//            tablaHorarios.getItems().clear();
-//        }
-    }
-
-    //tab de marcajes
 }
