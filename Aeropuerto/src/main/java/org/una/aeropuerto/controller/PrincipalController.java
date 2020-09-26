@@ -32,6 +32,7 @@ import javafx.util.Duration;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.App;
+import org.una.aeropuerto.dto.AuthenticationRequest;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.UserAuthenticated;
 
@@ -60,7 +61,7 @@ public class PrincipalController extends Controller implements Initializable {
     private HamburgerBackArrowBasicTransition deslizar;
     private Boolean isShow = false;
     private TranslateTransition tt;
-    
+    AuthenticationRequest authetication;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -76,6 +77,7 @@ public class PrincipalController extends Controller implements Initializable {
         isShow = true;
         trasladar();
         addListener();
+       
     }    
 
     @FXML
@@ -189,6 +191,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionAreasTrabajos(MouseEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "AreasTrabajos");
     }
 
     @FXML
@@ -217,7 +220,6 @@ public class PrincipalController extends Controller implements Initializable {
     }
     
     public void adjustWidth(double witdh) {
-        System.out.println(witdh);
         lblTitulo.setPrefWidth(witdh - 599);
         if(isShow){
             vbContenedor.setPrefWidth(witdh - 300);

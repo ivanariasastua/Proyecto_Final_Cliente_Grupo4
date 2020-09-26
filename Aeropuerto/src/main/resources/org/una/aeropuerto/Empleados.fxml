@@ -4,86 +4,158 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.EmpleadosController">
+<BorderPane fx:id="bpPantalla" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.EmpleadosController">
    <center>
-      <AnchorPane prefHeight="650.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbContenedor" BorderPane.alignment="CENTER">
          <children>
-            <TabPane fx:id="tabPane" layoutY="73.0" onMouseClicked="#actTabPane" prefHeight="577.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab fx:id="tabEmpleados" text="Empleados">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="1100.0">
-                           <children>
-                              <TableView fx:id="tablaEmpleados" layoutX="37.0" layoutY="88.0" prefHeight="387.0" prefWidth="727.0">
-                                <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                              <JFXTextField fx:id="txtBuscar" layoutX="42.0" layoutY="7.0" prefHeight="47.0" prefWidth="584.0" styleClass="campos_texto_1" />
-                              <JFXButton layoutX="871.0" layoutY="50.0" prefHeight="31.0" prefWidth="114.0" text="Buscar" />
-                              <JFXButton layoutX="871.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Modificar" />
-                              <JFXButton layoutX="728.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Inactivar" />
-                              <JFXButton layoutX="660.0" layoutY="18.0" onAction="#actBuscar" prefHeight="43.0" prefWidth="106.0" styleClass="button_3" text="Buscar" />
-                              <JFXButton layoutX="657.0" layoutY="485.0" onAction="#actIrAModificar" prefHeight="43.0" prefWidth="106.0" styleClass="button_3" text="Modificar" />
-                              <JFXButton layoutX="529.0" layoutY="485.0" onAction="#actInactivar" prefHeight="43.0" prefWidth="106.0" styleClass="button_3" text="Inactivar" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab fx:id="tabCrear" text="Crear/Modificar">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <JFXTextField fx:id="txtNombre" layoutX="125.0" layoutY="97.0" prefHeight="47.0" prefWidth="230.0" styleClass="campos_texto_1" />
-                              <JFXComboBox fx:id="cbxEmpleados" layoutX="510.0" layoutY="97.0" prefHeight="47.0" prefWidth="239.0" styleClass="comboBox" />
-                              <JFXComboBox fx:id="cbxRoles" layoutX="510.0" layoutY="240.0" prefHeight="47.0" prefWidth="237.0" styleClass="comboBox" />
-                              <JFXButton layoutX="647.0" layoutY="479.0" onAction="#actGuardar" prefHeight="43.0" prefWidth="131.0" styleClass="button_3" text="Guardar" />
-                              <Label layoutX="33.0" layoutY="111.0" text="Nombre" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <JFXTextField fx:id="txtCedula" layoutX="135.0" layoutY="240.0" prefHeight="47.0" prefWidth="225.0" styleClass="campos_texto_1" />
-                              <Label layoutX="33.0" layoutY="253.0" text="Cedula" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <JFXTextField fx:id="txtContrasena" layoutX="135.0" layoutY="382.0" prefHeight="47.0" prefWidth="222.0" styleClass="campos_texto_1" />
-                              <Label layoutX="33.0" layoutY="396.0" text="Contraseña" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="444.0" layoutY="110.0" text="Jefe" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="444.0" layoutY="254.0" text="Rol" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                           </children></AnchorPane>
-                  </content>
-                </Tab>
-              </tabs>
-            </TabPane>
-            <Label layoutX="216.0" layoutY="18.0" styleClass="lblTitulo_1" text="Información de Empleados" />
+            <AnchorPane prefHeight="650.0" prefWidth="800.0">
+               <children>
+                  <TabPane fx:id="tabPane" layoutY="65.0" onMouseClicked="#actTabPane" prefHeight="585.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab fx:id="tabEmpleados" text="Empleados">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="1100.0">
+                                 <children>
+                                    <TableView fx:id="tablaEmpleados" layoutX="120.0" layoutY="76.0" prefHeight="387.0" prefWidth="861.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="C1" />
+                                        <TableColumn prefWidth="75.0" text="C2" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <JFXTextField fx:id="txtBuscarEmpleados" layoutX="120.0" layoutY="3.0" prefHeight="47.0" prefWidth="695.0" styleClass="campos_texto_1" />
+                                    <JFXButton layoutX="871.0" layoutY="50.0" prefHeight="31.0" prefWidth="114.0" text="Buscar" />
+                                    <JFXButton layoutX="871.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Modificar" />
+                                    <JFXButton layoutX="728.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Inactivar" />
+                                    <JFXButton layoutX="864.0" layoutY="14.0" onAction="#actBuscarEmpleados" prefHeight="43.0" prefWidth="116.0" styleClass="button_3" text="Buscar" />
+                                    <JFXButton layoutX="875.0" layoutY="485.0" onAction="#actIrAModificarEmpleados" prefHeight="43.0" prefWidth="106.0" styleClass="button_3" text="Editar" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab fx:id="tabCrear" text="Crear/Editar">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextField fx:id="txtNombre" layoutX="213.0" layoutY="91.0" prefHeight="47.0" prefWidth="257.0" styleClass="campos_texto_1" />
+                                    <JFXComboBox fx:id="cbxJefes" layoutX="704.0" layoutY="91.0" prefHeight="47.0" prefWidth="259.0" styleClass="comboBox" />
+                                    <JFXComboBox fx:id="cbxRoles" layoutX="704.0" layoutY="234.0" prefHeight="47.0" prefWidth="255.0" styleClass="comboBox" />
+                                    <JFXButton layoutX="937.0" layoutY="479.0" onAction="#actGuardarEmpleado" prefHeight="43.0" prefWidth="131.0" styleClass="button_3" text="Guardar" />
+                                    <Label layoutX="113.0" layoutY="105.0" text="Nombre" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <JFXTextField fx:id="txtCedula" layoutX="223.0" layoutY="234.0" prefHeight="47.0" prefWidth="247.0" styleClass="campos_texto_1" />
+                                    <Label layoutX="111.0" layoutY="247.0" text="Cedula" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <JFXTextField fx:id="txtContrasena" layoutX="223.0" layoutY="376.0" prefHeight="47.0" prefWidth="250.0" styleClass="campos_texto_1" />
+                                    <Label layoutX="113.0" layoutY="390.0" text="Contraseña" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="634.0" layoutY="104.0" text="Jefe" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="634.0" layoutY="248.0" text="Rol" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab fx:id="tabHorarios" text="Horarios">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="1100.0">
+                                 <children>
+                                    <JFXButton layoutX="871.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Modificar" />
+                                    <JFXButton layoutX="728.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Inactivar" />
+                                    <TableView fx:id="tablaHorarios" layoutX="30.0" layoutY="89.0" prefHeight="381.0" prefWidth="535.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="C1" />
+                                        <TableColumn prefWidth="75.0" text="C2" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <Separator layoutX="611.0" layoutY="45.0" opacity="0.37" orientation="VERTICAL" prefHeight="453.0" prefWidth="0.0" />
+                                    <JFXTextField layoutX="30.0" layoutY="21.0" prefHeight="47.0" prefWidth="413.0" styleClass="campos_texto_1" />
+                                    <JFXButton layoutX="457.0" layoutY="29.0" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Buscar" />
+                                    <JFXComboBox fx:id="cbxEmpleados" layoutX="799.0" layoutY="70.0" prefHeight="47.0" prefWidth="257.0" styleClass="campos_texto_1" />
+                                    <JFXComboBox fx:id="cbxDias" layoutX="799.0" layoutY="157.0" prefHeight="47.0" prefWidth="259.0" styleClass="campos_texto_1" />
+                                    <JFXButton layoutX="456.0" layoutY="487.0" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Editar" />
+                                    <JFXButton layoutX="973.0" layoutY="487.0" onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Guardar" />
+                                    <JFXButton layoutX="841.0" layoutY="487.0" onAction="#actLimpiarCamposHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Limpiar" />
+                                    <Label layoutX="669.0" layoutY="83.0" text="Empleado" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="669.0" layoutY="172.0" text="Dia" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="669.0" layoutY="364.0" text="Hora Salida" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="669.0" layoutY="264.0" text="Hora Entrada" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <JFXComboBox fx:id="entradaHoras" layoutX="808.0" layoutY="248.0" prefHeight="47.0" prefWidth="108.0" styleClass="campos_texto_1" />
+                                    <JFXComboBox fx:id="entradaMinutos" layoutX="948.0" layoutY="248.0" prefHeight="47.0" prefWidth="108.0" styleClass="campos_texto_1" />
+                                    <JFXComboBox fx:id="salidaHoras" layoutX="805.0" layoutY="349.0" prefHeight="47.0" prefWidth="108.0" styleClass="campos_texto_1" />
+                                    <JFXComboBox fx:id="salidaMinutos" layoutX="945.0" layoutY="349.0" prefHeight="47.0" prefWidth="108.0" styleClass="campos_texto_1" />
+                                    <Label layoutX="931.0" layoutY="261.0" text=":" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="931.0" layoutY="365.0" text=":" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab fx:id="tabMarcajes" text="Marcaje">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+                  <Label fx:id="lblTitulo" layoutX="373.0" layoutY="14.0" styleClass="lblTitulo_1" text="Información de Empleados" />
+               </children>
+            </AnchorPane>
          </children>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>

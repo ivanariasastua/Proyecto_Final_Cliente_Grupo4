@@ -53,7 +53,6 @@ public class InicioController extends Controller implements Initializable {
             imagenes.add(new Image(App.class.getResource("resources/aeropuerto6.jpg").toString()));
             imvHome.setImage(imagenes.get(0));
         }catch(Exception ex){
-            System.out.println("Inicio ex: "+ex);
         }
         contenedor = (VBox) AppContext.getInstance().get("Contenedor");
         addListener();
@@ -75,7 +74,6 @@ public class InicioController extends Controller implements Initializable {
     }
 
     public void adjustWidth(double witdh) {
-        System.out.println("Inicio: "+witdh);
         imvHome.setFitWidth(witdh);
         lblHome.setPrefWidth(witdh);
     }

@@ -11,17 +11,21 @@ and open the template in the editor.
 .raiz{
     -fx-background-color: #2a2d4d;
 }
+.texto{
+    -fx-text-fill: white;
+    -fx-font: bold 12pt "Courier";
+}
 
 .campos_texto_1{
     -jfx-unfocus-color: #B2B2B2;
     -fx-prompt-text-fill: #B2B2B2;
-    -fx-font: bold 16pt "Courier";
+    -fx-font: bold 14pt "Courier";
     -jfx-focus-color: white;
     -fx-text-fill: derive(white, 20%);
 }
 .comboBox{
     -fx-prompt-text-fill:white;
-    -fx-font: bold 14pt "Courier";
+    -fx-font: bold 12pt "Courier";
     -fx-text-fill: white;
     -jfx-unfocus-color: #B2B2B2;
 }
@@ -33,7 +37,7 @@ and open the template in the editor.
 
 .button_1{
     -fx-text-fill: #B2B2B2;
-    -fx-font: bold 16pt "Courier";
+    -fx-font: bold 14pt "Courier";
     -fx-border-color: #2b702b;
     -fx-border-radius: 15px;
     -fx-background-radius: 15px;
@@ -47,7 +51,7 @@ and open the template in the editor.
 
 .button_2{
     -fx-text-fill: #B2B2B2;
-    -fx-font: bold 16pt "Courier";
+    -fx-font: bold 14pt "Courier";
     -fx-border-color: #990000;
     -fx-border-radius: 15px;
     -fx-background-radius: 15px;
@@ -280,7 +284,7 @@ and open the template in the editor.
 
 #lblCedula, #lblRol{
     -fx-text-fill: white;
-    -fx-font: italic 16pt "Courier";
+    -fx-font: italic 14pt "Courier";
 }
 
 #smUser{
@@ -329,7 +333,7 @@ and open the template in the editor.
 
 .table-view{
     -fx-control-inner-background: whitesmoke;
-    -fx-font: bold 16px "Courier";
+    -fx-font: bold 14px "Courier";
     -fx-text-background-color: black;
    /* -fx-focus-color: #3b427c;*/
     -fx-border-color: #3b427c;

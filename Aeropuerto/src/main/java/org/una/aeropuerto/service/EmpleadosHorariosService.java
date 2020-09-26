@@ -24,6 +24,7 @@ public class EmpleadosHorariosService {
             Request request = new Request("empleados_horarios/get");
             request.get();
             if (request.isError()) {
+                System.out.println("error "+request.getError()+request.getMensajeRespuesta());
                 return new Respuesta(false, request.getError(), "Error al obtener todos los horarios de los empleados");
             }
             List<EmpleadosHorariosDTO> result = (List<EmpleadosHorariosDTO>) request.readEntity(new GenericType<List<EmpleadosHorariosDTO>>(){});

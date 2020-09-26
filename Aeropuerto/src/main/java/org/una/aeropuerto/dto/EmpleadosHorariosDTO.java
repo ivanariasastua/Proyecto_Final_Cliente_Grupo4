@@ -6,7 +6,6 @@
 package org.una.aeropuerto.dto;
 
 import java.util.Date;
-import javax.json.bind.annotation.JsonbDateFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +23,7 @@ public class EmpleadosHorariosDTO {
     
     private Long id;
     private EmpleadosDTO empleado;
+  //  @JsonbDateFormat(value = "HH:mm:ss.SSSXXX")
     private Date horaEntrada;
     private Date horaSalida;
     private int dia;
