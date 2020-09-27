@@ -181,7 +181,15 @@ public class EmpleadosController extends Controller implements Initializable {
             return row;
         });
     }
-
+    @FXML
+    private void actLimpiarCamposEmplead(ActionEvent event) {
+        txtNombre.setText(null);
+        txtCedula.setText(null);
+        txtContrasena.setText(null);
+        cbxJefes.setValue(null);
+        cbxRoles.setValue(null);
+        empSeleccionado = false;
+    }
     public void cargarTablaEmpleados() {
         tablaEmpleados.getColumns().clear();
         TableColumn<EmpleadosDTO, String> colNombre = new TableColumn<>("Nombre");
@@ -223,11 +231,10 @@ public class EmpleadosController extends Controller implements Initializable {
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
 
-                Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
+                Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(),empleadoDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
                     empSeleccionado = false;
-                    emplSeleccionado = null;
                 } else {
                     Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
                 }
@@ -235,6 +242,7 @@ public class EmpleadosController extends Controller implements Initializable {
         } else {
             System.out.println("guardar");
             if (validarCampos()) {
+                empleadoDTO= new EmpleadosDTO();
                 empleadoDTO.setCedula(txtCedula.getText());
                 empleadoDTO.setContrasenaEncriptada(txtContrasena.getText());
                 empleadoDTO.setJefe(cbxJefes.getValue());
@@ -282,7 +290,7 @@ public class EmpleadosController extends Controller implements Initializable {
             SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
             selectionModel.select(tabCrear);
             cargarDatos();
-            empSeleccionado = false;
+          //  empSeleccionado = false;
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar empleado", "Debe seleccionar un empleado");
         }
@@ -332,5 +340,7 @@ public class EmpleadosController extends Controller implements Initializable {
         cbxDias.setValue(null);
         cbxEmpleados.setValue(null);
     }
+
+    
 
 }

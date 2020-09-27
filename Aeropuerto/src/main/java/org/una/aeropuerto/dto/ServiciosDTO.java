@@ -28,4 +28,9 @@ public class ServiciosDTO {
     private boolean estado;
     private List<ServiciosGastosDTO> gastosMantenimientos = new ArrayList<>();
     private List<ServiciosPreciosDTO> serviciosPrecios = new ArrayList<>();
+    
+     @Override
+    public String toString(){
+        return nombre;
+    }
 }

@@ -11,19 +11,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.GastosServiciosController">
    <center>
       <AnchorPane prefHeight="650.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="296.0" layoutY="11.0" styleClass="lblTitulo_1" text="Informaciono de Gastos de Servicios" />
+            <Label layoutX="296.0" layoutY="11.0" styleClass="lblTitulo_1" text="Informacion de Gastos de Servicios" />
             <TabPane layoutY="66.0" prefHeight="587.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Gastos">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="tablaGastosS" layoutX="73.0" layoutY="66.0" prefHeight="412.0" prefWidth="955.0">
+                              <TableView fx:id="tablaGastosS" layoutX="41.0" layoutY="68.0" prefHeight="412.0" prefWidth="1018.0">
                                 <columns>
                                   <TableColumn prefWidth="75.0" text="C1" />
                                   <TableColumn prefWidth="75.0" text="C2" />
@@ -32,9 +31,9 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
-                              <JFXTextField layoutX="74.0" layoutY="5.0" prefHeight="41.0" prefWidth="745.0" styleClass="campos_texto_1" />
-                              <JFXButton layoutX="875.0" layoutY="10.0" prefHeight="43.0" prefWidth="148.0" styleClass="button_3" text="Buscar" />
-                              <JFXButton layoutX="903.0" layoutY="491.0" onAction="#actEditarGastoS" prefHeight="43.0" prefWidth="125.0" styleClass="button_3" text="Editar" />
+                              <JFXTextField layoutX="41.0" layoutY="9.0" prefHeight="41.0" prefWidth="831.0" styleClass="campos_texto_1" />
+                              <JFXButton layoutX="911.0" layoutY="10.0" prefHeight="43.0" prefWidth="148.0" styleClass="button_3" text="Buscar" />
+                              <JFXButton layoutX="936.0" layoutY="493.0" onAction="#actEditarGastoS" prefHeight="43.0" prefWidth="125.0" styleClass="button_3" text="Editar" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -53,14 +52,15 @@
                               <Label layoutX="587.0" layoutY="388.0" styleClass="texto" text="Estado de Pago" />
                               <JFXComboBox fx:id="cbxEstadoGasto" layoutX="745.0" layoutY="268.0" prefHeight="31.0" prefWidth="290.0" styleClass="comboBox" />
                               <Label layoutX="43.0" layoutY="154.0" styleClass="texto" text="Numero Contrato" />
-                              <Label layoutX="43.0" layoutY="272.0" styleClass="texto" text="Perioricidad" />
+                              <Label layoutX="43.0" layoutY="272.0" styleClass="texto" text="Periodicidad" />
                               <JFXComboBox fx:id="cbxPerioricidad" layoutX="201.0" layoutY="268.0" prefHeight="31.0" prefWidth="280.0" styleClass="comboBox" />
                               <Label layoutX="587.0" layoutY="154.0" styleClass="texto" text="Responsable" />
                               <JFXComboBox fx:id="cbxResponsable" layoutX="744.0" layoutY="151.0" prefHeight="31.0" prefWidth="301.0" styleClass="comboBox" />
                               <Label layoutX="585.0" layoutY="45.0" styleClass="texto" text="Servicio" />
                               <JFXComboBox fx:id="cbxServicio" layoutX="743.0" layoutY="41.0" prefHeight="31.0" prefWidth="291.0" styleClass="comboBox" />
                               <Label layoutX="43.0" layoutY="391.0" styleClass="texto" text="Duracion" />
-                              <JFXComboBox fx:id="cbxDuracion" layoutX="201.0" layoutY="388.0" prefHeight="31.0" prefWidth="280.0" styleClass="comboBox" />
+                              <JFXComboBox fx:id="cbxDuracion" layoutX="201.0" layoutY="388.0" prefHeight="31.0" prefWidth="123.0" styleClass="comboBox" />
+                              <JFXComboBox fx:id="cbxTiempo" layoutX="358.0" layoutY="388.0" prefHeight="31.0" prefWidth="120.0" styleClass="comboBox" />
                            </children>
                         </AnchorPane>
                   </content>

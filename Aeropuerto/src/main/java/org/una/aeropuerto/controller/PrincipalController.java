@@ -142,10 +142,12 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionServicios(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "Servicios");
     }
 
     @FXML
     private void accionRegistrarGasto(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "GastosServicios");
     }
 
     @FXML

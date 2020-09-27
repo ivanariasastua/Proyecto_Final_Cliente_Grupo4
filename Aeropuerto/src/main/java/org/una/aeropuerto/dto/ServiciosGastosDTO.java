@@ -29,8 +29,8 @@ public class ServiciosGastosDTO {
     private String empresa;
     @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Date fechaRegistro;
-    private Integer estadoPago;
-    private Integer estadoGasto;
+    private boolean estadoPago;
+    private boolean estadoGasto;
     private String numeroContrato;
     private Integer perioricidad;
     private Long duracion;

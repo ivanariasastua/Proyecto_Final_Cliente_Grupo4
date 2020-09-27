@@ -84,6 +84,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     @Override
     public void initialize() {
         listAreasT = new ArrayList<>();
+        areaSelec=false;
         cargarTablaAreas();
         clickTablas();
         llenarComboboxs();
