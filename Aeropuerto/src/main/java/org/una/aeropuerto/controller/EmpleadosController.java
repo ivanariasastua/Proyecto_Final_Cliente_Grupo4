@@ -115,6 +115,11 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+    }
+
+    @Override
+    public void initialize() {
         ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo");
         cbxDias.setItems(items);
         empSeleccionado = false;
@@ -126,10 +131,6 @@ public class EmpleadosController extends Controller implements Initializable {
         cargarTablaEmpleados();
         llenarComboBoxs();
         clickTablas();
-    }
-
-    @Override
-    public void initialize() {
     }
     //tab de empleados
 
@@ -222,7 +223,6 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actGuardarEmpleado(ActionEvent event) {
         if (empSeleccionado == true) {
-            System.out.println("editar");
             if (validarCampos()) {
                 empleadoDTO.setId(emplSeleccionado.getId());
                 empleadoDTO.setCedula(txtCedula.getText());
@@ -234,13 +234,11 @@ public class EmpleadosController extends Controller implements Initializable {
                 Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(),empleadoDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
-                    empSeleccionado = false;
                 } else {
                     Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
                 }
             }
         } else {
-            System.out.println("guardar");
             if (validarCampos()) {
                 empleadoDTO= new EmpleadosDTO();
                 empleadoDTO.setCedula(txtCedula.getText());
@@ -265,6 +263,7 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     void limpiarCampos() {
+        empSeleccionado = false;
         txtCedula.setText(null);
         txtContrasena.setText(null);
         txtNombre.setText(null);
@@ -279,9 +278,25 @@ public class EmpleadosController extends Controller implements Initializable {
         } else if (tabCrear.isSelected() && empSeleccionado == false) {
             limpiarCampos();
         } else if (tabHorarios.isSelected()) {
-              //    cargarTablaHorarios();
+         //     cargarTablaHorarios();
+              llenarRelojs();
 
         }
+    }
+    
+    public void cargarTablaHorarios(){
+//        tablaHorarios.getColumns().clear();
+//        TableColumn<EmpleadosHorariosDTO, String> colNombre = new TableColumn<>("Empleado");
+//        colNombre.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
+//        tablaHorarios.getColumns().addAll(colNombre);
+//        Respuesta res = horarioService.getAll();
+//        listHorariosEmp = (List<EmpleadosHorariosDTO>) res.getResultado("Empleados_Horarios");
+//        if (listHorariosEmp != null) {
+//            ObservableList items = FXCollections.observableArrayList(listHorariosEmp);
+//            tablaHorarios.setItems(items);
+//        } else {
+//            tablaHorarios.getItems().clear();
+//        }
     }
 
     @FXML
@@ -309,7 +324,7 @@ public class EmpleadosController extends Controller implements Initializable {
         List<String> minutos = new ArrayList<>();
         List<String> horas = new ArrayList<>();
         for (int i = 0; i <= 59; i++) {
-            if (i != 0 && i <= 12) {
+            if (i != 0 && i <= 24) {
                 if (i <= 9) {
                     horas.add("0" + String.valueOf(i));
                 } else {
