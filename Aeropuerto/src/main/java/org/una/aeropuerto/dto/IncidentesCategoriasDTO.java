@@ -25,5 +25,11 @@ public class IncidentesCategoriasDTO {
     private String nombre;
     private String descripcion;
     private IncidentesCategoriasDTO categoriaSuperior;
+    //@ToString.Exclude
     private List<IncidentesRegistradosDTO> incidentesRegistrados;
+    
+    @Override
+    public String toString(){
+        return nombre;
+    }
 }

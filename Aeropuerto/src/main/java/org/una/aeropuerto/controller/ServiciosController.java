@@ -149,6 +149,7 @@ public class ServiciosController extends Controller implements Initializable {
         txtDescripcionServicio.setText(null);
         servSelec = false;
         servicioDTO = new ServiciosDTO();
+        servicSeleccionado = new ServiciosDTO();
     }
 
 }

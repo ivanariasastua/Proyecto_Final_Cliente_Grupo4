@@ -36,5 +36,5 @@ public class ServiciosGastosDTO {
     private Long duracion;
     private EmpleadosDTO responsable;
     private boolean estado;
-    private List<NotasDTO> notas = new ArrayList<>();
+    private String observaciones;
 }

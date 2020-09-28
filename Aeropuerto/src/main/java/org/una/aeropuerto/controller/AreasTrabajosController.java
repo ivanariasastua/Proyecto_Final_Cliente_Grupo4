@@ -84,7 +84,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     @Override
     public void initialize() {
         listAreasT = new ArrayList<>();
-        areaSelec=false;
+        areaSelec = false;
         cargarTablaAreas();
         clickTablas();
         llenarComboboxs();
@@ -154,6 +154,7 @@ public class AreasTrabajosController extends Controller implements Initializable
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
                 cargarTablaAreas();
+                llenarComboboxs();
             }
         } else {
             if (txtNombreArea.getText() == null) {
@@ -166,6 +167,7 @@ public class AreasTrabajosController extends Controller implements Initializable
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Area de trabajo guardada correctamente");
                     cargarTablaAreas();
+                    llenarComboboxs();
                 }
             }
         }
@@ -176,6 +178,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         txtDescripcionArea.setText(null);
         txtNombreArea.setText(null);
         areaSelec = false;
+        areaSeleccionada = new AreasTrabajosDTO();
         areaDto = new AreasTrabajosDTO();
     }
 
@@ -236,7 +239,7 @@ public class AreasTrabajosController extends Controller implements Initializable
             }
         } else {
             if (validarCamposEmpleadosAreasT()) {
-                empTrabDTO= new EmpleadosAreasTrabajosDTO();
+                empTrabDTO = new EmpleadosAreasTrabajosDTO();
                 empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
                 empTrabDTO.setEmpleado(cbxEmpleado.getValue());
                 Respuesta res = empTrabService.guardarEmpleadoAreaTrabajo(empTrabDTO);

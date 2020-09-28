@@ -59,7 +59,7 @@
                               <Label layoutX="585.0" layoutY="45.0" styleClass="texto" text="Servicio" />
                               <JFXComboBox fx:id="cbxServicio" layoutX="743.0" layoutY="41.0" prefHeight="31.0" prefWidth="291.0" styleClass="comboBox" />
                               <Label layoutX="43.0" layoutY="391.0" styleClass="texto" text="Duracion" />
-                              <JFXComboBox fx:id="cbxDuracion" labelFloat="true" layoutX="201.0" layoutY="388.0" prefHeight="31.0" prefWidth="123.0" />
+                              <JFXComboBox fx:id="cbxDuracion" labelFloat="true" layoutX="201.0" layoutY="388.0" prefHeight="31.0" prefWidth="123.0" styleClass="comboBox" />
                               <JFXComboBox fx:id="cbxTiempo" layoutX="358.0" layoutY="388.0" prefHeight="31.0" prefWidth="120.0" styleClass="comboBox" />
                            </children>
                         </AnchorPane>

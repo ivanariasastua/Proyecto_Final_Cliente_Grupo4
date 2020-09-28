@@ -26,6 +26,12 @@ public class EmpleadosHorariosDTO {
   //  @JsonbDateFormat(value = "HH:mm:ss.SSSXXX")
     private Date horaEntrada;
     private Date horaSalida;
-    private int dia;
+    private String diaEntrada;
+    private String diaSalida;
     private boolean estado;
+    
+    @Override
+    public String toString(){
+        return String.valueOf(horaEntrada+"/"+horaSalida);
+    }
 }

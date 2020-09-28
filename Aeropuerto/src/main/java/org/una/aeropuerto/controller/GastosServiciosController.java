@@ -375,6 +375,7 @@ public class GastosServiciosController extends Controller implements Initializab
         cbxResponsable.setValue(null);
         cbxTiempo.setValue(null);
         gastSelec = false;
+        gastoSelecciondo = new ServiciosGastosDTO();
     }
 
     @FXML

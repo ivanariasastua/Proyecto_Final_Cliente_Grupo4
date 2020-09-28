@@ -43,21 +43,35 @@ import org.una.aeropuerto.util.UserAuthenticated;
  */
 public class PrincipalController extends Controller implements Initializable {
 
-    @FXML private JFXHamburger hamMenu;
-    @FXML private MenuButton smUser;
-    @FXML private Label lblCedula1;
-    @FXML private Label lblRol1;
-    @FXML private MenuItem miCodigo1;
-    @FXML private ImageView imvDark;
-    @FXML private JFXToggleButton tbTema;
-    @FXML private ImageView imvLight;
-    @FXML private ImageView imvMaximizarRestaurar;
-    @FXML private VBox vbContenedor;
-    @FXML private Label lblTitulo;
-    @FXML private ScrollPane spMenu;
-    @FXML private VBox vbMenu;
-    @FXML private BorderPane bpPrincipal;
-    
+    @FXML
+    private JFXHamburger hamMenu;
+    @FXML
+    private MenuButton smUser;
+    @FXML
+    private Label lblCedula1;
+    @FXML
+    private Label lblRol1;
+    @FXML
+    private MenuItem miCodigo1;
+    @FXML
+    private ImageView imvDark;
+    @FXML
+    private JFXToggleButton tbTema;
+    @FXML
+    private ImageView imvLight;
+    @FXML
+    private ImageView imvMaximizarRestaurar;
+    @FXML
+    private VBox vbContenedor;
+    @FXML
+    private Label lblTitulo;
+    @FXML
+    private ScrollPane spMenu;
+    @FXML
+    private VBox vbMenu;
+    @FXML
+    private BorderPane bpPrincipal;
+
     private HamburgerBackArrowBasicTransition deslizar;
     private Boolean isShow = false;
     private TranslateTransition tt;
@@ -65,29 +79,30 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try{
+        try {
             miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE"));
-        }catch(Exception ex){}
+        } catch (Exception ex) {
+        }
         AppContext.getInstance().set("Contenedor", vbContenedor);
         FlowController.getInstance().goViewPanel(vbContenedor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
-        tt =  new TranslateTransition(Duration.seconds(0.6));
+        tt = new TranslateTransition(Duration.seconds(0.6));
         deslizar.setRate(1);
         deslizar.play();
         isShow = true;
         trasladar();
         addListener();
-       
-    }    
+
+    }
 
     @FXML
     private void accionDeslizarMenu(MouseEvent event) {
         deslizar.setRate(deslizar.getRate() * -1);
         deslizar.play();
-        if(isShow){
+        if (isShow) {
             tt.setByX(0);
             tt.setToX(-300);
-        }else{
+        } else {
             tt.setByX(-300);
             tt.setToX(0);
             vbContenedor.setPrefWidth(vbContenedor.getWidth() - 300);
@@ -103,7 +118,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionCerrarSecion(ActionEvent event) {
-        if(Mensaje.showConfirmation("Cerrar Sesion", this.getStage(), "¿Seguro desea cerrar la sesion?")){
+        if (Mensaje.showConfirmation("Cerrar Sesion", this.getStage(), "¿Seguro desea cerrar la sesion?")) {
             FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
             this.closeWindow();
         }
@@ -119,10 +134,10 @@ public class PrincipalController extends Controller implements Initializable {
             file.flush();
             file.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("Error leyendo el archivo: [ " + ex +" ]");
+            System.out.println("Error leyendo el archivo: [ " + ex + " ]");
         } catch (IOException ex) {
-            System.out.println("Error leyendo el archivo: [ " + ex +" ]");
-        } 
+            System.out.println("Error leyendo el archivo: [ " + ex + " ]");
+        }
     }
 
     @FXML
@@ -136,8 +151,9 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionCerrar(MouseEvent event) {
-        if(Mensaje.showConfirmation("Cerrar Ventana", this.getStage(), "¿Seguro desea cerrar la ventana?"))
+        if (Mensaje.showConfirmation("Cerrar Ventana", this.getStage(), "¿Seguro desea cerrar la ventana?")) {
             this.getStage().close();
+        }
     }
 
     @FXML
@@ -156,6 +172,8 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionCategorias(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "CategoriasIncidentes");
+
     }
 
     @FXML
@@ -198,6 +216,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionRegistrarGastos(MouseEvent event) {
+
     }
 
     @FXML
@@ -206,26 +225,27 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionTransacciones(MouseEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "Transacciones");
     }
 
     @FXML
     private void accionParametros(MouseEvent event) {
     }
-    
-    public void addListener(){
-        bpPrincipal.widthProperty().addListener( w -> {
+
+    public void addListener() {
+        bpPrincipal.widthProperty().addListener(w -> {
             adjustWidth(bpPrincipal.getWidth());
         });
-        bpPrincipal.heightProperty().addListener( h -> {
+        bpPrincipal.heightProperty().addListener(h -> {
             adjustHeigth(bpPrincipal.getHeight());
         });
     }
-    
+
     public void adjustWidth(double witdh) {
         lblTitulo.setPrefWidth(witdh - 599);
-        if(isShow){
+        if (isShow) {
             vbContenedor.setPrefWidth(witdh - 300);
-        }else{
+        } else {
             vbContenedor.setPrefWidth(witdh);
         }
     }
@@ -234,14 +254,14 @@ public class PrincipalController extends Controller implements Initializable {
         spMenu.setPrefHeight(height - 50);
         vbContenedor.setPrefHeight(height - 50);
     }
-    
-    private void trasladar(){
+
+    private void trasladar() {
         tt.setAutoReverse(false);
         tt.setCycleCount(1);
         tt.setDuration(Duration.seconds(0.6));
         tt.setNode(vbMenu);
         tt.setOnFinished(ev -> {
-            if(isShow){
+            if (isShow) {
                 vbMenu.getChildren().clear();
                 vbMenu.setPrefWidth(0);
                 vbContenedor.setPrefWidth(vbContenedor.getWidth() + 300);
@@ -249,5 +269,5 @@ public class PrincipalController extends Controller implements Initializable {
             isShow = !isShow;
         });
     }
-    
+
 }
