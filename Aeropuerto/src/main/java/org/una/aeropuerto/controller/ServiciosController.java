@@ -80,6 +80,14 @@ public class ServiciosController extends Controller implements Initializable {
             return row;
         });
     }
+    
+    public String estado(boolean estad) {
+        if (estad == true) {
+            return "Activo";
+        } else {
+            return "Inactivo";
+        }
+    }
 
     public void cargarTablaServicios() {
         tablaServicios.getColumns().clear();
@@ -87,7 +95,9 @@ public class ServiciosController extends Controller implements Initializable {
         colNomb.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<ServiciosDTO, String> colDescrip = new TableColumn<>("Descripcion");
         colDescrip.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDescripcion()));
-        tablaServicios.getColumns().addAll(colNomb, colDescrip);
+        TableColumn<ServiciosDTO, String> colEst = new TableColumn<>("Estado");
+        colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
+        tablaServicios.getColumns().addAll(colNomb, colDescrip,colEst);
         Respuesta res = servService.getAll();
         System.out.println(res.getMensaje() + res.getMensajeInterno());
         if (res.getEstado()) {
