@@ -205,6 +205,14 @@ public class GastosServiciosController extends Controller implements Initializab
         });
     }
 
+    public String estado(boolean estad) {
+        if (estad == true) {
+            return "Activo";
+        } else {
+            return "Inactivo";
+        }
+    }
+
     public void cargarColumnasTabla() {
         tablaGastosS.getColumns().clear();
         TableColumn<ServiciosGastosDTO, String> colEmpresa = new TableColumn<>("Empresa");
@@ -223,8 +231,10 @@ public class GastosServiciosController extends Controller implements Initializab
         colGast.setCellValueFactory((p) -> new SimpleStringProperty(estadoGasto(p.getValue().isEstadoGasto())));
         TableColumn<ServiciosGastosDTO, String> colPeriod = new TableColumn<>("Periodicidad");
         colPeriod.setCellValueFactory((p) -> new SimpleStringProperty(periodicidad(p.getValue().getPerioricidad())));
+        TableColumn<ServiciosGastosDTO, String> colEst = new TableColumn<>("Estado");
+        colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
 
-        tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colResp, colPago, colGast, colPeriod);
+        tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colResp, colPago, colGast, colPeriod, colEst);
 
     }
 
@@ -253,11 +263,15 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actEditarGastoS(ActionEvent event) {
         if (gastSelec == true) {
-            SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-            selectionModel.select(tabCrearEditar);
-            cargarDatos();
+            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(tabCrearEditar);
+                cargarDatos();
+            } else {
+                gastSelec = false;
+            }
         } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar empleado", "Debe seleccionar un empleado");
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto", "Debe seleccionar un gasto de servicio");
         }
     }
 
@@ -390,6 +404,26 @@ public class GastosServiciosController extends Controller implements Initializab
             cargarDatosGastosServ();
         } else if (tabCrearEditar.isSelected() && gastSelec == false) {
             limpiarCampos();
+        }
+    }
+
+    @FXML
+    private void actInactivarGastoS(ActionEvent event) {
+        if (gastSelec == true) {
+            if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
+                gastoSelecciondo.setEstado(false);
+                Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), gastoSelecciondo);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el gasto de servicio");
+                    cargarColumnasTabla();
+                    cargarDatosGastosServ();
+                    gastSelec = false;
+                }
+            } else {
+                gastSelec = false;
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto de servicio", "Debe seleccionar un gasto de servicio");
         }
     }
 

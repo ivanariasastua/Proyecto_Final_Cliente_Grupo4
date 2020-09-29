@@ -58,6 +58,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cargarCategorias();
+        clickTabla();
     }
 
     @Override
@@ -113,6 +114,14 @@ public class CategoriasIncidentesController extends Controller implements Initia
         }
     }
 
+    public String estado(boolean estad) {
+        if (estad == true) {
+            return "Activo";
+        } else {
+            return "Inactivo";
+        }
+    }
+
     public void cargarCategorias() {
         tablaCategorias.getColumns().clear();
         TableColumn<IncidentesCategoriasDTO, String> colNombre = new TableColumn<>("Nombre");
@@ -121,14 +130,18 @@ public class CategoriasIncidentesController extends Controller implements Initia
         colCat.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getCategoriaSuperior())));
         TableColumn<IncidentesCategoriasDTO, String> colDesc = new TableColumn<>("Descripcion");
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getDescripcion())));
-        tablaCategorias.getColumns().addAll(colNombre, colCat, colDesc);
+        TableColumn<IncidentesCategoriasDTO, String> colEst = new TableColumn<>("Estado");
+        colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
+        tablaCategorias.getColumns().addAll(colNombre, colCat, colDesc, colEst);
         Respuesta res = categoriaService.getAll();
-        listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
-        if (listCategorias != null) {
-            ObservableList items = FXCollections.observableArrayList(listCategorias);
-            tablaCategorias.setItems(items);
-        } else {
-            tablaCategorias.getItems().clear();
+        if (res.getEstado()) {
+            listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+            if (listCategorias != null) {
+                ObservableList items = FXCollections.observableArrayList(listCategorias);
+                tablaCategorias.setItems(items);
+            } else {
+                tablaCategorias.getItems().clear();
+            }
         }
     }
 
@@ -148,11 +161,34 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actEditarCat(ActionEvent event) {
         if (catSelec == true) {
-            txtDescripcion.setText(categoriaSelec.getDescripcion());
-            txtNombre.setText(categoriaSelec.getNombre());
-            cbxCategoriasSuperiores.setValue(categoriaSelec.getCategoriaSuperior());
+            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                txtDescripcion.setText(categoriaSelec.getDescripcion());
+                txtNombre.setText(categoriaSelec.getNombre());
+                cbxCategoriasSuperiores.setValue(categoriaSelec.getCategoriaSuperior());
+            } else {
+                catSelec = false;
+            }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar categoria", "Debe seleccionar una categoria");
+        }
+    }
+
+    @FXML
+    private void actInactivarCateg(ActionEvent event) {
+        if (catSelec == true) {
+            if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
+                categoriaSelec.setEstado(false);
+                Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
+                    cargarCategorias();
+                    catSelec = false;
+                }
+            } else {
+                catSelec = false;
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar información", "Debe seleccionar información de la tabla");
         }
     }
 

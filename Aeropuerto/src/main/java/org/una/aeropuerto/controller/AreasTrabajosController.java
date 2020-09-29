@@ -137,8 +137,12 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actEditarAreasT(ActionEvent event) {
         if (areaSelec == true) {
-            txtDescripcionArea.setText(areaSeleccionada.getDescripcion());
-            txtNombreArea.setText(areaSeleccionada.getNombre());
+            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                txtDescripcionArea.setText(areaSeleccionada.getDescripcion());
+                txtNombreArea.setText(areaSeleccionada.getNombre());
+            } else {
+                areaSelec = false;
+            }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "Debe seleccionar el area de trabajo");
         }
@@ -182,13 +186,23 @@ public class AreasTrabajosController extends Controller implements Initializable
         areaDto = new AreasTrabajosDTO();
     }
 
+    public String estado(boolean estad) {
+        if (estad == true) {
+            return "Activo";
+        } else {
+            return "Inactivo";
+        }
+    }
+
     public void cargarTablaAreas() {
         tablaAreasTrabajo.getColumns().clear();
         TableColumn<AreasTrabajosDTO, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<AreasTrabajosDTO, String> colDesc = new TableColumn<>("Descripcion");
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDescripcion()));
-        tablaAreasTrabajo.getColumns().addAll(colNombre, colDesc);
+        TableColumn<AreasTrabajosDTO, String> colEstado = new TableColumn<>("Estado");
+        colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
+        tablaAreasTrabajo.getColumns().addAll(colNombre, colDesc, colEstado);
         Respuesta res = areasService.getAll();
         listAreasT = (List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos");
         if (listAreasT != null) {
@@ -196,6 +210,25 @@ public class AreasTrabajosController extends Controller implements Initializable
             tablaAreasTrabajo.setItems(items);
         } else {
             tablaAreasTrabajo.getItems().clear();
+        }
+    }
+
+    @FXML
+    private void actInactivarAreaT(ActionEvent event) {
+        if (areaSelec == true) {
+            if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
+                areaSeleccionada.setEstado(false);
+                Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Area de trabajo inactivada correctamente");
+                    cargarTablaAreas();
+                    areaSelec = false;
+                }
+            } else {
+                areaSelec = false;
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "Debe seleccionar una area de trabajo");
         }
     }
 
@@ -214,7 +247,9 @@ public class AreasTrabajosController extends Controller implements Initializable
         colEmpl.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
         TableColumn<EmpleadosAreasTrabajosDTO, String> colArea = new TableColumn<>("Area de Trabajo");
         colArea.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getAreaTrabajo())));
-        tablaAsignarAreas.getColumns().addAll(colEmpl, colArea);
+        TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado = new TableColumn<>("Estado");
+        colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
+        tablaAsignarAreas.getColumns().addAll(colEmpl, colArea, colEstado);
         Respuesta res = empTrabService.getAll();
 
         listEmpAreaT = (List<EmpleadosAreasTrabajosDTO>) res.getResultado("Empleados_Areas_Trabajos");
@@ -263,10 +298,33 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actEditarEmplAreasTrab(ActionEvent event) {
         if (empAreaSelec == true) {
-            cbxAreaTrabajo.setValue(empAreaSeleccionado.getAreaTrabajo());
-            cbxEmpleado.setValue(empAreaSeleccionado.getEmpleado());
+            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                cbxAreaTrabajo.setValue(empAreaSeleccionado.getAreaTrabajo());
+                cbxEmpleado.setValue(empAreaSeleccionado.getEmpleado());
+            } else {
+                empAreaSelec = false;
+            }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Dato", "Debe seleccionar un dato de la tabla");
+        }
+    }
+
+    @FXML
+    private void actInactivarEmplAreasTrab(ActionEvent event) {
+        if (empAreaSelec == true) {
+            if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
+                empAreaSeleccionado.setEstado(false);
+                Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empAreaSeleccionado);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
+                    cargarTablaAsignarAreasT();
+                    empAreaSelec = false;
+                }
+            } else {
+                empAreaSelec = false;
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar información", "Debe seleccionar información de la tabla");
         }
     }
 

@@ -18,7 +18,7 @@
             <AnchorPane prefHeight="650.0" prefWidth="1100.0">
                <children>
                   <Label layoutX="380.0" layoutY="14.0" styleClass="lblTitulo_1" text="Informacion de Servicios" />
-                  <TableView fx:id="tablaServicios" layoutX="20.0" layoutY="170.0" prefHeight="400.0" prefWidth="534.0">
+                  <TableView fx:id="tablaServicios" layoutX="20.0" layoutY="170.0" prefHeight="409.0" prefWidth="534.0">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />
@@ -32,11 +32,12 @@
                   <JFXTextArea fx:id="txtDescripcionServicio" layoutX="720.0" layoutY="343.0" prefHeight="120.0" prefWidth="338.0" styleClass="campos_texto_1" />
                   <JFXButton layoutX="963.0" layoutY="592.0" onAction="#actGuardarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Guardar" />
                   <JFXTextField fx:id="txtBuscarServicio" layoutX="20.0" layoutY="108.0" prefHeight="41.0" prefWidth="412.0" styleClass="campos_texto_1" />
-                  <JFXButton layoutX="432.0" layoutY="592.0" onAction="#acteditarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Editar" />
-                  <JFXButton layoutX="449.0" layoutY="107.0" onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="105.0" styleClass="button_3" text="Buscar" />
+                  <JFXButton layoutX="152.0" layoutY="592.0" onAction="#actInactivarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Inactivar" />
+                  <JFXButton layoutX="449.0" layoutY="112.0" onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="105.0" styleClass="button_3" text="Buscar" />
                   <Label layoutX="606.0" layoutY="251.0" styleClass="texto" text="Nombre" />
                   <Label layoutX="606.0" layoutY="379.0" styleClass="texto" text="Descripcion" />
                   <JFXButton layoutX="831.0" layoutY="592.0" onAction="#actLimpiarCamposServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Limpiar" />
+                  <JFXButton layoutX="20.0" layoutY="592.0" onAction="#acteditarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Editar" />
                </children>
             </AnchorPane>
          </children>

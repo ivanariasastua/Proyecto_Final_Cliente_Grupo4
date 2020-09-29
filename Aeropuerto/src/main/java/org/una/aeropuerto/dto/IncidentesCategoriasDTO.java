@@ -18,14 +18,14 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class IncidentesCategoriasDTO {
     
     private Long id;
     private String nombre;
     private String descripcion;
     private IncidentesCategoriasDTO categoriaSuperior;
-    //@ToString.Exclude
+    private boolean estado;
+//    //@ToString.Exclude
     private List<IncidentesRegistradosDTO> incidentesRegistrados;
     
     @Override

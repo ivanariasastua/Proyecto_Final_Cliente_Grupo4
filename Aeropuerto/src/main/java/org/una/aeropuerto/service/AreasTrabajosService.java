@@ -71,6 +71,7 @@ public class AreasTrabajosService {
             Request request = new Request("areas_trabajos/inactivar", "/{id}", parametros);
             request.put(id);
             if (request.isError()) {
+                System.out.println("error "+request.getError());
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el area de trabajo");
             }
             AreasTrabajosDTO result = (AreasTrabajosDTO) request.readEntity(AreasTrabajosDTO.class);

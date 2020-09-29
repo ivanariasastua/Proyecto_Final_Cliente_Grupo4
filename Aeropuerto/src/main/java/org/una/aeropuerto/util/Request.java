@@ -47,16 +47,6 @@ public class Request {
         headers.add("Authorization", AppContext.getInstance().get("token"));
         builder.headers(headers);
     }
-    
-    private void setDireccion(String direccion) {
-        this.webTarget = client.target(apiUrl + direccion);
-        this.builder = webTarget.request(MediaType.APPLICATION_JSON);
-        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
-        headers.add("Content-Type", "application/json; charset=UTF-8");
-        headers.add("Accept", "application/json");
-        headers.add("Authorization", AppContext.getInstance().get("token"));
-        builder.headers(headers);
-    }
 
     public void get() {
         response = builder.get();

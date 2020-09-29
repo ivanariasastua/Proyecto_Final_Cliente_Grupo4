@@ -22,7 +22,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="tablaGastosS" layoutX="41.0" layoutY="68.0" prefHeight="412.0" prefWidth="1018.0">
+                              <TableView fx:id="tablaGastosS" layoutX="26.0" layoutY="68.0" prefHeight="412.0" prefWidth="1048.0">
                                 <columns>
                                   <TableColumn prefWidth="75.0" text="C1" />
                                   <TableColumn prefWidth="75.0" text="C2" />
@@ -31,9 +31,10 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
-                              <JFXTextField layoutX="41.0" layoutY="9.0" prefHeight="41.0" prefWidth="831.0" styleClass="campos_texto_1" />
+                              <JFXTextField layoutX="41.0" layoutY="5.0" prefHeight="41.0" prefWidth="831.0" styleClass="campos_texto_1" />
                               <JFXButton layoutX="911.0" layoutY="10.0" prefHeight="43.0" prefWidth="148.0" styleClass="button_3" text="Buscar" />
-                              <JFXButton layoutX="936.0" layoutY="493.0" onAction="#actEditarGastoS" prefHeight="43.0" prefWidth="125.0" styleClass="button_3" text="Editar" />
+                              <JFXButton layoutX="175.0" layoutY="493.0" onAction="#actInactivarGastoS" prefHeight="43.0" prefWidth="125.0" styleClass="button_3" text="Inactivar" />
+                              <JFXButton layoutX="41.0" layoutY="493.0" onAction="#actEditarGastoS" prefHeight="43.0" prefWidth="125.0" styleClass="button_3" text="Editar" />
                            </children>
                         </AnchorPane>
                   </content>

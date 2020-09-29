@@ -19,7 +19,6 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class IncidentesRegistradosEstadosDTO {
     
     private Long id;

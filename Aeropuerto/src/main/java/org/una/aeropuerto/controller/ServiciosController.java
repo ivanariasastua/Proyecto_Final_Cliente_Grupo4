@@ -132,8 +132,12 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void acteditarServicio(ActionEvent event) {
         if (servSelec == true) {
-            txtDescripcionServicio.setText(servicSeleccionado.getDescripcion());
-            txtNombreServicio.setText(servicSeleccionado.getNombre());
+            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                txtDescripcionServicio.setText(servicSeleccionado.getDescripcion());
+                txtNombreServicio.setText(servicSeleccionado.getNombre());
+            }else{
+                servSelec=false;
+            }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
         }
@@ -150,6 +154,25 @@ public class ServiciosController extends Controller implements Initializable {
         servSelec = false;
         servicioDTO = new ServiciosDTO();
         servicSeleccionado = new ServiciosDTO();
+    }
+
+    @FXML
+    private void actInactivarServicio(ActionEvent event) {
+        if (servSelec == true) {
+            if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
+                servicSeleccionado.setEstado(false);
+                Respuesta res =servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
+                    cargarTablaServicios();
+                    servSelec=false;
+                }
+            }else{
+                servSelec=false;
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
+        }
     }
 
 }
