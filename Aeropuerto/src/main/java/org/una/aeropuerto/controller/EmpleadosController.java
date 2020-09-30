@@ -216,7 +216,7 @@ public class EmpleadosController extends Controller implements Initializable {
         TableColumn<EmpleadosDTO, String> colCedula = new TableColumn<>("Cedula");
         colCedula.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCedula()));
         TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Jefe");
-        colJefe.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getJefe())));
+        colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
         TableColumn<EmpleadosDTO, String> colrol = new TableColumn<>("Rol");
         colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol())));
         tablaEmpleados.getColumns().addAll(colNombre, colCedula, colJefe, colrol);
