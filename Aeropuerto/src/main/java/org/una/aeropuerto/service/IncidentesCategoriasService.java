@@ -65,16 +65,33 @@ public class IncidentesCategoriasService {
     }
 
     public Respuesta getByNombre(String nombre) {
-        try {
-            Request request = new Request("incidentes_categorias/nombre");
+       try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("term", nombre);
+            Request request = new Request("incidentes_categorias/nombre", "/{term}", parametros);
             request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener las categorias de incidentes");
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener las categorias");
             }
-            List<IncidentesCategoriasDTO> result = (List<IncidentesCategoriasDTO>) request.readEntity(new GenericType<List<IncidentesCategoriasDTO>>() {
-            });
-            return new Respuesta(true, "Incidentes_Categorias", result);
-        } catch (Exception ex) {
+            List<IncidentesCategoriasDTO> result = (List<IncidentesCategoriasDTO>) request.readEntity(new GenericType<List<IncidentesCategoriasDTO>>(){});
+            return new Respuesta(true, "Incidentes_Categorias",result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta getByEstado(boolean estado) {
+       try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("term", estado);
+            Request request = new Request("incidentes_categorias/estado", "/{term}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener las categorias");
+            }
+            List<IncidentesCategoriasDTO> result = (List<IncidentesCategoriasDTO>) request.readEntity(new GenericType<List<IncidentesCategoriasDTO>>(){});
+            return new Respuesta(true, "Incidentes_Categorias",result);
+        }catch(Exception ex){
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }

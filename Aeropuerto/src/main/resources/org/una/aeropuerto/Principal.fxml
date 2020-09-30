@@ -119,11 +119,6 @@
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionSeguimientoGasto" onMouseClicked="#accionSeguimientoGastos" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Seguimiento de Gastos">
-                                       <VBox.margin>
-                                          <Insets bottom="2.5" top="2.5" />
-                                       </VBox.margin>
-                                    </JFXButton>
                                  </children>
                               </VBox>
                            </content>
