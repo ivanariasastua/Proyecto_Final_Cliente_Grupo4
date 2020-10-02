@@ -23,7 +23,7 @@
    <center>
       <VBox fx:id="vbContenedor" BorderPane.alignment="CENTER">
          <children>
-            <TabPane fx:id="tabPane" onMouseClicked="#actTabPane" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="tabCrear" text="Crear/Editar">
                      <content>
@@ -119,14 +119,19 @@
                                     </ListView>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <JFXButton onAction="#actInactivarAreaEmpleado" prefHeight="43.0" prefWidth="135.0" styleClass="button_2" text="Inactivar">
+                                          <JFXButton prefWidth="150.0" styleClass="button_3" text="Activar">
                                              <HBox.margin>
-                                                <Insets left="5.0" right="5.0" />
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton onAction="#actGuardarAreasEmpleado" prefHeight="41.0" prefWidth="160.0" styleClass="button_1" text="Guardar">
+                                          <JFXButton onAction="#actInactivarAreaEmpleado" prefHeight="43.0" prefWidth="150.0" styleClass="button_2" text="Inactivar">
                                              <HBox.margin>
-                                                <Insets left="5.0" right="5.0" />
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton onAction="#actGuardarAreasEmpleado" prefHeight="41.0" prefWidth="150.0" styleClass="button_1" text="Guardar">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </HBox.margin>
                                           </JFXButton>
                                        </children>
@@ -135,8 +140,29 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="250.0">
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="75.0" prefWidth="261.0" styleClass="texto" text="Areas de Trabajo" textAlignment="CENTER" />
-                                    <JFXButton onAction="#actBuscarArea" prefHeight="47.0" prefWidth="160.0" styleClass="button_3" text="Buscar Area" />
+                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="261.0" styleClass="texto" text="Areas de Trabajo" textAlignment="CENTER">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin></Label>
+                                    <JFXButton onAction="#actBuscarArea" prefHeight="50.0" prefWidth="160.0" styleClass="button_3" text="Buscar Area">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin></JFXButton>
+                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="239.0" styleClass="texto" text="Area Seleccionada">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="lblArea" layoutX="25.0" layoutY="306.0" prefHeight="50.0" prefWidth="239.0" styleClass="texto">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <JFXButton onAction="#actAgregarArea" prefHeight="50.0" prefWidth="165.0" styleClass="button_1" text="Agregar Area">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
                                  </children>
                               </VBox>
                            </children>

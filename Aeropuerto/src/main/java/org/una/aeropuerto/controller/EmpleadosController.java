@@ -77,52 +77,30 @@ public class EmpleadosController extends Controller implements Initializable {
     private EmpleadosHorariosService horarioService;
     private EmpleadosMarcajesService marcajesService = new EmpleadosMarcajesService();
     private EmpleadosMarcajesDTO marcajeDTO = new EmpleadosMarcajesDTO();
-    @FXML
-    private TableView tablaHorarios;
-    @FXML
-    private BorderPane bpPantalla;
-    @FXML
-    private VBox vbContenedor;
-    @FXML
-    private TabPane tabPane;
-    @FXML
-    private Tab tabCrear;
-    @FXML
-    private JFXTextField txtNombre;
-    @FXML
-    private JFXComboBox<RolesDTO> cbxRoles;
-    @FXML
-    private JFXTextField txtCedula;
-    @FXML
-    private JFXTextField txtContrasena;
-    @FXML
-    private Label lblTitulo;
-    @FXML
-    private Tab tabHorarios;
-    @FXML
-    private Tab tabMarcajes;
-    @FXML
-    private JFXComboBox<String> entradaHoras;
-    @FXML
-    private JFXComboBox<String> entradaMinutos;
-    @FXML
-    private JFXComboBox<String> salidaHoras;
-    @FXML
-    private JFXComboBox<String> salidaMinutos;
-    @FXML
-    private JFXComboBox<String> cbxDiaEntrada;
-    @FXML
-    private JFXComboBox<String> cbxDiaSalida;
-    @FXML
-    private JFXComboBox<EmpleadosHorariosDTO> cbxHorarios;
-    @FXML
-    private Tab tabArear;
-    @FXML
-    private ListView<String> lvAreas;
-    @FXML
-    private JFXTextField txtId;
-    @FXML
-    private JFXTextField txtJefe;
+    @FXML private TableView tablaHorarios;
+    @FXML private BorderPane bpPantalla;
+    @FXML private VBox vbContenedor;
+    @FXML private TabPane tabPane;
+    @FXML private Tab tabCrear;
+    @FXML private JFXTextField txtNombre;
+    @FXML private JFXComboBox<RolesDTO> cbxRoles;
+    @FXML private JFXTextField txtCedula;
+    @FXML private JFXTextField txtContrasena;
+    @FXML private Label lblTitulo;
+    @FXML private Tab tabHorarios;
+    @FXML private Tab tabMarcajes;
+    @FXML private JFXComboBox<String> entradaHoras;
+    @FXML private JFXComboBox<String> entradaMinutos;
+    @FXML private JFXComboBox<String> salidaHoras;
+    @FXML private JFXComboBox<String> salidaMinutos;
+    @FXML private JFXComboBox<String> cbxDiaEntrada;
+    @FXML private JFXComboBox<String> cbxDiaSalida;
+    @FXML private JFXComboBox<EmpleadosHorariosDTO> cbxHorarios;
+    @FXML private Tab tabArear;
+    @FXML private ListView<String> lvAreas;
+    @FXML private JFXTextField txtId;
+    @FXML private JFXTextField txtJefe;
+    @FXML private Label lblArea;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -237,9 +215,10 @@ public class EmpleadosController extends Controller implements Initializable {
         cbxRoles.setValue(null);
         empSeleccionado = false;
         emplSeleccionado = null;
+        tablaHorarios.getItems().clear();
+        lvAreas.getItems().clear();
     }
 
-    @FXML
     private void actTabPane(MouseEvent event) {
         if (tabCrear.isSelected() && empSeleccionado == false) {
             limpiarCampos();
@@ -426,5 +405,9 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarAreaEmpleado(ActionEvent event) {
+    }
+
+    @FXML
+    private void actAgregarArea(ActionEvent event) {
     }
 }
