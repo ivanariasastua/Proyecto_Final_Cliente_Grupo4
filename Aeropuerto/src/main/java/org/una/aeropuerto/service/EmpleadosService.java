@@ -64,7 +64,69 @@ public class EmpleadosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+    public Respuesta getByCedula(String cedula){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("cedula", cedula);
+            Request request = new Request("empleados/cedula", "/{cedula}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los empleados");
+            }
+            List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>(){});
+            return new Respuesta(true, "Empleados", result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 
+    public Respuesta getByNombre(String nombre){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("nombre", nombre);
+            Request request = new Request("empleados/nombre", "/{nombre}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los empleados");
+            }
+            List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>(){});
+            return new Respuesta(true, "Empleados", result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta getByArea(String area){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("area", area);
+            Request request = new Request("empleados/area", "/{area}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los empleados");
+            }
+            List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>(){});
+            return new Respuesta(true, "Empleados", result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+     public Respuesta getNoAprobados() {
+        try {
+            Request request = new Request("empleados/getNoAprobados");
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "Error al obtener todos los empleados\ncuyo rol no ha sido aprobado");
+            }
+            List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>(){});
+            return new Respuesta(true, "Empleados", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
     public Respuesta inactivarEmpleado(Long id) {
         try {
             Map<String, Object> parametros = new HashMap<>();
@@ -75,26 +137,6 @@ public class EmpleadosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el empleado");
             }
             EmpleadosDTO result = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
-            return new Respuesta(true, "Empleados", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-
-    public Respuesta getFiltro(String nombre, String cedula, boolean estado, String area) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("nombre", nombre);
-            parametros.put("cedula", cedula);
-            parametros.put("estado", estado);
-            parametros.put("area", area);
-            Request request = new Request("empleados/filter", "/{nombre}/{cedula}/{estado}/{area}", parametros);
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener los empleados");
-            }
-            List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>() {
-            });
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

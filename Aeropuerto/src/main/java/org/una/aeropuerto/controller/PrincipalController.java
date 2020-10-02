@@ -83,6 +83,9 @@ public class PrincipalController extends Controller implements Initializable {
             miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE"));
         } catch (Exception ex) {
         }
+        smUser.setText(UserAuthenticated.getInstance().getUsuario().getNombre());
+        lblCedula1.setText(UserAuthenticated.getInstance().getUsuario().getCedula());
+        lblRol1.setText(UserAuthenticated.getInstance().getRol().getNombre());
         AppContext.getInstance().set("Contenedor", vbContenedor);
         FlowController.getInstance().goViewPanel(vbContenedor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);

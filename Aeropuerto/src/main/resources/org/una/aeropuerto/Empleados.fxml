@@ -3,30 +3,152 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="bpPantalla" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.EmpleadosController">
+<BorderPane fx:id="bpPantalla" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.EmpleadosController">
    <center>
       <VBox fx:id="vbContenedor" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="650.0" prefWidth="800.0">
-               <children>
-                  <TabPane fx:id="tabPane" layoutY="65.0" onMouseClicked="#actTabPane" prefHeight="585.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                      <Tab fx:id="tabEmpleados" text="Empleados">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="1100.0">
+            <TabPane fx:id="tabPane" onMouseClicked="#actTabPane" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="tabCrear" text="Crear/Editar">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TableView fx:id="tablaEmpleados" layoutX="120.0" layoutY="76.0" prefHeight="387.0" prefWidth="861.0">
+                                    <GridPane prefHeight="546.0" prefWidth="800.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <JFXTextField fx:id="txtNombre" labelFloat="true" prefHeight="47.0" prefWidth="257.0" promptText="Nombre" styleClass="campos_texto_1" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txtCedula" labelFloat="true" prefHeight="47.0" prefWidth="247.0" promptText="Cedula" styleClass="campos_texto_1" GridPane.rowIndex="2">
+                                             <GridPane.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txtContrasena" prefHeight="47.0" prefWidth="250.0" promptText="Contraseña" styleClass="campos_texto_1" GridPane.columnIndex="1">
+                                             <GridPane.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXTextField>
+                                          <JFXComboBox fx:id="cbxRoles" labelFloat="true" prefHeight="47.0" prefWidth="413.0" promptText="Rol" styleClass="comboBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                             <GridPane.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXComboBox>
+                                          <JFXTextField fx:id="txtId" labelFloat="true" layoutX="25.0" layoutY="218.0" prefHeight="47.0" prefWidth="257.0" promptText="ID" styleClass="campos_texto_1">
+                                             <GridPane.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txtJefe" editable="false" onMouseClicked="#accionBuscraJefe" prefHeight="49.0" prefWidth="400.0" promptText="Jefe" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXTextField>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                           </center>
+                           <bottom>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <JFXButton onAction="#actLimpiarCamposEmplead" prefHeight="50.0" prefWidth="190.0" styleClass="button_3" text="Limpiar">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton layoutX="395.0" layoutY="35.0" onAction="#actBuscarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_3" text="Buscar">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onAction="#actInactivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_2" text="Inactivar">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onAction="#actGuardarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_1" text="Guardar">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
+                     </content>
+                </Tab>
+                  <Tab fx:id="tabArear" text="Areas">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="TOP_RIGHT" prefHeight="561.0" prefWidth="550.0">
+                                 <children>
+                                    <ListView fx:id="lvAreas" onMouseClicked="#accionListaAreasEmpleados" prefHeight="465.0" prefWidth="550.0">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <JFXButton onAction="#actInactivarAreaEmpleado" prefHeight="43.0" prefWidth="135.0" styleClass="button_2" text="Inactivar">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton onAction="#actGuardarAreasEmpleado" prefHeight="41.0" prefWidth="160.0" styleClass="button_1" text="Guardar">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="250.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="75.0" prefWidth="261.0" styleClass="texto" text="Areas de Trabajo" textAlignment="CENTER" />
+                                    <JFXButton onAction="#actBuscarArea" prefHeight="47.0" prefWidth="160.0" styleClass="button_3" text="Buscar Area" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </content></Tab>
+                  <Tab fx:id="tabHorarios" text="Horarios">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="800.0">
+                           <children>
+                              <VBox alignment="TOP_RIGHT" prefHeight="521.0" prefWidth="550.0">
+                                 <children>
+                                    <TableView fx:id="tablaHorarios" prefHeight="489.0" prefWidth="537.0">
                                       <columns>
                                         <TableColumn prefWidth="75.0" text="C1" />
                                         <TableColumn prefWidth="75.0" text="C2" />
@@ -34,162 +156,146 @@
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </VBox.margin>
                                     </TableView>
-                                    <JFXTextField fx:id="txtBuscarEmpleados" layoutX="120.0" layoutY="3.0" prefHeight="47.0" prefWidth="695.0" styleClass="campos_texto_1" />
-                                    <JFXButton layoutX="871.0" layoutY="50.0" prefHeight="31.0" prefWidth="114.0" text="Buscar" />
-                                    <JFXButton layoutX="871.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Modificar" />
-                                    <JFXButton layoutX="728.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Inactivar" />
-                                    <JFXButton layoutX="864.0" layoutY="14.0" onAction="#actBuscarEmpleados" prefHeight="43.0" prefWidth="116.0" styleClass="button_3" text="Buscar" />
-                                    <JFXButton layoutX="875.0" layoutY="485.0" onAction="#actIrAModificarEmpleados" prefHeight="43.0" prefWidth="106.0" styleClass="button_3" text="Editar" />
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="547.0">
+                                       <children>
+                                          <JFXButton onAction="#actInactivarHorarioEmpleado" prefHeight="0.0" prefWidth="150.0" styleClass="button_2" text="Inactivar">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton layoutX="10.0" layoutY="10.0" onAction="#actActivarHorarioEmpleado" prefHeight="0.0" prefWidth="150.0" styleClass="button_1" text="Activar">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </AnchorPane>
-                        </content>
-                      </Tab>
-                      <Tab fx:id="tabCrear" text="Crear/Editar">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              </VBox>
+                              <Separator opacity="0.37" orientation="VERTICAL" prefHeight="511.0" prefWidth="0.0" />
+                              <VBox alignment="CENTER" prefHeight="480.0" prefWidth="250.0">
                                  <children>
-                                    <JFXTextField fx:id="txtNombre" layoutX="213.0" layoutY="91.0" prefHeight="47.0" prefWidth="257.0" styleClass="campos_texto_1" />
-                                    <JFXComboBox fx:id="cbxJefes" layoutX="704.0" layoutY="91.0" prefHeight="47.0" prefWidth="259.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="cbxRoles" layoutX="704.0" layoutY="234.0" prefHeight="47.0" prefWidth="255.0" styleClass="comboBox" />
-                                    <JFXButton layoutX="937.0" layoutY="479.0" onAction="#actGuardarEmpleado" prefHeight="43.0" prefWidth="131.0" styleClass="button_3" text="Guardar" />
-                                    <Label layoutX="113.0" layoutY="105.0" text="Nombre" textFill="WHITE">
+                                    <JFXComboBox fx:id="cbxDiaEntrada" focusColor="WHITE" labelFloat="true" prefHeight="47.0" prefWidth="259.0" promptText="Dia de Entrada" styleClass="comboBox">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </JFXComboBox>
+                                    <JFXComboBox fx:id="cbxDiaSalida" labelFloat="true" prefHeight="47.0" prefWidth="253.0" promptText="Dia de Salida" styleClass="comboBox">
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </JFXComboBox>
+                                    <Label text="Hora Entrada" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="2.0" />
+                                       </VBox.margin>
                                     </Label>
-                                    <JFXTextField fx:id="txtCedula" layoutX="223.0" layoutY="234.0" prefHeight="47.0" prefWidth="247.0" styleClass="campos_texto_1" />
-                                    <Label layoutX="111.0" layoutY="247.0" text="Cedula" textFill="WHITE">
+                                    <HBox alignment="CENTER" prefHeight="71.0" prefWidth="250.0">
+                                       <children>
+                                          <JFXComboBox fx:id="entradaHoras" labelFloat="true" prefHeight="47.0" prefWidth="108.0" promptText="Horas" styleClass="comboBox" />
+                                          <Label text=":" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <JFXComboBox fx:id="entradaMinutos" labelFloat="true" prefHeight="47.0" prefWidth="108.0" promptText="Minutos" styleClass="comboBox" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <Label text="Hora Salida" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="2.0" />
+                                       </VBox.margin>
                                     </Label>
-                                    <JFXTextField fx:id="txtContrasena" layoutX="223.0" layoutY="376.0" prefHeight="47.0" prefWidth="250.0" styleClass="campos_texto_1" />
-                                    <Label layoutX="113.0" layoutY="390.0" text="Contraseña" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="634.0" layoutY="104.0" text="Jefe" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="634.0" layoutY="248.0" text="Rol" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <JFXButton layoutX="791.0" layoutY="479.0" onAction="#actLimpiarCamposEmplead" prefHeight="43.0" prefWidth="131.0" styleClass="button_3" text="Limpiar" />
+                                    <HBox alignment="CENTER" prefHeight="68.0" prefWidth="250.0">
+                                       <children>
+                                          <JFXComboBox fx:id="salidaHoras" labelFloat="true" prefHeight="47.0" prefWidth="108.0" promptText="Horas" styleClass="comboBox" />
+                                          <Label text=":" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <JFXComboBox fx:id="salidaMinutos" prefHeight="47.0" prefWidth="108.0" promptText="Minutos" styleClass="comboBox" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="62.0" prefWidth="250.0">
+                                       <children>
+                                          <JFXButton onAction="#actLimpiarCamposHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Limpiar">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_1" text="Guardar">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                    </HBox>
                                  </children>
-                              </AnchorPane>
-                        </content>
-                      </Tab>
-                        <Tab fx:id="tabHorarios" text="Horarios">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="1100.0">
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tabMarcajes" text="Marcaje">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="800.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="479.0" prefWidth="800.0">
                                  <children>
-                                    <JFXButton layoutX="871.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Modificar" />
-                                    <JFXButton layoutX="728.0" layoutY="562.0" prefHeight="31.0" prefWidth="114.0" text="Inactivar" />
-                                    <TableView fx:id="tablaHorarios" layoutX="20.0" layoutY="91.0" prefHeight="381.0" prefWidth="570.0">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
-                                      </columns>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                    </TableView>
-                                    <Separator layoutX="625.0" layoutY="45.0" opacity="0.37" orientation="VERTICAL" prefHeight="453.0" prefWidth="0.0" />
-                                    <JFXTextField fx:id="txtBuscarHorarios" layoutX="30.0" layoutY="17.0" prefHeight="47.0" prefWidth="419.0" styleClass="campos_texto_1" />
-                                    <JFXButton layoutX="484.0" layoutY="26.0" onAction="#actBuscarHorarios" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Buscar" />
-                                    <JFXComboBox fx:id="cbxEmpleados" layoutX="798.0" layoutY="56.0" prefHeight="47.0" prefWidth="257.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="cbxDiaEntrada" layoutX="798.0" layoutY="134.0" prefHeight="47.0" prefWidth="259.0" styleClass="comboBox" />
-                                    <JFXButton layoutX="481.0" layoutY="487.0" onAction="#actEditarHorarios" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Editar" />
-                                    <JFXButton layoutX="973.0" layoutY="487.0" onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Guardar" />
-                                    <JFXButton layoutX="841.0" layoutY="487.0" onAction="#actLimpiarCamposHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Limpiar" />
-                                    <Label layoutX="666.0" layoutY="74.0" text="Empleado" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
+                                    <JFXComboBox fx:id="cbxHorarios" labelFloat="true" prefHeight="50.0" prefWidth="500.0" promptText="Horario" styleClass="comboBox">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXComboBox>
+                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" text="Hora de Entrada">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
                                     </Label>
-                                    <Label layoutX="666.0" layoutY="147.0" text="Dia de Entrada" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
+                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" />
+                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" text="Hora de Salida">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
                                     </Label>
-                                    <Label layoutX="666.0" layoutY="394.0" text="Hora Salida" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="666.0" layoutY="305.0" text="Hora Entrada" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <JFXComboBox fx:id="entradaHoras" layoutX="798.0" layoutY="291.0" prefHeight="47.0" prefWidth="108.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="entradaMinutos" layoutX="943.0" layoutY="289.0" prefHeight="47.0" prefWidth="108.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="salidaHoras" layoutX="795.0" layoutY="379.0" prefHeight="47.0" prefWidth="108.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="salidaMinutos" layoutX="943.0" layoutY="379.0" prefHeight="47.0" prefWidth="108.0" styleClass="comboBox" />
-                                    <Label layoutX="921.0" layoutY="300.0" text=":" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="921.0" layoutY="392.0" text=":" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="666.0" layoutY="219.0" text="Dia de Salida" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <JFXComboBox fx:id="cbxDiaSalida" layoutX="798.0" layoutY="208.0" prefHeight="47.0" prefWidth="253.0" styleClass="comboBox" />
+                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" />
+                                    <JFXButton onAction="#actGuardarMarcajes" prefHeight="50.0" prefWidth="217.0" styleClass="button_3" text="Hacer Marcaje">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
                                  </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="tabMarcajes" text="Marcaje">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TableView fx:id="tablaMarcajes" layoutX="21.0" layoutY="79.0" prefHeight="396.0" prefWidth="546.0">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
-                                      </columns>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                    </TableView>
-                                    <JFXTextField fx:id="txtBuscarMarcajes" layoutX="21.0" layoutY="17.0" prefHeight="41.0" prefWidth="401.0" styleClass="campos_texto_1" />
-                                    <JFXButton layoutX="982.0" layoutY="489.0" onAction="#actGuardarMarcajes" prefHeight="43.0" prefWidth="104.0" styleClass="button_3" text="Guardar" />
-                                    <Label layoutX="631.0" layoutY="144.0" styleClass="texto" text="Horario" />
-                                    <JFXComboBox fx:id="cbxHorarios" layoutX="784.0" layoutY="141.0" prefHeight="31.0" prefWidth="250.0" styleClass="comboBox" />
-                                    <Separator layoutX="596.0" layoutY="37.0" opacity="0.41" orientation="VERTICAL" prefHeight="480.0" prefWidth="0.0" />
-                                    <JFXButton layoutX="446.0" layoutY="22.0" onAction="#actBuscarMarcajes" prefHeight="43.0" prefWidth="111.0" styleClass="button_3" text="Buscar" />
-                                    <JFXButton layoutX="465.0" layoutY="489.0" onAction="#actEditarMarcajes" prefHeight="43.0" prefWidth="101.0" styleClass="button_3" text="Editar" />
-                                    <JFXButton layoutX="866.0" layoutY="489.0" onAction="#actLimpiarCamposMarcajes" prefHeight="43.0" prefWidth="104.0" styleClass="button_3" text="Limpiar" />
-                                    <JFXComboBox fx:id="entradaHoras2" layoutX="784.0" layoutY="231.0" prefHeight="31.0" prefWidth="100.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="entradaMinutos2" layoutX="934.0" layoutY="231.0" prefHeight="31.0" prefWidth="100.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="salidaHoras2" layoutX="784.0" layoutY="323.0" prefHeight="31.0" prefWidth="100.0" styleClass="comboBox" />
-                                    <JFXComboBox fx:id="salidaMinutos2" layoutX="934.0" layoutY="323.0" prefHeight="31.0" prefWidth="100.0" styleClass="comboBox" />
-                                    <Label layoutX="631.0" layoutY="234.0" styleClass="texto" text="Hora de Entrada" />
-                                    <Label layoutX="631.0" layoutY="326.0" styleClass="texto" text="Hora de Salida" />
-                                    <Label layoutX="907.0" layoutY="233.0" styleClass="texto" text=":" />
-                                    <Label layoutX="909.0" layoutY="323.0" styleClass="texto" text=":" />
-                                 </children></AnchorPane>
-                           </content>
-                        </Tab>
-                    </tabs>
-                  </TabPane>
-                  <Label fx:id="lblTitulo" layoutX="373.0" layoutY="14.0" styleClass="lblTitulo_1" text="Información de Empleados" />
-               </children>
-            </AnchorPane>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
          </children>
       </VBox>
    </center>
+   <top>
+      <Label fx:id="lblTitulo" prefHeight="50.0" styleClass="lblTitulo_1" text="Información de Empleados" BorderPane.alignment="CENTER" />
+   </top>
 </BorderPane>

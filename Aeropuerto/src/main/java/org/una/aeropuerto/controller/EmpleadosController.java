@@ -7,24 +7,24 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTimePicker;
 import java.net.URL;
-import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -35,17 +35,20 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.EmpleadosHorariosDTO;
 import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
+import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.EmpleadosHorariosService;
 import org.una.aeropuerto.service.EmpleadosMarcajesService;
 import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.service.RolesService;
-import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.AppContext;
 
 /**
  * FXML Controller class
@@ -65,7 +68,7 @@ public class EmpleadosController extends Controller implements Initializable {
     private List<EmpleadosDTO> listEmp = new ArrayList<>();
     private List<RolesDTO> listRoles = new ArrayList<>();
     private RolesService rolesService = new RolesService();
-    private EmpleadosDTO empleadoDTO = new EmpleadosDTO();
+    private EmpleadosDTO empleadoDTO = new EmpleadosDTO(), jefeSelect;
     boolean empSeleccionado;
     boolean horarSeleccionado;
     private EmpleadosDTO emplSeleccionado = new EmpleadosDTO();
@@ -83,25 +86,15 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private TabPane tabPane;
     @FXML
-    private Tab tabEmpleados;
-    @FXML
-    private TableView tablaEmpleados;
-    @FXML
-    private JFXTextField txtBuscarEmpleados;
-    @FXML
     private Tab tabCrear;
     @FXML
     private JFXTextField txtNombre;
-    @FXML
-    private JFXComboBox<EmpleadosDTO> cbxJefes;
     @FXML
     private JFXComboBox<RolesDTO> cbxRoles;
     @FXML
     private JFXTextField txtCedula;
     @FXML
     private JFXTextField txtContrasena;
-    @FXML
-    private JFXComboBox<EmpleadosDTO> cbxEmpleados;
     @FXML
     private Label lblTitulo;
     @FXML
@@ -121,21 +114,15 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private JFXComboBox<String> cbxDiaSalida;
     @FXML
-    private TableView tablaMarcajes;
-    @FXML
-    private JFXTextField txtBuscarHorarios;
-    @FXML
-    private JFXTextField txtBuscarMarcajes;
-    @FXML
     private JFXComboBox<EmpleadosHorariosDTO> cbxHorarios;
     @FXML
-    private JFXComboBox<String> entradaHoras2;
+    private Tab tabArear;
     @FXML
-    private JFXComboBox<String> entradaMinutos2;
+    private ListView<String> lvAreas;
     @FXML
-    private JFXComboBox<String> salidaHoras2;
+    private JFXTextField txtId;
     @FXML
-    private JFXComboBox<String> salidaMinutos2;
+    private JFXTextField txtJefe;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -149,29 +136,17 @@ public class EmpleadosController extends Controller implements Initializable {
         ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo");
         cbxDiaEntrada.setItems(items);
         cbxDiaSalida.setItems(items);
-        cargarTablaHorarios();
         llenarComboBoxs();
+        clickTablas();
+        cargarTablaHorarios();
     }
 
     @Override
     public void initialize() {
-        cargarTablaEmpleados();
-        llenarComboBoxs();
-        clickTablas();
     }
 
-    //tab de empleados
     public void llenarComboBoxs() {
-        cbxJefes.getItems().clear();
-        cbxEmpleados.getItems().clear();
         cbxRoles.getItems().clear();
-        Respuesta res = empleadoService.getAll();
-        listJefes = (List<EmpleadosDTO>) res.getResultado("Empleados");
-        if (listJefes != null) {
-            ObservableList items = FXCollections.observableArrayList(listJefes);
-            cbxJefes.setItems(items);
-            cbxEmpleados.setItems(items);
-        }
         Respuesta resp = rolesService.getAll();
         listRoles = (List<RolesDTO>) resp.getResultado("Roles");
         if (listRoles != null) {
@@ -181,53 +156,29 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     public void clickTablas() {
-        tablaEmpleados.setRowFactory(tv -> {
-            TableRow<EmpleadosDTO> row = new TableRow();
-            row.setOnMouseClicked(e -> {
-                if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
-                    empSeleccionado = true;
-                    emplSeleccionado = row.getItem();
-                }
-            });
-            return row;
-        });
-
         tablaHorarios.setRowFactory(tv -> {
             TableRow<EmpleadosHorariosDTO> row = new TableRow();
             row.setOnMouseClicked(e -> {
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     horarSeleccionado = true;
                     horarioSeleccionado = row.getItem();
+                    cargarDatosHorarios();
                 }
             });
             return row;
         });
     }
 
+    public void llenarListaAreas(){
+        lvAreas.getItems().clear();
+        for(EmpleadosAreasTrabajosDTO area : emplSeleccionado.getEmpleadosAreasTrabajo()){
+            lvAreas.getItems().add(area.getAreaTrabajo().getNombre());
+        }
+    }
+    
     @FXML
     private void actLimpiarCamposEmplead(ActionEvent event) {
         limpiarCampos();
-    }
-
-    public void cargarTablaEmpleados() {
-        tablaEmpleados.getColumns().clear();
-        TableColumn<EmpleadosDTO, String> colNombre = new TableColumn<>("Nombre");
-        colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
-        TableColumn<EmpleadosDTO, String> colCedula = new TableColumn<>("Cedula");
-        colCedula.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCedula()));
-        TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Jefe");
-        colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
-        TableColumn<EmpleadosDTO, String> colrol = new TableColumn<>("Rol");
-        colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol())));
-        tablaEmpleados.getColumns().addAll(colNombre, colCedula, colJefe, colrol);
-        Respuesta res = empleadoService.getAll();
-        listEmpleados = (List<EmpleadosDTO>) res.getResultado("Empleados");
-        if (listEmpleados != null) {
-            ObservableList items = FXCollections.observableArrayList(listEmpleados);
-            tablaEmpleados.setItems(items);
-        } else {
-            tablaEmpleados.getItems().clear();
-        }
     }
 
     public boolean validarCampos() {
@@ -245,7 +196,7 @@ public class EmpleadosController extends Controller implements Initializable {
                 empleadoDTO.setId(emplSeleccionado.getId());
                 empleadoDTO.setCedula(txtCedula.getText());
                 empleadoDTO.setContrasenaEncriptada(txtContrasena.getText());
-                empleadoDTO.setJefe(cbxJefes.getValue());
+                empleadoDTO.setJefe(jefeSelect);
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
 
@@ -261,13 +212,16 @@ public class EmpleadosController extends Controller implements Initializable {
                 empleadoDTO = new EmpleadosDTO();
                 empleadoDTO.setCedula(txtCedula.getText());
                 empleadoDTO.setContrasenaEncriptada(txtContrasena.getText());
-                empleadoDTO.setJefe(cbxJefes.getValue());
+                empleadoDTO.setJefe(jefeSelect);
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
-
                 Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
+                    emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
+                    tablaHorarios.getItems().clear();
+                    tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
+                    llenarListaAreas();
                 } else {
                     Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
                 }
@@ -275,41 +229,26 @@ public class EmpleadosController extends Controller implements Initializable {
         }
     }
 
-    @FXML
-    private void actBuscarEmpleados(ActionEvent event) {
-
-    }
-
     void limpiarCampos() {
         txtNombre.setText(null);
         txtCedula.setText(null);
         txtContrasena.setText(null);
-        cbxJefes.setValue(null);
+        txtJefe.clear();
         cbxRoles.setValue(null);
         empSeleccionado = false;
-        emplSeleccionado = new EmpleadosDTO();
+        emplSeleccionado = null;
     }
 
     @FXML
     private void actTabPane(MouseEvent event) {
-        if (tabEmpleados.isSelected()) {
-            cargarTablaEmpleados();
-        } else if (tabCrear.isSelected() && empSeleccionado == false) {
+        if (tabCrear.isSelected() && empSeleccionado == false) {
             limpiarCampos();
         } else if (tabHorarios.isSelected()) {
-            llenarComboBoxs();
+            
         } else if (tabMarcajes.isSelected()) {
-            cbxHorarios.getItems().clear();
-            Respuesta resp = horarioService.getAll();
-            listHorariosEmp = (List<EmpleadosHorariosDTO>) resp.getResultado("Empleados_Horarios");
-            if (listHorariosEmp != null) {
-                ObservableList items = FXCollections.observableArrayList(listHorariosEmp);
-                cbxHorarios.setItems(items);
-            }
         }
     }
 
-    @FXML
     private void actIrAModificarEmpleados(ActionEvent event) {
         if (empSeleccionado == true) {
             SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -321,35 +260,41 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     public void cargarDatos() {
+        txtId.setDisable(true);
+        txtId.setText(emplSeleccionado.getId().toString());
         txtCedula.setText(emplSeleccionado.getCedula());
-        // txtContrasena.setText(emplSeleccionado.);
         txtNombre.setText(emplSeleccionado.getNombre());
-        cbxJefes.setValue(emplSeleccionado.getJefe());
+        txtJefe.setText(emplSeleccionado.getJefe() == null ? "Sin jefe directo" : emplSeleccionado.getJefe().getNombre());
         cbxRoles.setValue(emplSeleccionado.getRol());
     }
 
-    //tab de horarios
     public void cargarTablaHorarios() {
+        String pattern = " HH:mm:ss";
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        simpleDateFormat.setTimeZone(timeZone);
         tablaHorarios.getColumns().clear();
-        TableColumn<EmpleadosHorariosDTO, String> colNombre = new TableColumn<>("Empleado");
-        colNombre.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
         TableColumn<EmpleadosHorariosDTO, String> colDiaE = new TableColumn<>("Dia de entrada");
         colDiaE.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDiaEntrada()));
         TableColumn<EmpleadosHorariosDTO, String> colDiaS = new TableColumn<>("Dia de salida");
         colDiaS.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDiaSalida()));
         TableColumn<EmpleadosHorariosDTO, String> colHoraE = new TableColumn<>("Hora de entrada");
-        colHoraE.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getHoraEntrada())));
+        colHoraE.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getHoraEntrada() == null ? "Sin Hora" : String.valueOf(simpleDateFormat.format(p.getValue().getHoraEntrada()))));
         TableColumn<EmpleadosHorariosDTO, String> colHoraS = new TableColumn<>("hora de salida");
-        colHoraS.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getHoraSalida())));
-        tablaHorarios.getColumns().addAll(colNombre, colDiaE, colDiaS/*, colHoraE, colHoraS*/);
-        Respuesta res = horarioService.getAll();
-        listHorariosEmp = (List<EmpleadosHorariosDTO>) res.getResultado("Empleados_Horarios");
-        if (listHorariosEmp != null) {
-            ObservableList items = FXCollections.observableArrayList(listHorariosEmp);
-            tablaHorarios.setItems(items);
-        } else {
-            tablaHorarios.getItems().clear();
-        }
+        colHoraS.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getHoraSalida() == null ? "Sin Hora" : String.valueOf(simpleDateFormat.format(p.getValue().getHoraSalida())) ));
+        tablaHorarios.getColumns().addAll(colDiaE, colDiaS, colHoraE, colHoraS);
+    }
+    
+    private void cargarDatosHorarios(){
+        LocalDateTime he, hs;
+        cbxDiaEntrada.getSelectionModel().select(horarioSeleccionado.getDiaEntrada());
+        cbxDiaSalida.getSelectionModel().select(horarioSeleccionado.getDiaSalida());
+        he = horarioSeleccionado.getHoraEntrada().toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+        hs = horarioSeleccionado.getHoraSalida().toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+        entradaHoras.getSelectionModel().select((he.getHour() < 10) ? "0"+String.valueOf(he.getHour()) : String.valueOf(he.getHour()));
+        entradaMinutos.getSelectionModel().select((he.getMinute() < 10) ? "0"+String.valueOf(he.getMinute()) : String.valueOf(he.getMinute()));
+        salidaHoras.getSelectionModel().select((hs.getHour() < 10) ? "0"+String.valueOf(hs.getHour()) : String.valueOf(hs.getHour()));
+        salidaMinutos.getSelectionModel().select((hs.getMinute() < 10) ? "0"+String.valueOf(hs.getMinute()) : String.valueOf(hs.getMinute()));
     }
 
     public void llenarRelojs() {
@@ -375,14 +320,10 @@ public class EmpleadosController extends Controller implements Initializable {
         salidaMinutos.setItems(items);
         entradaHoras.setItems(items2);
         salidaHoras.setItems(items2);
-        entradaMinutos2.setItems(items);
-        salidaMinutos2.setItems(items);
-        entradaHoras2.setItems(items2);
-        salidaHoras2.setItems(items2);
     }
 
     public boolean validarCamposHorario() {
-        if (cbxDiaEntrada.getValue() == null || cbxEmpleados.getValue() == null || entradaHoras.getValue() == null) {
+        if (cbxDiaEntrada.getValue() == null || entradaHoras.getValue() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los siguientes campos son obligatorios\nEmpleado\nDia de entrada\nHora de entrada");
             return false;
         }
@@ -396,8 +337,7 @@ public class EmpleadosController extends Controller implements Initializable {
                 horarioDTO.setId(horarioSeleccionado.getId());
                 horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
                 horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-                horarioDTO.setEmpleado(cbxEmpleados.getValue());
-                //  horarioDTO.setHoraEntrada();
+//                horarioDTO.setEmpleado(cbxEmpleados.getValue());
                 Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
@@ -409,8 +349,7 @@ public class EmpleadosController extends Controller implements Initializable {
                 horarioDTO = new EmpleadosHorariosDTO();
                 horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
                 horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-                horarioDTO.setEmpleado(cbxEmpleados.getValue());
-                //  horarioDTO.setHoraEntrada();
+//                horarioDTO.setEmpleado(cbxEmpleados.getValue());
                 Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
@@ -428,29 +367,9 @@ public class EmpleadosController extends Controller implements Initializable {
         entradaMinutos.setValue(null);
         salidaHoras.setValue(null);
         salidaMinutos.setValue(null);
-        cbxEmpleados.setValue(null);
         horarSeleccionado = false;
-        horarioSeleccionado = new EmpleadosHorariosDTO();
+        horarioSeleccionado = null;
     }
-
-    @FXML
-    private void actBuscarHorarios(ActionEvent event) {
-    }
-
-    @FXML
-    private void actEditarHorarios(ActionEvent event) {
-        if (horarSeleccionado == true) {
-            cbxDiaEntrada.setValue(horarioSeleccionado.getDiaEntrada());
-            cbxDiaSalida.setValue(horarioSeleccionado.getDiaSalida());
-            cbxEmpleados.setValue(horarioSeleccionado.getEmpleado());
-            //  entradaHoras.setValue();
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Horario", "Debe seleccionar un horario a editar");
-        }
-    }
-
-    //tab marcajes
-
 
     @FXML
     private void actGuardarMarcajes(ActionEvent event) {
@@ -458,15 +377,54 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     @FXML
-    private void actBuscarMarcajes(ActionEvent event) {
+    private void actInactivarEmpleado(ActionEvent event) {
     }
 
     @FXML
-    private void actEditarMarcajes(ActionEvent event) {
+    private void actGuardarAreasEmpleado(ActionEvent event) {
     }
 
     @FXML
-    private void actLimpiarCamposMarcajes(ActionEvent event) {
+    private void actBuscarArea(ActionEvent event) {
     }
 
+
+    @FXML
+    private void accionListaAreasEmpleados(MouseEvent event) {
+    }
+
+    @FXML
+    private void actInactivarHorarioEmpleado(ActionEvent event) {
+    }
+
+    @FXML
+    private void actActivarHorarioEmpleado(ActionEvent event) {
+    }
+
+    @FXML
+    private void actBuscarEmpleado(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if(emplSeleccionado != null){
+            tablaHorarios.getItems().clear();
+            tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
+            llenarListaAreas();
+            cargarDatos();
+        }
+    }
+
+    @FXML
+    private void accionBuscraJefe(MouseEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        jefeSelect  = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if(jefeSelect != null){
+            txtJefe.setText(jefeSelect.getNombre());
+        }else{
+            txtJefe.setText("Sin jefe directo");
+        }
+    }
+
+    @FXML
+    private void actInactivarAreaEmpleado(ActionEvent event) {
+    }
 }

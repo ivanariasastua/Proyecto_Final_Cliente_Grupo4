@@ -243,13 +243,13 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     public void cargarTablaAsignarAreasT() {
         tablaAsignarAreas.getColumns().clear();
-        TableColumn<EmpleadosAreasTrabajosDTO, String> colEmpl = new TableColumn<>("Empleado");
-        colEmpl.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
+//        TableColumn<EmpleadosAreasTrabajosDTO, String> colEmpl = new TableColumn<>("Empleado");
+//        colEmpl.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
         TableColumn<EmpleadosAreasTrabajosDTO, String> colArea = new TableColumn<>("Area de Trabajo");
         colArea.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getAreaTrabajo())));
         TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-        tablaAsignarAreas.getColumns().addAll(colEmpl, colArea, colEstado);
+        tablaAsignarAreas.getColumns().addAll(colArea, colEstado);
         Respuesta res = empTrabService.getAll();
 
         listEmpAreaT = (List<EmpleadosAreasTrabajosDTO>) res.getResultado("Empleados_Areas_Trabajos");
@@ -266,7 +266,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         if (empAreaSelec == true) {
             empTrabDTO.setId(empAreaSeleccionado.getId());
             empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
-            empTrabDTO.setEmpleado(cbxEmpleado.getValue());
+//            empTrabDTO.setEmpleado(cbxEmpleado.getValue());
             Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empTrabDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado ", "Asignacion de area de trabajo editada correctamente");
@@ -276,7 +276,7 @@ public class AreasTrabajosController extends Controller implements Initializable
             if (validarCamposEmpleadosAreasT()) {
                 empTrabDTO = new EmpleadosAreasTrabajosDTO();
                 empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
-                empTrabDTO.setEmpleado(cbxEmpleado.getValue());
+//                empTrabDTO.setEmpleado(cbxEmpleado.getValue());
                 Respuesta res = empTrabService.guardarEmpleadoAreaTrabajo(empTrabDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado ", "Asignacion de area de trabajo guardada correctamente");
@@ -300,7 +300,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         if (empAreaSelec == true) {
             if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
                 cbxAreaTrabajo.setValue(empAreaSeleccionado.getAreaTrabajo());
-                cbxEmpleado.setValue(empAreaSeleccionado.getEmpleado());
+//                cbxEmpleado.setValue(empAreaSeleccionado.getEmpleado());
             } else {
                 empAreaSelec = false;
             }

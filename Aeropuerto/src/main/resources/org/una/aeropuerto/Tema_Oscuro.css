@@ -18,16 +18,28 @@ and open the template in the editor.
 
 .campos_texto_1{
     -jfx-unfocus-color: #B2B2B2;
+    -jfx-focus-color: white;
     -fx-prompt-text-fill: #B2B2B2;
     -fx-font: bold 14pt "Courier";
-    -jfx-focus-color: white;
     -fx-text-fill: derive(white, 20%);
 }
 .comboBox{
-    -fx-prompt-text-fill:white;
     -fx-font: bold 11pt "Courier";
     -fx-text-fill: white;
     -jfx-unfocus-color: #B2B2B2;
+    -jfx-focus-color: white;
+}
+
+.comboBox .list-cell {
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell{
+    -fx-background-color: #003366 
+}
+
+.combo-box-popup .list-view .list-cell:hover{
+    -fx-background-color: #a1bdf5
 }
 
 .button{ 

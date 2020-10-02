@@ -10,7 +10,6 @@ import javax.json.bind.annotation.JsonbDateFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  *
@@ -22,9 +21,11 @@ import lombok.ToString;
 public class EmpleadosMarcajesDTO {
     
     private Long id;
-    private EmpleadosHorariosDTO empleadoHorario;
+    @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Date horaEntrada;
+    @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Date horaSalida;
     @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Date fechaRegistro;
+    private Integer horasLaboradas;
 }

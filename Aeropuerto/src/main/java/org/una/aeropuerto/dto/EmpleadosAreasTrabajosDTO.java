@@ -8,7 +8,6 @@ package org.una.aeropuerto.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  *
@@ -20,7 +19,6 @@ import lombok.ToString;
 public class EmpleadosAreasTrabajosDTO {
     
     private Long id;
-    private EmpleadosDTO empleado;
     private AreasTrabajosDTO areaTrabajo;
     private boolean estado;
     
