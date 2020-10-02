@@ -77,6 +77,10 @@ public class GastosServiciosController extends Controller implements Initializab
     ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
     @FXML
     private TabPane tabPane;
+    @FXML
+    private JFXTextField txtBuscarGastosS;
+    @FXML
+    private JFXComboBox<String> cbxFiltro;
 
     /**
      * Initializes the controller class.
@@ -94,12 +98,13 @@ public class GastosServiciosController extends Controller implements Initializab
         listServicios = new ArrayList<>();
         listResponsables = new ArrayList<>();
         servGastDTO = new ServiciosGastosDTO();
-        cargarColumnasTabla();
-        cargarDatosGastosServ();
         clickTabla();
     }
 
     public void llenarComboBoxs() {
+        ObservableList filtro = FXCollections.observableArrayList("Empresa", "Numero de contraro","Servicio");
+        cbxFiltro.setItems(filtro);
+        
         ObservableList<String> estadoPag = FXCollections.observableArrayList("Pago", "Pendiente");
         cbxEstadoPago.setItems(estadoPag);
 
@@ -213,42 +218,6 @@ public class GastosServiciosController extends Controller implements Initializab
         }
     }
 
-    public void cargarColumnasTabla() {
-        tablaGastosS.getColumns().clear();
-        TableColumn<ServiciosGastosDTO, String> colEmpresa = new TableColumn<>("Empresa");
-        colEmpresa.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getEmpresa()));
-        TableColumn<ServiciosGastosDTO, String> colNumC = new TableColumn<>("Numero contrato");
-        colNumC.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNumeroContrato()));
-        TableColumn<ServiciosGastosDTO, String> colfecha = new TableColumn<>("Fecha registro");
-        colfecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
-        TableColumn<ServiciosGastosDTO, String> colServi = new TableColumn<>("Servicio");
-        colServi.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getServicio())));
-        TableColumn<ServiciosGastosDTO, String> colResp = new TableColumn<>("Responsable");
-        colResp.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getResponsable())));
-        TableColumn<ServiciosGastosDTO, String> colPago = new TableColumn<>("Estado de Pago");
-        colPago.setCellValueFactory((p) -> new SimpleStringProperty(estadoPago(p.getValue().isEstadoPago())));
-        TableColumn<ServiciosGastosDTO, String> colGast = new TableColumn<>("Estado de Gasto");
-        colGast.setCellValueFactory((p) -> new SimpleStringProperty(estadoGasto(p.getValue().isEstadoGasto())));
-        TableColumn<ServiciosGastosDTO, String> colPeriod = new TableColumn<>("Periodicidad");
-        colPeriod.setCellValueFactory((p) -> new SimpleStringProperty(periodicidad(p.getValue().getPerioricidad())));
-        TableColumn<ServiciosGastosDTO, String> colEst = new TableColumn<>("Estado");
-        colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-
-        tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colResp, colPago, colGast, colPeriod, colEst);
-
-    }
-
-    public void cargarDatosGastosServ() {
-        Respuesta res = servGastService.getAll();
-        listGastosServ = (List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos");
-        if (listGastosServ != null) {
-            ObservableList items = FXCollections.observableArrayList(listGastosServ);
-            tablaGastosS.setItems(items);
-        } else {
-            tablaGastosS.getItems().clear();
-        }
-    }
-
     public void cargarDatos() {
         txtEmpresa.setText(gastoSelecciondo.getEmpresa());
         txtNumContrato.setText(gastoSelecciondo.getNumeroContrato());
@@ -275,7 +244,6 @@ public class GastosServiciosController extends Controller implements Initializab
         }
     }
 
-    //tab de crear gastos de servicios
     public boolean validarCamposGastos() {
         if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || cbxServicio.getValue() == null || cbxResponsable.getValue() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Son obligatorios los siguientes campos: \nEmpresa\nNumero de contrato\nServicio\nResponsable");
@@ -323,8 +291,6 @@ public class GastosServiciosController extends Controller implements Initializab
         Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
         if (res.getEstado()) {
             Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
-            cargarColumnasTabla();
-            cargarDatosGastosServ();
         }
     }
 
@@ -372,8 +338,6 @@ public class GastosServiciosController extends Controller implements Initializab
                 Respuesta res = servGastService.guardarGastoServicio(servGastDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Gasto de servicio guardado corectamente");
-                    cargarColumnasTabla();
-                    cargarDatosGastosServ();
                 }
             }
         }
@@ -400,8 +364,6 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actTabPane(MouseEvent event) {
         if (tabGastos.isSelected()) {
-            cargarColumnasTabla();
-            cargarDatosGastosServ();
         } else if (tabCrearEditar.isSelected() && gastSelec == false) {
             limpiarCampos();
         }
@@ -415,8 +377,6 @@ public class GastosServiciosController extends Controller implements Initializab
                 Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), gastoSelecciondo);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el gasto de servicio");
-                    cargarColumnasTabla();
-                    cargarDatosGastosServ();
                     gastSelec = false;
                 }
             } else {
@@ -425,6 +385,36 @@ public class GastosServiciosController extends Controller implements Initializab
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto de servicio", "Debe seleccionar un gasto de servicio");
         }
+    }
+
+    public void cargarColumnasTabla() {
+        tablaGastosS.getColumns().clear();
+        TableColumn<ServiciosGastosDTO, String> colEmpresa = new TableColumn<>("Empresa");
+        colEmpresa.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getEmpresa()));
+        TableColumn<ServiciosGastosDTO, String> colNumC = new TableColumn<>("Numero contrato");
+        colNumC.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNumeroContrato()));
+        TableColumn<ServiciosGastosDTO, String> colfecha = new TableColumn<>("Fecha registro");
+        colfecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
+        TableColumn<ServiciosGastosDTO, String> colServi = new TableColumn<>("Servicio");
+        colServi.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getServicio())));
+        TableColumn<ServiciosGastosDTO, String> colResp = new TableColumn<>("Responsable");
+        colResp.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getResponsable())));
+        TableColumn<ServiciosGastosDTO, String> colPago = new TableColumn<>("Estado de Pago");
+        colPago.setCellValueFactory((p) -> new SimpleStringProperty(estadoPago(p.getValue().isEstadoPago())));
+        TableColumn<ServiciosGastosDTO, String> colGast = new TableColumn<>("Estado de Gasto");
+        colGast.setCellValueFactory((p) -> new SimpleStringProperty(estadoGasto(p.getValue().isEstadoGasto())));
+        TableColumn<ServiciosGastosDTO, String> colPeriod = new TableColumn<>("Periodicidad");
+        colPeriod.setCellValueFactory((p) -> new SimpleStringProperty(periodicidad(p.getValue().getPerioricidad())));
+        TableColumn<ServiciosGastosDTO, String> colEst = new TableColumn<>("Estado");
+        colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
+
+        tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colResp, colPago, colGast, colPeriod, colEst);
+
+    }
+
+    @FXML
+    private void actBuscarGastosServicios(ActionEvent event) {
+        cargarColumnasTabla();
     }
 
 }

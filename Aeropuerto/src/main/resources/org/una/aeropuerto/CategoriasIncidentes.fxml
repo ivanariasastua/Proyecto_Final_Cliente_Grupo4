@@ -26,11 +26,11 @@
                </columnResizePolicy>
             </TableView>
             <Separator layoutX="582.0" layoutY="111.0" opacity="0.34" orientation="VERTICAL" prefHeight="493.0" prefWidth="0.0" />
-            <JFXButton layoutX="446.0" layoutY="111.0" onAction="#actBuscarCategorias" prefHeight="43.0" prefWidth="119.0" styleClass="button_3" text="Buscar" />
+            <JFXButton layoutX="457.0" layoutY="111.0" onAction="#actBuscarCategorias" prefHeight="43.0" prefWidth="108.0" styleClass="button_3" text="Buscar" />
             <JFXButton layoutX="970.0" layoutY="596.0" onAction="#actGuardarCategorias" prefHeight="43.0" prefWidth="117.0" styleClass="button_3" text="Guardar" />
             <JFXButton layoutX="843.0" layoutY="596.0" onAction="#actLimpiarCampos" prefHeight="43.0" prefWidth="117.0" styleClass="button_3" text="Limpiar" />
             <JFXButton layoutX="151.0" layoutY="598.0" onAction="#actInactivarCateg" prefHeight="43.0" prefWidth="117.0" styleClass="button_3" text="Inactivar" />
-            <JFXTextField layoutX="20.0" layoutY="110.0" prefHeight="41.0" prefWidth="405.0" styleClass="campos_texto_1" />
+            <JFXTextField fx:id="txtBuscarCateg" layoutX="174.0" layoutY="110.0" prefHeight="41.0" prefWidth="266.0" promptText="Buscar" styleClass="campos_texto_1" />
             <JFXComboBox fx:id="cbxCategoriasSuperiores" layoutX="758.0" layoutY="328.0" prefHeight="31.0" prefWidth="298.0" styleClass="comboBox" />
             <JFXTextField fx:id="txtNombre" layoutX="758.0" layoutY="224.0" prefHeight="41.0" prefWidth="297.0" styleClass="campos_texto_1" />
             <Label layoutX="636.0" layoutY="232.0" styleClass="texto" text="Nombre" />
@@ -38,6 +38,7 @@
             <Label layoutX="597.0" layoutY="321.0" prefHeight="25.0" prefWidth="161.0" styleClass="texto" text="Categoría Superior" />
             <Label layoutX="623.0" layoutY="437.0" styleClass="texto" text="Descripción" />
             <JFXButton layoutX="20.0" layoutY="598.0" onAction="#actEditarCat" prefHeight="43.0" prefWidth="117.0" styleClass="button_3" text="Editar" />
+            <JFXComboBox fx:id="cbxFiltroCategorias" layoutX="21.0" layoutY="120.0" promptText="Filtrar por" styleClass="comboBox" />
          </children>
       </AnchorPane>
    </center>

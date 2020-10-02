@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -52,10 +53,14 @@ public class ServiciosController extends Controller implements Initializable {
     private List<ServiciosDTO> listServic;
     ServiciosDTO servicSeleccionado = new ServiciosDTO();
     boolean servSelec;
+    @FXML
+    private JFXComboBox<String> cbxFiltroServicios;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
+        cbxFiltroServicios.setItems(filtro);
     }
 
     @Override
@@ -63,7 +68,6 @@ public class ServiciosController extends Controller implements Initializable {
         servService = new ServiciosService();
         servicioDTO = new ServiciosDTO();
         listServic = new ArrayList<>();
-        cargarTablaServicios();
         clickTabla();
         servSelec = false;
     }
@@ -80,7 +84,7 @@ public class ServiciosController extends Controller implements Initializable {
             return row;
         });
     }
-    
+
     public String estado(boolean estad) {
         if (estad == true) {
             return "Activo";
@@ -89,7 +93,7 @@ public class ServiciosController extends Controller implements Initializable {
         }
     }
 
-    public void cargarTablaServicios() {
+    public void cargarColumnas() {
         tablaServicios.getColumns().clear();
         TableColumn<ServiciosDTO, String> colNomb = new TableColumn<>("Nombre");
         colNomb.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
@@ -97,18 +101,7 @@ public class ServiciosController extends Controller implements Initializable {
         colDescrip.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDescripcion()));
         TableColumn<ServiciosDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-        tablaServicios.getColumns().addAll(colNomb, colDescrip,colEst);
-        Respuesta res = servService.getAll();
-        System.out.println(res.getMensaje() + res.getMensajeInterno());
-        if (res.getEstado()) {
-            listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
-            if (listServic != null) {
-                ObservableList items = FXCollections.observableArrayList(listServic);
-                tablaServicios.setItems(items);
-            } else {
-                tablaServicios.getItems().clear();
-            }
-        }
+        tablaServicios.getColumns().addAll(colNomb, colDescrip, colEst);
     }
 
     @FXML
@@ -120,7 +113,6 @@ public class ServiciosController extends Controller implements Initializable {
             Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicioDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
-                cargarTablaServicios();
             }
         } else {
             if (txtNombreServicio.getText() != null) {
@@ -131,7 +123,6 @@ public class ServiciosController extends Controller implements Initializable {
                 System.out.println(res.getMensaje());
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Servicio guardado correctamente");
-                    cargarTablaServicios();
                 }
             } else {
                 Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
@@ -145,8 +136,8 @@ public class ServiciosController extends Controller implements Initializable {
             if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
                 txtDescripcionServicio.setText(servicSeleccionado.getDescripcion());
                 txtNombreServicio.setText(servicSeleccionado.getNombre());
-            }else{
-                servSelec=false;
+            } else {
+                servSelec = false;
             }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
@@ -155,6 +146,43 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actBuscarServicio(ActionEvent event) {
+        cargarColumnas();
+        if (cbxFiltroServicios.getValue() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
+        } else {
+            if (cbxFiltroServicios.getValue().equals("Nombre")) {
+                Respuesta res = servService.getByNombre(txtBuscarServicio.getText());
+                listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
+                if (listServic != null) {
+                    ObservableList items = FXCollections.observableArrayList(listServic);
+                    tablaServicios.setItems(items);
+                } else {
+                    tablaServicios.getItems().clear();
+                }
+            } else {
+                if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
+                    Respuesta res = servService.getByEstado(true);
+                    listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
+                    if (listServic != null) {
+                        ObservableList items = FXCollections.observableArrayList(listServic);
+                        tablaServicios.setItems(items);
+                    } else {
+                        tablaServicios.getItems().clear();
+                    }
+                } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
+                    Respuesta res = servService.getByEstado(false);
+                    listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
+                    if (listServic != null) {
+                        ObservableList items = FXCollections.observableArrayList(listServic);
+                        tablaServicios.setItems(items);
+                    } else {
+                        tablaServicios.getItems().clear();
+                    }
+                } else {
+                    tablaServicios.getItems().clear();
+                }
+            }
+        }
     }
 
     @FXML
@@ -171,14 +199,13 @@ public class ServiciosController extends Controller implements Initializable {
         if (servSelec == true) {
             if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
                 servicSeleccionado.setEstado(false);
-                Respuesta res =servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
-                if(res.getEstado()){
+                Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
+                if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
-                    cargarTablaServicios();
-                    servSelec=false;
+                    servSelec = false;
                 }
-            }else{
-                servSelec=false;
+            } else {
+                servSelec = false;
             }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");

@@ -95,4 +95,20 @@ public class ServiciosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+    public Respuesta getByEstado(boolean estado){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("term", estado);
+            Request request = new Request("servicios/estado", "/{term}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los servicios");
+            }
+            List<ServiciosDTO> result = (List<ServiciosDTO>) request.readEntity(new GenericType<List<ServiciosDTO>>(){});
+            return new Respuesta(true, "Servicios",result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }

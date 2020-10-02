@@ -169,9 +169,6 @@ public class PrincipalController extends Controller implements Initializable {
         FlowController.getInstance().goViewPanel(vbContenedor, "GastosServicios");
     }
 
-    @FXML
-    private void accionSeguimientoGasto(ActionEvent event) {
-    }
 
     @FXML
     private void accionCategorias(ActionEvent event) {
@@ -222,9 +219,6 @@ public class PrincipalController extends Controller implements Initializable {
 
     }
 
-    @FXML
-    private void accionSeguimientoGastos(MouseEvent event) {
-    }
 
     @FXML
     private void accionTransacciones(MouseEvent event) {

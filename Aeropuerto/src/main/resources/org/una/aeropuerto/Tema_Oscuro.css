@@ -24,6 +24,7 @@ and open the template in the editor.
     -fx-text-fill: derive(white, 20%);
 }
 .comboBox{
+    -fx-prompt-text-fill: #B2B2B2;
     -fx-font: bold 11pt "Courier";
     -fx-text-fill: white;
     -jfx-unfocus-color: #B2B2B2;

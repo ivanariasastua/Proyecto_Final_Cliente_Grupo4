@@ -50,14 +50,18 @@ public class CategoriasIncidentesController extends Controller implements Initia
     List<IncidentesCategoriasDTO> listCategorias = new ArrayList<>();
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
+    @FXML
+    private JFXComboBox<String> cbxFiltroCategorias;
+    @FXML
+    private JFXTextField txtBuscarCateg;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        cargarCategorias();
+        ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
+        cbxFiltroCategorias.setItems(filtro);
         clickTabla();
     }
 
@@ -94,8 +98,6 @@ public class CategoriasIncidentesController extends Controller implements Initia
             Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoria guardada correctamente");
-                cargarCategorias();
-
             }
         } else {
             if (txtNombre.getText() == null || txtNombre.getText().isEmpty()) {
@@ -108,7 +110,6 @@ public class CategoriasIncidentesController extends Controller implements Initia
                 Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoria guardada correctamente");
-                    cargarCategorias();
                 }
             }
         }
@@ -122,7 +123,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         }
     }
 
-    public void cargarCategorias() {
+    public void cargarColumnas() {
         tablaCategorias.getColumns().clear();
         TableColumn<IncidentesCategoriasDTO, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
@@ -133,20 +134,47 @@ public class CategoriasIncidentesController extends Controller implements Initia
         TableColumn<IncidentesCategoriasDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
         tablaCategorias.getColumns().addAll(colNombre, colCat, colDesc, colEst);
-        Respuesta res = categoriaService.getAll();
-        if (res.getEstado()) {
-            listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
-            if (listCategorias != null) {
-                ObservableList items = FXCollections.observableArrayList(listCategorias);
-                tablaCategorias.setItems(items);
-            } else {
-                tablaCategorias.getItems().clear();
-            }
-        }
     }
 
     @FXML
     private void actBuscarCategorias(ActionEvent event) {
+        cargarColumnas();
+        if (cbxFiltroCategorias.getValue() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
+        } else {
+            if (cbxFiltroCategorias.getValue().equals("Nombre")) {
+                Respuesta res = categoriaService.getByNombre(txtBuscarCateg.getText());
+                listCategorias =(List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                if (listCategorias != null) {
+                    ObservableList items = FXCollections.observableArrayList(listCategorias);
+                    tablaCategorias.setItems(items);
+                } else {
+                    tablaCategorias.getItems().clear();
+                }
+            } else {
+                if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
+                    Respuesta res = categoriaService.getByEstado(true);
+                    listCategorias =  (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                    if (listCategorias != null) {
+                        ObservableList items = FXCollections.observableArrayList(listCategorias);
+                        tablaCategorias.setItems(items);
+                    } else {
+                        tablaCategorias.getItems().clear();
+                    }
+                } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
+                    Respuesta res = categoriaService.getByEstado(false);
+                    listCategorias =  (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                    if (listCategorias != null) {
+                        ObservableList items = FXCollections.observableArrayList(listCategorias);
+                        tablaCategorias.setItems(items);
+                    } else {
+                        tablaCategorias.getItems().clear();
+                    }
+                }else{
+                    tablaCategorias.getItems().clear();
+                }
+            }
+        }
     }
 
     @FXML
@@ -181,7 +209,6 @@ public class CategoriasIncidentesController extends Controller implements Initia
                 Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
-                    cargarCategorias();
                     catSelec = false;
                 }
             } else {
