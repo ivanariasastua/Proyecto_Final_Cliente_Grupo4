@@ -28,8 +28,6 @@ public class AuthenticationService {
             }
             AuthenticationResponse usuario = (AuthenticationResponse) request.readEntity(AuthenticationResponse.class);
             UserAuthenticated.getInstance().setData(usuario.getEmpleado(), usuario.getRol(), usuario.getJwt());
-            AppContext.getInstance().set("UsuarioAutenticado", usuario);
-            AppContext.getInstance().set("token", "bearer " + usuario.getJwt());
             return new Respuesta(true, "Usuario", usuario);
         }catch(Exception ex){
             return new Respuesta(false, ex.toString(), "Iniciar Sesion: Error al comunicarse con el servidor");

@@ -63,6 +63,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
             if(res.getEstado()){
                 tablaEmpleados.getItems().addAll((List<EmpleadosDTO>)res.getResultado("Empleados"));
             }else{
+                System.out.println(res.getMensajeInterno());
                 Mensaje.show(Alert.AlertType.ERROR, "Buscar Empleados", res.getMensaje());
             }
         }

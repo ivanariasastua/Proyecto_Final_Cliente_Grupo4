@@ -53,6 +53,6 @@ public class UserAuthenticated {
     public void setData(EmpleadosDTO usuario, RolesDTO rol, String token){
         this.usuario = usuario;
         this.rol = rol;
-        this.token = token;
+        this.token = "bearer "+token;
     }
 }

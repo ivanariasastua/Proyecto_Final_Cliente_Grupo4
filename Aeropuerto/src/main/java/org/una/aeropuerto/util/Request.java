@@ -8,7 +8,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
@@ -33,7 +32,7 @@ public class Request {
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Accept", "application/json");
-        headers.add("Authorization", AppContext.getInstance().get("token"));
+        headers.add("Authorization", UserAuthenticated.getInstance().getToken());
         builder.headers(headers);
     }
 
@@ -43,8 +42,8 @@ public class Request {
         this.builder = webTarget.request(MediaType.APPLICATION_JSON);
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         headers.add("Content-Type", "application/json; charset=UTF-8");
-         headers.add("Accept", "application/json");
-        headers.add("Authorization", AppContext.getInstance().get("token"));
+        headers.add("Accept", "application/json");
+        headers.add("Authorization", UserAuthenticated.getInstance().getToken());
         builder.headers(headers);
     }
 

@@ -5,11 +5,11 @@
  */
 package org.una.aeropuerto.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  *
@@ -27,7 +27,9 @@ public class EmpleadosDTO {
     private EmpleadosDTO jefe;
     private String contrasenaEncriptada;
     private RolesDTO rol;
+    @JsonManagedReference
     private List<EmpleadosAreasTrabajosDTO> empleadosAreasTrabajo;
+    @JsonManagedReference
     private List<EmpleadosHorariosDTO> horarios;
     
     @Override
