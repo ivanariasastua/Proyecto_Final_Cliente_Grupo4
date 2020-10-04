@@ -79,4 +79,20 @@ public class EmpleadosAreasTrabajosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+    public Respuesta findByArea(String area){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("term", area);
+            Request request = new Request("empleados_areas_trabajos/area", "/{term}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener las areas de trabjo");
+            }
+            List<EmpleadosAreasTrabajosDTO> result = (List<EmpleadosAreasTrabajosDTO>) request.readEntity(new GenericType<List<EmpleadosAreasTrabajosDTO>>(){});
+            return new Respuesta(true, "Empleados_Areas_Trabajos",result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }

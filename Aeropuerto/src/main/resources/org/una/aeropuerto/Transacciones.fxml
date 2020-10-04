@@ -2,18 +2,50 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1100.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.TransaccionesController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.TransaccionesController">
    <center>
-      <AnchorPane prefHeight="650.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
+      <VBox BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="345.0" layoutY="24.0" styleClass="lblTitulo_1" text="Informacion de Transacciones" />
-            <TableView fx:id="tablaTransac" layoutX="55.0" layoutY="199.0" prefHeight="399.0" prefWidth="990.0">
+            <Label styleClass="lblTitulo_1" text="Informacion de Transacciones">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <JFXButton onAction="#actBuscar" prefHeight="43.0" prefWidth="130.0" styleClass="button_3" text="Buscar" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </JFXButton>
+                  <JFXTextField fx:id="txtBuscarTransacciones" prefHeight="41.0" prefWidth="825.0" styleClass="campos_texto_1">
+                     <GridPane.margin>
+                        <Insets left="30.0" />
+                     </GridPane.margin>
+                  </JFXTextField>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="30.0" top="30.0" />
+               </VBox.margin>
+            </GridPane>
+            <TableView fx:id="tablaTransac" prefHeight="430.0" prefWidth="740.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
@@ -21,10 +53,11 @@
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" top="15.0" />
+               </VBox.margin>
             </TableView>
-            <JFXTextField fx:id="txtBuscarTransacciones" layoutX="55.0" layoutY="122.0" prefHeight="41.0" prefWidth="825.0" styleClass="campos_texto_1" />
-            <JFXButton layoutX="915.0" layoutY="123.0" onAction="#actBuscar" prefHeight="43.0" prefWidth="130.0" styleClass="button_3" text="Buscar" />
          </children>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>

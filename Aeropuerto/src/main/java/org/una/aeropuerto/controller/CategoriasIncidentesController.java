@@ -23,9 +23,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
-import org.una.aeropuerto.dto.EmpleadosDTO;
+import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.service.IncidentesCategoriasService;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
@@ -39,25 +41,23 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private TableView tablaCategorias;
     @FXML
-    private JFXComboBox<IncidentesCategoriasDTO> cbxCategoriasSuperiores;
+    private JFXTextField txtCategoriaSuperior;
     @FXML
     private JFXTextField txtNombre;
     @FXML
     private JFXTextArea txtDescripcion;
+    @FXML
+    private JFXComboBox<String> cbxFiltroCategorias;
+    @FXML
+    private JFXTextField txtBuscarCateg;
 
     private IncidentesCategoriasDTO categoriaDTO = new IncidentesCategoriasDTO();
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias = new ArrayList<>();
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
-    @FXML
-    private JFXComboBox<String> cbxFiltroCategorias;
-    @FXML
-    private JFXTextField txtBuscarCateg;
+    IncidentesCategoriasDTO categSuperiorSelec;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
@@ -67,12 +67,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @Override
     public void initialize() {
-        Respuesta res = categoriaService.getAll();
-        listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
-        if (listCategorias != null) {
-            ObservableList items = FXCollections.observableArrayList(listCategorias);
-            cbxCategoriasSuperiores.setItems(items);
-        }
+        categSuperiorSelec = new IncidentesCategoriasDTO();
     }
 
     public void clickTabla() {
@@ -92,19 +87,19 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private void actGuardarCategorias(ActionEvent event) {
         if (catSelec == true) {
             categoriaDTO.setId(categoriaSelec.getId());
-            categoriaDTO.setCategoriaSuperior(cbxCategoriasSuperiores.getValue());
+            categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
             categoriaDTO.setDescripcion(txtDescripcion.getText());
             categoriaDTO.setNombre(txtNombre.getText());
             Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaDTO);
             if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoria guardada correctamente");
+                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoria editada correctamente");
             }
         } else {
             if (txtNombre.getText() == null || txtNombre.getText().isEmpty()) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de nombre es obligatorio");
             } else {
                 categoriaDTO = new IncidentesCategoriasDTO();
-                categoriaDTO.setCategoriaSuperior(cbxCategoriasSuperiores.getValue());
+                categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
                 categoriaDTO.setDescripcion(txtDescripcion.getText());
                 categoriaDTO.setNombre(txtNombre.getText());
                 Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
@@ -144,7 +139,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         } else {
             if (cbxFiltroCategorias.getValue().equals("Nombre")) {
                 Respuesta res = categoriaService.getByNombre(txtBuscarCateg.getText());
-                listCategorias =(List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
                 if (listCategorias != null) {
                     ObservableList items = FXCollections.observableArrayList(listCategorias);
                     tablaCategorias.setItems(items);
@@ -152,25 +147,25 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     tablaCategorias.getItems().clear();
                 }
             } else {
-                if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
+                if (txtBuscarCateg.getText().contains("activo") || txtBuscarCateg.getText().contains("Activo")) {
                     Respuesta res = categoriaService.getByEstado(true);
-                    listCategorias =  (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                    listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
                     if (listCategorias != null) {
                         ObservableList items = FXCollections.observableArrayList(listCategorias);
                         tablaCategorias.setItems(items);
                     } else {
                         tablaCategorias.getItems().clear();
                     }
-                } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
+                } else if (txtBuscarCateg.getText().contains("inactivo") || txtBuscarCateg.getText().contains("Inactivo")) {
                     Respuesta res = categoriaService.getByEstado(false);
-                    listCategorias =  (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                    listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
                     if (listCategorias != null) {
                         ObservableList items = FXCollections.observableArrayList(listCategorias);
                         tablaCategorias.setItems(items);
                     } else {
                         tablaCategorias.getItems().clear();
                     }
-                }else{
+                } else {
                     tablaCategorias.getItems().clear();
                 }
             }
@@ -180,10 +175,11 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actLimpiarCampos(ActionEvent event) {
         txtDescripcion.setText(null);
-        txtDescripcion.setText(null);
-        cbxCategoriasSuperiores.setValue(null);
+        txtNombre.setText(null);
+        txtCategoriaSuperior.setText(null);
         catSelec = false;
         categoriaSelec = new IncidentesCategoriasDTO();
+        categSuperiorSelec= new IncidentesCategoriasDTO();
     }
 
     @FXML
@@ -192,7 +188,9 @@ public class CategoriasIncidentesController extends Controller implements Initia
             if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
                 txtDescripcion.setText(categoriaSelec.getDescripcion());
                 txtNombre.setText(categoriaSelec.getNombre());
-                cbxCategoriasSuperiores.setValue(categoriaSelec.getCategoriaSuperior());
+                if(categoriaSelec.getCategoriaSuperior()!=null){
+                    txtCategoriaSuperior.setText(categoriaSelec.getCategoriaSuperior().getNombre());
+                }
             } else {
                 catSelec = false;
             }
@@ -216,6 +214,15 @@ public class CategoriasIncidentesController extends Controller implements Initia
             }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar información", "Debe seleccionar información de la tabla");
+        }
+    }
+
+    @FXML
+    private void actBuscarCategoriaSuperior(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+        categSuperiorSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
+        if (categSuperiorSelec != null) {
+            txtCategoriaSuperior.setText(categSuperiorSelec.getNombre());
         }
     }
 

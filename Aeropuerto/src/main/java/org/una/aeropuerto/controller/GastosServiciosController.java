@@ -26,12 +26,14 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosGastosDTO;
-import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.service.ServiciosGastosService;
 import org.una.aeropuerto.service.ServiciosService;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
@@ -55,56 +57,53 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private JFXComboBox<String> cbxPerioricidad;
     @FXML
-    private JFXComboBox<EmpleadosDTO> cbxResponsable;
-    @FXML
     private JFXComboBox<ServiciosDTO> cbxServicio;
     @FXML
     private JFXComboBox<Integer> cbxDuracion;
     @FXML
     private JFXComboBox<String> cbxTiempo;
-    List<ServiciosDTO> listServicios;
-    List<EmpleadosDTO> listResponsables;
-    private EmpleadosService emplService = new EmpleadosService();
-    private ServiciosService servService = new ServiciosService();
-    private ServiciosGastosDTO servGastDTO = new ServiciosGastosDTO();
-    private ServiciosGastosService servGastService = new ServiciosGastosService();
-    List<ServiciosGastosDTO> listGastosServ = new ArrayList<>();
     @FXML
     private Tab tabGastos;
     @FXML
     private Tab tabCrearEditar;
-    boolean gastSelec = false;
-    ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
     @FXML
     private TabPane tabPane;
     @FXML
     private JFXTextField txtBuscarGastosS;
     @FXML
     private JFXComboBox<String> cbxFiltro;
+    @FXML
+    private JFXTextField txtResponsable;
 
-    /**
-     * Initializes the controller class.
-     */
+    List<ServiciosDTO> listServicios;
+    private ServiciosService servService = new ServiciosService();
+    private ServiciosGastosDTO servGastDTO = new ServiciosGastosDTO();
+    private ServiciosGastosService servGastService = new ServiciosGastosService();
+    List<ServiciosGastosDTO> listGastosServ = new ArrayList<>();
+    boolean gastSelec = false;
+    ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
+    EmpleadosDTO responsableSelec;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         listServicios = new ArrayList<>();
         llenarComboBoxs();
+        limpiarCampos();
 
     }
 
     @Override
     public void initialize() {
         listServicios = new ArrayList<>();
-        listResponsables = new ArrayList<>();
         servGastDTO = new ServiciosGastosDTO();
         clickTabla();
+        responsableSelec = new EmpleadosDTO();
     }
 
     public void llenarComboBoxs() {
-        ObservableList filtro = FXCollections.observableArrayList("Empresa", "Numero de contraro","Servicio");
+        ObservableList filtro = FXCollections.observableArrayList("Empresa", "Numero de contraro", "Servicio");
         cbxFiltro.setItems(filtro);
-        
+
         ObservableList<String> estadoPag = FXCollections.observableArrayList("Pago", "Pendiente");
         cbxEstadoPago.setItems(estadoPag);
 
@@ -130,14 +129,6 @@ public class GastosServiciosController extends Controller implements Initializab
             ObservableList<ServiciosDTO> servicios = FXCollections.observableArrayList(listServicios);
             cbxServicio.setItems(servicios);
         }
-
-        Respuesta resp = emplService.getAll();
-        listResponsables = (List<EmpleadosDTO>) resp.getResultado("Empleados");
-        if (listResponsables != null) {
-            ObservableList<EmpleadosDTO> responsables = FXCollections.observableArrayList(listResponsables);
-            cbxResponsable.setItems(responsables);
-        }
-
     }
 
     public String estadoPago(boolean num) {
@@ -189,7 +180,8 @@ public class GastosServiciosController extends Controller implements Initializab
 
     public void duracion(String duracion) {
         if (duracion.length() == 3) {
-            cbxDuracion.setValue(Integer.parseInt(String.valueOf(duracion.charAt(0) + duracion.charAt(1))));
+            String num =duracion.charAt(0)+""+duracion.charAt(1);
+            cbxDuracion.setValue(Integer.valueOf(num));
             cbxTiempo.setValue(retornarPeriodo(duracion.charAt(2)));
         } else {
             cbxDuracion.setValue(Integer.parseInt(String.valueOf(duracion.charAt(0))));
@@ -219,9 +211,10 @@ public class GastosServiciosController extends Controller implements Initializab
     }
 
     public void cargarDatos() {
+        responsableSelec=gastoSelecciondo.getResponsable();
         txtEmpresa.setText(gastoSelecciondo.getEmpresa());
         txtNumContrato.setText(gastoSelecciondo.getNumeroContrato());
-        cbxResponsable.setValue(gastoSelecciondo.getResponsable());
+        txtResponsable.setText(gastoSelecciondo.getResponsable().getNombre());
         cbxServicio.setValue(gastoSelecciondo.getServicio());
         cbxEstadoGasto.setValue(estadoGasto(gastoSelecciondo.isEstadoGasto()));
         cbxEstadoPago.setValue(estadoPago(gastoSelecciondo.isEstadoPago()));
@@ -245,7 +238,7 @@ public class GastosServiciosController extends Controller implements Initializab
     }
 
     public boolean validarCamposGastos() {
-        if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || cbxServicio.getValue() == null || cbxResponsable.getValue() == null) {
+        if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || cbxServicio.getValue() == null || txtResponsable.getText() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Son obligatorios los siguientes campos: \nEmpresa\nNumero de contrato\nServicio\nResponsable");
             return false;
         }
@@ -256,7 +249,7 @@ public class GastosServiciosController extends Controller implements Initializab
         servGastDTO.setId(gastoSelecciondo.getId());
         servGastDTO.setEmpresa(txtEmpresa.getText());
         servGastDTO.setNumeroContrato(txtNumContrato.getText());
-        servGastDTO.setResponsable(cbxResponsable.getValue());
+        servGastDTO.setResponsable(responsableSelec);
         servGastDTO.setServicio(cbxServicio.getValue());
         if (cbxEstadoGasto.getValue().equals("Activo")) {
             servGastDTO.setEstadoGasto(true);
@@ -303,7 +296,7 @@ public class GastosServiciosController extends Controller implements Initializab
                 servGastDTO = new ServiciosGastosDTO();
                 servGastDTO.setEmpresa(txtEmpresa.getText());
                 servGastDTO.setNumeroContrato(txtNumContrato.getText());
-                servGastDTO.setResponsable(cbxResponsable.getValue());
+                servGastDTO.setResponsable(responsableSelec);
                 servGastDTO.setServicio(cbxServicio.getValue());
                 if (cbxEstadoGasto.getValue().equals("Activo")) {
                     servGastDTO.setEstadoGasto(true);
@@ -344,16 +337,18 @@ public class GastosServiciosController extends Controller implements Initializab
     }
 
     public void limpiarCampos() {
+        cbxServicio.setValue(null);
         txtEmpresa.setText(null);
         txtNumContrato.setText(null);
         cbxDuracion.setValue(null);
         cbxEstadoGasto.setValue(null);
         cbxEstadoPago.setValue(null);
         cbxPerioricidad.setValue(null);
-        cbxResponsable.setValue(null);
+        txtResponsable.setText(null);
         cbxTiempo.setValue(null);
         gastSelec = false;
         gastoSelecciondo = new ServiciosGastosDTO();
+        responsableSelec = new EmpleadosDTO();
     }
 
     @FXML
@@ -397,8 +392,6 @@ public class GastosServiciosController extends Controller implements Initializab
         colfecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
         TableColumn<ServiciosGastosDTO, String> colServi = new TableColumn<>("Servicio");
         colServi.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getServicio())));
-        TableColumn<ServiciosGastosDTO, String> colResp = new TableColumn<>("Responsable");
-        colResp.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getResponsable())));
         TableColumn<ServiciosGastosDTO, String> colPago = new TableColumn<>("Estado de Pago");
         colPago.setCellValueFactory((p) -> new SimpleStringProperty(estadoPago(p.getValue().isEstadoPago())));
         TableColumn<ServiciosGastosDTO, String> colGast = new TableColumn<>("Estado de Gasto");
@@ -408,13 +401,53 @@ public class GastosServiciosController extends Controller implements Initializab
         TableColumn<ServiciosGastosDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
 
-        tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colResp, colPago, colGast, colPeriod, colEst);
-
+        tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colPago, colGast, colPeriod, colEst);
     }
 
     @FXML
     private void actBuscarGastosServicios(ActionEvent event) {
         cargarColumnasTabla();
+        if (cbxFiltro.getValue() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
+        } else {
+            if (cbxFiltro.getValue().equals("Empresa")) {
+                Respuesta res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
+                listGastosServ = (List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos");
+                if (listGastosServ != null) {
+                    ObservableList items = FXCollections.observableArrayList(listGastosServ);
+                    tablaGastosS.setItems(items);
+                } else {
+                    tablaGastosS.getItems().clear();
+                }
+            } else if (cbxFiltro.getValue().equals("Numero de contraro")) {
+                Respuesta res = servGastService.getByContrato(txtBuscarGastosS.getText());
+                listGastosServ = (List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos");
+                if (listGastosServ != null) {
+                    ObservableList items = FXCollections.observableArrayList(listGastosServ);
+                    tablaGastosS.setItems(items);
+                } else {
+                    tablaGastosS.getItems().clear();
+                }
+            } else if (cbxFiltro.getValue().equals("Servicio")) {
+                Respuesta res = servGastService.findByServicio(txtBuscarGastosS.getText());
+                listGastosServ = (List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos");
+                if (listGastosServ != null) {
+                    ObservableList items = FXCollections.observableArrayList(listGastosServ);
+                    tablaGastosS.setItems(items);
+                } else {
+                    tablaGastosS.getItems().clear();
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void actBuscarResponsable(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if (responsableSelec != null) {
+            txtResponsable.setText(responsableSelec.getNombre());
+        }
     }
 
 }
