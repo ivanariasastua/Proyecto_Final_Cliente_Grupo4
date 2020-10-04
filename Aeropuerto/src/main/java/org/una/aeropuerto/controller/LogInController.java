@@ -8,10 +8,6 @@ package org.una.aeropuerto.controller;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import org.una.aeropuerto.service.AuthenticationService;
-import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
@@ -41,13 +36,6 @@ public class LogInController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        LocalDateTime time = LocalDateTime.now();
-//        Date out = Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
-//        String pattern = " HH:mm:ss";
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-//        String date = simpleDateFormat.format(out);
-//        System.out.println(date);
-
     }
 
     @Override

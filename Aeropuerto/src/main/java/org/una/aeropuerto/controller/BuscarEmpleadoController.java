@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -99,9 +99,9 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Jefe");
         colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
         TableColumn<EmpleadosDTO, String> colrol = new TableColumn<>("Rol");
-        colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol())));
+        colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol() )));
         TableColumn<EmpleadosDTO, String> colestado = new TableColumn<>("Estado");
-        colrol.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactivo"));
+        colestado.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactivo"));
         tablaEmpleados.getColumns().addAll(colNombre, colCedula, colJefe, colrol, colestado);
     }
     

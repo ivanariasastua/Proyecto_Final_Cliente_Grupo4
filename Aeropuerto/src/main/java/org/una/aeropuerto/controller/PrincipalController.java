@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import static java.lang.System.exit;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -156,6 +157,8 @@ public class PrincipalController extends Controller implements Initializable {
     private void accionCerrar(MouseEvent event) {
         if (Mensaje.showConfirmation("Cerrar Ventana", this.getStage(), "¿Seguro desea cerrar la ventana?")) {
             this.getStage().close();
+            Timer t = (Timer) AppContext.getInstance().get("Timer");
+            t.cancel();
         }
     }
 

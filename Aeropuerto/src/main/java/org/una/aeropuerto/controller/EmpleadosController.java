@@ -5,14 +5,15 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -24,7 +25,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -45,10 +45,12 @@ import org.una.aeropuerto.service.EmpleadosHorariosService;
 import org.una.aeropuerto.service.EmpleadosMarcajesService;
 import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.service.RolesService;
+import org.una.aeropuerto.service.EmpleadosAreasTrabajosService;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.dto.AreasTrabajosDTO;
 
 /**
  * FXML Controller class
@@ -61,6 +63,7 @@ public class EmpleadosController extends Controller implements Initializable {
      * Initializes the controller class.
      */
     private EmpleadosService empleadoService = new EmpleadosService();
+    private EmpleadosAreasTrabajosService empAreasService = new EmpleadosAreasTrabajosService();
     private List<EmpleadosDTO> listEmpleados;
     private List<EmpleadosHorariosDTO> listHorariosEmp;
     private List<EmpleadosMarcajesDTO> listMarcajes = new ArrayList<>();
@@ -77,6 +80,7 @@ public class EmpleadosController extends Controller implements Initializable {
     private EmpleadosHorariosService horarioService;
     private EmpleadosMarcajesService marcajesService = new EmpleadosMarcajesService();
     private EmpleadosMarcajesDTO marcajeDTO = new EmpleadosMarcajesDTO();
+    private AreasTrabajosDTO area = null;
     @FXML private TableView tablaHorarios;
     @FXML private BorderPane bpPantalla;
     @FXML private VBox vbContenedor;
@@ -97,10 +101,15 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private JFXComboBox<String> cbxDiaSalida;
     @FXML private JFXComboBox<EmpleadosHorariosDTO> cbxHorarios;
     @FXML private Tab tabArear;
-    @FXML private ListView<String> lvAreas;
     @FXML private JFXTextField txtId;
     @FXML private JFXTextField txtJefe;
     @FXML private Label lblArea;
+    @FXML private TableView<EmpleadosAreasTrabajosDTO> tvAreas;
+    @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colArea;
+    @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colDescripcion;
+    @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado;
+    @FXML
+    private JFXButton btnActInac;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -117,6 +126,7 @@ public class EmpleadosController extends Controller implements Initializable {
         llenarComboBoxs();
         clickTablas();
         cargarTablaHorarios();
+        cargarTablaAreas();
     }
 
     @Override
@@ -148,10 +158,8 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     public void llenarListaAreas(){
-        lvAreas.getItems().clear();
-        for(EmpleadosAreasTrabajosDTO area : emplSeleccionado.getEmpleadosAreasTrabajo()){
-            lvAreas.getItems().add(area.getAreaTrabajo().getNombre());
-        }
+        tvAreas.getItems().clear();
+        tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
     }
     
     @FXML
@@ -216,7 +224,7 @@ public class EmpleadosController extends Controller implements Initializable {
         empSeleccionado = false;
         emplSeleccionado = null;
         tablaHorarios.getItems().clear();
-        lvAreas.getItems().clear();
+        tvAreas.getItems().clear();
     }
 
     private void actTabPane(MouseEvent event) {
@@ -262,6 +270,12 @@ public class EmpleadosController extends Controller implements Initializable {
         TableColumn<EmpleadosHorariosDTO, String> colHoraS = new TableColumn<>("hora de salida");
         colHoraS.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getHoraSalida() == null ? "Sin Hora" : String.valueOf(simpleDateFormat.format(p.getValue().getHoraSalida())) ));
         tablaHorarios.getColumns().addAll(colDiaE, colDiaS, colHoraE, colHoraS);
+    }
+    
+    private void cargarTablaAreas(){
+        colArea.setCellValueFactory( p -> new SimpleStringProperty(p.getValue().getAreaTrabajo().getNombre()));
+        colDescripcion.setCellValueFactory( p -> new SimpleStringProperty(p.getValue().getAreaTrabajo().getDescripcion()));
+        colEstado.setCellValueFactory( p -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactiva"));
     }
     
     private void cargarDatosHorarios(){
@@ -316,7 +330,9 @@ public class EmpleadosController extends Controller implements Initializable {
                 horarioDTO.setId(horarioSeleccionado.getId());
                 horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
                 horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-//                horarioDTO.setEmpleado(cbxEmpleados.getValue());
+                horarioDTO.setEmpleado(emplSeleccionado);
+                horarioDTO.setHoraEntrada(obtenerFecha(true));
+                horarioDTO.setHoraSalida(obtenerFecha(false));
                 Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
@@ -328,7 +344,9 @@ public class EmpleadosController extends Controller implements Initializable {
                 horarioDTO = new EmpleadosHorariosDTO();
                 horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
                 horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-//                horarioDTO.setEmpleado(cbxEmpleados.getValue());
+                horarioDTO.setEmpleado(emplSeleccionado);
+                horarioDTO.setHoraEntrada(obtenerFecha(true));
+                horarioDTO.setHoraSalida(obtenerFecha(false));
                 Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
@@ -336,6 +354,24 @@ public class EmpleadosController extends Controller implements Initializable {
                 }
             }
         }
+    }
+    
+    private Date obtenerFecha(boolean horaEntrada){
+        LocalDateTime ldt = LocalDateTime.now(), ldt2;
+        int hora = 0, min = 0;
+        if(horaEntrada){
+            try{
+                hora = Integer.parseInt(entradaHoras.getSelectionModel().getSelectedItem());
+                min = Integer.parseInt(entradaMinutos.getSelectionModel().getSelectedItem());
+            }catch(NumberFormatException nfe){}
+        }else{
+            try{
+                hora = Integer.parseInt(salidaHoras.getSelectionModel().getSelectedItem());
+                min = Integer.parseInt(salidaMinutos.getSelectionModel().getSelectedItem());
+            }catch(NumberFormatException nfe){}
+        }
+        ldt2 = LocalDateTime.of(ldt.getYear(), ldt.getMonth(), ldt.getDayOfMonth(), hora, min, 0, 0);
+        return Date.from(ldt2.atZone(ZoneId.of("UTC")).toInstant());
     }
 
     @FXML
@@ -356,20 +392,23 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     @FXML
-    private void actInactivarEmpleado(ActionEvent event) {
-    }
-
-    @FXML
-    private void actGuardarAreasEmpleado(ActionEvent event) {
-    }
-
-    @FXML
     private void actBuscarArea(ActionEvent event) {
-    }
-
-
-    @FXML
-    private void accionListaAreasEmpleados(MouseEvent event) {
+        boolean existe = false;
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+        if(AppContext.getInstance().get("Area") != null){
+            area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
+            for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
+                if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
+                    existe = true;
+                    break;
+                }
+            }
+            if(existe){
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "El area de trabajo ya esta agregada");
+            }else{
+                lblArea.setText(area.getNombre());
+            }
+        }
     }
 
     @FXML
@@ -389,6 +428,11 @@ public class EmpleadosController extends Controller implements Initializable {
             tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
             llenarListaAreas();
             cargarDatos();
+            if(emplSeleccionado.isEstado()){
+                btnActInac.setText("Inactivar");
+            }else{
+                btnActInac.setText("Activar");
+            }
         }
     }
 
@@ -409,5 +453,20 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actAgregarArea(ActionEvent event) {
+        if(area != null){
+            EmpleadosAreasTrabajosDTO areaDto = new EmpleadosAreasTrabajosDTO(Long.valueOf("0"), emplSeleccionado, area, true);
+            Respuesta res = empAreasService.guardarEmpleadoAreaTrabajo(areaDto);
+            if(res.getEstado()){
+                emplSeleccionado.getEmpleadosAreasTrabajo().add((EmpleadosAreasTrabajosDTO) res.getResultado("Empleados_Areas_Trabajos"));
+                tvAreas.refresh();
+                lblArea.setText("");
+            }else{
+                Mensaje.show(Alert.AlertType.ERROR, "Asignar Area de Trabajo", res.getMensaje());
+            }
+        }
+    }
+
+    @FXML
+    private void actInactivarActivarEmpleado(ActionEvent event) {
     }
 }

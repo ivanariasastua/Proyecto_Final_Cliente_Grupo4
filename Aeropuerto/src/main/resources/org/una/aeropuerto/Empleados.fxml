@@ -5,7 +5,6 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -90,7 +89,7 @@
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton onAction="#actInactivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_2" text="Inactivar">
+                                    <JFXButton fx:id="btnActInac" onAction="#actInactivarActivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_3" text="Inactivar">
                                        <HBox.margin>
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
@@ -112,11 +111,19 @@
                            <children>
                               <VBox alignment="TOP_RIGHT" prefHeight="561.0" prefWidth="550.0">
                                  <children>
-                                    <ListView fx:id="lvAreas" onMouseClicked="#accionListaAreasEmpleados" prefHeight="465.0" prefWidth="550.0">
+                                    <TableView fx:id="tvAreas" prefHeight="493.0" prefWidth="550.0">
+                                      <columns>
+                                        <TableColumn fx:id="colArea" prefWidth="75.0" text="Area" />
+                                        <TableColumn fx:id="colDescripcion" prefWidth="75.0" text="Descripcion" />
+                                          <TableColumn fx:id="colEstado" prefWidth="75.0" text="Estado" />
+                                      </columns>
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                        </VBox.margin>
-                                    </ListView>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
                                           <JFXButton prefWidth="150.0" styleClass="button_3" text="Activar">
@@ -125,11 +132,6 @@
                                              </HBox.margin>
                                           </JFXButton>
                                           <JFXButton onAction="#actInactivarAreaEmpleado" prefHeight="43.0" prefWidth="150.0" styleClass="button_2" text="Inactivar">
-                                             <HBox.margin>
-                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
-                                          <JFXButton onAction="#actGuardarAreasEmpleado" prefHeight="41.0" prefWidth="150.0" styleClass="button_1" text="Guardar">
                                              <HBox.margin>
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </HBox.margin>
