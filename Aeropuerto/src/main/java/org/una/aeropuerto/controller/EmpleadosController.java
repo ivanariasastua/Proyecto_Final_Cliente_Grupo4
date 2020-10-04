@@ -458,7 +458,8 @@ public class EmpleadosController extends Controller implements Initializable {
             Respuesta res = empAreasService.guardarEmpleadoAreaTrabajo(areaDto);
             if(res.getEstado()){
                 emplSeleccionado.getEmpleadosAreasTrabajo().add((EmpleadosAreasTrabajosDTO) res.getResultado("Empleados_Areas_Trabajos"));
-                tvAreas.refresh();
+                tvAreas.getItems().clear();
+                tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
                 lblArea.setText("");
             }else{
                 Mensaje.show(Alert.AlertType.ERROR, "Asignar Area de Trabajo", res.getMensaje());
