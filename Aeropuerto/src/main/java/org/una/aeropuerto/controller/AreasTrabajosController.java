@@ -239,14 +239,12 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Area de trabajo inactivada correctamente");
-                    areaSelec = false;
                 }
-            } else {
-                areaSelec = false;
             }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "Debe seleccionar una area de trabajo");
         }
+        areaSelec = false;
     }
 
     //tab de asignar areas de trabajo
@@ -335,14 +333,12 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empAreaSeleccionado);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
-                    empAreaSelec = false;
                 }
-            } else {
-                empAreaSelec = false;
             }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar información", "Debe seleccionar información de la tabla");
         }
+        empAreaSelec = false;
     }
 
     @FXML

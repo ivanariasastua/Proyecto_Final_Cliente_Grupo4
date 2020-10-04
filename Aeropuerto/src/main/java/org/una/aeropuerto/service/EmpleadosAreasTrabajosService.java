@@ -64,22 +64,6 @@ public class EmpleadosAreasTrabajosService {
         }
     }
 
-    public Respuesta inactivarEmpleadoAreaTrabajo(Long id) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("id", id);
-            Request request = new Request("empleados_areas_trabajos/inactivar", "/{id}", parametros);
-            request.put(id);
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "No se pudo inactivar el empleados areas de trabajo");
-            }
-            EmpleadosAreasTrabajosDTO result = (EmpleadosAreasTrabajosDTO) request.readEntity(EmpleadosAreasTrabajosDTO.class);
-            return new Respuesta(true, "Empleados_Areas_Trabajos", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-    
     public Respuesta findByArea(String area){
         try{
             Map<String, Object> parametros = new HashMap<>();

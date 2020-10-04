@@ -63,24 +63,7 @@ public class AreasTrabajosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta inactivarAreaTrabajo(Long id) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("id", id);
-            Request request = new Request("areas_trabajos/inactivar", "/{id}", parametros);
-            request.put(id);
-            if (request.isError()) {
-                System.out.println("error "+request.getError());
-                return new Respuesta(false, request.getError(), "No se pudo inactivar el area de trabajo");
-            }
-            AreasTrabajosDTO result = (AreasTrabajosDTO) request.readEntity(AreasTrabajosDTO.class);
-            return new Respuesta(true, "Areas_Trabajos", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-    
+
     public Respuesta getByNombre(String nombre){
         try{
             Map<String, Object> parametros = new HashMap<>();

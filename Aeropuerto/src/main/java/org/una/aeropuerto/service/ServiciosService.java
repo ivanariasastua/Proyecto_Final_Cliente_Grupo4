@@ -63,22 +63,6 @@ public class ServiciosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-
-    public Respuesta inactivarServicio(Long id) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("id", id);
-            Request request = new Request("servicios/inactivar", "/{id}", parametros);
-            request.put(id);
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "No se pudo inactivar el servicio");
-            }
-            ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
-            return new Respuesta(true, "Servicios", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
     
     public Respuesta getByNombre(String nombre){
         try{

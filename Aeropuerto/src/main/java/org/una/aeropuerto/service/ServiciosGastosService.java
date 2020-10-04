@@ -64,22 +64,6 @@ public class ServiciosGastosService {
         }
     }
 
-    public Respuesta inactivarGastoServicio(Long id) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("id", id);
-            Request request = new Request("gastos_mantenimientos/inactivar", "/{id}", parametros);
-            request.put(id);
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "No se pudo inactivar el gasto de servicio");
-            }
-            ServiciosGastosDTO result = (ServiciosGastosDTO) request.readEntity(ServiciosGastosDTO.class);
-            return new Respuesta(true, "Servicios_Gastos", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-    
     public Respuesta getByEmpresa(String empresa){
         try{
             Map<String, Object> parametros = new HashMap<>();
