@@ -79,20 +79,51 @@ public class ServiciosGastosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-
-    public Respuesta getByServicios(Long id) {
-        try {
+    
+    public Respuesta getByEmpresa(String empresa){
+        try{
             Map<String, Object> parametros = new HashMap<>();
-            parametros.put("id", id);
-            Request request = new Request("gastos_mantenimientos/gastos_servicios", "/{id}", parametros);
+            parametros.put("term", empresa);
+            Request request = new Request("gastos_mantenimientos/empresa", "/{term}", parametros);
             request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener los datos");
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los gastos de servios");
             }
-            List<ServiciosGastosDTO> result = (List<ServiciosGastosDTO>) request.readEntity(new GenericType<List<ServiciosGastosDTO>>() {
-            });
-            return new Respuesta(true, "Servicios_Gastos", result);
-        } catch (Exception ex) {
+            List<ServiciosGastosDTO> result = (List<ServiciosGastosDTO>) request.readEntity(new GenericType<List<ServiciosGastosDTO>>(){});
+            return new Respuesta(true, "Servicios_Gastos",result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta getByContrato(String contrato){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("term", contrato);
+            Request request = new Request("gastos_mantenimientos/numeroContrato", "/{term}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los gastos de servios");
+            }
+            List<ServiciosGastosDTO> result = (List<ServiciosGastosDTO>) request.readEntity(new GenericType<List<ServiciosGastosDTO>>(){});
+            return new Respuesta(true, "Servicios_Gastos",result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta findByServicio(String servicio){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("term", servicio);
+            Request request = new Request("gastos_mantenimientos/servicio", "/{term}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "Error al obtener los gastos de servios");
+            }
+            List<ServiciosGastosDTO> result = (List<ServiciosGastosDTO>) request.readEntity(new GenericType<List<ServiciosGastosDTO>>(){});
+            return new Respuesta(true, "Servicios_Gastos",result);
+        }catch(Exception ex){
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }

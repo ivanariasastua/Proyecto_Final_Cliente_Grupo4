@@ -24,12 +24,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
 import org.una.aeropuerto.service.EmpleadosAreasTrabajosService;
 import org.una.aeropuerto.service.EmpleadosService;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
@@ -50,10 +53,6 @@ public class AreasTrabajosController extends Controller implements Initializable
     private JFXTextArea txtDescripcionArea;
     @FXML
     private Tab tabAsignarAreas;
-    @FXML
-    private JFXComboBox<AreasTrabajosDTO> cbxAreaTrabajo;
-    @FXML
-    private JFXComboBox<EmpleadosDTO> cbxEmpleado;
     @FXML
     private TableView tablaAsignarAreas;
 
@@ -77,6 +76,13 @@ public class AreasTrabajosController extends Controller implements Initializable
     private JFXComboBox<String> cbxFiltroAsignarA;
     @FXML
     private JFXTextField txtBuscarEmpleadAreaT;
+    @FXML
+    private JFXTextField txtEmpleadoSeleccionado;
+
+    private EmpleadosDTO emplSeleccionado = new EmpleadosDTO();
+
+    @FXML
+    private JFXTextField txtAreaSeleccionadda;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -91,23 +97,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         listAreasT = new ArrayList<>();
         areaSelec = false;
         clickTablas();
-        llenarComboboxs();
         llenarColumnas();
-    }
-
-    public void llenarComboboxs() {
-        Respuesta res = empleadoService.getAll();
-        listEmp = (List<EmpleadosDTO>) res.getResultado("Empleados");
-        if (listEmp != null) {
-            ObservableList items = FXCollections.observableArrayList(listEmp);
-            cbxEmpleado.setItems(items);
-        }
-        Respuesta resp = areasService.getAll();
-        listAreasT = (List<AreasTrabajosDTO>) resp.getResultado("Areas_Trabajos");
-        if (listAreasT != null) {
-            ObservableList items = FXCollections.observableArrayList(listAreasT);
-            cbxAreaTrabajo.setItems(items);
-        }
     }
 
     public void llenarColumnas() {
@@ -155,7 +145,7 @@ public class AreasTrabajosController extends Controller implements Initializable
                     } else {
                         tablaAreasTrabajo.getItems().clear();
                     }
-                }else{
+                } else {
                     tablaAreasTrabajo.getItems().clear();
                 }
             }
@@ -208,7 +198,6 @@ public class AreasTrabajosController extends Controller implements Initializable
             Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaDto);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
-                llenarComboboxs();
             }
         } else {
             if (txtNombreArea.getText() == null) {
@@ -220,7 +209,6 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Respuesta res = areasService.guardarAreaTrabajo(areaDto);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Area de trabajo guardada correctamente");
-                    llenarComboboxs();
                 }
             }
         }
@@ -263,25 +251,23 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     //tab de asignar areas de trabajo
     public boolean validarCamposEmpleadosAreasT() {
-        if (cbxAreaTrabajo.getValue() == null || cbxEmpleado.getValue() == null) {
+        if (txtAreaSeleccionadda.getText() == null || txtEmpleadoSeleccionado.getText() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos son obligatorios");
             return false;
         }
         return true;
     }
 
-
     public void cargarTablaAsignarAreasT() {
         tablaAsignarAreas.getColumns().clear();
-//        TableColumn<EmpleadosAreasTrabajosDTO, String> colEmpl = new TableColumn<>("Empleado");
-//        colEmpl.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
+        TableColumn<EmpleadosAreasTrabajosDTO, String> colEmpl = new TableColumn<>("Empleado");
+        colEmpl.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmpleado())));
         TableColumn<EmpleadosAreasTrabajosDTO, String> colArea = new TableColumn<>("Area de Trabajo");
         colArea.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getAreaTrabajo())));
         TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-        tablaAsignarAreas.getColumns().addAll(colArea, colEstado);
+        tablaAsignarAreas.getColumns().addAll(colEmpl, colArea, colEstado);
         Respuesta res = empTrabService.getAll();
-
         listEmpAreaT = (List<EmpleadosAreasTrabajosDTO>) res.getResultado("Empleados_Areas_Trabajos");
         if (listEmpAreaT != null) {
             ObservableList items = FXCollections.observableArrayList(listEmpAreaT);
@@ -291,13 +277,12 @@ public class AreasTrabajosController extends Controller implements Initializable
         }
     }
 
-
     @FXML
     private void actGuardarAsignacionArea(ActionEvent event) {
         if (empAreaSelec == true) {
             empTrabDTO.setId(empAreaSeleccionado.getId());
-            empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
-//            empTrabDTO.setEmpleado(cbxEmpleado.getValue());
+            empTrabDTO.setAreaTrabajo(areaSeleccionada);
+            empTrabDTO.setEmpleado(emplSeleccionado);
             Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empTrabDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado ", "Asignacion de area de trabajo editada correctamente");
@@ -305,11 +290,12 @@ public class AreasTrabajosController extends Controller implements Initializable
         } else {
             if (validarCamposEmpleadosAreasT()) {
                 empTrabDTO = new EmpleadosAreasTrabajosDTO();
-                empTrabDTO.setAreaTrabajo(cbxAreaTrabajo.getValue());
-//                empTrabDTO.setEmpleado(cbxEmpleado.getValue());
+                empTrabDTO.setAreaTrabajo(areaSeleccionada);
+                empTrabDTO.setEmpleado(emplSeleccionado);
                 Respuesta res = empTrabService.guardarEmpleadoAreaTrabajo(empTrabDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado ", "Asignacion de area de trabajo guardada correctamente");
+
                 }
             }
         }
@@ -317,18 +303,22 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actLimpiarCamposAsignarArea(ActionEvent event) {
-        cbxAreaTrabajo.setValue(null);
-        cbxEmpleado.setValue(null);
+        txtAreaSeleccionadda.setText(null);
+        txtEmpleadoSeleccionado.setText(null);
         empAreaSelec = false;
         empAreaSeleccionado = new EmpleadosAreasTrabajosDTO();
+        emplSeleccionado = new EmpleadosDTO();
+        areaSeleccionada = new AreasTrabajosDTO();
     }
 
     @FXML
     private void actEditarEmplAreasTrab(ActionEvent event) {
         if (empAreaSelec == true) {
             if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
-                cbxAreaTrabajo.setValue(empAreaSeleccionado.getAreaTrabajo());
-//                cbxEmpleado.setValue(empAreaSeleccionado.getEmpleado());
+                txtAreaSeleccionadda.setText(empAreaSeleccionado.getAreaTrabajo().getNombre());
+                System.out.println("empleado " + empAreaSeleccionado.getEmpleado().getNombre());
+                txtEmpleadoSeleccionado.setText(empAreaSeleccionado.getEmpleado().getNombre());
+                emplSeleccionado = empAreaSeleccionado.getEmpleado();
             } else {
                 empAreaSelec = false;
             }
@@ -357,6 +347,25 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actBuscarEmpleadAreasT(ActionEvent event) {
+        cargarTablaAsignarAreasT();
+    }
+
+    @FXML
+    private void actBuscarEmpleado(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if (emplSeleccionado != null) {
+            txtEmpleadoSeleccionado.setText(emplSeleccionado.getNombre());
+        }
+    }
+
+    @FXML
+    private void actBuscarAreaT(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+        areaSeleccionada = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
+        if (areaSeleccionada != null) {
+            txtAreaSeleccionadda.setText(areaSeleccionada.getNombre());
+        }
     }
 
 }
