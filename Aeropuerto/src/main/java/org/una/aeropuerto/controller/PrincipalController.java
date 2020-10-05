@@ -44,49 +44,28 @@ import org.una.aeropuerto.util.UserAuthenticated;
  */
 public class PrincipalController extends Controller implements Initializable {
 
-    @FXML
-    private JFXHamburger hamMenu;
-    @FXML
-    private MenuButton smUser;
-    @FXML
-    private Label lblCedula1;
-    @FXML
-    private Label lblRol1;
-    @FXML
-    private MenuItem miCodigo1;
-    @FXML
-    private ImageView imvDark;
-    @FXML
-    private JFXToggleButton tbTema;
-    @FXML
-    private ImageView imvLight;
-    @FXML
-    private ImageView imvMaximizarRestaurar;
-    @FXML
-    private VBox vbContenedor;
-    @FXML
-    private Label lblTitulo;
-    @FXML
-    private ScrollPane spMenu;
-    @FXML
-    private VBox vbMenu;
-    @FXML
-    private BorderPane bpPrincipal;
+    @FXML private JFXHamburger hamMenu;
+    @FXML private MenuButton smUser;
+    @FXML private Label lblCedula1;
+    @FXML private Label lblRol1;
+    @FXML private MenuItem miCodigo1;
+    @FXML private ImageView imvDark;
+    @FXML private JFXToggleButton tbTema;
+    @FXML private ImageView imvLight;
+    @FXML private ImageView imvMaximizarRestaurar;
+    @FXML private VBox vbContenedor;
+    @FXML private Label lblTitulo;
+    @FXML private ScrollPane spMenu;
+    @FXML private VBox vbMenu;
+    @FXML private BorderPane bpPrincipal;
 
     private HamburgerBackArrowBasicTransition deslizar;
     private Boolean isShow = false;
     private TranslateTransition tt;
-    AuthenticationRequest authetication;
+    private AuthenticationRequest authetication;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE"));
-        } catch (Exception ex) {
-        }
-        smUser.setText(UserAuthenticated.getInstance().getUsuario().getNombre());
-        lblCedula1.setText(UserAuthenticated.getInstance().getUsuario().getCedula());
-        lblRol1.setText(UserAuthenticated.getInstance().getRol().getNombre());
         AppContext.getInstance().set("Contenedor", vbContenedor);
         FlowController.getInstance().goViewPanel(vbContenedor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
@@ -201,6 +180,13 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        try {
+            miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE"));
+        } catch (Exception ex) {
+        }
+        smUser.setText(UserAuthenticated.getInstance().getUsuario().getNombre());
+        lblCedula1.setText(UserAuthenticated.getInstance().getUsuario().getCedula());
+        lblRol1.setText(UserAuthenticated.getInstance().getRol().getNombre());
     }
 
     @FXML
@@ -268,6 +254,14 @@ public class PrincipalController extends Controller implements Initializable {
             }
             isShow = !isShow;
         });
+    }
+
+    @FXML
+    private void actParametros(ActionEvent event) {
+    }
+
+    @FXML
+    private void actAutorizarRoles(ActionEvent event) {
     }
 
 }

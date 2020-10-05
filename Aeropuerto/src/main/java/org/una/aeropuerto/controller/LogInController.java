@@ -40,6 +40,8 @@ public class LogInController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        txtUserName.setText("");
+        txtUserName.setText("");
     }
 
     @FXML

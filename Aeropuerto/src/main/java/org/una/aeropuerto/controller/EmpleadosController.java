@@ -72,9 +72,8 @@ public class EmpleadosController extends Controller implements Initializable {
     private List<RolesDTO> listRoles = new ArrayList<>();
     private RolesService rolesService = new RolesService();
     private EmpleadosDTO empleadoDTO = new EmpleadosDTO(), jefeSelect;
-    boolean empSeleccionado;
     boolean horarSeleccionado;
-    private EmpleadosDTO emplSeleccionado = new EmpleadosDTO();
+    private EmpleadosDTO emplSeleccionado = null;
     private EmpleadosHorariosDTO horarioSeleccionado = new EmpleadosHorariosDTO();
     private EmpleadosHorariosDTO horarioDTO = new EmpleadosHorariosDTO();
     private EmpleadosHorariosService horarioService;
@@ -113,7 +112,6 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        empSeleccionado = false;
         horarSeleccionado = false;
         listEmpleados = new ArrayList<>();
         listHorariosEmp = new ArrayList<>();
@@ -127,10 +125,12 @@ public class EmpleadosController extends Controller implements Initializable {
         clickTablas();
         cargarTablaHorarios();
         cargarTablaAreas();
+        txtId.setDisable(true);    
     }
 
     @Override
     public void initialize() {
+        limpiarCampos();
     }
 
     public void llenarComboBoxs() {
@@ -168,24 +168,30 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     public boolean validarCampos() {
-        if (txtCedula.getText() == null || txtNombre.getText() == null || txtContrasena.getText() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cedula y Contraseña son obligatorios");
-            return false;
+        if(emplSeleccionado == null){
+            if (txtCedula.getText() == null || txtNombre.getText() == null || txtContrasena.getText() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cedula y Contraseña son obligatorios");
+                return false;
+            }
+        }else{
+            if (txtCedula.getText() == null || txtNombre.getText() == null || txtContrasena.getText() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre y Cedula son obligatorios");
+                return false;
+            }
         }
         return true;
     }
 
     @FXML
     private void actGuardarEmpleado(ActionEvent event) {
-        if (empSeleccionado == true) {  //editar
+        if (emplSeleccionado != null) {  //editar
             if (validarCampos()) {
                 empleadoDTO.setId(emplSeleccionado.getId());
                 empleadoDTO.setCedula(txtCedula.getText());
-                empleadoDTO.setContrasenaEncriptada(txtContrasena.getText());
+                empleadoDTO.setContrasenaEncriptada(txtContrasena.getText().isEmpty() ? emplSeleccionado.getContrasenaEncriptada() : txtContrasena.getText());
                 empleadoDTO.setJefe(jefeSelect);
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
-
                 Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
@@ -206,8 +212,7 @@ public class EmpleadosController extends Controller implements Initializable {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
                     emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
                     tablaHorarios.getItems().clear();
-                    tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
-                    llenarListaAreas();
+                    tvAreas.getItems().clear();
                 } else {
                     Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
                 }
@@ -221,37 +226,20 @@ public class EmpleadosController extends Controller implements Initializable {
         txtContrasena.setText(null);
         txtJefe.clear();
         cbxRoles.setValue(null);
-        empSeleccionado = false;
         emplSeleccionado = null;
         tablaHorarios.getItems().clear();
         tvAreas.getItems().clear();
-    }
-
-    private void actTabPane(MouseEvent event) {
-        if (tabCrear.isSelected() && empSeleccionado == false) {
-            limpiarCampos();
-        } else if (tabHorarios.isSelected()) {
-            
-        } else if (tabMarcajes.isSelected()) {
-        }
-    }
-
-    private void actIrAModificarEmpleados(ActionEvent event) {
-        if (empSeleccionado == true) {
-            SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-            selectionModel.select(tabCrear);
-            cargarDatos();
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar empleado", "Debe seleccionar un empleado");
-        }
+        txtId.setText("");
     }
 
     public void cargarDatos() {
-        txtId.setDisable(true);
         txtId.setText(emplSeleccionado.getId().toString());
         txtCedula.setText(emplSeleccionado.getCedula());
         txtNombre.setText(emplSeleccionado.getNombre());
         txtJefe.setText(emplSeleccionado.getJefe() == null ? "Sin jefe directo" : emplSeleccionado.getJefe().getNombre());
+        if(emplSeleccionado.getJefe() != null){
+            jefeSelect = emplSeleccionado.getJefe();
+        }
         cbxRoles.setValue(emplSeleccionado.getRol());
     }
 

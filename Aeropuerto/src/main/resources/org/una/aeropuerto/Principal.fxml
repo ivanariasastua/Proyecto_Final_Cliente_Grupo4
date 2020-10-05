@@ -102,7 +102,7 @@
                               <ImageView id="imvAreas" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="60.0" text="Gastos de Servicios">
+                        <TitledPane alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="60.0" text="Gastos de Servicios">
                            <graphic>
                               <ImageView id="imvGastos" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
@@ -123,7 +123,7 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="266.0" text="Incidentes">
+                        <TitledPane alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="266.0" text="Incidentes">
                            <graphic>
                               <ImageView id="imvIncidentes" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
@@ -149,7 +149,7 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" contentDisplay="TOP" layoutX="10.0" layoutY="291.0" text="Reportes">
+                        <TitledPane alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="291.0" text="Reportes">
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -175,14 +175,30 @@
                               <ImageView id="imvReport" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
+                        <TitledPane alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="518.0" onMouseClicked="#accionParametros" text="Administracion">
+                           <graphic>
+                              <ImageView id="imvParametros" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" smooth="false" />
+                           </graphic>
+                           <content>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <JFXButton onAction="#actParametros" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Parametros del Sistema">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton layoutX="23.0" layoutY="23.0" onAction="#actAutorizarRoles" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Autorizar Roles">
+                                       <VBox.margin>
+                                          <Insets bottom="2.5" top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="316.0" onMouseClicked="#accionTransacciones" text="Transacciones">
                            <graphic>
                               <ImageView id="imvTrasaccion" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
-                           </graphic>
-                        </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" layoutX="10.0" layoutY="518.0" onMouseClicked="#accionParametros" text="Parametros del Sistema">
-                           <graphic>
-                              <ImageView id="imvParametros" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
                      </panes>

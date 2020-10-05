@@ -24,4 +24,5 @@ public class ParametrosSistemaDTO {
     private String valor;
     private String descripcion;
     private boolean estado;
+    private String codigoIdentificador;
 }
