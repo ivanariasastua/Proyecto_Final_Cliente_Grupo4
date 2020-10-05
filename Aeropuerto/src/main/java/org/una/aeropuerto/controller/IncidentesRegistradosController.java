@@ -68,6 +68,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     IncidentesRegistradosDTO incidentSeleccionado = new IncidentesRegistradosDTO();
     List<EmpleadosDTO> listEmpl = new ArrayList<>();
     List<AreasTrabajosDTO> listAreas = new ArrayList<>();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> item = FXCollections.observableArrayList("Responsable", "Emisor", "Categoria", "Area");
@@ -151,6 +152,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
             Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
             }
         }
     }
@@ -173,6 +176,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
                 Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Incidente inactivado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                 }
             }
         } else {
@@ -188,7 +193,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
             return "Inactivo";
         }
     }
-    
+
     public void llenarColumnas() {
         tablaIncident.getColumns().clear();
         TableColumn<IncidentesRegistradosDTO, String> colCatag = new TableColumn<>("Categoria");
@@ -203,12 +208,32 @@ public class IncidentesRegistradosController extends Controller implements Initi
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDescripcion()));
         TableColumn<IncidentesRegistradosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-        tablaIncident.getColumns().addAll(colCatag, colEmisor,colRespons,colArea,colEstado,colDesc);
+        tablaIncident.getColumns().addAll(colCatag, colEmisor, colRespons, colArea, colEstado, colDesc);
     }
 
     @FXML
     private void actBuscarIncidente(ActionEvent event) {
-
+        llenarColumnas();
+        tablaIncident.getItems().clear();
+        if (cbxFiltro.getValue() != null) {
+            Respuesta res;
+            if (cbxFiltro.getValue().equals("Emisor")) {
+                res = incidentService.findByEmisor(txtBuscarIncident.getText());
+            } else if (cbxFiltro.getValue().equals("Responsable")) {
+                res = incidentService.findByResponsable(txtBuscarIncident.getText());
+            } else if (cbxFiltro.getValue().equals("Area")) {
+                res = incidentService.findByArea(txtBuscarIncident.getText());
+            } else {
+                res = incidentService.findByCategoria(txtBuscarIncident.getText());
+            }
+            if (res.getEstado()) {
+                tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cual tipo desea filtrar");
+        }
     }
 
 }

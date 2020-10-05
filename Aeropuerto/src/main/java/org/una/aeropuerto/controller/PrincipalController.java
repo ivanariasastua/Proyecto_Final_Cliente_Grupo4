@@ -160,6 +160,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionRegistrarIncidente(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "IncidentesRegistrados");
     }
 
     @FXML
