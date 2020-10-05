@@ -113,6 +113,8 @@ public class ServiciosController extends Controller implements Initializable {
             Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicioDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
             }
         } else {
             if (txtNombreServicio.getText() != null) {
@@ -120,9 +122,10 @@ public class ServiciosController extends Controller implements Initializable {
                 servicioDTO.setDescripcion(txtDescripcionServicio.getText());
                 servicioDTO.setNombre(txtNombreServicio.getText());
                 Respuesta res = servService.guardarServicio(servicioDTO);
-                System.out.println(res.getMensaje());
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Servicio guardado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                 }
             } else {
                 Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
@@ -147,40 +150,26 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actBuscarServicio(ActionEvent event) {
         cargarColumnas();
+        tablaServicios.getItems().clear();
         if (cbxFiltroServicios.getValue() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
         } else {
+            Respuesta res;
             if (cbxFiltroServicios.getValue().equals("Nombre")) {
-                Respuesta res = servService.getByNombre(txtBuscarServicio.getText());
-                listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
-                if (listServic != null) {
-                    ObservableList items = FXCollections.observableArrayList(listServic);
-                    tablaServicios.setItems(items);
-                } else {
-                    tablaServicios.getItems().clear();
-                }
+                res = servService.getByNombre(txtBuscarServicio.getText());
             } else {
                 if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
-                    Respuesta res = servService.getByEstado(true);
-                    listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
-                    if (listServic != null) {
-                        ObservableList items = FXCollections.observableArrayList(listServic);
-                        tablaServicios.setItems(items);
-                    } else {
-                        tablaServicios.getItems().clear();
-                    }
+                    res = servService.getByEstado(true);
                 } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
-                    Respuesta res = servService.getByEstado(false);
-                    listServic = (List<ServiciosDTO>) res.getResultado("Servicios");
-                    if (listServic != null) {
-                        ObservableList items = FXCollections.observableArrayList(listServic);
-                        tablaServicios.setItems(items);
-                    } else {
-                        tablaServicios.getItems().clear();
-                    }
+                    res = servService.getByEstado(false);
                 } else {
-                    tablaServicios.getItems().clear();
+                    res = servService.getByNombre("");
                 }
+            }
+            if (res.getEstado()) {
+                tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
             }
         }
     }
@@ -203,6 +192,8 @@ public class ServiciosController extends Controller implements Initializable {
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
                     servSelec = false;
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                 }
             } else {
                 servSelec = false;

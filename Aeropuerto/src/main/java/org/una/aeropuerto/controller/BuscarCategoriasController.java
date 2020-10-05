@@ -38,15 +38,14 @@ public class BuscarCategoriasController extends Controller implements Initializa
     @FXML
     private JFXTextField txtBuscar;
 
-    
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
     @Override
     public void initialize() {
         Limpiar();
@@ -55,19 +54,22 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actBuscar(ActionEvent event) {
-        if(txtBuscar.getText()!=null){
+        tablaCategorias.getItems().clear();
+        if (txtBuscar.getText() != null) {
             cargarColumnas();
             Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
+            if (res.getEstado()) {
                 listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
                 if (listCategorias != null) {
                     ObservableList items = FXCollections.observableArrayList(listCategorias);
                     tablaCategorias.setItems(items);
-                } else {
-                    tablaCategorias.getItems().clear();
                 }
+            }else{
+                 Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias", res.getMensaje());
+            }
         }
     }
-    
+
     public String estado(boolean estad) {
         if (estad == true) {
             return "Activo";
@@ -84,7 +86,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getDescripcion())));
         TableColumn<IncidentesCategoriasDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-        tablaCategorias.getColumns().addAll(colNombre,colDesc, colEst);
+        tablaCategorias.getColumns().addAll(colNombre, colDesc, colEst);
     }
 
     @FXML
@@ -92,16 +94,16 @@ public class BuscarCategoriasController extends Controller implements Initializa
         this.closeWindow();
     }
 
-    public void Limpiar(){
+    public void Limpiar() {
         txtBuscar.clear();
         tablaCategorias.getItems().clear();
     }
 
     @FXML
     private void actClickTabla(MouseEvent event) {
-        if(tablaCategorias.getSelectionModel().getSelectedItem() != null){
+        if (tablaCategorias.getSelectionModel().getSelectedItem() != null) {
             AppContext.getInstance().set("CategoriaSup", tablaCategorias.getSelectionModel().getSelectedItem());
-        }else{
+        } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
         }
     }
@@ -110,6 +112,5 @@ public class BuscarCategoriasController extends Controller implements Initializa
     private void actCancelar(ActionEvent event) {
         this.closeWindow();
     }
-    
-    
+
 }

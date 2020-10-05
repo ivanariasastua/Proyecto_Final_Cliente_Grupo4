@@ -114,40 +114,26 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actBuscarAreasTrabajos(ActionEvent event) {
         llenarColumnas();
+        tablaAreasTrabajo.getItems().clear();
         if (cbxFiltroAreas.getValue() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
         } else {
+            Respuesta res;
             if (cbxFiltroAreas.getValue().equals("Nombre")) {
-                Respuesta res = areasService.getByNombre(txtBuscarAreasT.getText());
-                listAreasT = (List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos");
-                if (listAreasT != null) {
-                    ObservableList items = FXCollections.observableArrayList(listAreasT);
-                    tablaAreasTrabajo.setItems(items);
-                } else {
-                    tablaAreasTrabajo.getItems().clear();
-                }
+                res = areasService.getByNombre(txtBuscarAreasT.getText());
             } else {
                 if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
-                    Respuesta res = areasService.getByEstado(true);
-                    listAreasT = (List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos");
-                    if (listAreasT != null) {
-                        ObservableList items = FXCollections.observableArrayList(listAreasT);
-                        tablaAreasTrabajo.setItems(items);
-                    } else {
-                        tablaAreasTrabajo.getItems().clear();
-                    }
+                    res = areasService.getByEstado(true);
                 } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
-                    Respuesta res = areasService.getByEstado(false);
-                    listAreasT = (List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos");
-                    if (listAreasT != null) {
-                        ObservableList items = FXCollections.observableArrayList(listAreasT);
-                        tablaAreasTrabajo.setItems(items);
-                    } else {
-                        tablaAreasTrabajo.getItems().clear();
-                    }
+                    res = areasService.getByEstado(false);
                 } else {
-                    tablaAreasTrabajo.getItems().clear();
+                    res = areasService.getByNombre("");
                 }
+            }
+            if (res.getEstado()) {
+                tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
             }
         }
     }
@@ -198,6 +184,8 @@ public class AreasTrabajosController extends Controller implements Initializable
             Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaDto);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
             }
         } else {
             if (txtNombreArea.getText() == null) {
@@ -209,6 +197,8 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Respuesta res = areasService.guardarAreaTrabajo(areaDto);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Area de trabajo guardada correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                 }
             }
         }
@@ -239,6 +229,8 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Area de trabajo inactivada correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                 }
             }
         } else {
@@ -265,14 +257,6 @@ public class AreasTrabajosController extends Controller implements Initializable
         TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
         tablaAsignarAreas.getColumns().addAll(colEmpl, colArea, colEstado);
-        Respuesta res = empTrabService.getAll();
-        listEmpAreaT = (List<EmpleadosAreasTrabajosDTO>) res.getResultado("Empleados_Areas_Trabajos");
-        if (listEmpAreaT != null) {
-            ObservableList items = FXCollections.observableArrayList(listEmpAreaT);
-            tablaAsignarAreas.setItems(items);
-        } else {
-            tablaAsignarAreas.getItems().clear();
-        }
     }
 
     @FXML
@@ -284,6 +268,8 @@ public class AreasTrabajosController extends Controller implements Initializable
             Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empTrabDTO);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado ", "Asignacion de area de trabajo editada correctamente");
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
             }
         } else {
             if (validarCamposEmpleadosAreasT()) {
@@ -294,6 +280,8 @@ public class AreasTrabajosController extends Controller implements Initializable
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado ", "Asignacion de area de trabajo guardada correctamente");
 
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                 }
             }
         }
@@ -314,7 +302,6 @@ public class AreasTrabajosController extends Controller implements Initializable
         if (empAreaSelec == true) {
             if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
                 txtAreaSeleccionadda.setText(empAreaSeleccionado.getAreaTrabajo().getNombre());
-                System.out.println("empleado " + empAreaSeleccionado.getEmpleado().getNombre());
                 txtEmpleadoSeleccionado.setText(empAreaSeleccionado.getEmpleado().getNombre());
                 emplSeleccionado = empAreaSeleccionado.getEmpleado();
             } else {
@@ -333,6 +320,8 @@ public class AreasTrabajosController extends Controller implements Initializable
                 Respuesta res = empTrabService.modificarEmpleadoAreaTrabajo(empAreaSeleccionado.getId(), empAreaSeleccionado);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                 }
             }
         } else {
