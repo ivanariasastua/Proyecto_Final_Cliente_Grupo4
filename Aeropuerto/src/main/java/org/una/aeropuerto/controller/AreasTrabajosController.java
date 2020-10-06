@@ -178,10 +178,10 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actGuardarAreasTrabajo(ActionEvent event) {
         if (areaSelec == true) {
-            areaDto.setId(areaSeleccionada.getId());
-            areaDto.setDescripcion(txtDescripcionArea.getText());
-            areaDto.setNombre(txtNombreArea.getText());
-            Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaDto);
+            areaSeleccionada.setId(areaSeleccionada.getId());
+            areaSeleccionada.setDescripcion(txtDescripcionArea.getText());
+            areaSeleccionada.setNombre(txtNombreArea.getText());
+            Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
             } else {

@@ -25,9 +25,9 @@
                   <Insets bottom="10.0" left="20.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <TabPane prefHeight="610.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" prefHeight="610.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Crear">
+                <Tab fx:id="tabCrear" text="Crear">
                      <content>
                         <GridPane prefHeight="229.0" prefWidth="800.0">
                           <columnConstraints>
@@ -99,7 +99,7 @@
                         </GridPane>
                      </content>
                 </Tab>
-                <Tab text="Incidentes">
+                <Tab fx:id="tabIncidentes" text="Incidentes">
                      <content>
                         <GridPane>
                           <columnConstraints>
@@ -143,6 +143,16 @@
                                     <Insets left="30.0" top="11.0" />
                                  </GridPane.margin>
                               </JFXComboBox>
+                              <JFXButton onAction="#actEditarIncidente" prefHeight="43.0" prefWidth="124.0" styleClass="button_3" text="Editar" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets right="160.0" />
+                                 </GridPane.margin>
+                              </JFXButton>
+                              <JFXButton onAction="#actSeguimientoIncidenteEstados" prefHeight="43.0" prefWidth="174.0" styleClass="button_3" text="Seguimiento" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets left="30.0" />
+                                 </GridPane.margin>
+                              </JFXButton>
                            </children>
                         </GridPane>
                      </content>

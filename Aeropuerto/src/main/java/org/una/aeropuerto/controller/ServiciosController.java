@@ -107,10 +107,10 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actGuardarServicio(ActionEvent event) {
         if (servSelec == true) {
-            servicioDTO.setId(servicSeleccionado.getId());
-            servicioDTO.setDescripcion(txtDescripcionServicio.getText());
-            servicioDTO.setNombre(txtNombreServicio.getText());
-            Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicioDTO);
+            servicSeleccionado.setId(servicSeleccionado.getId());
+            servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
+            servicSeleccionado.setNombre(txtNombreServicio.getText());
+            Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
             } else {
