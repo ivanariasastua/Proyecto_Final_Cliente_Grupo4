@@ -286,6 +286,9 @@ public class GastosServiciosController extends Controller implements Initializab
     private void actGuardarGastoS(ActionEvent event) {
         if (gastSelec == true) {
             servGastDTO.setId(gastoSelecciondo.getId());
+            if(gastoSelecciondo.isEstado()){
+                servGastDTO.setEstado(true);
+            }
             guardar();
             Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
             if (res.getEstado()) {

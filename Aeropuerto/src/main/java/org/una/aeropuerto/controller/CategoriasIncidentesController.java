@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.service.IncidentesCategoriasService;
@@ -56,19 +57,17 @@ public class CategoriasIncidentesController extends Controller implements Initia
     List<IncidentesCategoriasDTO> listCategorias = new ArrayList<>();
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
-    IncidentesCategoriasDTO categSuperiorSelec;
+    IncidentesCategoriasDTO categSuperiorSelec = new IncidentesCategoriasDTO();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroCategorias.setItems(filtro);
         clickTabla();
-        categSuperiorSelec = new IncidentesCategoriasDTO();
     }
 
     @Override
     public void initialize() {
-        categSuperiorSelec = new IncidentesCategoriasDTO();
     }
 
     public void clickTabla() {
@@ -87,28 +86,28 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actGuardarCategorias(ActionEvent event) {
         if (catSelec == true) {
-            categoriaDTO.setId(categoriaSelec.getId());
-            if (txtCategoriaSuperior.getText() != null) {
+            categoriaSelec.setId(categoriaSelec.getId());
+            categoriaSelec.setDescripcion(txtDescripcion.getText());
+            categoriaSelec.setNombre(txtNombre.getText());
+            if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
                 categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
             }
-            categoriaDTO.setDescripcion(txtDescripcion.getText());
-            categoriaDTO.setNombre(txtNombre.getText());
-            Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaDTO);
+            Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
             if (res.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoria editada correctamente");
             } else {
                 Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
             }
         } else {
-            if (txtNombre.getText() == null || txtNombre.getText().isEmpty()) {
+            if (txtNombre.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de nombre es obligatorio");
             } else {
                 categoriaDTO = new IncidentesCategoriasDTO();
-                if (txtCategoriaSuperior.getText() != null) {
-                    categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
-                }
                 categoriaDTO.setDescripcion(txtDescripcion.getText());
                 categoriaDTO.setNombre(txtNombre.getText());
+                if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
+                    categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
+                }
                 Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
                 if (res.getEstado()) {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoria guardada correctamente");
@@ -133,7 +132,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         TableColumn<IncidentesCategoriasDTO, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<IncidentesCategoriasDTO, String> colCat = new TableColumn<>("Categoria superior");
-        colCat.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getCategoriaSuperior())));
+        colCat.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCategoriaSuperior()== null ? "Sin Categoria superior" : String.valueOf(String.valueOf(p.getValue().getCategoriaSuperior()))));
         TableColumn<IncidentesCategoriasDTO, String> colDesc = new TableColumn<>("Descripcion");
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getDescripcion())));
         TableColumn<IncidentesCategoriasDTO, String> colEst = new TableColumn<>("Estado");

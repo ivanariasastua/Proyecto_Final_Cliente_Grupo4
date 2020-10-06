@@ -19,6 +19,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -68,6 +71,12 @@ public class IncidentesRegistradosController extends Controller implements Initi
     IncidentesRegistradosDTO incidentSeleccionado = new IncidentesRegistradosDTO();
     List<EmpleadosDTO> listEmpl = new ArrayList<>();
     List<AreasTrabajosDTO> listAreas = new ArrayList<>();
+    @FXML
+    private Tab tabCrear;
+    @FXML
+    private Tab tabIncidentes;
+    @FXML
+    private TabPane tabPane;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -90,6 +99,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     incidentSelec = true;
                     incidentSeleccionado = row.getItem();
+                    System.out.println("lista de estados " + incidentSeleccionado.getIncidentesRegistradosEstados());
                 }
             });
             return row;
@@ -142,18 +152,38 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actGuardarIncidenteRegistrado(ActionEvent event) {
-        if (validarCampos()) {
-            incidentDTO = new IncidentesRegistradosDTO();
-            incidentDTO.setAreaTrabajo(areaSelec);
-            incidentDTO.setCategoria(categoriaSelec);
-            incidentDTO.setDescripcion(txtDescripcionIncident.getText());
-            incidentDTO.setEmisor(emisorSelec);
-            incidentDTO.setResponsable(responsableSelec);
-            Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
+        if (incidentSelec == true) {
+            incidentSeleccionado.setId(incidentSeleccionado.getId());
+            System.out.println(areaSelec);
+            System.out.println(categoriaSelec);
+            System.out.println(emisorSelec);
+            System.out.println(responsableSelec);
+            incidentSeleccionado.setAreaTrabajo(areaSelec);
+            incidentSeleccionado.setCategoria(categoriaSelec);
+            incidentSeleccionado.setDescripcion(txtDescripcionIncident.getText());
+            incidentSeleccionado.setEmisor(emisorSelec);
+            incidentSeleccionado.setResponsable(responsableSelec);
+            Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
             if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
+                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
             } else {
+                System.out.println(res.getMensajeInterno());
                 Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+            }
+        } else {
+            if (validarCampos()) {
+                incidentDTO = new IncidentesRegistradosDTO();
+                incidentDTO.setAreaTrabajo(areaSelec);
+                incidentDTO.setCategoria(categoriaSelec);
+                incidentDTO.setDescripcion(txtDescripcionIncident.getText());
+                incidentDTO.setEmisor(emisorSelec);
+                incidentDTO.setResponsable(responsableSelec);
+                Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                }
             }
         }
     }
@@ -165,7 +195,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         txtDescripcionIncident.setText(null);
         txtEmisorSelec.setText(null);
         txtResponsableSelec.setText(null);
-        areaSelec = new AreasTrabajosDTO();
+        incidentSelec=false;
     }
 
     @FXML
@@ -226,6 +256,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
             } else {
                 res = incidentService.findByCategoria(txtBuscarIncident.getText());
             }
+            System.out.println(res.getMensaje() + res.getMensajeInterno());
             if (res.getEstado()) {
                 tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
             } else {
@@ -234,6 +265,38 @@ public class IncidentesRegistradosController extends Controller implements Initi
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cual tipo desea filtrar");
         }
+    }
+
+    public void cargarDatos() {
+        txtAreaSelec.setText(incidentSeleccionado.getAreaTrabajo().getNombre());
+        areaSelec = incidentSeleccionado.getAreaTrabajo();
+        txtCategoriaSelec.setText(incidentSeleccionado.getCategoria().getNombre());
+        categoriaSelec = incidentSeleccionado.getCategoria();
+        txtDescripcionIncident.setText(incidentSeleccionado.getDescripcion());
+        txtEmisorSelec.setText(incidentSeleccionado.getEmisor().getNombre());
+        emisorSelec = incidentSeleccionado.getEmisor();
+        txtResponsableSelec.setText(incidentSeleccionado.getResponsable().getNombre());
+        responsableSelec = incidentSeleccionado.getResponsable();
+    }
+
+    @FXML
+    private void actEditarIncidente(ActionEvent event) {
+        if (incidentSelec == true) {
+            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(tabCrear);
+                cargarDatos();
+
+            } else {
+                incidentSelec = false;
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar categoria", "Debe seleccionar una categoria");
+        }
+    }
+
+    @FXML
+    private void actSeguimientoIncidenteEstados(ActionEvent event) {
     }
 
 }

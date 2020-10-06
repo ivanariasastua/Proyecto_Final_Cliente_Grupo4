@@ -163,10 +163,6 @@ public class PrincipalController extends Controller implements Initializable {
     }
 
     @FXML
-    private void accionSeguimientoIncidentes(ActionEvent event) {
-    }
-
-    @FXML
     private void accionReporteGastos(ActionEvent event) {
     }
 
@@ -207,7 +203,6 @@ public class PrincipalController extends Controller implements Initializable {
     private void accionRegistrarGastos(MouseEvent event) {
 
     }
-
 
     @FXML
     private void accionTransacciones(MouseEvent event) {
