@@ -40,6 +40,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias;
+    IncidentesCategoriasDTO catSelect;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -50,6 +51,8 @@ public class BuscarCategoriasController extends Controller implements Initializa
     public void initialize() {
         Limpiar();
         listCategorias = new ArrayList<>();
+        catSelect = new IncidentesCategoriasDTO();
+
     }
 
     @FXML
@@ -64,8 +67,8 @@ public class BuscarCategoriasController extends Controller implements Initializa
                     ObservableList items = FXCollections.observableArrayList(listCategorias);
                     tablaCategorias.setItems(items);
                 }
-            }else{
-                 Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias", res.getMensaje());
+            } else {
+                Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias", res.getMensaje());
             }
         }
     }
@@ -91,7 +94,15 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actSeleccionar(ActionEvent event) {
-        this.closeWindow();
+        if (catSelect.getNombre() != null) {
+            if (catSelect.isEstado()) {
+                this.closeWindow();
+            } else {
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
+        }
     }
 
     public void Limpiar() {
@@ -101,6 +112,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actClickTabla(MouseEvent event) {
+        catSelect = (IncidentesCategoriasDTO) tablaCategorias.getSelectionModel().getSelectedItem();
         if (tablaCategorias.getSelectionModel().getSelectedItem() != null) {
             AppContext.getInstance().set("CategoriaSup", tablaCategorias.getSelectionModel().getSelectedItem());
         } else {

@@ -83,20 +83,30 @@ public class CategoriasIncidentesController extends Controller implements Initia
         });
     }
 
+    public boolean validarActivos() {
+        if (categoriaSelec.isEstado() != true) {
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
+            return false;
+        }
+        return true;
+    }
+
     @FXML
     private void actGuardarCategorias(ActionEvent event) {
         if (catSelec == true) {
-            categoriaSelec.setId(categoriaSelec.getId());
-            categoriaSelec.setDescripcion(txtDescripcion.getText());
-            categoriaSelec.setNombre(txtNombre.getText());
-            if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
-                categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
-            }
-            Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
-            if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoria editada correctamente");
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+            if (validarActivos()){
+                categoriaSelec.setId(categoriaSelec.getId());
+                categoriaSelec.setDescripcion(txtDescripcion.getText());
+                categoriaSelec.setNombre(txtNombre.getText());
+                if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
+                    categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
+                }
+                Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoria editada correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                }
             }
         } else {
             if (txtNombre.getText() == null) {
@@ -132,7 +142,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         TableColumn<IncidentesCategoriasDTO, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<IncidentesCategoriasDTO, String> colCat = new TableColumn<>("Categoria superior");
-        colCat.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCategoriaSuperior()== null ? "Sin Categoria superior" : String.valueOf(String.valueOf(p.getValue().getCategoriaSuperior()))));
+        colCat.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCategoriaSuperior() == null ? "Sin Categoria superior" : String.valueOf(String.valueOf(p.getValue().getCategoriaSuperior()))));
         TableColumn<IncidentesCategoriasDTO, String> colDesc = new TableColumn<>("Descripcion");
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getDescripcion())));
         TableColumn<IncidentesCategoriasDTO, String> colEst = new TableColumn<>("Estado");
@@ -151,9 +161,9 @@ public class CategoriasIncidentesController extends Controller implements Initia
             if (cbxFiltroCategorias.getValue().equals("Nombre")) {
                 res = categoriaService.getByNombre(txtBuscarCateg.getText());
             } else {
-                if (txtBuscarCateg.getText().contains("activo") || txtBuscarCateg.getText().contains("Activo")) {
+                if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
                     res = categoriaService.getByEstado(true);
-                } else if (txtBuscarCateg.getText().contains("inactivo") || txtBuscarCateg.getText().contains("Inactivo")) {
+                } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
                     res = categoriaService.getByEstado(false);
                 } else {
                     res = categoriaService.getByNombre("");
@@ -198,13 +208,15 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private void actInactivarCateg(ActionEvent event) {
         if (catSelec == true) {
             if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
-                categoriaSelec.setEstado(false);
-                Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
-                    catSelec = false;
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                if (validarActivos()){
+                    categoriaSelec.setEstado(false);
+                    Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
+                        catSelec = false;
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             } else {
                 catSelec = false;

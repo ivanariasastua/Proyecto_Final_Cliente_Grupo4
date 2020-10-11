@@ -161,6 +161,14 @@ public class AreasTrabajosController extends Controller implements Initializable
         });
     }
 
+    public boolean validarActivos() {
+        if (areaSeleccionada.isEstado() != true) {
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
+            return false;
+        }
+        return true;
+    }
+
     @FXML
     private void actEditarAreasT(ActionEvent event) {
         if (areaSelec == true) {
@@ -178,14 +186,16 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actGuardarAreasTrabajo(ActionEvent event) {
         if (areaSelec == true) {
-            areaSeleccionada.setId(areaSeleccionada.getId());
-            areaSeleccionada.setDescripcion(txtDescripcionArea.getText());
-            areaSeleccionada.setNombre(txtNombreArea.getText());
-            Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
-            if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+            if (validarActivos()) {
+                areaSeleccionada.setId(areaSeleccionada.getId());
+                areaSeleccionada.setDescripcion(txtDescripcionArea.getText());
+                areaSeleccionada.setNombre(txtNombreArea.getText());
+                Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                }
             }
         } else {
             if (txtNombreArea.getText() == null) {
@@ -225,12 +235,14 @@ public class AreasTrabajosController extends Controller implements Initializable
     private void actInactivarAreaT(ActionEvent event) {
         if (areaSelec == true) {
             if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
-                areaSeleccionada.setEstado(false);
-                Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Area de trabajo inactivada correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                if (validarActivos()) {
+                    areaSeleccionada.setEstado(false);
+                    Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Area de trabajo inactivada correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             }
         } else {

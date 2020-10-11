@@ -149,26 +149,31 @@ public class IncidentesRegistradosController extends Controller implements Initi
         }
         return true;
     }
+    
+    public boolean validarActivos() {
+        if (incidentSeleccionado.isEstado() != true) {
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
+            return false;
+        }
+        return true;
+    }
 
     @FXML
     private void actGuardarIncidenteRegistrado(ActionEvent event) {
         if (incidentSelec == true) {
-            incidentSeleccionado.setId(incidentSeleccionado.getId());
-            System.out.println(areaSelec);
-            System.out.println(categoriaSelec);
-            System.out.println(emisorSelec);
-            System.out.println(responsableSelec);
-            incidentSeleccionado.setAreaTrabajo(areaSelec);
-            incidentSeleccionado.setCategoria(categoriaSelec);
-            incidentSeleccionado.setDescripcion(txtDescripcionIncident.getText());
-            incidentSeleccionado.setEmisor(emisorSelec);
-            incidentSeleccionado.setResponsable(responsableSelec);
-            Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
-            if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
-            } else {
-                System.out.println(res.getMensajeInterno());
-                Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+            if(validarActivos()){
+                incidentSeleccionado.setId(incidentSeleccionado.getId());
+                incidentSeleccionado.setAreaTrabajo(areaSelec);
+                incidentSeleccionado.setCategoria(categoriaSelec);
+                incidentSeleccionado.setDescripcion(txtDescripcionIncident.getText());
+                incidentSeleccionado.setEmisor(emisorSelec);
+                incidentSeleccionado.setResponsable(responsableSelec);
+                Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                }
             }
         } else {
             if (validarCampos()) {
@@ -202,12 +207,14 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private void actInactivarIncidente(ActionEvent event) {
         if (incidentSelec == true) {
             if (Mensaje.showConfirmation("Inactivar incidente", null, "Seguro que desea inactivar el incidente?")) {
-                incidentSeleccionado.setEstado(false);
-                Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Incidente inactivado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                if(validarActivos()){
+                    incidentSeleccionado.setEstado(false);
+                    Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Incidente inactivado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
                 }
             }
         } else {

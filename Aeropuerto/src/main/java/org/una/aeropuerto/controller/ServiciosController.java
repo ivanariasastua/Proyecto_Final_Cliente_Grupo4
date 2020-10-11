@@ -104,17 +104,27 @@ public class ServiciosController extends Controller implements Initializable {
         tablaServicios.getColumns().addAll(colNomb, colDescrip, colEst);
     }
 
+    public boolean validarActivos() {
+        if (servicSeleccionado.isEstado() != true) {
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
+            return false;
+        }
+        return true;
+    }
+    
     @FXML
     private void actGuardarServicio(ActionEvent event) {
         if (servSelec == true) {
-            servicSeleccionado.setId(servicSeleccionado.getId());
-            servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
-            servicSeleccionado.setNombre(txtNombreServicio.getText());
-            Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
-            if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+            if(validarActivos()){
+                servicSeleccionado.setId(servicSeleccionado.getId());
+                servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
+                servicSeleccionado.setNombre(txtNombreServicio.getText());
+                Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                }
             }
         } else {
             if (txtNombreServicio.getText() != null) {
@@ -187,13 +197,15 @@ public class ServiciosController extends Controller implements Initializable {
     private void actInactivarServicio(ActionEvent event) {
         if (servSelec == true) {
             if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
-                servicSeleccionado.setEstado(false);
-                Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
-                    servSelec = false;
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                if(validarActivos()){
+                    servicSeleccionado.setEstado(false);
+                    Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
+                        servSelec = false;
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
                 }
             } else {
                 servSelec = false;

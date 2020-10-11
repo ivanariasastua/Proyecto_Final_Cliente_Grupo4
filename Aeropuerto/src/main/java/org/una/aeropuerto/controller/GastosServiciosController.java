@@ -282,19 +282,29 @@ public class GastosServiciosController extends Controller implements Initializab
         }
     }
 
+    public boolean validarActivos() {
+        if (gastoSelecciondo.isEstado() != true) {
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
+            return false;
+        }
+        return true;
+    }
+    
     @FXML
     private void actGuardarGastoS(ActionEvent event) {
         if (gastSelec == true) {
-            servGastDTO.setId(gastoSelecciondo.getId());
-            if(gastoSelecciondo.isEstado()){
-                servGastDTO.setEstado(true);
-            }
-            guardar();
-            Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
-            if (res.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+            if(validarActivos()){
+                servGastDTO.setId(gastoSelecciondo.getId());
+                if(gastoSelecciondo.isEstado()){
+                    servGastDTO.setEstado(true);
+                }
+                guardar();
+                Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
+                if (res.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                }
             }
         } else {
             if (validarCamposGastos()) {
@@ -343,13 +353,15 @@ public class GastosServiciosController extends Controller implements Initializab
     private void actInactivarGastoS(ActionEvent event) {
         if (gastSelec == true) {
             if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
-                gastoSelecciondo.setEstado(false);
-                Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), gastoSelecciondo);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el gasto de servicio");
-                    gastSelec = false;
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                if(validarActivos()){
+                    gastoSelecciondo.setEstado(false);
+                    Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), gastoSelecciondo);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el gasto de servicio");
+                        gastSelec = false;
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             } else {
                 gastSelec = false;

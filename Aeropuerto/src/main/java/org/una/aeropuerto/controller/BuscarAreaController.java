@@ -31,27 +31,33 @@ import org.una.aeropuerto.util.Respuesta;
  */
 public class BuscarAreaController extends Controller implements Initializable {
 
-    @FXML private JFXTextField txtBuscar;
-    @FXML private TableView<AreasTrabajosDTO> tvAreas;
-    @FXML private TableColumn<AreasTrabajosDTO, Long> colId;
-    @FXML private TableColumn<AreasTrabajosDTO, String> colArea;
-    @FXML private TableColumn<AreasTrabajosDTO, String> colEstado;
+    @FXML
+    private JFXTextField txtBuscar;
+    @FXML
+    private TableView<AreasTrabajosDTO> tvAreas;
+    @FXML
+    private TableColumn<AreasTrabajosDTO, Long> colId;
+    @FXML
+    private TableColumn<AreasTrabajosDTO, String> colArea;
+    @FXML
+    private TableColumn<AreasTrabajosDTO, String> colEstado;
     private final AreasTrabajosService service = new AreasTrabajosService();
+    AreasTrabajosDTO areaSelec;
 
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initVista();
-    }    
+
+    }
 
     @FXML
     private void accionBuscar(ActionEvent event) {
-        if(!txtBuscar.getText().isEmpty()){
+        if (!txtBuscar.getText().isEmpty()) {
             Respuesta res = service.getByNombre(txtBuscar.getText());
-            if(res.getEstado()){
+            if (res.getEstado()) {
                 tvAreas.getItems().clear();
-                tvAreas.getItems().addAll((List<AreasTrabajosDTO>)res.getResultado("Areas_Trabajos"));
-            }else{
+                tvAreas.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+            } else {
                 Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas", res.getMensaje());
             }
         }
@@ -59,30 +65,40 @@ public class BuscarAreaController extends Controller implements Initializable {
 
     @FXML
     private void accionTabla(MouseEvent event) {
-        if(tvAreas.getSelectionModel().getSelectedItem() != null){
+        areaSelec = tvAreas.getSelectionModel().getSelectedItem();
+        if (tvAreas.getSelectionModel().getSelectedItem() != null) {
             AppContext.getInstance().set("Area", tvAreas.getSelectionModel().getSelectedItem());
         }
     }
 
     @FXML
     private void accionSeleccionar(ActionEvent event) {
-        this.closeWindow();
+        if (areaSelec.getNombre() != null) {
+            if (areaSelec.isEstado()) {
+                this.closeWindow();
+            } else {
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar el area de trabajo");
+        }
     }
-    
-    private void initVista(){
+
+    private void initVista() {
         colId.setCellValueFactory(new PropertyValueFactory("id"));
         colArea.setCellValueFactory(new PropertyValueFactory("nombre"));
         colEstado.setCellValueFactory(per -> {
             String estadoString;
-            if(per.getValue().isEstado())
+            if (per.getValue().isEstado()) {
                 estadoString = "Activo";
-            else
+            } else {
                 estadoString = "Inactivo";
+            }
             return new ReadOnlyStringWrapper(estadoString);
         });
     }
-    
-    private void Limpiar(){
+
+    private void Limpiar() {
         txtBuscar.clear();
         tvAreas.getItems().clear();
     }
@@ -90,6 +106,7 @@ public class BuscarAreaController extends Controller implements Initializable {
     @Override
     public void initialize() {
         Limpiar();
+        areaSelec = new AreasTrabajosDTO();
     }
-    
+
 }
