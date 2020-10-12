@@ -51,7 +51,7 @@
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </GridPane.margin>
                                           </JFXTextField>
-                                          <JFXTextField fx:id="txtContrasena" prefHeight="47.0" prefWidth="250.0" promptText="Contraseña" styleClass="campos_texto_1" GridPane.columnIndex="1">
+                                          <JFXTextField fx:id="txtCorreo" labelFloat="true" prefHeight="47.0" prefWidth="250.0" promptText="Correo" styleClass="campos_texto_1" GridPane.columnIndex="1">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </GridPane.margin>
@@ -66,7 +66,7 @@
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </GridPane.margin>
                                           </JFXTextField>
-                                          <JFXTextField fx:id="txtJefe" editable="false" onMouseClicked="#accionBuscraJefe" prefHeight="49.0" prefWidth="400.0" promptText="Jefe" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                          <JFXTextField fx:id="txtJefe" editable="false" labelFloat="true" onMouseClicked="#accionBuscraJefe" prefHeight="49.0" prefWidth="400.0" promptText="Jefe" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </GridPane.margin>
@@ -89,7 +89,7 @@
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton fx:id="btnActInac" onAction="#actInactivarActivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_3" text="Inactivar">
+                                    <JFXButton fx:id="btnActInac" onAction="#actInactivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_3" text="Inactivar">
                                        <HBox.margin>
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>

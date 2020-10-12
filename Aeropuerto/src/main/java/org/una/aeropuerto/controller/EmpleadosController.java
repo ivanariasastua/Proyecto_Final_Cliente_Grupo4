@@ -25,7 +25,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -88,7 +87,6 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private JFXTextField txtNombre;
     @FXML private JFXComboBox<RolesDTO> cbxRoles;
     @FXML private JFXTextField txtCedula;
-    @FXML private JFXTextField txtContrasena;
     @FXML private Label lblTitulo;
     @FXML private Tab tabHorarios;
     @FXML private Tab tabMarcajes;
@@ -109,6 +107,8 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado;
     @FXML
     private JFXButton btnActInac;
+    @FXML
+    private JFXTextField txtCorreo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -169,12 +169,12 @@ public class EmpleadosController extends Controller implements Initializable {
 
     public boolean validarCampos() {
         if(emplSeleccionado == null){
-            if (txtCedula.getText() == null || txtNombre.getText() == null || txtContrasena.getText() == null) {
+            if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cedula y Contraseña son obligatorios");
                 return false;
             }
         }else{
-            if (txtCedula.getText() == null || txtNombre.getText() == null || txtContrasena.getText() == null) {
+            if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre y Cedula son obligatorios");
                 return false;
             }
@@ -188,7 +188,7 @@ public class EmpleadosController extends Controller implements Initializable {
             if (validarCampos()) {
                 empleadoDTO.setId(emplSeleccionado.getId());
                 empleadoDTO.setCedula(txtCedula.getText());
-                empleadoDTO.setContrasenaEncriptada(txtContrasena.getText().isEmpty() ? emplSeleccionado.getContrasenaEncriptada() : txtContrasena.getText());
+                empleadoDTO.setCorreo(txtCorreo.getText());
                 empleadoDTO.setJefe(jefeSelect);
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
@@ -203,7 +203,7 @@ public class EmpleadosController extends Controller implements Initializable {
             if (validarCampos()) {
                 empleadoDTO = new EmpleadosDTO();
                 empleadoDTO.setCedula(txtCedula.getText());
-                empleadoDTO.setContrasenaEncriptada(txtContrasena.getText());
+                empleadoDTO.setCorreo(txtCorreo.getText());
                 empleadoDTO.setJefe(jefeSelect);
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
@@ -223,7 +223,7 @@ public class EmpleadosController extends Controller implements Initializable {
     void limpiarCampos() {
         txtNombre.setText(null);
         txtCedula.setText(null);
-        txtContrasena.setText(null);
+        txtCorreo.setText(null);
         txtJefe.clear();
         cbxRoles.setValue(null);
         emplSeleccionado = null;
@@ -456,6 +456,6 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     @FXML
-    private void actInactivarActivarEmpleado(ActionEvent event) {
+    private void actInactivarEmpleado(ActionEvent event) {
     }
 }

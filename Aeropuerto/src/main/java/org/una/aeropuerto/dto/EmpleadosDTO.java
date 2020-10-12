@@ -27,6 +27,10 @@ public class EmpleadosDTO {
     private EmpleadosDTO jefe;
     private String contrasenaEncriptada;
     private RolesDTO rol;
+    private Boolean passwordTemporal;
+    private Boolean solicitud;
+    private Boolean aprobado;
+    private String correo;
     @JsonManagedReference
     private List<EmpleadosAreasTrabajosDTO> empleadosAreasTrabajo;
     @JsonManagedReference
