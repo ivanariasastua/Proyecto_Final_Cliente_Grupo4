@@ -82,6 +82,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> item = FXCollections.observableArrayList("Responsable", "Emisor", "Categoria", "Area");
         cbxFiltro.setItems(item);
+        clickTabla();
+
     }
 
     @Override
@@ -89,7 +91,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         incidentService = new IncidentesRegistradosService();
         incidentDTO = new IncidentesRegistradosDTO();
         incidentSelec = false;
-        clickTabla();
+        limpiar();
     }
 
     public void clickTabla() {
@@ -99,7 +101,6 @@ public class IncidentesRegistradosController extends Controller implements Initi
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     incidentSelec = true;
                     incidentSeleccionado = row.getItem();
-                    System.out.println("lista de estados " + incidentSeleccionado.getIncidentesRegistradosEstados());
                 }
             });
             return row;
@@ -149,7 +150,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         }
         return true;
     }
-    
+
     public boolean validarActivos() {
         if (incidentSeleccionado.isEstado() != true) {
             Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
@@ -161,7 +162,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actGuardarIncidenteRegistrado(ActionEvent event) {
         if (incidentSelec == true) {
-            if(validarActivos()){
+            if (validarActivos()) {
                 incidentSeleccionado.setId(incidentSeleccionado.getId());
                 incidentSeleccionado.setAreaTrabajo(areaSelec);
                 incidentSeleccionado.setCategoria(categoriaSelec);
@@ -193,21 +194,25 @@ public class IncidentesRegistradosController extends Controller implements Initi
         }
     }
 
-    @FXML
-    private void actLimpiarCamposIncidentes(ActionEvent event) {
+    public void limpiar() {
         txtAreaSelec.setText(null);
         txtCategoriaSelec.setText(null);
         txtDescripcionIncident.setText(null);
         txtEmisorSelec.setText(null);
         txtResponsableSelec.setText(null);
-        incidentSelec=false;
+        incidentSelec = false;
+    }
+
+    @FXML
+    private void actLimpiarCamposIncidentes(ActionEvent event) {
+        limpiar();
     }
 
     @FXML
     private void actInactivarIncidente(ActionEvent event) {
         if (incidentSelec == true) {
             if (Mensaje.showConfirmation("Inactivar incidente", null, "Seguro que desea inactivar el incidente?")) {
-                if(validarActivos()){
+                if (validarActivos()) {
                     incidentSeleccionado.setEstado(false);
                     Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
                     if (res.getEstado()) {
@@ -263,7 +268,6 @@ public class IncidentesRegistradosController extends Controller implements Initi
             } else {
                 res = incidentService.findByCategoria(txtBuscarIncident.getText());
             }
-            System.out.println(res.getMensaje() + res.getMensajeInterno());
             if (res.getEstado()) {
                 tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
             } else {
@@ -298,12 +302,19 @@ public class IncidentesRegistradosController extends Controller implements Initi
                 incidentSelec = false;
             }
         } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar categoria", "Debe seleccionar una categoria");
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
         }
     }
 
     @FXML
     private void actSeguimientoIncidenteEstados(ActionEvent event) {
+        if (incidentSelec == true) {
+            AppContext.getInstance().set("EstadosIncidentes", incidentSeleccionado);
+            FlowController.getInstance().goViewInNoResizableWindow("EstadosIncidentes", false, StageStyle.UTILITY);
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+        }
+        incidentSelec = false;
     }
 
 }

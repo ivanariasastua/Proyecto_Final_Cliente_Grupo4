@@ -58,9 +58,9 @@ public class ServiciosController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroServicios.setItems(filtro);
+        clickTabla();
     }
 
     @Override
@@ -68,8 +68,7 @@ public class ServiciosController extends Controller implements Initializable {
         servService = new ServiciosService();
         servicioDTO = new ServiciosDTO();
         listServic = new ArrayList<>();
-        clickTabla();
-        servSelec = false;
+        limpiarCampos();
     }
 
     public void clickTabla() {
@@ -183,14 +182,17 @@ public class ServiciosController extends Controller implements Initializable {
             }
         }
     }
-
-    @FXML
-    private void actLimpiarCamposServicio(ActionEvent event) {
+    public void limpiarCampos(){
         txtNombreServicio.setText(null);
         txtDescripcionServicio.setText(null);
         servSelec = false;
         servicioDTO = new ServiciosDTO();
         servicSeleccionado = new ServiciosDTO();
+    }
+
+    @FXML
+    private void actLimpiarCamposServicio(ActionEvent event) {
+        limpiarCampos();
     }
 
     @FXML

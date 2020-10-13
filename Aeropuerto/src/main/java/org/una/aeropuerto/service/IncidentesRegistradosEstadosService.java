@@ -64,20 +64,4 @@ public class IncidentesRegistradosEstadosService {
         }
     }
 
-    public Respuesta getByIncidentesRegistrados(Long id) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("id", id);
-            Request request = new Request("incidentes_registrados_estados/incidentes", "/{id}", parametros);
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener los datos");
-            }
-            List<IncidentesRegistradosEstadosDTO> result = (List<IncidentesRegistradosEstadosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosEstadosDTO>>() {
-            });
-            return new Respuesta(true, "Incidentes_Registrados_E", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
 }
