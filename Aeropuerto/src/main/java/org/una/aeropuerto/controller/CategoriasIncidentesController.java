@@ -68,6 +68,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @Override
     public void initialize() {
+        limpiarCampos();
     }
 
     public void clickTabla() {
@@ -177,14 +178,18 @@ public class CategoriasIncidentesController extends Controller implements Initia
         }
     }
 
-    @FXML
-    private void actLimpiarCampos(ActionEvent event) {
+    public void limpiarCampos(){
         txtDescripcion.setText(null);
         txtNombre.setText(null);
         txtCategoriaSuperior.setText(null);
         catSelec = false;
         categoriaSelec = new IncidentesCategoriasDTO();
         categSuperiorSelec = new IncidentesCategoriasDTO();
+    }
+    
+    @FXML
+    private void actLimpiarCampos(ActionEvent event) {
+        limpiarCampos();
     }
 
     @FXML

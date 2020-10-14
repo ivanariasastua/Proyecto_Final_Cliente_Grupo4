@@ -88,16 +88,15 @@ public class GastosServiciosController extends Controller implements Initializab
     public void initialize(URL url, ResourceBundle rb) {
         listServicios = new ArrayList<>();
         llenarComboBoxs();
-        limpiarCampos();
-
+        clickTabla();
     }
 
     @Override
     public void initialize() {
         listServicios = new ArrayList<>();
         servGastDTO = new ServiciosGastosDTO();
-        clickTabla();
         responsableSelec = new EmpleadosDTO();
+        limpiarCampos();
     }
 
     public void llenarComboBoxs() {

@@ -57,15 +57,11 @@ public class AreasTrabajosController extends Controller implements Initializable
     private TableView tablaAsignarAreas;
 
     private AreasTrabajosService areasService = new AreasTrabajosService();
-    private List<AreasTrabajosDTO> listAreasT = new ArrayList<>();
-    private List<EmpleadosAreasTrabajosDTO> listEmpAreaT = new ArrayList<>();
     private AreasTrabajosDTO areaDto = new AreasTrabajosDTO();
     private AreasTrabajosDTO areaSeleccionada = new AreasTrabajosDTO();
     private EmpleadosAreasTrabajosDTO empAreaSeleccionado = new EmpleadosAreasTrabajosDTO();
     private EmpleadosAreasTrabajosDTO empTrabDTO = new EmpleadosAreasTrabajosDTO();
     private EmpleadosAreasTrabajosService empTrabService = new EmpleadosAreasTrabajosService();
-    private List<EmpleadosDTO> listEmp = new ArrayList<>();
-    private EmpleadosService empleadoService = new EmpleadosService();
     boolean areaSelec = false;
     boolean empAreaSelec = false;
     @FXML
@@ -90,14 +86,13 @@ public class AreasTrabajosController extends Controller implements Initializable
         cbxFiltroAreas.setItems(filtro);
         ObservableList filtro2 = FXCollections.observableArrayList("Empleado", "Area de trabajo");
         cbxFiltroAsignarA.setItems(filtro2);
+        clickTablas();
     }
 
     @Override
     public void initialize() {
-        listAreasT = new ArrayList<>();
-        areaSelec = false;
-        clickTablas();
         llenarColumnas();
+        limpiarAreas();
     }
 
     public void llenarColumnas() {
@@ -199,7 +194,7 @@ public class AreasTrabajosController extends Controller implements Initializable
             }
         } else {
             if (txtNombreArea.getText() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Noombre es obligatorio");
+                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
             } else {
                 areaDto = new AreasTrabajosDTO();
                 areaDto.setDescripcion(txtDescripcionArea.getText());
@@ -214,13 +209,17 @@ public class AreasTrabajosController extends Controller implements Initializable
         }
     }
 
-    @FXML
-    private void actLimpiarCamposAreasTrabajo(ActionEvent event) {
+    public void limpiarAreas(){
         txtDescripcionArea.setText(null);
         txtNombreArea.setText(null);
         areaSelec = false;
         areaSeleccionada = new AreasTrabajosDTO();
         areaDto = new AreasTrabajosDTO();
+    }
+    
+    @FXML
+    private void actLimpiarCamposAreasTrabajo(ActionEvent event) {
+        limpiarAreas();
     }
 
     public String estado(boolean estad) {
