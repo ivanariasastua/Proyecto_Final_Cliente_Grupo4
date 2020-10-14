@@ -89,7 +89,7 @@
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton fx:id="btnActInac" onAction="#actInactivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_3" text="Inactivar">
+                                    <JFXButton fx:id="btnActInac" onAction="#actInactivarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_2" text="Inactivar">
                                        <HBox.margin>
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
@@ -126,11 +126,6 @@
                                     </TableView>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <JFXButton prefWidth="150.0" styleClass="button_3" text="Activar">
-                                             <HBox.margin>
-                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
                                           <JFXButton onAction="#actInactivarAreaEmpleado" prefHeight="43.0" prefWidth="150.0" styleClass="button_2" text="Inactivar">
                                              <HBox.margin>
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
@@ -191,11 +186,6 @@
                                     <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="547.0">
                                        <children>
                                           <JFXButton onAction="#actInactivarHorarioEmpleado" prefHeight="0.0" prefWidth="150.0" styleClass="button_2" text="Inactivar">
-                                             <HBox.margin>
-                                                <Insets left="5.0" right="5.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
-                                          <JFXButton layoutX="10.0" layoutY="10.0" onAction="#actActivarHorarioEmpleado" prefHeight="0.0" prefWidth="150.0" styleClass="button_1" text="Activar">
                                              <HBox.margin>
                                                 <Insets left="5.0" right="5.0" />
                                              </HBox.margin>
@@ -278,40 +268,6 @@
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
                                     </HBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                     </content>
-                  </Tab>
-                  <Tab fx:id="tabMarcajes" text="Marcaje">
-                     <content>
-                        <HBox prefHeight="100.0" prefWidth="800.0">
-                           <children>
-                              <VBox alignment="CENTER" prefHeight="479.0" prefWidth="800.0">
-                                 <children>
-                                    <JFXComboBox fx:id="cbxHorarios" labelFloat="true" prefHeight="50.0" prefWidth="500.0" promptText="Horario" styleClass="comboBox">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" top="20.0" />
-                                       </VBox.margin>
-                                    </JFXComboBox>
-                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" text="Hora de Entrada">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" top="20.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" />
-                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" text="Hora de Salida">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" top="20.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <Label prefHeight="50.0" prefWidth="500.0" styleClass="texto" />
-                                    <JFXButton onAction="#actGuardarMarcajes" prefHeight="50.0" prefWidth="217.0" styleClass="button_3" text="Hacer Marcaje">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" top="20.0" />
-                                       </VBox.margin>
-                                    </JFXButton>
                                  </children>
                               </VBox>
                            </children>

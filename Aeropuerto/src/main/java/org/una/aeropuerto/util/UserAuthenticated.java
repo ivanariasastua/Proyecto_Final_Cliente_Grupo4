@@ -55,4 +55,20 @@ public class UserAuthenticated {
         this.rol = rol;
         this.token = "bearer "+token;
     }
+    
+    public Boolean isValid(){
+        return usuario.isEstado() && usuario.getAprobado() && !usuario.getPasswordTemporal();
+    }
+    
+    public Boolean isEstado(){
+        return usuario.isEstado();
+    }
+    
+    public Boolean isAprobado(){
+        return usuario.getAprobado();
+    }
+    
+    public Boolean isTemporal(){
+        return usuario.getPasswordTemporal();
+    }
 }

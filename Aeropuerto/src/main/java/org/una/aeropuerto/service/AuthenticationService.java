@@ -7,7 +7,6 @@ package org.una.aeropuerto.service;
 
 import org.una.aeropuerto.dto.AuthenticationRequest;
 import org.una.aeropuerto.dto.AuthenticationResponse;
-import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -33,6 +32,4 @@ public class AuthenticationService {
             return new Respuesta(false, ex.toString(), "Iniciar Sesion: Error al comunicarse con el servidor");
         }
     }
-    
-
 }

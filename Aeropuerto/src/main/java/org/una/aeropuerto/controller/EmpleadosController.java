@@ -41,7 +41,6 @@ import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.EmpleadosHorariosService;
-import org.una.aeropuerto.service.EmpleadosMarcajesService;
 import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.service.RolesService;
 import org.una.aeropuerto.service.EmpleadosAreasTrabajosService;
@@ -61,24 +60,16 @@ public class EmpleadosController extends Controller implements Initializable {
     /**
      * Initializes the controller class.
      */
-    private EmpleadosService empleadoService = new EmpleadosService();
-    private EmpleadosAreasTrabajosService empAreasService = new EmpleadosAreasTrabajosService();
-    private List<EmpleadosDTO> listEmpleados;
-    private List<EmpleadosHorariosDTO> listHorariosEmp;
-    private List<EmpleadosMarcajesDTO> listMarcajes = new ArrayList<>();
-    private List<EmpleadosDTO> listJefes = new ArrayList<>();
-    private List<EmpleadosDTO> listEmp = new ArrayList<>();
-    private List<RolesDTO> listRoles = new ArrayList<>();
-    private RolesService rolesService = new RolesService();
-    private EmpleadosDTO empleadoDTO = new EmpleadosDTO(), jefeSelect;
-    boolean horarSeleccionado;
-    private EmpleadosDTO emplSeleccionado = null;
-    private EmpleadosHorariosDTO horarioSeleccionado = new EmpleadosHorariosDTO();
-    private EmpleadosHorariosDTO horarioDTO = new EmpleadosHorariosDTO();
-    private EmpleadosHorariosService horarioService;
-    private EmpleadosMarcajesService marcajesService = new EmpleadosMarcajesService();
-    private EmpleadosMarcajesDTO marcajeDTO = new EmpleadosMarcajesDTO();
+    private final EmpleadosService empleadoService = new EmpleadosService();
+    private final EmpleadosAreasTrabajosService empAreasService = new EmpleadosAreasTrabajosService();
+    private final RolesService rolesService = new RolesService();
+    private final EmpleadosHorariosService horarioService = new EmpleadosHorariosService();
+    
+    
+    private EmpleadosDTO empleadoDTO = null, jefeSelect = null, emplSeleccionado = null;
+    private EmpleadosHorariosDTO horarioSeleccionado = null, horarioDTO = null;
     private AreasTrabajosDTO area = null;
+    
     @FXML private TableView tablaHorarios;
     @FXML private BorderPane bpPantalla;
     @FXML private VBox vbContenedor;
@@ -89,14 +80,12 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private JFXTextField txtCedula;
     @FXML private Label lblTitulo;
     @FXML private Tab tabHorarios;
-    @FXML private Tab tabMarcajes;
     @FXML private JFXComboBox<String> entradaHoras;
     @FXML private JFXComboBox<String> entradaMinutos;
     @FXML private JFXComboBox<String> salidaHoras;
     @FXML private JFXComboBox<String> salidaMinutos;
     @FXML private JFXComboBox<String> cbxDiaEntrada;
     @FXML private JFXComboBox<String> cbxDiaSalida;
-    @FXML private JFXComboBox<EmpleadosHorariosDTO> cbxHorarios;
     @FXML private Tab tabArear;
     @FXML private JFXTextField txtId;
     @FXML private JFXTextField txtJefe;
@@ -105,18 +94,11 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colArea;
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colDescripcion;
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado;
-    @FXML
-    private JFXButton btnActInac;
-    @FXML
-    private JFXTextField txtCorreo;
+    @FXML private JFXButton btnActInac;
+    @FXML private JFXTextField txtCorreo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        horarSeleccionado = false;
-        listEmpleados = new ArrayList<>();
-        listHorariosEmp = new ArrayList<>();
-        horarioService = new EmpleadosHorariosService();
-        empleadoService = new EmpleadosService();
         llenarRelojs();
         ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo");
         cbxDiaEntrada.setItems(items);
@@ -136,10 +118,9 @@ public class EmpleadosController extends Controller implements Initializable {
     public void llenarComboBoxs() {
         cbxRoles.getItems().clear();
         Respuesta resp = rolesService.getAll();
-        listRoles = (List<RolesDTO>) resp.getResultado("Roles");
-        if (listRoles != null) {
-            ObservableList items = FXCollections.observableArrayList(listRoles);
-            cbxRoles.setItems(items);
+        if (resp.getResultado("Roles") != null) {
+            cbxRoles.getItems().clear();
+            cbxRoles.getItems().addAll((List<RolesDTO>) resp.getResultado("Roles"));
         }
     }
 
@@ -148,7 +129,6 @@ public class EmpleadosController extends Controller implements Initializable {
             TableRow<EmpleadosHorariosDTO> row = new TableRow();
             row.setOnMouseClicked(e -> {
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
-                    horarSeleccionado = true;
                     horarioSeleccionado = row.getItem();
                     cargarDatosHorarios();
                 }
@@ -313,7 +293,7 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actGuardarHorario(ActionEvent event) {
-        if (horarSeleccionado == true) {
+        if (horarioSeleccionado != null) {
             if (validarCamposHorario()) {
                 horarioDTO.setId(horarioSeleccionado.getId());
                 horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
@@ -370,14 +350,9 @@ public class EmpleadosController extends Controller implements Initializable {
         entradaMinutos.setValue(null);
         salidaHoras.setValue(null);
         salidaMinutos.setValue(null);
-        horarSeleccionado = false;
         horarioSeleccionado = null;
     }
 
-    @FXML
-    private void actGuardarMarcajes(ActionEvent event) {
-
-    }
 
     @FXML
     private void actBuscarArea(ActionEvent event) {
@@ -403,9 +378,6 @@ public class EmpleadosController extends Controller implements Initializable {
     private void actInactivarHorarioEmpleado(ActionEvent event) {
     }
 
-    @FXML
-    private void actActivarHorarioEmpleado(ActionEvent event) {
-    }
 
     @FXML
     private void actBuscarEmpleado(ActionEvent event) {

@@ -49,7 +49,7 @@ and open the template in the editor.
 }
 
 .button_1{
-    -fx-text-fill: #B2B2B2;
+    -fx-text-fill: #2b702b;
     -fx-font: bold 14pt "Courier";
     -fx-border-color: #2b702b;
     -fx-border-radius: 15px;
@@ -60,10 +60,11 @@ and open the template in the editor.
 
 .button_1:hover{
     -fx-background-color: #2b702b;
+    -fx-text-fill: white;
 }
 
 .button_2{
-    -fx-text-fill: #B2B2B2;
+    -fx-text-fill: #990000;
     -fx-font: bold 14pt "Courier";
     -fx-border-color: #990000;
     -fx-border-radius: 15px;
@@ -74,6 +75,7 @@ and open the template in the editor.
 
 .button_2:hover{
     -fx-background-color: #990000;
+    -fx-text-fill: white;
 }
 
 .lblTitulo_1{
@@ -103,6 +105,17 @@ and open the template in the editor.
     -fx-opacity: 0.8;
     -fx-image:url('resources/minimize.png')
 }
+
+#lblRestablecer{
+    -fx-text-fill:#B2B2B2;
+    -fx-font: bold 16px "Courier";
+    -fx-alignment: CENTER;
+}
+
+#lblRestablecer:hover{
+    -fx-text-fill: white;
+}
+
 /*Principal Exclusivo*/
 
 .marco{

@@ -80,7 +80,7 @@ public class EmpleadosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-
+    
     public Respuesta getByNombre(String nombre){
         try{
             Map<String, Object> parametros = new HashMap<>();
