@@ -19,21 +19,6 @@ import org.una.aeropuerto.util.Respuesta;
  */
 public class IncidentesRegistradosService {
 
-    public Respuesta getAll() {
-        try {
-            Request request = new Request("incidentes_registrados/get");
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener todos los  incidentes registrados");
-            }
-            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>() {
-            });
-            return new Respuesta(true, "Incidentes_Registrados", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-
     public Respuesta guardarIncidenteRegistrado(IncidentesRegistradosDTO incidente) {
         try {
             Request request = new Request("incidentes_registrados/save");

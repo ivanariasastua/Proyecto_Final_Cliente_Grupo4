@@ -19,21 +19,6 @@ import org.una.aeropuerto.util.Respuesta;
  */
 public class ServiciosGastosService {
 
-    public Respuesta getAll() {
-        try {
-            Request request = new Request("gastos_mantenimientos/get");
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener todos los gastos de servicios");
-            }
-            List<ServiciosGastosDTO> result = (List<ServiciosGastosDTO>) request.readEntity(new GenericType<List<ServiciosGastosDTO>>() {
-            });
-            return new Respuesta(true, "Servicios_Gastos", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-
     public Respuesta guardarGastoServicio(ServiciosGastosDTO servicio) {
         try {
             Request request = new Request("gastos_mantenimientos/save");

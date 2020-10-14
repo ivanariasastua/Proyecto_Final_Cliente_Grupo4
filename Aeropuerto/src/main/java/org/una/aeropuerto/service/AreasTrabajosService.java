@@ -18,21 +18,6 @@ import org.una.aeropuerto.util.Respuesta;
  * @author cordo
  */
 public class AreasTrabajosService {
-    
-    public Respuesta getAll() {
-        try {
-            Request request = new Request("areas_trabajos/get");
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener todos las areas de trabajos");
-            }
-            List<AreasTrabajosDTO> result = (List<AreasTrabajosDTO>) request.readEntity(new GenericType<List<AreasTrabajosDTO>>(){});
-            return new Respuesta(true, "Areas_Trabajos", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-
 
     public Respuesta guardarAreaTrabajo(AreasTrabajosDTO areas) {
         try {
