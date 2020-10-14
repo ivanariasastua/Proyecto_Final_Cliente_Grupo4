@@ -43,7 +43,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <GridPane.margin>
-                        <Insets left="15.0" />
+                        <Insets left="25.0" />
                      </GridPane.margin>
                   </TableView>
                   <JFXTextField fx:id="txtNombreServicio" labelFloat="true" prefHeight="41.0" prefWidth="345.0" promptText="Nombre" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -60,13 +60,13 @@
                      </GridPane.margin></JFXButton>
                   <JFXTextField fx:id="txtBuscarServicio" prefHeight="41.0" prefWidth="263.0" promptText="Buscar" styleClass="campos_texto_1">
                      <GridPane.margin>
-                        <Insets left="150.0" right="110.0" />
+                        <Insets left="160.0" right="95.0" />
                      </GridPane.margin></JFXTextField>
-                  <JFXButton onAction="#actInactivarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
+                  <JFXButton onAction="#actInactivarServicio" prefHeight="43.0" prefWidth="116.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets left="150.0" />
+                        <Insets left="160.0" />
                      </GridPane.margin></JFXButton>
-                  <JFXButton onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="105.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT">
+                  <JFXButton onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="88.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT">
                      <GridPane.margin>
                         <Insets top="7.0" />
                      </GridPane.margin></JFXButton>
@@ -76,11 +76,11 @@
                      </GridPane.margin></JFXButton>
                   <JFXButton onAction="#acteditarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Editar" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets left="15.0" />
+                        <Insets left="25.0" />
                      </GridPane.margin></JFXButton>
-                  <JFXComboBox fx:id="cbxFiltroServicios" prefHeight="31.0" prefWidth="127.0" promptText="Filtrar por" styleClass="comboBox">
+                  <JFXComboBox fx:id="cbxFiltroServicios" prefHeight="31.0" prefWidth="130.0" promptText="Filtrar por" styleClass="comboBox">
                      <GridPane.margin>
-                        <Insets left="15.0" top="11.0" />
+                        <Insets left="25.0" top="11.0" />
                      </GridPane.margin></JFXComboBox>
                </children>
             </GridPane>

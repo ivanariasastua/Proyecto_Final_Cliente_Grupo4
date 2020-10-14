@@ -41,10 +41,6 @@ public class ServiciosController extends Controller implements Initializable {
     private JFXTextArea txtDescripcionServicio;
     @FXML
     private JFXTextField txtBuscarServicio;
-
-    /**
-     * Initializes the controller class.
-     */
     private ServiciosDTO servicioDTO;
     private ServiciosService servService;
     @FXML
@@ -69,6 +65,7 @@ public class ServiciosController extends Controller implements Initializable {
         servicioDTO = new ServiciosDTO();
         listServic = new ArrayList<>();
         limpiarCampos();
+        cargarColumnas();
     }
 
     public void clickTabla() {

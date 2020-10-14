@@ -29,8 +29,8 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="240.0" minHeight="8.0" prefHeight="92.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="513.0" minHeight="10.0" prefHeight="433.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="240.0" minHeight="8.0" prefHeight="104.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="513.0" minHeight="10.0" prefHeight="423.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="197.0" minHeight="0.0" prefHeight="79.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
@@ -71,22 +71,22 @@
                         <Insets bottom="280.0" left="25.0" right="25.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <JFXTextArea fx:id="txtDescripcion" labelFloat="true" prefHeight="85.0" prefWidth="301.0" promptText="Descripcion" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <JFXTextArea fx:id="txtDescripcion" labelFloat="true" prefHeight="95.0" prefWidth="350.0" promptText="Descripcion" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="50.0" left="25.0" right="25.0" top="280.0" />
                      </GridPane.margin>
                   </JFXTextArea>
-                  <JFXComboBox fx:id="cbxFiltroCategorias" prefHeight="31.0" prefWidth="98.0" promptText="Filtrar por" styleClass="comboBox">
+                  <JFXComboBox fx:id="cbxFiltroCategorias" prefHeight="31.0" prefWidth="108.0" promptText="Filtrar por" styleClass="comboBox">
                      <GridPane.margin>
                         <Insets left="15.0" top="10.0" />
                      </GridPane.margin>
                   </JFXComboBox>
-                  <JFXTextField fx:id="txtBuscarCateg" prefHeight="41.0" prefWidth="260.0" promptText="Buscar" styleClass="campos_texto_1">
+                  <JFXTextField fx:id="txtBuscarCateg" prefHeight="41.0" prefWidth="183.0" promptText="Buscar" styleClass="campos_texto_1">
                      <GridPane.margin>
-                        <Insets left="125.0" right="100.0" />
+                        <Insets left="130.0" right="90.0" />
                      </GridPane.margin>
                   </JFXTextField>
-                  <JFXButton onAction="#actBuscarCategorias" prefHeight="43.0" prefWidth="96.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT" />
+                  <JFXButton onAction="#actBuscarCategorias" prefHeight="43.0" prefWidth="87.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT" />
                   <JFXTextField fx:id="txtCategoriaSuperior" editable="false" labelFloat="true" promptText="Categoria Superior" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="60.0" left="25.0" right="25.0" />

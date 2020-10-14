@@ -83,7 +83,6 @@ public class IncidentesRegistradosController extends Controller implements Initi
         ObservableList<String> item = FXCollections.observableArrayList("Responsable", "Emisor", "Categoria", "Area");
         cbxFiltro.setItems(item);
         clickTabla();
-
     }
 
     @Override
@@ -92,6 +91,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         incidentDTO = new IncidentesRegistradosDTO();
         incidentSelec = false;
         limpiar();
+        llenarColumnas();
     }
 
     public void clickTabla() {
@@ -297,7 +297,6 @@ public class IncidentesRegistradosController extends Controller implements Initi
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(tabCrear);
                 cargarDatos();
-
             } else {
                 incidentSelec = false;
             }

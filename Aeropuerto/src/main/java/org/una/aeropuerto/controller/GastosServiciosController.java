@@ -97,6 +97,7 @@ public class GastosServiciosController extends Controller implements Initializab
         servGastDTO = new ServiciosGastosDTO();
         responsableSelec = new EmpleadosDTO();
         limpiarCampos();
+        cargarColumnasTabla();
     }
 
     public void llenarComboBoxs() {

@@ -50,6 +50,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
     @Override
     public void initialize() {
         Limpiar();
+        cargarColumnas();
         listCategorias = new ArrayList<>();
         catSelect = new IncidentesCategoriasDTO();
 

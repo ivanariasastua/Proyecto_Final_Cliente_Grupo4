@@ -40,8 +40,6 @@ public class EstadosIncidentesController extends Controller implements Initializ
     @FXML
     private JFXComboBox<String> cbxEstados;
     @FXML
-    private JFXTextField txtBuscaar;
-    @FXML
     private Label txtIncidente;
     private IncidentesRegistradosEstadosService estadosService = new IncidentesRegistradosEstadosService();
     private IncidentesRegistradosEstadosDTO estadosDto = new IncidentesRegistradosEstadosDTO();
@@ -64,6 +62,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
         cbxEstados.setValue(null);
         incidenteRegistrado = (IncidentesRegistradosDTO) AppContext.getInstance().get("EstadosIncidentes");
         txtIncidente.setText(incidenteRegistrado.getId().toString());
+        cargarEstados();
     }
 
     public void cargarColumnas() {
@@ -73,6 +72,13 @@ public class EstadosIncidentesController extends Controller implements Initializ
         TableColumn<IncidentesRegistradosEstadosDTO, String> colFecha = new TableColumn<>("Fecha de registro");
         colFecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
         tabla.getColumns().addAll(colEstado, colFecha);
+    }
+
+    public void cargarEstados() {
+        tabla.getItems().clear();
+        if (incidenteRegistrado.getIncidentesRegistradosEstados() != null) {
+            tabla.getItems().addAll(incidenteRegistrado.getIncidentesRegistradosEstados());
+        }
     }
 
     @FXML
@@ -90,10 +96,6 @@ public class EstadosIncidentesController extends Controller implements Initializ
                 Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
             }
         }
-    }
-
-    @FXML
-    private void actBuscar(ActionEvent event) {
     }
 
 }

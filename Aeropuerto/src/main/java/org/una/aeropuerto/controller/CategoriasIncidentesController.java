@@ -69,6 +69,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @Override
     public void initialize() {
         limpiarCampos();
+        cargarColumnas();
     }
 
     public void clickTabla() {
