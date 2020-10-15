@@ -5,11 +5,13 @@
  */
 package org.una.aeropuerto.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
@@ -24,7 +26,6 @@ public class ServiciosDTO {
     private String nombre;
     private String descripcion;
     private boolean estado;
-    //@ToString.Exclude
     private List<ServiciosGastosDTO> gastosMantenimientos = new ArrayList<>();
     private List<ServiciosPreciosDTO> serviciosPrecios = new ArrayList<>();
     

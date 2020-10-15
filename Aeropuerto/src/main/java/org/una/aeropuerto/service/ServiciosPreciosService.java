@@ -6,9 +6,7 @@
 package org.una.aeropuerto.service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.ServiciosPreciosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;

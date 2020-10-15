@@ -31,7 +31,6 @@ import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosGastosDTO;
 import org.una.aeropuerto.service.ServiciosGastosService;
-import org.una.aeropuerto.service.ServiciosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
@@ -57,8 +56,6 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private JFXComboBox<String> cbxPerioricidad;
     @FXML
-    private JFXComboBox<ServiciosDTO> cbxServicio;
-    @FXML
     private JFXComboBox<Integer> cbxDuracion;
     @FXML
     private JFXComboBox<String> cbxTiempo;
@@ -76,13 +73,14 @@ public class GastosServiciosController extends Controller implements Initializab
     private JFXTextField txtResponsable;
 
     List<ServiciosDTO> listServicios;
-    private ServiciosService servService = new ServiciosService();
     private ServiciosGastosDTO servGastDTO = new ServiciosGastosDTO();
     private ServiciosGastosService servGastService = new ServiciosGastosService();
-    List<ServiciosGastosDTO> listGastosServ = new ArrayList<>();
     boolean gastSelec = false;
     ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
     EmpleadosDTO responsableSelec;
+    ServiciosDTO servicioSelec;
+    @FXML
+    private JFXTextField txtServicio;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -96,6 +94,7 @@ public class GastosServiciosController extends Controller implements Initializab
         listServicios = new ArrayList<>();
         servGastDTO = new ServiciosGastosDTO();
         responsableSelec = new EmpleadosDTO();
+        servicioSelec = new ServiciosDTO();
         limpiarCampos();
         cargarColumnasTabla();
     }
@@ -122,13 +121,6 @@ public class GastosServiciosController extends Controller implements Initializab
 
         ObservableList<String> tiempo = FXCollections.observableArrayList("Dia(s)", "Semana(s)", "Mes(es)", "Año(s)");
         cbxTiempo.setItems(tiempo);
-
-        Respuesta res = servService.getAll();
-        listServicios = (List<ServiciosDTO>) res.getResultado("Servicios");
-        if (listServicios != null) {
-            ObservableList<ServiciosDTO> servicios = FXCollections.observableArrayList(listServicios);
-            cbxServicio.setItems(servicios);
-        }
     }
 
     public String estadoPago(boolean num) {
@@ -215,7 +207,7 @@ public class GastosServiciosController extends Controller implements Initializab
         txtEmpresa.setText(gastoSelecciondo.getEmpresa());
         txtNumContrato.setText(gastoSelecciondo.getNumeroContrato());
         txtResponsable.setText(gastoSelecciondo.getResponsable().getNombre());
-        cbxServicio.setValue(gastoSelecciondo.getServicio());
+        txtServicio.setText(gastoSelecciondo.getServicio().getNombre());
         cbxEstadoGasto.setValue(estadoGasto(gastoSelecciondo.isEstadoGasto()));
         cbxEstadoPago.setValue(estadoPago(gastoSelecciondo.isEstadoPago()));
         cbxPerioricidad.setValue(periodicidad(gastoSelecciondo.getPerioricidad()));
@@ -238,7 +230,7 @@ public class GastosServiciosController extends Controller implements Initializab
     }
 
     public boolean validarCamposGastos() {
-        if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || cbxServicio.getValue() == null || txtResponsable.getText() == null) {
+        if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || txtServicio.getText() == null || txtResponsable.getText() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Son obligatorios los siguientes campos: \nEmpresa\nNumero de contrato\nServicio\nResponsable");
             return false;
         }
@@ -249,7 +241,7 @@ public class GastosServiciosController extends Controller implements Initializab
         servGastDTO.setEmpresa(txtEmpresa.getText());
         servGastDTO.setNumeroContrato(txtNumContrato.getText());
         servGastDTO.setResponsable(responsableSelec);
-        servGastDTO.setServicio(cbxServicio.getValue());
+        servGastDTO.setServicio(servicioSelec);
         if (cbxEstadoGasto.getValue().equals("Activo")) {
             servGastDTO.setEstadoGasto(true);
         } else {
@@ -322,7 +314,7 @@ public class GastosServiciosController extends Controller implements Initializab
 
     public void limpiarCampos() {
         servGastDTO= new ServiciosGastosDTO();
-        cbxServicio.setValue(null);
+        txtServicio.setText(null);
         txtEmpresa.setText(null);
         txtNumContrato.setText(null);
         cbxDuracion.setValue(null);
@@ -334,6 +326,7 @@ public class GastosServiciosController extends Controller implements Initializab
         gastSelec = false;
         gastoSelecciondo = new ServiciosGastosDTO();
         responsableSelec = new EmpleadosDTO();
+        servicioSelec= new ServiciosDTO();
     }
 
     @FXML
@@ -422,6 +415,15 @@ public class GastosServiciosController extends Controller implements Initializab
         responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
         if (responsableSelec != null) {
             txtResponsable.setText(responsableSelec.getNombre());
+        }
+    }
+
+    @FXML
+    private void actBuscarServicio(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
+        servicioSelec = (ServiciosDTO) AppContext.getInstance().get("servSelect");
+        if (servicioSelec != null) {
+            txtServicio.setText(servicioSelec.getNombre());
         }
     }
 

@@ -92,6 +92,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
             Respuesta resp = estadosService.guardarIncidentesRegistradosEstados(estadosDto);
             if (resp.getEstado()) {
                 Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Estado del incidente guardado correctamente");
+                cargarEstados();
             } else {
                 Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
             }

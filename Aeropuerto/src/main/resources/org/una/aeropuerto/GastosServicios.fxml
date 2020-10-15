@@ -111,14 +111,14 @@
                                           <Insets right="190.0" top="100.0" />
                                        </GridPane.margin>
                                     </JFXButton>
-                                    <JFXComboBox fx:id="cbxEstadoPago" labelFloat="true" prefHeight="31.0" prefWidth="581.0" promptText="Estado de Pago" styleClass="comboBox" GridPane.rowIndex="1">
+                                    <JFXComboBox fx:id="cbxEstadoPago" labelFloat="true" prefHeight="31.0" prefWidth="581.0" promptText="Estado de Pago" styleClass="comboBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                        <GridPane.margin>
-                                          <Insets left="25.0" right="25.0" top="150.0" />
+                                          <Insets bottom="70.0" left="25.0" right="25.0" />
                                        </GridPane.margin>
                                     </JFXComboBox>
                                     <JFXTextField fx:id="txtNumContrato" labelFloat="true" prefHeight="41.0" prefWidth="280.0" promptText="Numero de Contrato" styleClass="campos_texto_1">
                                        <GridPane.margin>
-                                          <Insets left="25.0" right="25.0" top="150.0" />
+                                          <Insets left="25.0" right="25.0" top="140.0" />
                                        </GridPane.margin>
                                     </JFXTextField>
                                     <JFXTextField fx:id="txtEmpresa" labelFloat="true" prefHeight="41.0" prefWidth="277.0" promptText="Empresa" styleClass="campos_texto_1">
@@ -126,19 +126,14 @@
                                           <Insets bottom="50.0" left="25.0" right="25.0" />
                                        </GridPane.margin>
                                     </JFXTextField>
-                                    <JFXComboBox fx:id="cbxEstadoGasto" labelFloat="true" prefHeight="31.0" prefWidth="590.0" promptText="Estado de Gasto" styleClass="comboBox" GridPane.rowIndex="1">
+                                    <JFXComboBox fx:id="cbxEstadoGasto" labelFloat="true" prefHeight="31.0" prefWidth="590.0" promptText="Estado de Gasto" styleClass="comboBox" GridPane.columnIndex="1">
                                        <GridPane.margin>
                                           <Insets bottom="50.0" left="25.0" right="25.0" />
                                        </GridPane.margin>
                                     </JFXComboBox>
                                     <JFXComboBox fx:id="cbxPerioricidad" labelFloat="true" prefHeight="31.0" prefWidth="609.0" promptText="Periodicidad" styleClass="comboBox" GridPane.columnIndex="1">
                                        <GridPane.margin>
-                                          <Insets left="25.0" right="25.0" top="160.0" />
-                                       </GridPane.margin>
-                                    </JFXComboBox>
-                                    <JFXComboBox fx:id="cbxServicio" labelFloat="true" prefHeight="31.0" prefWidth="579.0" promptText="Servicio" styleClass="comboBox" GridPane.columnIndex="1">
-                                       <GridPane.margin>
-                                          <Insets bottom="40.0" left="25.0" right="25.0" />
+                                          <Insets left="25.0" right="25.0" top="150.0" />
                                        </GridPane.margin>
                                     </JFXComboBox>
                                     <JFXComboBox fx:id="cbxDuracion" labelFloat="true" prefHeight="31.0" prefWidth="596.0" promptText="Duracion" styleClass="comboBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -148,17 +143,27 @@
                                     </JFXComboBox>
                                     <JFXComboBox fx:id="cbxTiempo" labelFloat="true" prefHeight="31.0" prefWidth="576.0" promptText="Tiempo" styleClass="comboBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <GridPane.margin>
-                                          <Insets left="25.0" right="25.0" top="150.0" />
+                                          <Insets left="25.0" right="25.0" top="120.0" />
                                        </GridPane.margin>
                                     </JFXComboBox>
                                     <JFXTextField fx:id="txtResponsable" editable="false" labelFloat="true" promptText="Responsable" styleClass="campos_texto_1" GridPane.rowIndex="2">
                                        <GridPane.margin>
-                                          <Insets bottom="30.0" left="25.0" right="25.0" />
+                                          <Insets bottom="150.0" left="25.0" right="25.0" />
                                        </GridPane.margin>
                                     </JFXTextField>
                                     <JFXButton onAction="#actBuscarResponsable" prefHeight="43.0" prefWidth="182.0" styleClass="button_3" text="Buscar Empleado" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <GridPane.margin>
-                                          <Insets top="100.0" />
+                                          <Insets bottom="20.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXTextField fx:id="txtServicio" editable="false" labelFloat="true" promptText="Servicio" styleClass="campos_texto_1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets bottom="60.0" left="25.0" right="25.0" />
+                                       </GridPane.margin>
+                                    </JFXTextField>
+                                    <JFXButton onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="182.0" styleClass="button_3" text="Buscar Servicio" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets top="70.0" />
                                        </GridPane.margin>
                                     </JFXButton>
                                  </children>

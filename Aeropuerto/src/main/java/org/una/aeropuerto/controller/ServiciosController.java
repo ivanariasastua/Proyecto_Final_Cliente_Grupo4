@@ -19,11 +19,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.una.aeropuerto.dto.ServiciosDTO;
+import org.una.aeropuerto.dto.ServiciosPreciosDTO;
+import org.una.aeropuerto.service.ServiciosPreciosService;
 import org.una.aeropuerto.service.ServiciosService;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
@@ -51,12 +58,28 @@ public class ServiciosController extends Controller implements Initializable {
     boolean servSelec;
     @FXML
     private JFXComboBox<String> cbxFiltroServicios;
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private Tab tabServicios;
+    @FXML
+    private Tab tabPrecios;
+    @FXML
+    private TableView tablaPrecios;
+    @FXML
+    private Label txtServicioSelec;
+    @FXML
+    private JFXTextField txtCostoServico;
+
+    ServiciosPreciosService precioService = new ServiciosPreciosService();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroServicios.setItems(filtro);
         clickTabla();
+        cargarColumnasPrecios();
+        cargarColumnas();
     }
 
     @Override
@@ -65,7 +88,6 @@ public class ServiciosController extends Controller implements Initializable {
         servicioDTO = new ServiciosDTO();
         listServic = new ArrayList<>();
         limpiarCampos();
-        cargarColumnas();
     }
 
     public void clickTabla() {
@@ -107,11 +129,11 @@ public class ServiciosController extends Controller implements Initializable {
         }
         return true;
     }
-    
+
     @FXML
     private void actGuardarServicio(ActionEvent event) {
         if (servSelec == true) {
-            if(validarActivos()){
+            if (validarActivos()) {
                 servicSeleccionado.setId(servicSeleccionado.getId());
                 servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
                 servicSeleccionado.setNombre(txtNombreServicio.getText());
@@ -179,7 +201,8 @@ public class ServiciosController extends Controller implements Initializable {
             }
         }
     }
-    public void limpiarCampos(){
+
+    public void limpiarCampos() {
         txtNombreServicio.setText(null);
         txtDescripcionServicio.setText(null);
         servSelec = false;
@@ -196,7 +219,7 @@ public class ServiciosController extends Controller implements Initializable {
     private void actInactivarServicio(ActionEvent event) {
         if (servSelec == true) {
             if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
-                if(validarActivos()){
+                if (validarActivos()) {
                     servicSeleccionado.setEstado(false);
                     Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
                     if (res.getEstado()) {
@@ -214,4 +237,47 @@ public class ServiciosController extends Controller implements Initializable {
         }
     }
 
+    @FXML
+    private void actGuardarPrecio(ActionEvent event) {
+        ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
+        preciosDto.setCosto(Float.valueOf(txtCostoServico.getText()));
+        preciosDto.setServicio(servicSeleccionado);
+        Respuesta resp = precioService.guardarPrecioServicio(preciosDto);
+        if (resp.getEstado()) {
+            Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
+            cargarPrecios();
+        } else {
+            Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+        }
+    }
+
+    @FXML
+    private void actPane(MouseEvent event) {
+        if (tabPrecios.isSelected() && servSelec == false) {
+            SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+            selectionModel.select(tabServicios);
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
+        } else if (tabPrecios.isSelected() && servSelec == true) {
+            txtServicioSelec.setText(servicSeleccionado.getNombre());
+            cargarPrecios();
+        }
+        servSelec = false;
+    }
+
+    public void cargarColumnasPrecios() {
+        tablaPrecios.getColumns().clear();
+        TableColumn<ServiciosPreciosDTO, String> colCosto = new TableColumn<>("Costo");
+        colCosto.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getCosto())));
+        TableColumn<ServiciosPreciosDTO, String> colFecha = new TableColumn<>("Fecha de registro");
+        colFecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
+        tablaPrecios.getColumns().addAll(colCosto, colFecha);
+    }
+
+    public void cargarPrecios() {
+        System.out.println(servicSeleccionado.getServiciosPrecios());
+        tablaPrecios.getItems().clear();
+        if (servicSeleccionado.getServiciosPrecios() != null) {
+            tablaPrecios.getItems().addAll(servicSeleccionado.getServiciosPrecios());
+        }
+    }
 }
