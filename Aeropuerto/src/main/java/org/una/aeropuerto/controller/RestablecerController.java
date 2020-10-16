@@ -19,6 +19,7 @@ import org.una.aeropuerto.service.CambioContrasenaService;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.Mensaje;
+import org.una.aeropuerto.util.Formato;
 /**
  * FXML Controller class
  *
@@ -32,7 +33,8 @@ public class RestablecerController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        txtNewPass.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
+        txtConfPass.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
     }    
 
     @FXML

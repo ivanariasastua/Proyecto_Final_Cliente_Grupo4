@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -21,6 +22,7 @@ import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
 import org.una.aeropuerto.service.CambioContrasenaService;
+import org.una.aeropuerto.util.Formato;
 
 /**
  * FXML Controller class
@@ -29,16 +31,29 @@ import org.una.aeropuerto.service.CambioContrasenaService;
  */
 public class LogInController extends Controller implements Initializable {
 
-    @FXML
-    private JFXTextField txtUserName;
-    @FXML
-    private JFXPasswordField txtPassword;
-
+    @FXML private JFXTextField txtUserName;
+    @FXML private JFXPasswordField txtPassword;
+    @FXML private JFXTextField txtViewPass;
+    @FXML private JFXCheckBox cbPass;
+    
     private final AuthenticationService service = new AuthenticationService();
     private final CambioContrasenaService contService = new CambioContrasenaService();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        txtPassword.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
+        cbPass.setWrapText(true);
+        txtPassword.textProperty().addListener( t -> {
+            if(cbPass.isSelected()){
+                txtViewPass.setText(txtPassword.getText());
+            }
+        });
+        cbPass.selectedProperty().addListener( t -> {
+            if(cbPass.isSelected())
+                txtViewPass.setText(txtPassword.getText());
+            else
+                txtViewPass.setText("");
+        });
     }
 
     @Override

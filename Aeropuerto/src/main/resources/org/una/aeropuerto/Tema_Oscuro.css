@@ -116,6 +116,15 @@ and open the template in the editor.
     -fx-text-fill: white;
 }
 
+.cb {
+    -jfx-unchecked-color: #B2B2B2;
+    -jfx-checked-color: #0f9d58;
+    -fx-text-fill: white;
+    -fx-font: bold 16px "Courier";
+    -fx-border-color:#B2B2B2;
+    -fx-border-width: 0 0 1 0;
+}
+
 /*Principal Exclusivo*/
 
 .marco{
