@@ -77,7 +77,7 @@
                                     </JFXTextField>
                                     <JFXButton onAction="#actInactivarServicio" prefHeight="43.0" prefWidth="116.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
                                        <GridPane.margin>
-                                          <Insets left="160.0" />
+                                          <Insets left="25.0" />
                                        </GridPane.margin>
                                     </JFXButton>
                                     <JFXButton onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="88.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT">
@@ -88,11 +88,6 @@
                                     <JFXButton onAction="#actLimpiarCamposServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Limpiar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                        <GridPane.margin>
                                           <Insets right="155.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton onAction="#acteditarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Editar" GridPane.rowIndex="2">
-                                       <GridPane.margin>
-                                          <Insets left="25.0" />
                                        </GridPane.margin>
                                     </JFXButton>
                                     <JFXComboBox fx:id="cbxFiltroServicios" prefHeight="31.0" prefWidth="130.0" promptText="Filtrar por" styleClass="comboBox">
@@ -121,7 +116,7 @@
                                   <RowConstraints maxHeight="364.0" minHeight="7.0" prefHeight="24.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <TableView fx:id="tablaPrecios" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                    <TableView fx:id="tablaPrecios" onMouseClicked="#actClickTablaPrecios" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                       <columns>
                                         <TableColumn prefWidth="75.0" text="C1" />
                                         <TableColumn prefWidth="75.0" text="C2" />
@@ -159,6 +154,16 @@
                                           <Font size="19.0" />
                                        </font>
                                     </Label>
+                                    <JFXButton onAction="#actLimpiarCamposPrecio" prefHeight="43.0" prefWidth="129.0" styleClass="button_3" text="Limpiar" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="100.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton onAction="#actInactivarPrecios" prefHeight="43.0" prefWidth="129.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="25.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
                                  </children>
                               </GridPane>
                            </children>

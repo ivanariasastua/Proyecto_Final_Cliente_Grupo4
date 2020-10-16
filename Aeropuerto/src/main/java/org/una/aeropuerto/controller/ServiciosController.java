@@ -55,7 +55,8 @@ public class ServiciosController extends Controller implements Initializable {
 
     private List<ServiciosDTO> listServic;
     ServiciosDTO servicSeleccionado = new ServiciosDTO();
-    boolean servSelec;
+    boolean servSelec = false;
+    boolean precioSelec = false;
     @FXML
     private JFXComboBox<String> cbxFiltroServicios;
     @FXML
@@ -71,7 +72,9 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private JFXTextField txtCostoServico;
 
-    ServiciosPreciosService precioService = new ServiciosPreciosService();
+    ServiciosPreciosService precioService;
+    ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
+    ServiciosPreciosDTO precioSelect = new ServiciosPreciosDTO();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,9 +88,11 @@ public class ServiciosController extends Controller implements Initializable {
     @Override
     public void initialize() {
         servService = new ServiciosService();
+        precioService = new ServiciosPreciosService();
         servicioDTO = new ServiciosDTO();
         listServic = new ArrayList<>();
         limpiarCampos();
+        limpiarPrecios();
     }
 
     public void clickTabla() {
@@ -97,6 +102,8 @@ public class ServiciosController extends Controller implements Initializable {
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     servSelec = true;
                     servicSeleccionado = row.getItem();
+                    txtNombreServicio.setText(servicSeleccionado.getNombre());
+                    txtDescripcionServicio.setText(servicSeleccionado.getDescripcion());
                 }
             });
             return row;
@@ -162,20 +169,6 @@ public class ServiciosController extends Controller implements Initializable {
     }
 
     @FXML
-    private void acteditarServicio(ActionEvent event) {
-        if (servSelec == true) {
-            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
-                txtDescripcionServicio.setText(servicSeleccionado.getDescripcion());
-                txtNombreServicio.setText(servicSeleccionado.getNombre());
-            } else {
-                servSelec = false;
-            }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
-        }
-    }
-
-    @FXML
     private void actBuscarServicio(ActionEvent event) {
         cargarColumnas();
         tablaServicios.getItems().clear();
@@ -206,8 +199,7 @@ public class ServiciosController extends Controller implements Initializable {
         txtNombreServicio.setText(null);
         txtDescripcionServicio.setText(null);
         servSelec = false;
-        servicioDTO = new ServiciosDTO();
-        servicSeleccionado = new ServiciosDTO();
+
     }
 
     @FXML
@@ -239,15 +231,35 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actGuardarPrecio(ActionEvent event) {
-        ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
-        preciosDto.setCosto(Float.valueOf(txtCostoServico.getText()));
-        preciosDto.setServicio(servicSeleccionado);
-        Respuesta resp = precioService.guardarPrecioServicio(preciosDto);
-        if (resp.getEstado()) {
-            Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
-            cargarPrecios();
+        if (precioSelec == true) {
+            if (validarPreciosActivos()) {
+                System.out.println("editando " + precioSelect);
+                precioSelect.setId(precioSelect.getId());
+                precioSelect.setCosto(Float.valueOf(txtCostoServico.getText()));
+                precioSelect.setServicio(servicSeleccionado);
+                Respuesta resp = precioService.modificarPrecioServicio(precioSelect.getId(), precioSelect);
+                if (resp.getEstado()) {
+                    cargarPrecios();
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado Correctamente", "Precio editado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+                }
+            }
         } else {
-            Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+            if (txtCostoServico.getText() != null) {
+                preciosDto = new ServiciosPreciosDTO();
+                preciosDto.setCosto(Float.valueOf(txtCostoServico.getText()));
+                preciosDto.setServicio(servicSeleccionado);
+                Respuesta resp = precioService.guardarPrecioServicio(preciosDto);
+                if (resp.getEstado()) {
+                    cargarPrecios();
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+                }
+            } else {
+                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Precio es obligatorio");
+            }
         }
     }
 
@@ -260,6 +272,7 @@ public class ServiciosController extends Controller implements Initializable {
         } else if (tabPrecios.isSelected() && servSelec == true) {
             txtServicioSelec.setText(servicSeleccionado.getNombre());
             cargarPrecios();
+            limpiarPrecios();
         }
         servSelec = false;
     }
@@ -270,14 +283,66 @@ public class ServiciosController extends Controller implements Initializable {
         colCosto.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getCosto())));
         TableColumn<ServiciosPreciosDTO, String> colFecha = new TableColumn<>("Fecha de registro");
         colFecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
-        tablaPrecios.getColumns().addAll(colCosto, colFecha);
+        TableColumn<ServiciosPreciosDTO, String> colEst = new TableColumn<>("Estado");
+        colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
+        tablaPrecios.getColumns().addAll(colCosto, colFecha, colEst);
     }
 
     public void cargarPrecios() {
-        System.out.println(servicSeleccionado.getServiciosPrecios());
-        tablaPrecios.getItems().clear();
-        if (servicSeleccionado.getServiciosPrecios() != null) {
-            tablaPrecios.getItems().addAll(servicSeleccionado.getServiciosPrecios());
+        Respuesta res = servService.findById(servicSeleccionado.getId());
+        if (res.getEstado()) {
+            ServiciosDTO servic = (ServiciosDTO) res.getResultado("Servicios");
+            tablaPrecios.getItems().clear();
+            if (servic.getServiciosPrecios() != null) {
+                tablaPrecios.getItems().addAll((List<ServiciosPreciosDTO>) servic.getServiciosPrecios());
+            }
         }
+    }
+
+    @FXML
+    private void actClickTablaPrecios(MouseEvent event) {
+        precioSelect = (ServiciosPreciosDTO) tablaPrecios.getSelectionModel().getSelectedItem();
+        precioSelec = true;
+        txtCostoServico.setText(String.valueOf(precioSelect.getCosto()));
+    }
+
+    public void limpiarPrecios() {
+        txtCostoServico.setText(null);
+        precioSelec = false;
+        precioSelect = new ServiciosPreciosDTO();
+    }
+
+    @FXML
+    private void actInactivarPrecios(ActionEvent event) {
+        if (precioSelec == true) {
+            if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
+                if (validarPreciosActivos()) {
+                    precioSelect.setEstado(false);
+                    precioSelect.setServicio(servicSeleccionado);
+                    Respuesta res = precioService.modificarPrecioServicio(precioSelect.getId(), precioSelect);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
+                }
+            }
+        } else {
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
+        }
+        precioSelec = false;
+    }
+
+    public boolean validarPreciosActivos() {
+        if (precioSelect.isEstado() != true) {
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    private void actLimpiarCamposPrecio(ActionEvent event) {
+        limpiarPrecios();
     }
 }

@@ -23,10 +23,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
-import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
-import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
-import org.una.aeropuerto.service.EmpleadosAreasTrabajosService;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
@@ -111,6 +108,8 @@ public class AreasTrabajosController extends Controller implements Initializable
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     areaSelec = true;
                     areaSeleccionada = row.getItem();
+                    txtDescripcionArea.setText(areaSeleccionada.getDescripcion());
+                    txtNombreArea.setText(areaSeleccionada.getNombre());
                 }
             });
             return row;
@@ -123,20 +122,6 @@ public class AreasTrabajosController extends Controller implements Initializable
             return false;
         }
         return true;
-    }
-
-    @FXML
-    private void actEditarAreasT(ActionEvent event) {
-        if (areaSelec == true) {
-            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
-                txtDescripcionArea.setText(areaSeleccionada.getDescripcion());
-                txtNombreArea.setText(areaSeleccionada.getNombre());
-            } else {
-                areaSelec = false;
-            }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "Debe seleccionar el area de trabajo");
-        }
     }
 
     @FXML
