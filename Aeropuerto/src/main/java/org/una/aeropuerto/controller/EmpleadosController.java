@@ -37,7 +37,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.EmpleadosHorariosDTO;
-import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.EmpleadosHorariosService;

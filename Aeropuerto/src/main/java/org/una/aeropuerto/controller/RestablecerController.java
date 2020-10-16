@@ -5,6 +5,8 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,14 +29,34 @@ import org.una.aeropuerto.util.Formato;
  */
 public class RestablecerController extends Controller implements Initializable {
 
-    @FXML private JFXTextField txtNewPass;
-    @FXML private JFXTextField txtConfPass;
+    @FXML private JFXPasswordField txtNewPass;
+    @FXML private JFXPasswordField txtConfPass;
     private final CambioContrasenaService service = new CambioContrasenaService();
+    @FXML private JFXCheckBox cbNew;
+    @FXML private JFXCheckBox cbConf;
+    @FXML private JFXTextField txtViewNew;
+    @FXML private JFXTextField txtViewConf;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         txtNewPass.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         txtConfPass.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
+        txtNewPass.textProperty().addListener( t -> {
+            if(cbNew.isSelected()){
+                txtViewNew.setText(txtNewPass.getText());
+            }
+        });
+        cbNew.selectedProperty().addListener( s -> {
+            txtViewNew.setText(cbNew.isSelected() ? txtNewPass.getText() : "");
+        });
+        txtConfPass.textProperty().addListener( t -> {
+            if(cbConf.isSelected()){
+                txtViewConf.setText(txtConfPass.getText());
+            }
+        });
+        cbConf.selectedProperty().addListener( s -> {
+            txtViewConf.setText(cbConf.isSelected() ? txtConfPass.getText() : "");
+        });
     }    
 
     @FXML
@@ -43,7 +65,6 @@ public class RestablecerController extends Controller implements Initializable {
             if(txtNewPass.getText().equals(txtConfPass.getText())){
                 EmpleadosDTO emp = UserAuthenticated.getInstance().getUsuario();
                 emp.setContrasenaEncriptada(txtNewPass.getText());
-                emp.setPasswordTemporal(Boolean.FALSE);
                 Respuesta res = service.cambioContrasena(emp);
                 if(res.getEstado()){
                     Mensaje.show(Alert.AlertType.INFORMATION, "Cambiar Contraseña", "La contraseña se ha sido modificada");

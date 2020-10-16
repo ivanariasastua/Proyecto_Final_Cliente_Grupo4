@@ -37,7 +37,7 @@ public class CambioContrasenaService {
             Request request = new Request("changePassword/cambiarContrasena");
             request.post(empleado);
             if(request.isError()){
-                return new Respuesta(Boolean.FALSE, "Hubo un error al cambiar la contraseña");
+                return new Respuesta(Boolean.FALSE, request.getMensajeRespuesta());
             }
             empleado = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
             return new Respuesta(Boolean.TRUE, "Empleado", empleado);
