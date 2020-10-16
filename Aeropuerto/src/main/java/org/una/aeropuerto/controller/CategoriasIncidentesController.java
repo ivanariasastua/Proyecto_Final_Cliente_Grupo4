@@ -79,6 +79,13 @@ public class CategoriasIncidentesController extends Controller implements Initia
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     catSelec = true;
                     categoriaSelec = row.getItem();
+                    txtDescripcion.setText(categoriaSelec.getDescripcion());
+                    txtNombre.setText(categoriaSelec.getNombre());
+                    if (categoriaSelec.getCategoriaSuperior() != null) {
+                        txtCategoriaSuperior.setText(categoriaSelec.getCategoriaSuperior().getNombre());
+                    }else{
+                        txtCategoriaSuperior.setText(null);
+                    }
                 }
             });
             return row;
@@ -96,7 +103,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actGuardarCategorias(ActionEvent event) {
         if (catSelec == true) {
-            if (validarActivos()){
+            if (validarActivos()) {
                 categoriaSelec.setId(categoriaSelec.getId());
                 categoriaSelec.setDescripcion(txtDescripcion.getText());
                 categoriaSelec.setNombre(txtNombre.getText());
@@ -179,7 +186,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         }
     }
 
-    public void limpiarCampos(){
+    public void limpiarCampos() {
         txtDescripcion.setText(null);
         txtNombre.setText(null);
         txtCategoriaSuperior.setText(null);
@@ -187,34 +194,17 @@ public class CategoriasIncidentesController extends Controller implements Initia
         categoriaSelec = new IncidentesCategoriasDTO();
         categSuperiorSelec = new IncidentesCategoriasDTO();
     }
-    
+
     @FXML
     private void actLimpiarCampos(ActionEvent event) {
         limpiarCampos();
     }
 
     @FXML
-    private void actEditarCat(ActionEvent event) {
-        if (catSelec == true) {
-            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
-                txtDescripcion.setText(categoriaSelec.getDescripcion());
-                txtNombre.setText(categoriaSelec.getNombre());
-                if (categoriaSelec.getCategoriaSuperior() != null) {
-                    txtCategoriaSuperior.setText(categoriaSelec.getCategoriaSuperior().getNombre());
-                }
-            } else {
-                catSelec = false;
-            }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar categoria", "Debe seleccionar una categoria");
-        }
-    }
-
-    @FXML
     private void actInactivarCateg(ActionEvent event) {
         if (catSelec == true) {
             if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
-                if (validarActivos()){
+                if (validarActivos()) {
                     categoriaSelec.setEstado(false);
                     Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
                     if (res.getEstado()) {

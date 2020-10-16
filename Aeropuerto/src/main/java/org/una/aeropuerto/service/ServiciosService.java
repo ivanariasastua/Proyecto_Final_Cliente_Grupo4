@@ -95,4 +95,20 @@ public class ServiciosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+        public Respuesta findById(Long id){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            Request request = new Request("servicios/get","/{id}",parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(),"Error al obtener el servicio");
+            }
+            ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
+            return new Respuesta(true, "Servicios", result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No se estableció conexión con el servidor");
+        }
+    }
 }

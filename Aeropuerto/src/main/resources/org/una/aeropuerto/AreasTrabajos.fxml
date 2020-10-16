@@ -64,7 +64,7 @@
                         </JFXComboBox>
                         <JFXButton onAction="#actInactivarAreaT" prefHeight="43.0" prefWidth="119.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
                            <GridPane.margin>
-                              <Insets left="150.0" />
+                              <Insets left="25.0" />
                            </GridPane.margin>
                         </JFXButton>
                         <JFXButton onAction="#actLimpiarCamposAreasTrabajo" prefHeight="43.0" prefWidth="104.0" styleClass="button_3" text="Limpiar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
@@ -85,11 +85,6 @@
                         <JFXButton onAction="#actBuscarAreasTrabajos" prefHeight="43.0" prefWidth="83.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT">
                            <GridPane.margin>
                               <Insets top="10.0" />
-                           </GridPane.margin>
-                        </JFXButton>
-                        <JFXButton onAction="#actEditarAreasT" prefHeight="43.0" prefWidth="114.0" styleClass="button_3" text="Editar" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets left="25.0" />
                            </GridPane.margin>
                         </JFXButton>
                      </children>
