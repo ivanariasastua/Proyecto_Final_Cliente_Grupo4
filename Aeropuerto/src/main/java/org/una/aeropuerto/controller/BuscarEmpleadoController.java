@@ -10,7 +10,9 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,6 +53,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     private void accionBuscarEmpleado(ActionEvent event) {
         if(cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()){
             tablaEmpleados.getItems().clear();
+            /*
             String var = cbBuscarEmpleado.getSelectionModel().getSelectedItem();
             Respuesta res;
             if(var.equals("Por nombre")){
@@ -65,14 +68,18 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
             }else{
                 System.out.println(res.getMensajeInterno());
                 Mensaje.show(Alert.AlertType.ERROR, "Buscar Empleados", res.getMensaje());
-            }
+            }*/
+            Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
         }
     }
 
     @FXML
     private void accionTablaEmpleados(MouseEvent event) {
         if(tablaEmpleados.getSelectionModel().getSelectedItem() != null){
-            AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
+            if(tablaEmpleados.getSelectionModel().getSelectedItem().isEstado())
+                AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
+            else
+                Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
         }
     }
 
@@ -84,6 +91,38 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @FXML
     private void accionLimpiar(ActionEvent event) {
         Limpiar();
+    }
+    
+    public Task TaskFiltrarEmpleado(){
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                String var = cbBuscarEmpleado.getSelectionModel().getSelectedItem();
+                Respuesta res;
+                updateMessage("Filtrando empleados.");
+                updateProgress(1, 3);
+                if(var.equals("Por nombre")){
+                    res = service.getByNombre(txtBuscarEmpleados.getText());
+                }else if(var.equals("Por area")){
+                    res = service.getByArea(txtBuscarEmpleados.getText());
+                }else{
+                    res = service.getByCedula(txtBuscarEmpleados.getText());
+                }
+                updateMessage("Filtrando empleados..");
+                updateProgress(2, 3);
+                Platform.runLater( () -> {
+                    if(res.getEstado()){
+                        tablaEmpleados.getItems().addAll((List<EmpleadosDTO>)res.getResultado("Empleados"));
+                    }else{
+                        System.out.println(res.getMensajeInterno());
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Empleados", res.getMensaje());
+                    }
+                });
+                updateMessage("Filtrando empleados...");
+                updateProgress(3, 3);
+                return true;
+            } 
+        };
     }
     
     private void initVista(){

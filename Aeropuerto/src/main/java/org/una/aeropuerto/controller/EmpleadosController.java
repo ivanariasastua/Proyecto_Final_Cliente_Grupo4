@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.EmpleadosHorariosDTO;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
@@ -48,6 +50,7 @@ import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -387,11 +390,6 @@ public class EmpleadosController extends Controller implements Initializable {
             tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
             llenarListaAreas();
             cargarDatos();
-            if(emplSeleccionado.isEstado()){
-                btnActInac.setText("Inactivar");
-            }else{
-                btnActInac.setText("Activar");
-            }
         }
     }
 
@@ -428,5 +426,25 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarEmpleado(ActionEvent event) {
+        if(emplSeleccionado != null){
+            Boolean puedeInactivar = Boolean.FALSE;
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                emplSeleccionado.setEstado(false);
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
+                if(result.isPresent()){
+                    System.out.println(result.get());
+                }
+            }
+            Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), emplSeleccionado);
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Inactivar Empleados", "El usuario: "+emplSeleccionado.getNombre()+" ha sido inactivado");
+            }else{
+
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Empleado", "No ha seleccionado ningún empleado");
+        }
     }
 }

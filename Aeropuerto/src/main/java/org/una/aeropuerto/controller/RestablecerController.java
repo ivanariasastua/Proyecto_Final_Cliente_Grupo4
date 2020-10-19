@@ -68,8 +68,8 @@ public class RestablecerController extends Controller implements Initializable {
                 Respuesta res = service.cambioContrasena(emp);
                 if(res.getEstado()){
                     Mensaje.show(Alert.AlertType.INFORMATION, "Cambiar Contraseña", "La contraseña se ha sido modificada");
-                    FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
                     this.closeWindow();
+                    FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
                 }else{
                     Mensaje.show(Alert.AlertType.ERROR, "Cambiar Contraseña", res.getMensaje());
                 }

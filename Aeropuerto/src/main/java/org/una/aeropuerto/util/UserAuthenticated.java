@@ -71,4 +71,10 @@ public class UserAuthenticated {
     public Boolean isTemporal(){
         return usuario.getPasswordTemporal();
     }
+    
+    public Boolean isRol(String rolName){
+        if(rol == null)
+            return false;
+        return rol.getNombre().equals(rolName.toUpperCase());
+    }
 }
