@@ -117,4 +117,8 @@ public class InicioController extends Controller implements Initializable {
         fade2.setAutoReverse(false);
         fade2.setNode(imvHome);
     }
+
+    @Override
+    public void cargarTema() {
+    }
 }

@@ -126,4 +126,8 @@ public class BuscarCategoriasController extends Controller implements Initializa
         this.closeWindow();
     }
 
+    @Override
+    public void cargarTema() {
+    }
+
 }

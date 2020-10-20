@@ -23,7 +23,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.service.IncidentesCategoriasService;
@@ -229,6 +228,10 @@ public class CategoriasIncidentesController extends Controller implements Initia
         if (categSuperiorSelec != null) {
             txtCategoriaSuperior.setText(categSuperiorSelec.getNombre());
         }
+    }
+
+    @Override
+    public void cargarTema() {
     }
 
 }

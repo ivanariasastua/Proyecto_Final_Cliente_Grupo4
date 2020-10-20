@@ -195,4 +195,8 @@ public class AreasTrabajosController extends Controller implements Initializable
         areaSelec = false;
     }
 
+    @Override
+    public void cargarTema() {
+    }
+
 }

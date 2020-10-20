@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  *
@@ -25,7 +24,6 @@ public class IncidentesCategoriasDTO {
     private String descripcion;
     private IncidentesCategoriasDTO categoriaSuperior;
     private boolean estado;
-//    //@ToString.Exclude
     private List<IncidentesRegistradosDTO> incidentesRegistrados;
     
     @Override

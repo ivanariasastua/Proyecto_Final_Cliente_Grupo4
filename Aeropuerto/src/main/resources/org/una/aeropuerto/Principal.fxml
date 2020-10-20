@@ -43,6 +43,11 @@
                   </MenuItem>
                   <MenuItem mnemonicParsing="false">
                      <graphic>
+                        <JFXButton onAction="#accionHacerMarcaje" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Hacer Marcaje" />
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
                         <JFXButton onAction="#accionCerrarSecion" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Cerrar Sesion" />
                      </graphic>
                   </MenuItem>

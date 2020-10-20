@@ -184,6 +184,9 @@ public abstract class Controller {
         scene.setOnMouseDragged(listener.get(cursor));
     }
     
+    public abstract void cargarTema();
+    
     public abstract void initialize();
+
 }
 

@@ -79,5 +79,9 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
         colHoraEntrada.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(simpleDateFormat.format(p.getValue().getHoraEntrada()))));
         colHoraSalida.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(simpleDateFormat.format(p.getValue().getHoraSalida()))));
     }
+
+    @Override
+    public void cargarTema() {
+    }
     
 }

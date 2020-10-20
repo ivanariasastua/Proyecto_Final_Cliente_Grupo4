@@ -6,7 +6,9 @@
 package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -34,6 +36,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
@@ -98,6 +101,14 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado;
     @FXML private JFXButton btnActInac;
     @FXML private JFXTextField txtCorreo;
+    @FXML
+    private RowConstraints rowContrasena;
+    @FXML
+    private JFXPasswordField txtPass;
+    @FXML
+    private JFXCheckBox cbViewPass;
+    @FXML
+    private JFXTextField txtViewPass;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -151,7 +162,7 @@ public class EmpleadosController extends Controller implements Initializable {
 
     public boolean validarCampos() {
         if(emplSeleccionado == null){
-            if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null) {
+            if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null || txtPass.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cedula y Contraseña son obligatorios");
                 return false;
             }
@@ -186,6 +197,7 @@ public class EmpleadosController extends Controller implements Initializable {
                 empleadoDTO = new EmpleadosDTO();
                 empleadoDTO.setCedula(txtCedula.getText());
                 empleadoDTO.setCorreo(txtCorreo.getText());
+                empleadoDTO.setContrasenaEncriptada(txtPass.getText());
                 empleadoDTO.setJefe(jefeSelect);
                 empleadoDTO.setNombre(txtNombre.getText());
                 empleadoDTO.setRol(cbxRoles.getValue());
@@ -196,6 +208,7 @@ public class EmpleadosController extends Controller implements Initializable {
                     tablaHorarios.getItems().clear();
                     tvAreas.getItems().clear();
                 } else {
+                    System.out.println(res.getMensajeInterno());
                     Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
                 }
             }
@@ -212,6 +225,11 @@ public class EmpleadosController extends Controller implements Initializable {
         tablaHorarios.getItems().clear();
         tvAreas.getItems().clear();
         txtId.setText("");
+        txtPass.setText("");
+        txtViewPass.setText("");
+        txtPass.setVisible(true);
+        cbViewPass.setVisible(true);
+        txtViewPass.setVisible(true);
     }
 
     public void cargarDatos() {
@@ -390,6 +408,9 @@ public class EmpleadosController extends Controller implements Initializable {
             tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
             llenarListaAreas();
             cargarDatos();
+            txtPass.setVisible(false);
+            cbViewPass.setVisible(false);
+            txtViewPass.setVisible(false);
         }
     }
 
@@ -428,23 +449,33 @@ public class EmpleadosController extends Controller implements Initializable {
     private void actInactivarEmpleado(ActionEvent event) {
         if(emplSeleccionado != null){
             Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "", codigo = "";
             if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                emplSeleccionado.setEstado(false);
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
                 puedeInactivar = Boolean.TRUE;
             }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
                 Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
                 if(result.isPresent()){
-                    System.out.println(result.get());
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
                 }
             }
-            Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), emplSeleccionado);
-            if(res.getEstado()){
-                Mensaje.show(Alert.AlertType.CONFIRMATION, "Inactivar Empleados", "El usuario: "+emplSeleccionado.getNombre()+" ha sido inactivado");
-            }else{
-
+            if(puedeInactivar){
+                Respuesta res = empleadoService.inactivar(emplSeleccionado, emplSeleccionado.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Empleados", "El usuario: "+emplSeleccionado.getNombre()+" ha sido inactivado");
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Empleados", res.getMensaje());
+                }
             }
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Inactivar Empleado", "No ha seleccionado ningún empleado");
         }
+    }
+
+    @Override
+    public void cargarTema() {
     }
 }

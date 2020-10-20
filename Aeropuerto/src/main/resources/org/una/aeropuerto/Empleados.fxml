@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -39,6 +41,7 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                          <RowConstraints fx:id="rowContrasena" minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
                                           <JFXTextField fx:id="txtNombre" labelFloat="true" prefHeight="47.0" prefWidth="257.0" promptText="Nombre" styleClass="campos_texto_1" GridPane.rowIndex="1">
@@ -69,6 +72,25 @@
                                           <JFXTextField fx:id="txtJefe" editable="false" labelFloat="true" onMouseClicked="#accionBuscraJefe" prefHeight="49.0" prefWidth="400.0" promptText="Jefe" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                             </GridPane.margin>
+                                          </JFXTextField>
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+                                             <children>
+                                                <JFXPasswordField fx:id="txtPass" labelFloat="true" prefHeight="25.0" prefWidth="397.0" promptText="Contraseña" styleClass="campos_texto_1">
+                                                   <HBox.margin>
+                                                      <Insets left="15.0" />
+                                                   </HBox.margin>
+                                                </JFXPasswordField>
+                                                <JFXCheckBox fx:id="cbViewPass" prefHeight="38.0" prefWidth="42.0" styleClass="cb" text=" ">
+                                                   <HBox.margin>
+                                                      <Insets right="15.0" />
+                                                   </HBox.margin>
+                                                </JFXCheckBox>
+                                             </children>
+                                          </HBox>
+                                          <JFXTextField fx:id="txtViewPass" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets left="15.0" right="15.0" />
                                              </GridPane.margin>
                                           </JFXTextField>
                                        </children>

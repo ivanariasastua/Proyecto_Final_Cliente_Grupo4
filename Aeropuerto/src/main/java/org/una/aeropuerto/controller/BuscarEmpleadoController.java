@@ -154,5 +154,9 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     public void initialize() {
         Limpiar();
     }
+
+    @Override
+    public void cargarTema() {
+    }
     
 }

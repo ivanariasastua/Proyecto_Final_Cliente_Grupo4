@@ -40,5 +40,9 @@ public class TransaccionesController extends Controller implements Initializable
     @FXML
     private void actBuscar(ActionEvent event) {
     }
+
+    @Override
+    public void cargarTema() {
+    }
     
 }

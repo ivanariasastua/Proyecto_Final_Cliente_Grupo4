@@ -345,4 +345,8 @@ public class ServiciosController extends Controller implements Initializable {
     private void actLimpiarCamposPrecio(ActionEvent event) {
         limpiarPrecios();
     }
+
+    @Override
+    public void cargarTema() {
+    }
 }

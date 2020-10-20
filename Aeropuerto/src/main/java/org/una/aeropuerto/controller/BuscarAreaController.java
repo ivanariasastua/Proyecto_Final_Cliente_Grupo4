@@ -109,4 +109,8 @@ public class BuscarAreaController extends Controller implements Initializable {
         areaSelec = new AreasTrabajosDTO();
     }
 
+    @Override
+    public void cargarTema() {
+    }
+
 }

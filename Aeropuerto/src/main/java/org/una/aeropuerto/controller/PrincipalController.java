@@ -13,12 +13,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -35,6 +39,9 @@ import org.una.aeropuerto.App;
 import org.una.aeropuerto.dto.AuthenticationRequest;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.service.ParametrosSistemaService;
+import org.una.aeropuerto.dto.ParametrosSistemaDTO;
+import org.una.aeropuerto.util.Respuesta;
 
 /**
  * FXML Controller class
@@ -62,6 +69,7 @@ public class PrincipalController extends Controller implements Initializable {
     private Boolean isShow = false;
     private TranslateTransition tt;
     private AuthenticationRequest authetication;
+    private final ParametrosSistemaService service = new ParametrosSistemaService();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,7 +82,8 @@ public class PrincipalController extends Controller implements Initializable {
         isShow = true;
         trasladar();
         addListener();
-
+        if(UserAuthenticated.getInstance().isRol("GERENTE"))
+            crearCodigoGerente();
     }
 
     @FXML
@@ -96,6 +105,42 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionGenerarCodigo(ActionEvent event) {
+        crearCodigoGerente();
+    }
+    
+    public void crearCodigoGerente(){
+        if(UserAuthenticated.getInstance().isRol("GERENTE")){
+            String codigo = generarCodigo();
+            Respuesta res = service.getByCodigoIdentificador(UserAuthenticated.getInstance().getUsuario().getCedula());
+            ParametrosSistemaDTO param = null;
+            if(!res.getEstado()){
+                param = new ParametrosSistemaDTO(0L, codigo, "Codigo para autorizar gestores del gerente "+UserAuthenticated.getInstance().getUsuario().getCedula(), true, UserAuthenticated.getInstance().getUsuario().getCedula(), new Date(), new Date());
+                res = service.guardarParametro(param);
+                if(res.getEstado()){
+                    param = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                }else{
+                    Mensaje.show(Alert.AlertType.ERROR, "Generar Condigo", "Hubo un error al generar el codigo: "+res.getMensaje());
+                }
+            }else{
+                param = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                if(compararFechas(param.getFechaModificacion())){
+                    param.setValor(codigo);
+                    res = service.modificarParametro(param.getId(), param);
+                    if(res.getEstado()){
+                        param = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                    }else{
+                        Mensaje.show(Alert.AlertType.ERROR, "Generar Condigo", "Hubo un error al generar el codigo: "+res.getMensaje());
+                    }
+                }
+            }
+            if(param != null){
+                if(param.getId() != null || param.getId() > 0L){
+                    if(AppContext.getInstance().get("CodigoGerente") != null)
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Generar Codigo", "Este es su codigo:\n"+param.getValor());
+                    AppContext.getInstance().set("CodigoGerente", param.getValor());
+                }
+            }
+        }
     }
 
     @FXML
@@ -115,6 +160,7 @@ public class PrincipalController extends Controller implements Initializable {
             file.write(tema);
             file.flush();
             file.close();
+            AppContext.getInstance().set("Tema", tema);
         } catch (FileNotFoundException ex) {
             System.out.println("Error leyendo el archivo: [ " + ex + " ]");
         } catch (IOException ex) {
@@ -129,6 +175,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionMaximizarRestaurar(MouseEvent event) {
+        this.adjustWindow();
     }
 
     @FXML
@@ -259,4 +306,40 @@ public class PrincipalController extends Controller implements Initializable {
     private void actAutorizarRoles(ActionEvent event) {
     }
 
+    @FXML
+    private void accionHacerMarcaje(ActionEvent event) {
+        FlowController.getInstance().goViewInNoResizableWindow("EmpleadosMarcajes", false, StageStyle.DECORATED);
+    }
+
+    private String generarCodigo(){
+        String codigo = "";
+        int cont = 0, aux = 0;
+        char caracter;
+        while(cont < 25){
+            caracter = (char) (Math.floor(Math.random()*74) + 48);
+            aux = caracter;
+            System.out.println(aux+" : "+caracter);
+            if((aux >= 65 && aux <= 90) || (aux >= 97 && aux <= 122) || (aux >= 48 && aux <= 57)){
+                codigo += caracter;
+                cont++;
+            }
+        }
+        return codigo;
+    }
+    
+    public Boolean compararFechas(Date date){
+        LocalDateTime fecha = date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+        LocalDateTime hoy = LocalDateTime.now();
+        int diferencia = hoy.getDayOfYear() - fecha.getDayOfYear();
+        if(diferencia > 1){
+            return true;
+        }else if(diferencia == 1){
+            return hoy.getHour() - fecha.getHour() <= 0;
+        }
+        return false;
+    }
+
+    @Override
+    public void cargarTema() {
+    }
 }

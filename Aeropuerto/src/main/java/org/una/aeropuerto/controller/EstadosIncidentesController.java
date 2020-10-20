@@ -99,4 +99,9 @@ public class EstadosIncidentesController extends Controller implements Initializ
         }
     }
 
+    @Override
+    public void cargarTema() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

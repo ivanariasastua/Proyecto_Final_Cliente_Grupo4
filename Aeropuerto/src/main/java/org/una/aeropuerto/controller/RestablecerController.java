@@ -90,5 +90,9 @@ public class RestablecerController extends Controller implements Initializable {
     private Boolean validar(){
         return txtNewPass.getText() != null && !txtNewPass.getText().isEmpty() && txtConfPass.getText() != null && !txtConfPass.getText().isEmpty();
     }
+
+    @Override
+    public void cargarTema() {
+    }
     
 }

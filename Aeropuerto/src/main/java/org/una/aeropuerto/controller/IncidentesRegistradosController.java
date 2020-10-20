@@ -316,4 +316,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
         incidentSelec = false;
     }
 
+    @Override
+    public void cargarTema() {
+    }
+
 }

@@ -108,4 +108,8 @@ public class BuscarServiciosController extends Controller implements Initializab
         }
     }
 
+    @Override
+    public void cargarTema() {
+    }
+
 }
