@@ -19,21 +19,6 @@ import org.una.aeropuerto.util.Respuesta;
  */
 public class EmpleadosMarcajesService {
 
-    public Respuesta getAll() {
-        try {
-            Request request = new Request("empleados_marcajes/get");
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener todos los marcajes de empleados");
-            }
-            List<EmpleadosMarcajesDTO> result = (List<EmpleadosMarcajesDTO>) request.readEntity(new GenericType<List<EmpleadosMarcajesDTO>>() {
-            });
-            return new Respuesta(true, "Empleados_Marcajes", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-
     public Respuesta guardarEmpleadoMarcaje(EmpleadosMarcajesDTO empleado) {
         try {
             Request request = new Request("empleados_marcajes/save");

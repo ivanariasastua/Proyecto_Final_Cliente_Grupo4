@@ -65,14 +65,16 @@ public class EmpleadosHorariosService {
         }
     }
     
-    public Respuesta inactivarEmpleadoHorario(Long id) {
+    public Respuesta inactivar(EmpleadosHorariosDTO horario, Long id, String cedula, String codigo) {
         try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("id", id);
-            Request request = new Request("empleados_horarios/inactivar", "/{id}", parametros);
-            request.put(id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("empleados_horarios/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(horario);
             if (request.isError()) {
-                return new Respuesta(false, request.getError(), "No se pudo inactivar el horario del empleado");
+                return new Respuesta(false, request.getError(), "No se pudo inactivar el horario de trabajo del empleado");
             }
             EmpleadosHorariosDTO result = (EmpleadosHorariosDTO) request.readEntity(EmpleadosHorariosDTO.class);
             return new Respuesta(true, "Empleados_Horarios", result);

@@ -111,4 +111,22 @@ public class ServiciosService {
             return new Respuesta(false, ex.toString(), "No se estableció conexión con el servidor");
         }
     }
+        
+    public Respuesta inactivar(ServiciosDTO servicio, Long id, String cedula, String codigo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("servicios/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(servicio);
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "No se pudo inactivar el servicio");
+            }
+            ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
+            return new Respuesta(true, "Empleados", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }

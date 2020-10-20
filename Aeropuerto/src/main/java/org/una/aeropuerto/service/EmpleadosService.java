@@ -18,23 +18,7 @@ import org.una.aeropuerto.util.Respuesta;
  * @author cordo
  */
 public class EmpleadosService {
-
-    public Respuesta getAll() {
-        try {
-            Request request = new Request("empleados/get");
-            request.get();
-            if (request.isError()) {
-                System.out.println("ERROR "+request.getError() +" "+request.getMensajeRespuesta());
-                return new Respuesta(false, request.getError(), "Error al obtener todos los empleados");
-            }
-            List<EmpleadosDTO> result = (List<EmpleadosDTO>) request.readEntity(new GenericType<List<EmpleadosDTO>>() {
-            });
-            return new Respuesta(true, "Empleados", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
-
+    
     public Respuesta guardarEmpleado(EmpleadosDTO empleado) {
         try {
             Request request = new Request("empleados/save");
@@ -127,12 +111,14 @@ public class EmpleadosService {
         }
     }
     
-    public Respuesta inactivarEmpleado(Long id) {
+    public Respuesta inactivar(EmpleadosDTO emp, Long id, String cedula, String codigo) {
         try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("id", id);
-            Request request = new Request("empleados/inactivar", "/{id}", parametros);
-            request.put(id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("empleados/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(emp);
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el empleado");
             }

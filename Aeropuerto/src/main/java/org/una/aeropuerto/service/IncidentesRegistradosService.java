@@ -113,4 +113,21 @@ public class IncidentesRegistradosService {
         }
     }
 
+    public Respuesta inactivar(IncidentesRegistradosDTO incidente, Long id, String cedula, String codigo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("incidentes_registrados/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(incidente);
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "No se pudo inactivar el incidente");
+            }
+            IncidentesRegistradosDTO result = (IncidentesRegistradosDTO) request.readEntity(IncidentesRegistradosDTO.class);
+            return new Respuesta(true, "Empleados", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }

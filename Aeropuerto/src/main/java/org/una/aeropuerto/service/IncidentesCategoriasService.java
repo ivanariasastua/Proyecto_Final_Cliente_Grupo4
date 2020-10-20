@@ -80,4 +80,22 @@ public class IncidentesCategoriasService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+    public Respuesta inactivar(IncidentesCategoriasDTO categoria, Long id, String cedula, String codigo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("incidentes_categorias/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(categoria);
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "No se pudo inactivar la categoria");
+            }
+            IncidentesCategoriasDTO result = (IncidentesCategoriasDTO) request.readEntity(IncidentesCategoriasDTO.class);
+            return new Respuesta(true, "Incidentes_Categorias", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }

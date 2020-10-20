@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,21 +19,6 @@ import org.una.aeropuerto.util.Respuesta;
  * @author cordo
  */
 public class ParametrosSistemaService {
-    
-     public Respuesta getAll() {
-        try {
-            Request request = new Request("parametros_sistema/get");
-            request.get();
-            if (request.isError()) {
-                return new Respuesta(false, request.getError(), "Error al obtener todos los parametros del sistema");
-            }
-            List<ParametrosSistemaDTO> result = (List<ParametrosSistemaDTO>) request.readEntity(new GenericType<List<ParametrosSistemaDTO>>() {
-            });
-            return new Respuesta(true, "Parametros_Sistema", result);
-        } catch (Exception ex) {
-            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
-        }
-    }
 
     public Respuesta guardarParametro(ParametrosSistemaDTO parametros) {
         try {
@@ -66,14 +52,83 @@ public class ParametrosSistemaService {
     
     public Respuesta getByValor(String valor) {
         try {
-            Request request = new Request("parametros_sistema/valor");
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("valor", valor);
+            Request request = new Request("parametros_sistema/valor", "/{valor}", parametros);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los parametros del sistema");
             }
-            List<ParametrosSistemaDTO> result = (List<ParametrosSistemaDTO>) request.readEntity(new GenericType<List<ParametrosSistemaDTO>>() {
-            });
+            ParametrosSistemaDTO result = (ParametrosSistemaDTO) request.readEntity(ParametrosSistemaDTO.class);
             return new Respuesta(true, "Parametros_Sistema", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta getByCodigoIdentificador(String codigo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("codigo", codigo);
+            Request request = new Request("parametros_sistema/codigoIdentiicador", "/{codigo}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "Error al obtener los parametros del sistema");
+            }
+            ParametrosSistemaDTO result = (ParametrosSistemaDTO) request.readEntity(ParametrosSistemaDTO.class);
+            return new Respuesta(true, "Parametros_Sistema", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta getByFechaRegistro(Date fecha1, Date fecha2){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("fecha1", fecha1);
+            parametros.put("fecha2", fecha2);
+            Request request = new Request("parametros_sistema/fechaRegisto", "/{fecha1}/{fecha2}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "Error al obtener los parametros del sistema");
+            }
+            List<ParametrosSistemaDTO> result = (List<ParametrosSistemaDTO>) request.readEntity(new GenericType<List<ParametrosSistemaDTO>>(){});
+            return new Respuesta(true, "Parametros_Sistema", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta getByModificacion(Date fecha1, Date fecha2){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("fecha1", fecha1);
+            parametros.put("fecha2", fecha2);
+            Request request = new Request("parametros_sistema/fechaModificacion", "/{fecha1}/{fecha2}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "Error al obtener los parametros del sistema");
+            }
+            List<ParametrosSistemaDTO> result = (List<ParametrosSistemaDTO>) request.readEntity(new GenericType<List<ParametrosSistemaDTO>>(){});
+            return new Respuesta(true, "Parametros_Sistema", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
+    
+    public Respuesta inactivar(ParametrosSistemaDTO parametro, Long id, String cedula, String codigo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("parametros_sistema/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(parametro);
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "No se pudo inactivar el parametro");
+            }
+            ParametrosSistemaDTO result = (ParametrosSistemaDTO) request.readEntity(ParametrosSistemaDTO.class);
+            return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }

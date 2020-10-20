@@ -46,4 +46,22 @@ public class ServiciosPreciosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+    public Respuesta inactivar(ServiciosPreciosDTO precio, Long id, String cedula, String codigo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            parametros.put("cedula", cedula);
+            parametros.put("codigo", codigo);
+            Request request = new Request("servicios_precios/inactivar", "/{id}/{cedula}/{codigo}", parametros);
+            request.put(precio);
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "No se pudo inactivar el precio");
+            }
+            ServiciosPreciosDTO result = (ServiciosPreciosDTO) request.readEntity(ServiciosPreciosDTO.class);
+            return new Respuesta(true, "Empleados", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }
