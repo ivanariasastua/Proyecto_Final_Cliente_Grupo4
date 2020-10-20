@@ -1,11 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.EmpleadosMarcajesController">
-    
-</AnchorPane>
+<VBox prefHeight="500.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.EmpleadosMarcajesController">
+   <children>
+      <TabPane prefHeight="500.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Horario">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tvHorarios" layoutX="14.0" layoutY="44.0" onMouseClicked="#accionTabla" prefHeight="391.0" prefWidth="772.0">
+                          <columns>
+                            <TableColumn fx:id="colDiaEntrada" prefWidth="75.0" text="Día de Entrada" />
+                            <TableColumn fx:id="colDiaSalida" prefWidth="75.0" text="Día de Salida" />
+                              <TableColumn fx:id="colHoraEntrada" prefWidth="75.0" text="Hora de Entrada" />
+                              <TableColumn fx:id="colHoraSalida" prefWidth="75.0" text="Hora de Salida" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Hacer Marcaje">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane layoutX="27.0" layoutY="25.0" prefHeight="471.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="394.0" minWidth="10.0" prefWidth="226.0" />
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="574.0" minWidth="10.0" prefWidth="574.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label alignment="CENTER" prefHeight="71.0" prefWidth="800.0" styleClass="texto" text="Informacion del Marcaje" GridPane.columnSpan="2" />
+                              <Label layoutX="10.0" layoutY="36.0" prefHeight="123.0" prefWidth="399.0" styleClass="texto" text="Detalle del Horario" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="104.0" prefHeight="101.0" prefWidth="332.0" styleClass="texto" text="Fecha de Registro" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="171.0" prefHeight="124.0" prefWidth="341.0" styleClass="texto" text="Hora de Entrada" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="238.0" prefHeight="116.0" prefWidth="368.0" styleClass="texto" text="Hora de Salida" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="305.0" prefHeight="134.0" prefWidth="458.0" styleClass="texto" text="Horas Laboradas" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </Label>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                                 <children>
+                                    <JFXButton onAction="#accionHacerMarcaje" prefHeight="43.0" prefWidth="224.0" styleClass="button_1" text="Hacer Marcaje" />
+                                 </children>
+                                 <padding>
+                                    <Insets right="15.0" />
+                                 </padding>
+                              </HBox>
+                              <Label fx:id="lblDetalleHorario" prefHeight="149.0" prefWidth="607.0" styleClass="texto" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lblFechaRegistro" prefHeight="142.0" prefWidth="767.0" styleClass="texto" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lblHoraEntrada" prefHeight="108.0" prefWidth="696.0" styleClass="texto" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lblHoraSalida" prefHeight="76.0" prefWidth="640.0" styleClass="texto" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lblHorasLaboradas" prefHeight="68.0" prefWidth="770.0" styleClass="texto" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>
