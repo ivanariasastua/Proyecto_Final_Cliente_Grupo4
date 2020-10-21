@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -27,6 +28,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosGastosDTO;
@@ -35,6 +37,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -344,6 +347,33 @@ public class GastosServiciosController extends Controller implements Initializab
 
     @FXML
     private void actInactivarGastoS(ActionEvent event) {
+        if(gastoSelecciondo != null){
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "", codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Gasto en Servicio");
+                if(result.isPresent()){
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
+                }
+            }
+            if(puedeInactivar){
+                Respuesta res = servGastService.inactivar(gastoSelecciondo, gastoSelecciondo.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", "El Gasto en Servicio ha sido inactivado");
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", res.getMensaje());
+                }
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Gasto en Servicio", "No ha seleccionado ninguna Gasto en Servicio");
+        }
+        /*
         if (gastSelec == true) {
             if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
                 if(validarActivos()){
@@ -361,7 +391,7 @@ public class GastosServiciosController extends Controller implements Initializab
             }
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto de servicio", "Debe seleccionar un gasto de servicio");
-        }
+        }*/
     }
 
     public void cargarColumnasTabla() {

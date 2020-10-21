@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -28,12 +29,15 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Pair;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosPreciosDTO;
 import org.una.aeropuerto.service.ServiciosPreciosService;
 import org.una.aeropuerto.service.ServiciosService;
+import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -209,6 +213,33 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarServicio(ActionEvent event) {
+        if(servicSeleccionado != null){
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "", codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Servicio");
+                if(result.isPresent()){
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
+                }
+            }
+            if(puedeInactivar){
+                Respuesta res = servService.inactivar(servicSeleccionado, servicSeleccionado.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", "El servicio ha sido inactivado");
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", res.getMensaje());
+                }
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningun servicio");
+        }
+        /*
         if (servSelec == true) {
             if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
                 if (validarActivos()) {
@@ -227,6 +258,7 @@ public class ServiciosController extends Controller implements Initializable {
         } else {
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
         }
+*/
     }
 
     @FXML

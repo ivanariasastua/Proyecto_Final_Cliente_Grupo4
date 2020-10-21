@@ -133,7 +133,7 @@
                            <children>
                               <VBox alignment="TOP_RIGHT" prefHeight="561.0" prefWidth="550.0">
                                  <children>
-                                    <TableView fx:id="tvAreas" prefHeight="493.0" prefWidth="550.0">
+                                    <TableView fx:id="tvAreas" onMouseClicked="#actTablaAreas" prefHeight="493.0" prefWidth="550.0">
                                       <columns>
                                         <TableColumn fx:id="colArea" prefWidth="75.0" text="Area" />
                                         <TableColumn fx:id="colDescripcion" prefWidth="75.0" text="Descripcion" />
