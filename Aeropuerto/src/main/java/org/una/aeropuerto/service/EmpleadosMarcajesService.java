@@ -48,4 +48,20 @@ public class EmpleadosMarcajesService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+    
+    public Respuesta getLastByHorarioId(Long id){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            Request request = new Request("empleados_marcajes/Ultimo", "/{id}", parametros);
+            request.get();
+            if(request.isError()){
+               return new Respuesta(false, request.getError(), "No se pudo modificar el marcaje del empleado");
+            }
+            EmpleadosMarcajesDTO result = (EmpleadosMarcajesDTO) request.readEntity(EmpleadosMarcajesDTO.class);
+            return new Respuesta(true, "Empleados_Marcajes", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        }
+    }
 }

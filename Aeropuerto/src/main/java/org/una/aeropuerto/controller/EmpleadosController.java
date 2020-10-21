@@ -42,7 +42,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.EmpleadosHorariosDTO;
-import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.EmpleadosHorariosService;
 import org.una.aeropuerto.service.EmpleadosService;
@@ -108,7 +107,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         llenarRelojs();
-        ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo");
+        ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
         cbxDiaEntrada.setItems(items);
         cbxDiaSalida.setItems(items);
         llenarComboBoxs();
