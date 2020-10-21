@@ -98,14 +98,10 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado;
     @FXML private JFXButton btnActInac;
     @FXML private JFXTextField txtCorreo;
-    @FXML
-    private RowConstraints rowContrasena;
-    @FXML
-    private JFXPasswordField txtPass;
-    @FXML
-    private JFXCheckBox cbViewPass;
-    @FXML
-    private JFXTextField txtViewPass;
+    @FXML private RowConstraints rowContrasena;
+    @FXML private JFXPasswordField txtPass;
+    @FXML private JFXCheckBox cbViewPass;
+    @FXML private JFXTextField txtViewPass;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

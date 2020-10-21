@@ -53,22 +53,6 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     private void accionBuscarEmpleado(ActionEvent event) {
         if(cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()){
             tablaEmpleados.getItems().clear();
-            /*
-            String var = cbBuscarEmpleado.getSelectionModel().getSelectedItem();
-            Respuesta res;
-            if(var.equals("Por nombre")){
-                res = service.getByNombre(txtBuscarEmpleados.getText());
-            }else if(var.equals("Por area")){
-                res = service.getByArea(txtBuscarEmpleados.getText());
-            }else{
-                res = service.getByCedula(txtBuscarEmpleados.getText());
-            }
-            if(res.getEstado()){
-                tablaEmpleados.getItems().addAll((List<EmpleadosDTO>)res.getResultado("Empleados"));
-            }else{
-                System.out.println(res.getMensajeInterno());
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Empleados", res.getMensaje());
-            }*/
             Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
         }
     }
