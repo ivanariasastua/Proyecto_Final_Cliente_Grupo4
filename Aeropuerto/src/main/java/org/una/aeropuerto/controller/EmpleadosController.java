@@ -62,9 +62,6 @@ import org.una.aeropuerto.util.UserAuthenticated;
  */
 public class EmpleadosController extends Controller implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
     private final EmpleadosService empleadoService = new EmpleadosService();
     private final EmpleadosAreasTrabajosService empAreasService = new EmpleadosAreasTrabajosService();
     private final RolesService rolesService = new RolesService();
