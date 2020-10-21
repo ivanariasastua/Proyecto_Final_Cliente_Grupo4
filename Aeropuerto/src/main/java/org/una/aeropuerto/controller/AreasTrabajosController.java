@@ -189,15 +189,14 @@ public class AreasTrabajosController extends Controller implements Initializable
                 cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
                 codigo = (String) AppContext.getInstance().get("CodigoGerente");
                 puedeInactivar = Boolean.TRUE;
-            }else{
-                if(UserAuthenticated.getInstance().isRol("GESTOR")){
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
                     Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de trabajo");
                     if(result.isPresent()){
                         cedula = result.get().getKey();
                         codigo = result.get().getValue();
                         puedeInactivar = Boolean.TRUE;
                     }
-                }
+            }
                 if(puedeInactivar){
                     Respuesta res = areasService.inactivar(areaSeleccionada, areaSeleccionada.getId(), cedula, codigo);
                     if(res.getEstado()){
@@ -206,7 +205,6 @@ public class AreasTrabajosController extends Controller implements Initializable
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", res.getMensaje());
                     }
                 }
-            }
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área", "No ha seleccionado ninguna área de trabajo");
         }

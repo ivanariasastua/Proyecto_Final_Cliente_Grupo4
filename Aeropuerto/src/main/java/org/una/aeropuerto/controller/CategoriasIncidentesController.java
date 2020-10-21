@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,12 +25,14 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.service.IncidentesCategoriasService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -202,22 +205,29 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actInactivarCateg(ActionEvent event) {
         if (catSelec == true) {
-            if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
-                if (validarActivos()) {
-                    categoriaSelec.setEstado(false);
-                    Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Información inactivada correctamente");
-                        catSelec = false;
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
-                    }
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "";
+            String codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")) {
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
+                if(result.isPresent()){
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
                 }
-            } else {
-                catSelec = false;
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar información", "Debe seleccionar información de la tabla");
+            if(puedeInactivar){
+                Respuesta res = categoriaService.inactivar(categoriaSelec, categoriaSelec.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", "La categoría : "+categoriaSelec.getNombre()+" ha sido inactivada");
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", res.getMensaje());
+                }
+            }
         }
     }
 
