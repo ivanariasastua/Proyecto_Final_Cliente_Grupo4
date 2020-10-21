@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -22,10 +23,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.util.Pair;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
+import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -177,22 +181,35 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actInactivarAreaT(ActionEvent event) {
-        if (areaSelec == true) {
-            if (Mensaje.showConfirmation("Inactivar ", null, "Seguro que desea inactivar la información?")) {
-                if (validarActivos()) {
-                    areaSeleccionada.setEstado(false);
-                    Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Area de trabajo inactivada correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+        if(areaSeleccionada != null){
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "";
+            String codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else{
+                if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de trabajo");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
+                }
+                if(puedeInactivar){
+                    Respuesta res = areasService.inactivar(areaSeleccionada, areaSeleccionada.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", "La área de trabajo: "+areaSeleccionada.getNombre()+" ha sido inactivada");
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", res.getMensaje());
                     }
                 }
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "Debe seleccionar una area de trabajo");
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área", "No ha seleccionado ninguna área de trabajo");
         }
-        areaSelec = false;
     }
 
     @Override
