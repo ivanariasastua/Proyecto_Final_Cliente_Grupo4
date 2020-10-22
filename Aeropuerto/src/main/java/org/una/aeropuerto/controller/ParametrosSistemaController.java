@@ -5,10 +5,25 @@
  */
 package org.una.aeropuerto.controller;
 
-/**
- *
- * @author Dios
- */
-public class ParametrosSistemaController {
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+
+public class ParametrosSistemaController extends Controller implements Initializable{
+
+    @Override
+    public void cargarTema() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void initialize() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
