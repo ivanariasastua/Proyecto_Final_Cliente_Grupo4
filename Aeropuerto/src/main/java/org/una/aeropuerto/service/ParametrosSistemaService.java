@@ -82,7 +82,7 @@ public class ParametrosSistemaService {
         }
     }
     
-    public Respuesta getByFechaRegistro(Date fecha1, Date fecha2){
+    public Respuesta getByFechaRegistro(String fecha1, String fecha2){
         try{
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("fecha1", fecha1);
