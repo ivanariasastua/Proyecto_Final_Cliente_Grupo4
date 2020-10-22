@@ -134,11 +134,9 @@ public class EmpleadosService {
     public Respuesta Aprobar(Long id){
         try {
             Map<String, Object> parametros = new HashMap<>();
-            System.out.println("hash map");
             parametros.put("id", id);
-            System.out.println("parametros");
             Request request = new Request("empleados/aprobar","/{id}", parametros);
-            System.out.println("request");
+            request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "No se pudo aprobar el empleado");
             }

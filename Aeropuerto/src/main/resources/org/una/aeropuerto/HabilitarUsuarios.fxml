@@ -21,7 +21,7 @@
             </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ComboBox fx:id="cbFiltro" prefHeight="31.0" prefWidth="208.0">
+                  <ComboBox fx:id="cbFiltro" prefHeight="31.0" prefWidth="208.0" styleClass="comboBox">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
