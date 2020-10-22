@@ -65,7 +65,7 @@
                                           <Insets bottom="100.0" left="30.0" right="30.0" top="160.0" />
                                        </GridPane.margin>
                                     </JFXTextArea>
-                                    <JFXButton onAction="#actGuardarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                    <JFXButton fx:id="btnGuardar" onAction="#actGuardarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                        <GridPane.margin>
                                           <Insets right="20.0" />
                                        </GridPane.margin>

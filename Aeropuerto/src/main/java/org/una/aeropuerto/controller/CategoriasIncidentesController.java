@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -60,6 +61,8 @@ public class CategoriasIncidentesController extends Controller implements Initia
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
     IncidentesCategoriasDTO categSuperiorSelec = new IncidentesCategoriasDTO();
+    @FXML
+    private JFXButton btnGuardar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,6 +75,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     public void initialize() {
         limpiarCampos();
         cargarColumnas();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void clickTabla() {
@@ -104,37 +108,41 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @FXML
     private void actGuardarCategorias(ActionEvent event) {
-        if (catSelec == true) {
-            if (validarActivos()) {
-                categoriaSelec.setId(categoriaSelec.getId());
-                categoriaSelec.setDescripcion(txtDescripcion.getText());
-                categoriaSelec.setNombre(txtNombre.getText());
-                if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
-                    categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (catSelec == true) {
+                if (validarActivos()) {
+                    categoriaSelec.setId(categoriaSelec.getId());
+                    categoriaSelec.setDescripcion(txtDescripcion.getText());
+                    categoriaSelec.setNombre(txtNombre.getText());
+                    if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
+                        categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
+                    }
+                    Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoria editada correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
-                Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoria editada correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
-                }
-            }
-        } else {
-            if (txtNombre.getText() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de nombre es obligatorio");
             } else {
-                categoriaDTO = new IncidentesCategoriasDTO();
-                categoriaDTO.setDescripcion(txtDescripcion.getText());
-                categoriaDTO.setNombre(txtNombre.getText());
-                if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
-                    categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
-                }
-                Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoria guardada correctamente");
+                if (txtNombre.getText() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de nombre es obligatorio");
                 } else {
-                    System.out.println(res.getMensajeInterno());
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    categoriaDTO = new IncidentesCategoriasDTO();
+                    categoriaDTO.setDescripcion(txtDescripcion.getText());
+                    categoriaDTO.setNombre(txtNombre.getText());
+                    if (categSuperiorSelec.getNombre() != null && txtCategoriaSuperior.getText() != null) {
+                        categoriaDTO.setCategoriaSuperior(categSuperiorSelec);
+                    }
+                    Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoria guardada correctamente");
+                    } else {
+                        System.out.println(res.getMensajeInterno());
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             }
         }
@@ -163,27 +171,31 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @FXML
     private void actBuscarCategorias(ActionEvent event) {
-        cargarColumnas();
-        tablaCategorias.getItems().clear();
-        if (cbxFiltroCategorias.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
-        } else {
-            Respuesta res;
-            if (cbxFiltroCategorias.getValue().equals("Nombre")) {
-                res = categoriaService.getByNombre(txtBuscarCateg.getText());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            cargarColumnas();
+            tablaCategorias.getItems().clear();
+            if (cbxFiltroCategorias.getValue() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
             } else {
-                if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
-                    res = categoriaService.getByEstado(true);
-                } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
-                    res = categoriaService.getByEstado(false);
+                Respuesta res;
+                if (cbxFiltroCategorias.getValue().equals("Nombre")) {
+                    res = categoriaService.getByNombre(txtBuscarCateg.getText());
                 } else {
-                    res = categoriaService.getByNombre("");
+                    if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
+                        res = categoriaService.getByEstado(true);
+                    } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
+                        res = categoriaService.getByEstado(false);
+                    } else {
+                        res = categoriaService.getByNombre("");
+                    }
                 }
-            }
-            if (res.getEstado()) {
-                tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias ", res.getMensaje());
+                if (res.getEstado()) {
+                    tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias ", res.getMensaje());
+                }
             }
         }
     }
@@ -204,28 +216,33 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @FXML
     private void actInactivarCateg(ActionEvent event) {
-        if (catSelec == true) {
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "";
-            String codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")) {
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (catSelec == true) {
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "";
+                String codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
                     puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")) {
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
                 }
-            }
-            if(puedeInactivar){
-                Respuesta res = categoriaService.inactivar(categoriaSelec, categoriaSelec.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", "La categoría : "+categoriaSelec.getNombre()+" ha sido inactivada");
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", res.getMensaje());
+                if(puedeInactivar){
+                    Respuesta res = categoriaService.inactivar(categoriaSelec, categoriaSelec.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", "La categoría : "+categoriaSelec.getNombre()+" ha sido inactivada");
+                        catSelec = false;
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", res.getMensaje());
+                    }
                 }
             }
         }
@@ -233,10 +250,14 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @FXML
     private void actBuscarCategoriaSuperior(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
-        categSuperiorSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
-        if (categSuperiorSelec != null) {
-            txtCategoriaSuperior.setText(categSuperiorSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+            categSuperiorSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
+            if (categSuperiorSelec != null) {
+                txtCategoriaSuperior.setText(categSuperiorSelec.getNombre());
+            }
         }
     }
 

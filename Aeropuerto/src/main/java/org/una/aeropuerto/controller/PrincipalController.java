@@ -27,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -70,6 +71,22 @@ public class PrincipalController extends Controller implements Initializable {
     private TranslateTransition tt;
     private AuthenticationRequest authetication;
     private final ParametrosSistemaService service = new ParametrosSistemaService();
+    @FXML
+    private TitledPane tpReportes;
+    @FXML
+    private TitledPane tpAdministracion;
+    @FXML
+    private TitledPane tpTransacciones;
+    @FXML
+    private TitledPane tpInicio;
+    @FXML
+    private TitledPane tpEmpleados;
+    @FXML
+    private TitledPane tpAreas;
+    @FXML
+    private TitledPane tpGastos;
+    @FXML
+    private TitledPane tpIncidentes;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -224,12 +241,13 @@ public class PrincipalController extends Controller implements Initializable {
     @Override
     public void initialize() {
         try {
-            miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE"));
+            miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         } catch (Exception ex) {
         }
         smUser.setText(UserAuthenticated.getInstance().getUsuario().getNombre());
         lblCedula1.setText(UserAuthenticated.getInstance().getUsuario().getCedula());
         lblRol1.setText(UserAuthenticated.getInstance().getRol().getNombre());
+        visualizarTitledPane();
     }
 
     @FXML
@@ -244,11 +262,6 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML
     private void accionAreasTrabajos(MouseEvent event) {
         FlowController.getInstance().goViewPanel(vbContenedor, "AreasTrabajos");
-    }
-
-    @FXML
-    private void accionRegistrarGastos(MouseEvent event) {
-
     }
 
     @FXML
@@ -342,5 +355,15 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void cargarTema() {
+    }
+    
+    private void visualizarTitledPane(){
+        tpEmpleados.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpAreas.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpGastos.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpIncidentes.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpReportes.setVisible(!UserAuthenticated.getInstance().isRol("GESTOR"));
+        tpAdministracion.setVisible(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        tpTransacciones.setVisible(UserAuthenticated.getInstance().isRol("AUDITOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 }

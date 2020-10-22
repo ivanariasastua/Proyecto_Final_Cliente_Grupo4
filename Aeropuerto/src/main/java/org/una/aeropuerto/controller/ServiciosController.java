@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -79,6 +80,8 @@ public class ServiciosController extends Controller implements Initializable {
     ServiciosPreciosService precioService;
     ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
     ServiciosPreciosDTO precioSelect = new ServiciosPreciosDTO();
+    @FXML
+    private JFXButton btnGuardar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -97,6 +100,7 @@ public class ServiciosController extends Controller implements Initializable {
         listServic = new ArrayList<>();
         limpiarCampos();
         limpiarPrecios();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void clickTabla() {
@@ -143,58 +147,66 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actGuardarServicio(ActionEvent event) {
-        if (servSelec == true) {
-            if (validarActivos()) {
-                servicSeleccionado.setId(servicSeleccionado.getId());
-                servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
-                servicSeleccionado.setNombre(txtNombreServicio.getText());
-                Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
-                }
-            }
-        } else {
-            if (txtNombreServicio.getText() != null) {
-                servicioDTO = new ServiciosDTO();
-                servicioDTO.setDescripcion(txtDescripcionServicio.getText());
-                servicioDTO.setNombre(txtNombreServicio.getText());
-                Respuesta res = servService.guardarServicio(servicioDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Servicio guardado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (servSelec == true) {
+                if (validarActivos()) {
+                    servicSeleccionado.setId(servicSeleccionado.getId());
+                    servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
+                    servicSeleccionado.setNombre(txtNombreServicio.getText());
+                    Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
                 }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
+                if (txtNombreServicio.getText() != null) {
+                    servicioDTO = new ServiciosDTO();
+                    servicioDTO.setDescripcion(txtDescripcionServicio.getText());
+                    servicioDTO.setNombre(txtNombreServicio.getText());
+                    Respuesta res = servService.guardarServicio(servicioDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Servicio guardado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
+                }
             }
         }
     }
 
     @FXML
     private void actBuscarServicio(ActionEvent event) {
-        cargarColumnas();
-        tablaServicios.getItems().clear();
-        if (cbxFiltroServicios.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
-        } else {
-            Respuesta res;
-            if (cbxFiltroServicios.getValue().equals("Nombre")) {
-                res = servService.getByNombre(txtBuscarServicio.getText());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            cargarColumnas();
+            tablaServicios.getItems().clear();
+            if (cbxFiltroServicios.getValue() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
             } else {
-                if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
-                    res = servService.getByEstado(true);
-                } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
-                    res = servService.getByEstado(false);
+                Respuesta res;
+                if (cbxFiltroServicios.getValue().equals("Nombre")) {
+                    res = servService.getByNombre(txtBuscarServicio.getText());
                 } else {
-                    res = servService.getByNombre("");
+                    if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
+                        res = servService.getByEstado(true);
+                    } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
+                        res = servService.getByEstado(false);
+                    } else {
+                        res = servService.getByNombre("");
+                    }
                 }
-            }
-            if (res.getEstado()) {
-                tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                if (res.getEstado()) {
+                    tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                }
             }
         }
     }
@@ -213,84 +225,72 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarServicio(ActionEvent event) {
-        if(servicSeleccionado != null){
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "", codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Servicio");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
-                    puedeInactivar = Boolean.TRUE;
-                }
-            }
-            if(puedeInactivar){
-                Respuesta res = servService.inactivar(servicSeleccionado, servicSeleccionado.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", "El servicio ha sido inactivado");
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", res.getMensaje());
-                }
-            }
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningun servicio");
-        }
-        /*
-        if (servSelec == true) {
-            if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
-                if (validarActivos()) {
-                    servicSeleccionado.setEstado(false);
-                    Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
-                        servSelec = false;
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+            if(servicSeleccionado != null){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Servicio");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
                     }
                 }
-            } else {
-                servSelec = false;
+                if(puedeInactivar){
+                    Respuesta res = servService.inactivar(servicSeleccionado, servicSeleccionado.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", "El servicio ha sido inactivado");
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", res.getMensaje());
+                    }
+                }
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningun servicio");
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
         }
-*/
     }
 
     @FXML
     private void actGuardarPrecio(ActionEvent event) {
-        if (precioSelec == true) {
-            if (validarPreciosActivos()) {
-                System.out.println("editando " + precioSelect);
-                precioSelect.setId(precioSelect.getId());
-                precioSelect.setCosto(Float.valueOf(txtCostoServico.getText()));
-                precioSelect.setServicio(servicSeleccionado);
-                Respuesta resp = precioService.modificarPrecioServicio(precioSelect.getId(), precioSelect);
-                if (resp.getEstado()) {
-                    cargarPrecios();
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado Correctamente", "Precio editado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
-                }
-            }
-        } else {
-            if (txtCostoServico.getText() != null) {
-                preciosDto = new ServiciosPreciosDTO();
-                preciosDto.setCosto(Float.valueOf(txtCostoServico.getText()));
-                preciosDto.setServicio(servicSeleccionado);
-                Respuesta resp = precioService.guardarPrecioServicio(preciosDto);
-                if (resp.getEstado()) {
-                    cargarPrecios();
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (precioSelec == true) {
+                if (validarPreciosActivos()) {
+                    System.out.println("editando " + precioSelect);
+                    precioSelect.setId(precioSelect.getId());
+                    precioSelect.setCosto(Float.valueOf(txtCostoServico.getText()));
+                    precioSelect.setServicio(servicSeleccionado);
+                    Respuesta resp = precioService.modificarPrecioServicio(precioSelect.getId(), precioSelect);
+                    if (resp.getEstado()) {
+                        cargarPrecios();
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado Correctamente", "Precio editado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+                    }
                 }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Precio es obligatorio");
+                if (txtCostoServico.getText() != null) {
+                    preciosDto = new ServiciosPreciosDTO();
+                    preciosDto.setCosto(Float.valueOf(txtCostoServico.getText()));
+                    preciosDto.setServicio(servicSeleccionado);
+                    Respuesta resp = precioService.guardarPrecioServicio(preciosDto);
+                    if (resp.getEstado()) {
+                        cargarPrecios();
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+                    }
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Precio es obligatorio");
+                }
             }
         }
     }
@@ -346,23 +346,35 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarPrecios(ActionEvent event) {
-        if (precioSelec == true) {
-            if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
-                if (validarPreciosActivos()) {
-                    precioSelect.setEstado(false);
-                    precioSelect.setServicio(servicSeleccionado);
-                    Respuesta res = precioService.modificarPrecioServicio(precioSelect.getId(), precioSelect);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el servicio");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if(precioSelec){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Precio de Servicio");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
+                }
+                if(puedeInactivar){
+                    Respuesta res = precioService.inactivar(precioSelect, precioSelect.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
+                        precioSelec = false;
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
                     }
                 }
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
         }
-        precioSelec = false;
     }
 
     public boolean validarPreciosActivos() {

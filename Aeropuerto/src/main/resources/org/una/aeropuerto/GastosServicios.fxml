@@ -101,7 +101,7 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <JFXButton onAction="#actGuardarGastoS" prefHeight="43.0" prefWidth="151.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                    <JFXButton fx:id="btnGuardar" onAction="#actGuardarGastoS" prefHeight="43.0" prefWidth="151.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                        <GridPane.margin>
                                           <Insets right="25.0" top="100.0" />
                                        </GridPane.margin>

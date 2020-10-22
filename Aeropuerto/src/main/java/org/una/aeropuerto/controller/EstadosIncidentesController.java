@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -27,6 +28,7 @@ import org.una.aeropuerto.service.IncidentesRegistradosEstadosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -46,6 +48,8 @@ public class EstadosIncidentesController extends Controller implements Initializ
     List<IncidentesRegistradosEstadosDTO> listEstados = new ArrayList<>();
     Respuesta res;
     IncidentesRegistradosDTO incidenteRegistrado = new IncidentesRegistradosDTO();
+    @FXML
+    private JFXButton btnGuardar;
 
     /**
      * Initializes the controller class.
@@ -63,6 +67,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
         incidenteRegistrado = (IncidentesRegistradosDTO) AppContext.getInstance().get("EstadosIncidentes");
         txtIncidente.setText(incidenteRegistrado.getId().toString());
         cargarEstados();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void cargarColumnas() {
@@ -83,18 +88,22 @@ public class EstadosIncidentesController extends Controller implements Initializ
 
     @FXML
     private void actGuardar(ActionEvent event) {
-        if (cbxEstados.getValue().isEmpty() || cbxEstados.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de estados es obligatorio");
-        } else {
-            estadosDto = new IncidentesRegistradosEstadosDTO();
-            estadosDto.setEstado(cbxEstados.getValue());
-            estadosDto.setIncidenteRegistrado(incidenteRegistrado);
-            Respuesta resp = estadosService.guardarIncidentesRegistradosEstados(estadosDto);
-            if (resp.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Estado del incidente guardado correctamente");
-                cargarEstados();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (cbxEstados.getValue().isEmpty() || cbxEstados.getValue() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de estados es obligatorio");
             } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                estadosDto = new IncidentesRegistradosEstadosDTO();
+                estadosDto.setEstado(cbxEstados.getValue());
+                estadosDto.setIncidenteRegistrado(incidenteRegistrado);
+                Respuesta resp = estadosService.guardarIncidentesRegistradosEstados(estadosDto);
+                if (resp.getEstado()) {
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Estado del incidente guardado correctamente");
+                    cargarEstados();
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                }
             }
         }
     }

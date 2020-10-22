@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -84,6 +85,8 @@ public class GastosServiciosController extends Controller implements Initializab
     ServiciosDTO servicioSelec;
     @FXML
     private JFXTextField txtServicio;
+    @FXML
+    private JFXButton btnGuardar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,6 +103,7 @@ public class GastosServiciosController extends Controller implements Initializab
         servicioSelec = new ServiciosDTO();
         limpiarCampos();
         cargarColumnasTabla();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void llenarComboBoxs() {
@@ -219,16 +223,20 @@ public class GastosServiciosController extends Controller implements Initializab
 
     @FXML
     private void actEditarGastoS(ActionEvent event) {
-        if (gastSelec == true) {
-            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
-                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-                selectionModel.select(tabCrearEditar);
-                cargarDatos();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (gastSelec == true) {
+                if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                    SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                    selectionModel.select(tabCrearEditar);
+                    cargarDatos();
+                } else {
+                    gastSelec = false;
+                }
             } else {
-                gastSelec = false;
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto", "Debe seleccionar un gasto de servicio");
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto", "Debe seleccionar un gasto de servicio");
         }
     }
 
@@ -287,29 +295,33 @@ public class GastosServiciosController extends Controller implements Initializab
     
     @FXML
     private void actGuardarGastoS(ActionEvent event) {
-        if (gastSelec == true) {
-            if(validarActivos()){
-                servGastDTO.setId(gastoSelecciondo.getId());
-                if(gastoSelecciondo.isEstado()){
-                    servGastDTO.setEstado(true);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (gastSelec == true) {
+                if(validarActivos()){
+                    servGastDTO.setId(gastoSelecciondo.getId());
+                    if(gastoSelecciondo.isEstado()){
+                        servGastDTO.setEstado(true);
+                    }
+                    guardar();
+                    Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
-                guardar();
-                Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
-                }
-            }
-        } else {
-            if (validarCamposGastos()) {
-                servGastDTO = new ServiciosGastosDTO();
-                guardar();
-                Respuesta res = servGastService.guardarGastoServicio(servGastDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Gasto de servicio guardado corectamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+            } else {
+                if (validarCamposGastos()) {
+                    servGastDTO = new ServiciosGastosDTO();
+                    guardar();
+                    Respuesta res = servGastService.guardarGastoServicio(servGastDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Gasto de servicio guardado corectamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             }
         }
@@ -347,51 +359,37 @@ public class GastosServiciosController extends Controller implements Initializab
 
     @FXML
     private void actInactivarGastoS(ActionEvent event) {
-        if(gastoSelecciondo != null){
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "", codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Gasto en Servicio");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
-                    puedeInactivar = Boolean.TRUE;
-                }
-            }
-            if(puedeInactivar){
-                Respuesta res = servGastService.inactivar(gastoSelecciondo, gastoSelecciondo.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", "El Gasto en Servicio ha sido inactivado");
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", res.getMensaje());
-                }
-            }
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Gasto en Servicio", "No ha seleccionado ninguna Gasto en Servicio");
-        }
-        /*
-        if (gastSelec == true) {
-            if (Mensaje.showConfirmation("Inactivar", null, "Seguro que desea inactivar la información?")) {
-                if(validarActivos()){
-                    gastoSelecciondo.setEstado(false);
-                    Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), gastoSelecciondo);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Se ha inactivado correctamente el gasto de servicio");
-                        gastSelec = false;
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+            if(gastoSelecciondo != null){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Gasto en Servicio");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
                     }
                 }
-            } else {
-                gastSelec = false;
+                if(puedeInactivar){
+                    Respuesta res = servGastService.inactivar(gastoSelecciondo, gastoSelecciondo.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", "El Gasto en Servicio ha sido inactivado");
+                        gastSelec = false;
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", res.getMensaje());
+                    }
+                }
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Gasto en Servicio", "No ha seleccionado ninguna Gasto en Servicio");
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Gasto de servicio", "Debe seleccionar un gasto de servicio");
-        }*/
+        }
     }
 
     public void cargarColumnasTabla() {
@@ -418,42 +416,54 @@ public class GastosServiciosController extends Controller implements Initializab
 
     @FXML
     private void actBuscarGastosServicios(ActionEvent event) {
-        cargarColumnasTabla();
-        tablaGastosS.getItems().clear();
-        if (cbxFiltro.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
-        } else {
-            Respuesta res;
-            if (cbxFiltro.getValue().equals("Empresa")) {
-                res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
-            } else if (cbxFiltro.getValue().equals("Numero de contraro")) {
-                res = servGastService.getByContrato(txtBuscarGastosS.getText());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            cargarColumnasTabla();
+            tablaGastosS.getItems().clear();
+            if (cbxFiltro.getValue() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
             } else {
-                res = servGastService.findByServicio(txtBuscarGastosS.getText());
-            }
-            if (res.getEstado()) {
-                tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+                Respuesta res;
+                if (cbxFiltro.getValue().equals("Empresa")) {
+                    res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
+                } else if (cbxFiltro.getValue().equals("Numero de contraro")) {
+                    res = servGastService.getByContrato(txtBuscarGastosS.getText());
+                } else {
+                    res = servGastService.findByServicio(txtBuscarGastosS.getText());
+                }
+                if (res.getEstado()) {
+                    tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+                }
             }
         }
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if (responsableSelec != null) {
-            txtResponsable.setText(responsableSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if (responsableSelec != null) {
+                txtResponsable.setText(responsableSelec.getNombre());
+            }
         }
     }
 
     @FXML
     private void actBuscarServicio(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
-        servicioSelec = (ServiciosDTO) AppContext.getInstance().get("servSelect");
-        if (servicioSelec != null) {
-            txtServicio.setText(servicioSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
+            servicioSelec = (ServiciosDTO) AppContext.getInstance().get("servSelect");
+            if (servicioSelec != null) {
+                txtServicio.setText(servicioSelec.getNombre());
+            }
         }
     }
 

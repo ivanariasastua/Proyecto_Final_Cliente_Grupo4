@@ -34,7 +34,7 @@
                 <RowConstraints maxHeight="197.0" minHeight="0.0" prefHeight="79.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXButton onAction="#actGuardarCategorias" prefHeight="43.0" prefWidth="117.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                  <JFXButton fx:id="btnGuardar" onAction="#actGuardarCategorias" prefHeight="43.0" prefWidth="117.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
