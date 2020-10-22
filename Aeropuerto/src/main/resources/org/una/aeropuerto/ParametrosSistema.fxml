@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ParametrosSistemaController">
    <top>
       <Label text="Parametros del Sistema" BorderPane.alignment="CENTER">
@@ -28,15 +27,8 @@
           <Tab text="Información">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <bottom>
-                        <Button mnemonicParsing="false" onAction="#inactivarParametro" prefHeight="31.0" prefWidth="170.0" text="Inactivar" BorderPane.alignment="CENTER_LEFT">
-                           <BorderPane.margin>
-                              <Insets bottom="5.0" top="5.0" />
-                           </BorderPane.margin>
-                        </Button>
-                     </bottom>
                      <center>
-                        <TableView fx:id="tvParametros" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="tvParametros" onMouseClicked="#clickTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="tcDescripcion" prefWidth="110.0" text="Descripción" />
                             <TableColumn fx:id="tcValor" prefWidth="104.0" text="Valor" />
@@ -72,14 +64,21 @@
                                     <DatePicker fx:id="dpFinal" />
                                  </children>
                               </VBox>
-                              <Button mnemonicParsing="false" onAction="#filtrarParametros" prefHeight="31.0" prefWidth="170.0" text="Filtrar">
+                              <Button mnemonicParsing="false" onAction="#filtrarParametros" prefHeight="31.0" prefWidth="155.0" text="Filtrar">
                                  <HBox.margin>
-                                    <Insets left="90.0" top="35.0" />
+                                    <Insets left="55.0" top="30.0" />
                                  </HBox.margin>
                               </Button>
                            </children>
                         </HBox>
                      </top>
+                     <bottom>
+                        <Button mnemonicParsing="false" onAction="#inactivarParametro" prefHeight="31.0" prefWidth="147.0" text="Inactivar" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets right="640.0" top="5.0" />
+                           </BorderPane.margin>
+                        </Button>
+                     </bottom>
                   </BorderPane>
                </content>
           </Tab>

@@ -21,7 +21,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.una.aeropuerto.dto.ParametrosSistemaDTO;
 import org.una.aeropuerto.service.ParametrosSistemaService;
 import org.una.aeropuerto.util.Respuesta;
@@ -51,8 +54,6 @@ public class ParametrosSistemaController extends Controller implements Initializ
     
     private final String fecha = "yyyy-MM-dd";
     private final SimpleDateFormat formatoFecha = new SimpleDateFormat(fecha);
-
-
 
     @Override
     public void cargarTema() {
@@ -136,6 +137,26 @@ public class ParametrosSistemaController extends Controller implements Initializ
 
     @FXML
     private void inactivarParametro(ActionEvent event) {
+        if(parametroSeleccionado != null){
+            parametroSeleccionado.setEstado(Boolean.FALSE);
+            Respuesta res = paramService.update(parametroSeleccionado, parametroSeleccionado.getId());
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Éxito", "El parametro del sistema fue inactivado con éxito");
+                tvParametros.getItems().remove(parametroSeleccionado);
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Error", "No se pudo inactivar el parametro del sistema");
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Datos Insuficientes", "No se ha seleccionado un parametro para inactivar");
+        }
+    }
+
+    @FXML
+    private void clickTableView(MouseEvent event) {
+        if(tvParametros.getSelectionModel().getSelectedItem() != null){
+            parametroSeleccionado = tvParametros.getSelectionModel().getSelectedItem();
+            System.out.println(parametroSeleccionado.isEstado());
+        }
     }
     
 }
