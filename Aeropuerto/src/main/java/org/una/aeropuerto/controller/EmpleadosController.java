@@ -42,7 +42,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.EmpleadosHorariosDTO;
-import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.EmpleadosHorariosService;
 import org.una.aeropuerto.service.EmpleadosService;
@@ -54,6 +53,7 @@ import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 
 /**
  * FXML Controller class
@@ -71,6 +71,7 @@ public class EmpleadosController extends Controller implements Initializable {
     private EmpleadosDTO empleadoDTO = null, jefeSelect = null, emplSeleccionado = null;
     private EmpleadosHorariosDTO horarioSeleccionado = null, horarioDTO = null;
     private AreasTrabajosDTO area = null;
+    private EmpleadosAreasTrabajosDTO areaSelected = null;
     
     @FXML private TableView tablaHorarios;
     @FXML private BorderPane bpPantalla;
@@ -106,7 +107,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         llenarRelojs();
-        ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo");
+        ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
         cbxDiaEntrada.setItems(items);
         cbxDiaSalida.setItems(items);
         llenarComboBoxs();
@@ -364,6 +365,8 @@ public class EmpleadosController extends Controller implements Initializable {
         salidaHoras.setValue(null);
         salidaMinutos.setValue(null);
         horarioSeleccionado = null;
+        area = null;
+        areaSelected = null;
     }
 
 
@@ -389,6 +392,32 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarHorarioEmpleado(ActionEvent event) {
+        if(horarioSeleccionado != null){
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "", codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Horario de Empleado");
+                if(result.isPresent()){
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
+                }
+            }
+            if(puedeInactivar){
+                Respuesta res = horarioService.inactivar(horarioSeleccionado, horarioSeleccionado.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Horario de empleado", "El horario ha sido inactivado");
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Horario de empleados", res.getMensaje());
+                }
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+        }
     }
 
 
@@ -420,6 +449,32 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarAreaEmpleado(ActionEvent event) {
+        if(areaSelected != null){
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "", codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de Trabajo de Empleado");
+                if(result.isPresent()){
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
+                }
+            }
+            if(puedeInactivar){
+                Respuesta res = empAreasService.inactivar(areaSelected, areaSelected.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleado", "El area ha sido inactivado");
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleados", res.getMensaje());
+                }
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+        }
     }
 
     @FXML
@@ -470,5 +525,12 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @Override
     public void cargarTema() {
+    }
+
+    @FXML
+    private void actTablaAreas(MouseEvent event) {
+        if(tvAreas.getSelectionModel().getSelectedItem() != null){
+            areaSelected = tvAreas.getSelectionModel().getSelectedItem();
+        }
     }
 }
