@@ -25,6 +25,7 @@ import org.una.aeropuerto.service.IncidentesCategoriasService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -58,18 +59,22 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actBuscar(ActionEvent event) {
-        tablaCategorias.getItems().clear();
-        if (txtBuscar.getText() != null) {
-            cargarColumnas();
-            Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
-            if (res.getEstado()) {
-                listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
-                if (listCategorias != null) {
-                    ObservableList items = FXCollections.observableArrayList(listCategorias);
-                    tablaCategorias.setItems(items);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            tablaCategorias.getItems().clear();
+            if (txtBuscar.getText() != null) {
+                cargarColumnas();
+                Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
+                if (res.getEstado()) {
+                    listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                    if (listCategorias != null) {
+                        ObservableList items = FXCollections.observableArrayList(listCategorias);
+                        tablaCategorias.setItems(items);
+                    }
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias", res.getMensaje());
                 }
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias", res.getMensaje());
             }
         }
     }
@@ -95,14 +100,18 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actSeleccionar(ActionEvent event) {
-        if (catSelect.getNombre() != null) {
-            if (catSelect.isEstado()) {
-                this.closeWindow();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (catSelect.getNombre() != null) {
+                if (catSelect.isEstado()) {
+                    this.closeWindow();
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+                }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
         }
     }
 

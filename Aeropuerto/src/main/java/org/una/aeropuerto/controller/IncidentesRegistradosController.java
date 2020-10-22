@@ -5,12 +5,14 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -27,6 +29,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
@@ -36,6 +39,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -77,6 +81,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private Tab tabIncidentes;
     @FXML
     private TabPane tabPane;
+    @FXML
+    private JFXButton btnGuardar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -92,6 +98,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         incidentSelec = false;
         limpiar();
         llenarColumnas();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void clickTabla() {
@@ -109,37 +116,53 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarCategoria(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
-        categoriaSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
-        if (categoriaSelec != null) {
-            txtCategoriaSelec.setText(categoriaSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+            categoriaSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
+            if (categoriaSelec != null) {
+                txtCategoriaSelec.setText(categoriaSelec.getNombre());
+            }
         }
     }
 
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if (emisorSelec != null) {
-            txtEmisorSelec.setText(emisorSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if (emisorSelec != null) {
+                txtEmisorSelec.setText(emisorSelec.getNombre());
+            }
         }
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if (responsableSelec != null) {
-            txtResponsableSelec.setText(responsableSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if (responsableSelec != null) {
+                txtResponsableSelec.setText(responsableSelec.getNombre());
+            }
         }
     }
 
     @FXML
     private void actBuscarArea(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
-        areaSelec = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
-        if (areaSelec != null) {
-            txtAreaSelec.setText(areaSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+            areaSelec = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
+            if (areaSelec != null) {
+                txtAreaSelec.setText(areaSelec.getNombre());
+            }
         }
     }
 
@@ -161,34 +184,38 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actGuardarIncidenteRegistrado(ActionEvent event) {
-        if (incidentSelec == true) {
-            if (validarActivos()) {
-                incidentSeleccionado.setId(incidentSeleccionado.getId());
-                incidentSeleccionado.setAreaTrabajo(areaSelec);
-                incidentSeleccionado.setCategoria(categoriaSelec);
-                incidentSeleccionado.setDescripcion(txtDescripcionIncident.getText());
-                incidentSeleccionado.setEmisor(emisorSelec);
-                incidentSeleccionado.setResponsable(responsableSelec);
-                Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (incidentSelec == true) {
+                if (validarActivos()) {
+                    incidentSeleccionado.setId(incidentSeleccionado.getId());
+                    incidentSeleccionado.setAreaTrabajo(areaSelec);
+                    incidentSeleccionado.setCategoria(categoriaSelec);
+                    incidentSeleccionado.setDescripcion(txtDescripcionIncident.getText());
+                    incidentSeleccionado.setEmisor(emisorSelec);
+                    incidentSeleccionado.setResponsable(responsableSelec);
+                    Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
                 }
-            }
-        } else {
-            if (validarCampos()) {
-                incidentDTO = new IncidentesRegistradosDTO();
-                incidentDTO.setAreaTrabajo(areaSelec);
-                incidentDTO.setCategoria(categoriaSelec);
-                incidentDTO.setDescripcion(txtDescripcionIncident.getText());
-                incidentDTO.setEmisor(emisorSelec);
-                incidentDTO.setResponsable(responsableSelec);
-                Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+            } else {
+                if (validarCampos()) {
+                    incidentDTO = new IncidentesRegistradosDTO();
+                    incidentDTO.setAreaTrabajo(areaSelec);
+                    incidentDTO.setCategoria(categoriaSelec);
+                    incidentDTO.setDescripcion(txtDescripcionIncident.getText());
+                    incidentDTO.setEmisor(emisorSelec);
+                    incidentDTO.setResponsable(responsableSelec);
+                    Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
+                    }
                 }
             }
         }
@@ -211,15 +238,27 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actInactivarIncidente(ActionEvent event) {
         if (incidentSelec == true) {
-            if (Mensaje.showConfirmation("Inactivar incidente", null, "Seguro que desea inactivar el incidente?")) {
-                if (validarActivos()) {
-                    incidentSeleccionado.setEstado(false);
-                    Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivado", "Incidente inactivado correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
-                    }
+            Boolean puedeInactivar = Boolean.FALSE;
+            String cedula = "", codigo = "";
+            if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                puedeInactivar = Boolean.TRUE;
+            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Precio de Servicio");
+                if(result.isPresent()){
+                    cedula = result.get().getKey();
+                    codigo = result.get().getValue();
+                    puedeInactivar = Boolean.TRUE;
+                }
+            }
+            if(puedeInactivar){
+                Respuesta res = incidentService.inactivar(incidentSeleccionado, incidentSeleccionado.getId(), cedula, codigo);
+                if(res.getEstado()){
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
+                    incidentSelec = false;
+                }else{
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
                 }
             }
         } else {
@@ -255,26 +294,30 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarIncidente(ActionEvent event) {
-        llenarColumnas();
-        tablaIncident.getItems().clear();
-        if (cbxFiltro.getValue() != null) {
-            Respuesta res;
-            if (cbxFiltro.getValue().equals("Emisor")) {
-                res = incidentService.findByEmisor(txtBuscarIncident.getText());
-            } else if (cbxFiltro.getValue().equals("Responsable")) {
-                res = incidentService.findByResponsable(txtBuscarIncident.getText());
-            } else if (cbxFiltro.getValue().equals("Area")) {
-                res = incidentService.findByArea(txtBuscarIncident.getText());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            llenarColumnas();
+            tablaIncident.getItems().clear();
+            if (cbxFiltro.getValue() != null) {
+                Respuesta res;
+                if (cbxFiltro.getValue().equals("Emisor")) {
+                    res = incidentService.findByEmisor(txtBuscarIncident.getText());
+                } else if (cbxFiltro.getValue().equals("Responsable")) {
+                    res = incidentService.findByResponsable(txtBuscarIncident.getText());
+                } else if (cbxFiltro.getValue().equals("Area")) {
+                    res = incidentService.findByArea(txtBuscarIncident.getText());
+                } else {
+                    res = incidentService.findByCategoria(txtBuscarIncident.getText());
+                }
+                if (res.getEstado()) {
+                    tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
+                }
             } else {
-                res = incidentService.findByCategoria(txtBuscarIncident.getText());
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cual tipo desea filtrar");
             }
-            if (res.getEstado()) {
-                tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
-            }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cual tipo desea filtrar");
         }
     }
 
@@ -307,13 +350,17 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actSeguimientoIncidenteEstados(ActionEvent event) {
-        if (incidentSelec == true) {
-            AppContext.getInstance().set("EstadosIncidentes", incidentSeleccionado);
-            FlowController.getInstance().goViewInNoResizableWindow("EstadosIncidentes", false, StageStyle.UTILITY);
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (incidentSelec == true) {
+                AppContext.getInstance().set("EstadosIncidentes", incidentSeleccionado);
+                FlowController.getInstance().goViewInNoResizableWindow("EstadosIncidentes", false, StageStyle.UTILITY);
+            } else {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+            }
+            incidentSelec = false;
         }
-        incidentSelec = false;
     }
 
     @Override

@@ -25,6 +25,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.service.EmpleadosService;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -51,19 +52,27 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
 
     @FXML
     private void accionBuscarEmpleado(ActionEvent event) {
-        if(cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()){
-            tablaEmpleados.getItems().clear();
-            Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if(cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()){
+                tablaEmpleados.getItems().clear();
+                Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
+            }
         }
     }
 
     @FXML
     private void accionTablaEmpleados(MouseEvent event) {
-        if(tablaEmpleados.getSelectionModel().getSelectedItem() != null){
-            if(tablaEmpleados.getSelectionModel().getSelectedItem().isEstado())
-                AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
-            else
-                Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+            }else{
+            if(tablaEmpleados.getSelectionModel().getSelectedItem() != null){
+                if(tablaEmpleados.getSelectionModel().getSelectedItem().isEstado())
+                    AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
+                else
+                    Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
+            }
         }
     }
 

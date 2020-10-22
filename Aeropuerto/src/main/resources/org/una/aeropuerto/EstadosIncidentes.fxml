@@ -19,7 +19,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton layoutX="557.0" layoutY="476.0" onAction="#actGuardar" prefHeight="43.0" prefWidth="122.0" styleClass="button_1" text="Guardar" />
+      <JFXButton fx:id="btnGuardar" layoutX="557.0" layoutY="476.0" onAction="#actGuardar" prefHeight="43.0" prefWidth="122.0" styleClass="button_1" text="Guardar" />
       <JFXComboBox fx:id="cbxEstados" labelFloat="true" layoutX="440.0" layoutY="268.0" prefHeight="31.0" prefWidth="237.0" promptText="Estado" styleClass="comboBox" />
       <Label layoutX="24.0" layoutY="21.0" text="Incidente Registrado:" textFill="WHITE">
          <font>

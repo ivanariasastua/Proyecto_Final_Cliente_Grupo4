@@ -116,7 +116,7 @@
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton onAction="#actGuardarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_1" text="Guardar">
+                                    <JFXButton fx:id="btnGuardar" onAction="#actGuardarEmpleado" prefHeight="50.0" prefWidth="190.0" styleClass="button_1" text="Guardar">
                                        <HBox.margin>
                                           <Insets left="5.0" right="5.0" />
                                        </HBox.margin>
@@ -177,7 +177,7 @@
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <JFXButton onAction="#actAgregarArea" prefHeight="50.0" prefWidth="165.0" styleClass="button_1" text="Agregar Area">
+                                    <JFXButton fx:id="btnGuardarArea" onAction="#actAgregarArea" prefHeight="50.0" prefWidth="165.0" styleClass="button_1" text="Agregar Area">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
@@ -280,7 +280,7 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_1" text="Guardar">
+                                          <JFXButton fx:id="btnGuardarHorario" onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_1" text="Guardar">
                                              <HBox.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </HBox.margin>

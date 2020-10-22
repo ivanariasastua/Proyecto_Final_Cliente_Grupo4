@@ -23,6 +23,7 @@ import org.una.aeropuerto.service.AreasTrabajosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -52,13 +53,17 @@ public class BuscarAreaController extends Controller implements Initializable {
 
     @FXML
     private void accionBuscar(ActionEvent event) {
-        if (!txtBuscar.getText().isEmpty()) {
-            Respuesta res = service.getByNombre(txtBuscar.getText());
-            if (res.getEstado()) {
-                tvAreas.getItems().clear();
-                tvAreas.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (!txtBuscar.getText().isEmpty()) {
+                Respuesta res = service.getByNombre(txtBuscar.getText());
+                if (res.getEstado()) {
+                    tvAreas.getItems().clear();
+                    tvAreas.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas", res.getMensaje());
+                }
             }
         }
     }
@@ -73,14 +78,18 @@ public class BuscarAreaController extends Controller implements Initializable {
 
     @FXML
     private void accionSeleccionar(ActionEvent event) {
-        if (areaSelec.getNombre() != null) {
-            if (areaSelec.isEstado()) {
-                this.closeWindow();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (areaSelec.getNombre() != null) {
+                if (areaSelec.isEstado()) {
+                    this.closeWindow();
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+                }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar el area de trabajo");
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar el area de trabajo");
         }
     }
 

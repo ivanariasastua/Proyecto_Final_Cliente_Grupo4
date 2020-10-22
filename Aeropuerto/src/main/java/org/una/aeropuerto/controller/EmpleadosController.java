@@ -103,6 +103,12 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private JFXPasswordField txtPass;
     @FXML private JFXCheckBox cbViewPass;
     @FXML private JFXTextField txtViewPass;
+    @FXML
+    private JFXButton btnGuardar;
+    @FXML
+    private JFXButton btnGuardarArea;
+    @FXML
+    private JFXButton btnGuardarHorario;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -118,8 +124,11 @@ public class EmpleadosController extends Controller implements Initializable {
     }
 
     @Override
-    public void initialize() {
+    public void initialize(){
         limpiarCampos();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        btnGuardarArea.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        btnGuardarHorario.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void llenarComboBoxs() {
@@ -171,39 +180,43 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actGuardarEmpleado(ActionEvent event) {
-        if (emplSeleccionado != null) {  //editar
-            if (validarCampos()) {
-                empleadoDTO.setId(emplSeleccionado.getId());
-                empleadoDTO.setCedula(txtCedula.getText());
-                empleadoDTO.setCorreo(txtCorreo.getText());
-                empleadoDTO.setJefe(jefeSelect);
-                empleadoDTO.setNombre(txtNombre.getText());
-                empleadoDTO.setRol(cbxRoles.getValue());
-                Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (emplSeleccionado != null) {  //editar
+                if (validarCampos()) {
+                    empleadoDTO.setId(emplSeleccionado.getId());
+                    empleadoDTO.setCedula(txtCedula.getText());
+                    empleadoDTO.setCorreo(txtCorreo.getText());
+                    empleadoDTO.setJefe(jefeSelect);
+                    empleadoDTO.setNombre(txtNombre.getText());
+                    empleadoDTO.setRol(cbxRoles.getValue());
+                    Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
+                    }
                 }
-            }
-        } else {  //guardar nuevo
-            if (validarCampos()) {
-                empleadoDTO = new EmpleadosDTO();
-                empleadoDTO.setCedula(txtCedula.getText());
-                empleadoDTO.setCorreo(txtCorreo.getText());
-                empleadoDTO.setContrasenaEncriptada(txtPass.getText());
-                empleadoDTO.setJefe(jefeSelect);
-                empleadoDTO.setNombre(txtNombre.getText());
-                empleadoDTO.setRol(cbxRoles.getValue());
-                Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
-                    emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
-                    tablaHorarios.getItems().clear();
-                    tvAreas.getItems().clear();
-                } else {
-                    System.out.println(res.getMensajeInterno());
-                    Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
+            } else {  //guardar nuevo
+                if (validarCampos()) {
+                    empleadoDTO = new EmpleadosDTO();
+                    empleadoDTO.setCedula(txtCedula.getText());
+                    empleadoDTO.setCorreo(txtCorreo.getText());
+                    empleadoDTO.setContrasenaEncriptada(txtPass.getText());
+                    empleadoDTO.setJefe(jefeSelect);
+                    empleadoDTO.setNombre(txtNombre.getText());
+                    empleadoDTO.setRol(cbxRoles.getValue());
+                    Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
+                        emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
+                        tablaHorarios.getItems().clear();
+                        tvAreas.getItems().clear();
+                    } else {
+                        System.out.println(res.getMensajeInterno());
+                        Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
+                    }
                 }
             }
         }
@@ -307,32 +320,36 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actGuardarHorario(ActionEvent event) {
-        if (horarioSeleccionado != null) {
-            if (validarCamposHorario()) {
-                horarioDTO.setId(horarioSeleccionado.getId());
-                horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
-                horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-                horarioDTO.setEmpleado(emplSeleccionado);
-                horarioDTO.setHoraEntrada(obtenerFecha(true));
-                horarioDTO.setHoraSalida(obtenerFecha(false));
-                Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
-                    cargarTablaHorarios();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (horarioSeleccionado != null) {
+                if (validarCamposHorario()) {
+                    horarioDTO.setId(horarioSeleccionado.getId());
+                    horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
+                    horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
+                    horarioDTO.setEmpleado(emplSeleccionado);
+                    horarioDTO.setHoraEntrada(obtenerFecha(true));
+                    horarioDTO.setHoraSalida(obtenerFecha(false));
+                    Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
+                        cargarTablaHorarios();
+                    }
                 }
-            }
-        } else {
-            if (validarCamposHorario()) {
-                horarioDTO = new EmpleadosHorariosDTO();
-                horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
-                horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-                horarioDTO.setEmpleado(emplSeleccionado);
-                horarioDTO.setHoraEntrada(obtenerFecha(true));
-                horarioDTO.setHoraSalida(obtenerFecha(false));
-                Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
-                    cargarTablaHorarios();
+            } else {
+                if (validarCamposHorario()) {
+                    horarioDTO = new EmpleadosHorariosDTO();
+                    horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
+                    horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
+                    horarioDTO.setEmpleado(emplSeleccionado);
+                    horarioDTO.setHoraEntrada(obtenerFecha(true));
+                    horarioDTO.setHoraSalida(obtenerFecha(false));
+                    Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
+                        cargarTablaHorarios();
+                    }
                 }
             }
         }
@@ -372,154 +389,182 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actBuscarArea(ActionEvent event) {
-        boolean existe = false;
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
-        if(AppContext.getInstance().get("Area") != null){
-            area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
-            for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
-                if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
-                    existe = true;
-                    break;
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            boolean existe = false;
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+            if(AppContext.getInstance().get("Area") != null){
+                area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
+                for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
+                    if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
+                        existe = true;
+                        break;
+                    }
                 }
-            }
-            if(existe){
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "El area de trabajo ya esta agregada");
-            }else{
-                lblArea.setText(area.getNombre());
+                if(existe){
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "El area de trabajo ya esta agregada");
+                }else{
+                    lblArea.setText(area.getNombre());
+                }
             }
         }
     }
 
     @FXML
     private void actInactivarHorarioEmpleado(ActionEvent event) {
-        if(horarioSeleccionado != null){
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "", codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Horario de Empleado");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
-                    puedeInactivar = Boolean.TRUE;
-                }
-            }
-            if(puedeInactivar){
-                Respuesta res = horarioService.inactivar(horarioSeleccionado, horarioSeleccionado.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Horario de empleado", "El horario ha sido inactivado");
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Horario de empleados", res.getMensaje());
-                }
-            }
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+            if(horarioSeleccionado != null){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Horario de Empleado");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
+                }
+                if(puedeInactivar){
+                    Respuesta res = horarioService.inactivar(horarioSeleccionado, horarioSeleccionado.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Horario de empleado", "El horario ha sido inactivado");
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Horario de empleados", res.getMensaje());
+                    }
+                }
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+            }
         }
     }
 
 
     @FXML
     private void actBuscarEmpleado(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if(emplSeleccionado != null){
-            tablaHorarios.getItems().clear();
-            tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
-            llenarListaAreas();
-            cargarDatos();
-            txtPass.setVisible(false);
-            cbViewPass.setVisible(false);
-            txtViewPass.setVisible(false);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if(emplSeleccionado != null){
+                tablaHorarios.getItems().clear();
+                tablaHorarios.getItems().addAll(emplSeleccionado.getHorarios());
+                llenarListaAreas();
+                cargarDatos();
+                txtPass.setVisible(false);
+                cbViewPass.setVisible(false);
+                txtViewPass.setVisible(false);
+            }
         }
     }
 
     @FXML
     private void accionBuscraJefe(MouseEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        jefeSelect  = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if(jefeSelect != null){
-            txtJefe.setText(jefeSelect.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            txtJefe.setText("Sin jefe directo");
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            jefeSelect  = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if(jefeSelect != null){
+                txtJefe.setText(jefeSelect.getNombre());
+            }else{
+                txtJefe.setText("Sin jefe directo");
+            }
         }
     }
 
     @FXML
     private void actInactivarAreaEmpleado(ActionEvent event) {
-        if(areaSelected != null){
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "", codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de Trabajo de Empleado");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
-                    puedeInactivar = Boolean.TRUE;
-                }
-            }
-            if(puedeInactivar){
-                Respuesta res = empAreasService.inactivar(areaSelected, areaSelected.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleado", "El area ha sido inactivado");
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleados", res.getMensaje());
-                }
-            }
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+            if(areaSelected != null){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de Trabajo de Empleado");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
+                }
+                if(puedeInactivar){
+                    Respuesta res = empAreasService.inactivar(areaSelected, areaSelected.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleado", "El area ha sido inactivado");
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleados", res.getMensaje());
+                    }
+                }
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+            }
         }
     }
 
     @FXML
     private void actAgregarArea(ActionEvent event) {
-        if(area != null){
-            EmpleadosAreasTrabajosDTO areaDto = new EmpleadosAreasTrabajosDTO(Long.valueOf("0"), emplSeleccionado, area, true);
-            Respuesta res = empAreasService.guardarEmpleadoAreaTrabajo(areaDto);
-            if(res.getEstado()){
-                emplSeleccionado.getEmpleadosAreasTrabajo().add((EmpleadosAreasTrabajosDTO) res.getResultado("Empleados_Areas_Trabajos"));
-                tvAreas.getItems().clear();
-                tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
-                lblArea.setText("");
-            }else{
-                Mensaje.show(Alert.AlertType.ERROR, "Asignar Area de Trabajo", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if(area != null){
+                EmpleadosAreasTrabajosDTO areaDto = new EmpleadosAreasTrabajosDTO(Long.valueOf("0"), emplSeleccionado, area, true);
+                Respuesta res = empAreasService.guardarEmpleadoAreaTrabajo(areaDto);
+                if(res.getEstado()){
+                    emplSeleccionado.getEmpleadosAreasTrabajo().add((EmpleadosAreasTrabajosDTO) res.getResultado("Empleados_Areas_Trabajos"));
+                    tvAreas.getItems().clear();
+                    tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
+                    lblArea.setText("");
+                }else{
+                    Mensaje.show(Alert.AlertType.ERROR, "Asignar Area de Trabajo", res.getMensaje());
+                }
             }
         }
     }
 
     @FXML
     private void actInactivarEmpleado(ActionEvent event) {
-        if(emplSeleccionado != null){
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "", codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
-                    puedeInactivar = Boolean.TRUE;
-                }
-            }
-            if(puedeInactivar){
-                Respuesta res = empleadoService.inactivar(emplSeleccionado, emplSeleccionado.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Empleados", "El usuario: "+emplSeleccionado.getNombre()+" ha sido inactivado");
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Empleados", res.getMensaje());
-                }
-            }
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Empleado", "No ha seleccionado ningún empleado");
+            if(emplSeleccionado != null){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Empleado");
+                    if(result.isPresent()){
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
+                }
+                if(puedeInactivar){
+                    Respuesta res = empleadoService.inactivar(emplSeleccionado, emplSeleccionado.getId(), cedula, codigo);
+                    if(res.getEstado()){
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Empleados", "El usuario: "+emplSeleccionado.getNombre()+" ha sido inactivado");
+                    }else{
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Empleados", res.getMensaje());
+                    }
+                }
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Empleado", "No ha seleccionado ningún empleado");
+            }
         }
     }
 

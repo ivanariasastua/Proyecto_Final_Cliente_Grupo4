@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -53,6 +54,8 @@ public class AreasTrabajosController extends Controller implements Initializable
     private JFXTextField txtBuscarAreasT;
     @FXML
     private JFXComboBox<String> cbxFiltroAreas;
+    @FXML
+    private JFXButton btnGuardar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -65,6 +68,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     public void initialize() {
         llenarColumnas();
         limpiarAreas();
+        btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
     public void llenarColumnas() {
@@ -80,27 +84,31 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actBuscarAreasTrabajos(ActionEvent event) {
-        llenarColumnas();
-        tablaAreasTrabajo.getItems().clear();
-        if (cbxFiltroAreas.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
-        } else {
-            Respuesta res;
-            if (cbxFiltroAreas.getValue().equals("Nombre")) {
-                res = areasService.getByNombre(txtBuscarAreasT.getText());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            llenarColumnas();
+            tablaAreasTrabajo.getItems().clear();
+            if (cbxFiltroAreas.getValue() == null) {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
             } else {
-                if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
-                    res = areasService.getByEstado(true);
-                } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
-                    res = areasService.getByEstado(false);
+                Respuesta res;
+                if (cbxFiltroAreas.getValue().equals("Nombre")) {
+                    res = areasService.getByNombre(txtBuscarAreasT.getText());
                 } else {
-                    res = areasService.getByNombre("");
+                    if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
+                        res = areasService.getByEstado(true);
+                    } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
+                        res = areasService.getByEstado(false);
+                    } else {
+                        res = areasService.getByNombre("");
+                    }
                 }
-            }
-            if (res.getEstado()) {
-                tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
+                if (res.getEstado()) {
+                    tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
+                }
             }
         }
     }
@@ -130,30 +138,34 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actGuardarAreasTrabajo(ActionEvent event) {
-        if (areaSelec == true) {
-            if (validarActivos()) {
-                areaSeleccionada.setId(areaSeleccionada.getId());
-                areaSeleccionada.setDescripcion(txtDescripcionArea.getText());
-                areaSeleccionada.setNombre(txtNombreArea.getText());
-                Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (areaSelec == true) {
+                if (validarActivos()) {
+                    areaSeleccionada.setId(areaSeleccionada.getId());
+                    areaSeleccionada.setDescripcion(txtDescripcionArea.getText());
+                    areaSeleccionada.setNombre(txtNombreArea.getText());
+                    Respuesta res = areasService.modificarAreaTrabajo(areaSeleccionada.getId(), areaSeleccionada);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
-            }
-        } else {
-            if (txtNombreArea.getText() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
             } else {
-                areaDto = new AreasTrabajosDTO();
-                areaDto.setDescripcion(txtDescripcionArea.getText());
-                areaDto.setNombre(txtNombreArea.getText());
-                Respuesta res = areasService.guardarAreaTrabajo(areaDto);
-                if (res.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Area de trabajo guardada correctamente");
+                if (txtNombreArea.getText() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
                 } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    areaDto = new AreasTrabajosDTO();
+                    areaDto.setDescripcion(txtDescripcionArea.getText());
+                    areaDto.setNombre(txtNombreArea.getText());
+                    Respuesta res = areasService.guardarAreaTrabajo(areaDto);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Area de trabajo guardada correctamente");
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             }
         }
@@ -168,6 +180,9 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actLimpiarCamposAreasTrabajo(ActionEvent event) {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }
         limpiarAreas();
     }
 
@@ -181,32 +196,36 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actInactivarAreaT(ActionEvent event) {
-        if(areaSeleccionada != null){
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "";
-            String codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de trabajo");
-                    if(result.isPresent()){
-                        cedula = result.get().getKey();
-                        codigo = result.get().getValue();
-                        puedeInactivar = Boolean.TRUE;
-                    }
-            }
-                if(puedeInactivar){
-                    Respuesta res = areasService.inactivar(areaSeleccionada, areaSeleccionada.getId(), cedula, codigo);
-                    if(res.getEstado()){
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", "La área de trabajo: "+areaSeleccionada.getNombre()+" ha sido inactivada");
-                    }else{
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", res.getMensaje());
-                    }
-                }
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área", "No ha seleccionado ninguna área de trabajo");
+            if(areaSeleccionada != null){
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "";
+                String codigo = "";
+                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                        Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Area de trabajo");
+                        if(result.isPresent()){
+                            cedula = result.get().getKey();
+                            codigo = result.get().getValue();
+                            puedeInactivar = Boolean.TRUE;
+                        }
+                }
+                    if(puedeInactivar){
+                        Respuesta res = areasService.inactivar(areaSeleccionada, areaSeleccionada.getId(), cedula, codigo);
+                        if(res.getEstado()){
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", "La área de trabajo: "+areaSeleccionada.getNombre()+" ha sido inactivada");
+                        }else{
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", res.getMensaje());
+                        }
+                    }
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área", "No ha seleccionado ninguna área de trabajo");
+            }
         }
     }
 

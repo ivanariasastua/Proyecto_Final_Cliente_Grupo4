@@ -23,6 +23,7 @@ import org.una.aeropuerto.service.ServiciosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -73,28 +74,36 @@ public class BuscarServiciosController extends Controller implements Initializab
 
     @FXML
     private void actBuscar(ActionEvent event) {
-        tabla.getItems().clear();
-        if (txtBuscar.getText() != null) {
-            cargarColumnas();
-            Respuesta res = servService.getByNombre(txtBuscar.getText());
-            if (res.getEstado()) {
-                tabla.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
-            } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            tabla.getItems().clear();
+            if (txtBuscar.getText() != null) {
+                cargarColumnas();
+                Respuesta res = servService.getByNombre(txtBuscar.getText());
+                if (res.getEstado()) {
+                    tabla.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+                } else {
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                }
             }
         }
     }
 
     @FXML
     private void actSeleccionarServicio(ActionEvent event) {
-        if (servicSelec.getNombre() != null) {
-            if (servicSelec.isEstado()) {
-                this.closeWindow();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            if (servicSelec.getNombre() != null) {
+                if (servicSelec.isEstado()) {
+                    this.closeWindow();
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+                }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar un servicio");
             }
-        } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar un servicio");
         }
     }
 
