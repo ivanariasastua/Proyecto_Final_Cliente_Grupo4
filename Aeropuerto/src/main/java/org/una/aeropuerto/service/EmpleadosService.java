@@ -97,9 +97,11 @@ public class EmpleadosService {
         }
     }
     
-     public Respuesta getNoAprobados() {
+     public Respuesta getNoAprobadosbyRol(Long rol) {
         try {
-            Request request = new Request("empleados/getNoAprobados");
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("rol", rol);
+            Request request = new Request("empleados/getNoAprobados","/{rol}", parametros);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener todos los empleados\ncuyo rol no ha sido aprobado");
@@ -127,5 +129,23 @@ public class EmpleadosService {
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
+    }
+    
+    public Respuesta Aprobar(Long id){
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            System.out.println("hash map");
+            parametros.put("id", id);
+            System.out.println("parametros");
+            Request request = new Request("empleados/aprobar","/{id}", parametros);
+            System.out.println("request");
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "No se pudo aprobar el empleado");
+            }
+            EmpleadosDTO result = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
+            return new Respuesta(true, "Empleados", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
+        } 
     }
 }

@@ -304,6 +304,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void actAutorizarRoles(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(vbContenedor, "HabilitarUsuarios");
     }
 
     @FXML
