@@ -28,6 +28,10 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.EmpleadosDTO;
@@ -80,6 +84,7 @@ public class GastosServiciosController extends Controller implements Initializab
     private ServiciosGastosDTO servGastDTO = new ServiciosGastosDTO();
     private ServiciosGastosService servGastService = new ServiciosGastosService();
     boolean gastSelec = false;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
     EmpleadosDTO responsableSelec;
     ServiciosDTO servicioSelec;
@@ -87,12 +92,21 @@ public class GastosServiciosController extends Controller implements Initializab
     private JFXTextField txtServicio;
     @FXML
     private JFXButton btnGuardar;
+    @FXML
+    private BorderPane bpRoot;
+    @FXML
+    private VBox vbRoot;
+    @FXML
+    private VBox vbTabla;
+    @FXML
+    private GridPane gpCrearEditar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         listServicios = new ArrayList<>();
         llenarComboBoxs();
         clickTabla();
+        addListner();
     }
 
     @Override
@@ -104,6 +118,8 @@ public class GastosServiciosController extends Controller implements Initializab
         limpiarCampos();
         cargarColumnasTabla();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        adjustWidth(contenedor.getWidth());
+        adjustHeigth(contenedor.getHeight());
     }
 
     public void llenarComboBoxs() {
@@ -484,4 +500,35 @@ public class GastosServiciosController extends Controller implements Initializab
     public void cargarTema() {
     }
 
+    private void addListner(){
+        contenedor.widthProperty().addListener( w -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            adjustHeigth(contenedor.getHeight());
+        });
+    }
+    
+    private void adjustWidth(double ancho){
+        bpRoot.setPrefWidth(ancho);
+        vbRoot.setPrefWidth(ancho);
+        tabPane.setPrefWidth(ancho);
+        vbTabla.setPrefWidth(ancho);
+        tablaGastosS.setPrefWidth(ancho);
+        gpCrearEditar.setPrefWidth(ancho);
+        cbxDuracion.setPrefWidth((ancho/2)-50);
+        cbxEstadoGasto.setPrefWidth((ancho/2)-50);
+        cbxEstadoPago.setPrefWidth((ancho/2)-50);
+        cbxPerioricidad.setPrefWidth((ancho/2)-50);
+        cbxTiempo.setPrefWidth((ancho/2)-50);
+    }
+    
+    private void adjustHeigth(double altura){
+        bpRoot.setPrefHeight(altura);
+        vbRoot.setPrefHeight(altura);
+        tabPane.setPrefHeight(altura-50);
+        vbTabla.setPrefHeight(altura-100);
+        tablaGastosS.setPrefHeight(altura-261);
+        gpCrearEditar.setPrefHeight(altura);
+    }
 }

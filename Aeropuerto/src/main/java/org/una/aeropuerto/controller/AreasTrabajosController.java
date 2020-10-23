@@ -24,6 +24,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
@@ -39,29 +44,30 @@ import org.una.aeropuerto.util.UserAuthenticated;
  */
 public class AreasTrabajosController extends Controller implements Initializable {
 
-    @FXML
-    private TableView tablaAreasTrabajo;
-    @FXML
-    private JFXTextField txtNombreArea;
-    @FXML
-    private JFXTextArea txtDescripcionArea;
-
+    @FXML private TableView tablaAreasTrabajo;
+    @FXML private JFXTextField txtNombreArea;
+    @FXML private JFXTextArea txtDescripcionArea;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private AreasTrabajosService areasService = new AreasTrabajosService();
     private AreasTrabajosDTO areaDto = new AreasTrabajosDTO();
     private AreasTrabajosDTO areaSeleccionada = new AreasTrabajosDTO();
     boolean areaSelec = false;
+    @FXML private JFXTextField txtBuscarAreasT;
+    @FXML private JFXComboBox<String> cbxFiltroAreas;
+    @FXML private JFXButton btnGuardar;
+    @FXML private BorderPane bpRoot;
+    @FXML private GridPane gpCont;
     @FXML
-    private JFXTextField txtBuscarAreasT;
+    private VBox vpRoot;
     @FXML
-    private JFXComboBox<String> cbxFiltroAreas;
-    @FXML
-    private JFXButton btnGuardar;
+    private ColumnConstraints row;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroAreas.setItems(filtro);
         clickTablas();
+        addListener();
     }
 
     @Override
@@ -69,6 +75,8 @@ public class AreasTrabajosController extends Controller implements Initializable
         llenarColumnas();
         limpiarAreas();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        adjustWidth(contenedor.getWidth());
+        adjustHeigth(contenedor.getHeight());
     }
 
     public void llenarColumnas() {
@@ -233,4 +241,28 @@ public class AreasTrabajosController extends Controller implements Initializable
     public void cargarTema() {
     }
 
+    private void addListener(){
+        contenedor.widthProperty().addListener( W -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( H -> {
+            adjustHeigth(contenedor.getHeight());
+        });
+    }
+    
+    private void adjustWidth(double ancho){
+        bpRoot.setPrefWidth(ancho);
+        vpRoot.setPrefWidth(ancho);
+        txtBuscarAreasT.setPrefWidth((ancho/2)-209);
+        tablaAreasTrabajo.setPrefWidth(ancho-400);
+        gpCont.setPrefWidth(ancho);
+    }
+    
+    private void adjustHeigth(double altura){
+        bpRoot.setPrefHeight(altura);
+        vpRoot.setPrefHeight(altura);
+        gpCont.setPrefHeight(altura-50);
+        tablaAreasTrabajo.setPrefHeight(altura-272);
+        
+    }
 }

@@ -30,6 +30,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosPreciosDTO;
@@ -57,7 +58,7 @@ public class ServiciosController extends Controller implements Initializable {
     private ServiciosService servService;
     @FXML
     private TableView tablaServicios;
-
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private List<ServiciosDTO> listServic;
     ServiciosDTO servicSeleccionado = new ServiciosDTO();
     boolean servSelec = false;
@@ -90,6 +91,7 @@ public class ServiciosController extends Controller implements Initializable {
         clickTabla();
         cargarColumnasPrecios();
         cargarColumnas();
+        addListener();
     }
 
     @Override
@@ -101,6 +103,8 @@ public class ServiciosController extends Controller implements Initializable {
         limpiarCampos();
         limpiarPrecios();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        adjustWidth(contenedor.getWidth());
+        adjustHeight(contenedor.getHeight());
     }
 
     public void clickTabla() {
@@ -392,5 +396,17 @@ public class ServiciosController extends Controller implements Initializable {
 
     @Override
     public void cargarTema() {
+    }
+    
+    private void addListener(){
+        
+    }
+    
+    private void adjustWidth(double ancho){
+        
+    }
+    
+    private void adjustHeight(double alto){
+        
     }
 }

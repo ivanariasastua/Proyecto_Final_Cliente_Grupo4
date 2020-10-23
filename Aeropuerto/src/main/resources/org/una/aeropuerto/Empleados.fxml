@@ -32,7 +32,7 @@
                            <center>
                               <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <GridPane prefHeight="546.0" prefWidth="800.0">
+                                    <GridPane fx:id="gpCont" prefHeight="546.0" prefWidth="800.0">
                                        <columnConstraints>
                                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -129,9 +129,9 @@
                 </Tab>
                   <Tab fx:id="tabArear" text="Areas">
                      <content>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox fx:id="hbContHorarios" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <VBox alignment="TOP_RIGHT" prefHeight="561.0" prefWidth="550.0">
+                              <VBox fx:id="vbTableAreas" alignment="TOP_RIGHT" prefHeight="561.0" prefWidth="550.0">
                                  <children>
                                     <TableView fx:id="tvAreas" onMouseClicked="#actTablaAreas" prefHeight="493.0" prefWidth="550.0">
                                       <columns>
@@ -189,9 +189,9 @@
                      </content></Tab>
                   <Tab fx:id="tabHorarios" text="Horarios">
                      <content>
-                        <HBox prefHeight="100.0" prefWidth="800.0">
+                        <HBox fx:id="hbHorarios" prefHeight="100.0" prefWidth="800.0">
                            <children>
-                              <VBox alignment="TOP_RIGHT" prefHeight="521.0" prefWidth="550.0">
+                              <VBox fx:id="vbTablaHorarios" alignment="TOP_RIGHT" prefHeight="521.0" prefWidth="550.0">
                                  <children>
                                     <TableView fx:id="tablaHorarios" prefHeight="489.0" prefWidth="537.0">
                                       <columns>
@@ -273,23 +273,16 @@
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
                                     </HBox>
-                                    <HBox alignment="CENTER" prefHeight="62.0" prefWidth="250.0">
-                                       <children>
-                                          <JFXButton onAction="#actLimpiarCamposHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_3" text="Limpiar">
-                                             <HBox.margin>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
-                                          <JFXButton fx:id="btnGuardarHorario" onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="109.0" styleClass="button_1" text="Guardar">
-                                             <HBox.margin>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
-                                       </children>
+                                    <JFXButton onAction="#actLimpiarCamposHorario" prefHeight="0.0" prefWidth="200.0" styleClass="button_3" text="Limpiar">
                                        <VBox.margin>
-                                          <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+                                          <Insets bottom="2.5" />
                                        </VBox.margin>
-                                    </HBox>
+                                    </JFXButton>
+                                    <JFXButton fx:id="btnGuardarHorario" onAction="#actGuardarHorario" prefHeight="0.0" prefWidth="200.0" styleClass="button_1" text="Guardar">
+                                       <VBox.margin>
+                                          <Insets top="2.5" />
+                                       </VBox.margin>
+                                    </JFXButton>
                                  </children>
                               </VBox>
                            </children>
