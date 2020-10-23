@@ -30,7 +30,10 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosPreciosDTO;
@@ -83,6 +86,14 @@ public class ServiciosController extends Controller implements Initializable {
     ServiciosPreciosDTO precioSelect = new ServiciosPreciosDTO();
     @FXML
     private JFXButton btnGuardar;
+    @FXML
+    private BorderPane bpRoot;
+    @FXML
+    private VBox vbRoot;
+    @FXML
+    private GridPane gpTabla;
+    @FXML
+    private GridPane gpServicio;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -408,10 +419,23 @@ public class ServiciosController extends Controller implements Initializable {
     }
     
     private void adjustWidth(double ancho){
-        
+        bpRoot.setPrefWidth(ancho);
+        vbRoot.setPrefWidth(ancho);
+        tabPane.setPrefWidth(ancho);
+        gpTabla.setPrefWidth(ancho);
+        gpServicio.setPrefWidth(ancho);
+        tablaServicios.setPrefWidth((ancho/2)-25);
+        txtBuscarServicio.setPrefWidth((ancho/2)-(25+130+88));
+        tablaPrecios.setPrefWidth((ancho/2)-25);
     }
 
     private void adjustHeight(double alto){
-        
+        bpRoot.setPrefHeight(alto);
+        vbRoot.setPrefHeight(alto);
+        tabPane.setPrefHeight(alto-48);
+        gpTabla.setPrefHeight(alto-87);
+        gpServicio.setPrefHeight(alto-87);
+        tablaServicios.setPrefHeight(alto-241);
+        tablaPrecios.setPrefHeight(alto-207);
     }
 }

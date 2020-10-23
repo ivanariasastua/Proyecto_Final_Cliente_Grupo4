@@ -22,18 +22,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import org.una.aeropuerto.dto.ParametrosSistemaDTO;
 import org.una.aeropuerto.service.ParametrosSistemaService;
+import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.Mensaje;
 
 public class ParametrosSistemaController extends Controller implements Initializable{
 
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     @FXML
     private DatePicker dpInicio;
     @FXML
@@ -62,6 +68,14 @@ public class ParametrosSistemaController extends Controller implements Initializ
     
     private final String fecha = "yyyy-MM-dd";
     private final SimpleDateFormat formatoFecha = new SimpleDateFormat(fecha);
+    @FXML
+    private BorderPane bpRoot;
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private BorderPane vbRoot;
+    @FXML
+    private GridPane gpDatos;
 
     @Override
     public void cargarTema() {
@@ -70,13 +84,15 @@ public class ParametrosSistemaController extends Controller implements Initializ
 
     @Override
     public void initialize() {
-        
+        adjustHeight(contenedor.getHeight());
+        adjustWidth(contenedor.getWidth());
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         initTableView();
         paramService = new ParametrosSistemaService();
+        addListener();
     }
 
     public void initTableView(){
@@ -229,4 +245,27 @@ public class ParametrosSistemaController extends Controller implements Initializ
         txtCodigo.setEditable(true);
     }
     
+    private void addListener(){
+        contenedor.widthProperty().addListener( w -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            adjustHeight(contenedor.getHeight());
+        });
+    }
+    
+    private void adjustWidth(double ancho){
+        bpRoot.setPrefWidth(ancho);
+        vbRoot.setPrefWidth(ancho);
+        tabPane.setPrefWidth(ancho);
+        tvParametros.setPrefWidth(ancho-314);
+        gpDatos.setPrefWidth(ancho);
+    }
+
+    private void adjustHeight(double alto){
+        bpRoot.setPrefHeight(alto);
+        vbRoot.setPrefHeight(alto);
+        tabPane.setPrefHeight(alto-113);
+        gpDatos.setPrefHeight(alto-207);
+    }
 }

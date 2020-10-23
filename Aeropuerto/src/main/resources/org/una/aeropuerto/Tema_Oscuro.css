@@ -7,7 +7,11 @@ and open the template in the editor.
     Created on : 20 sep 2020, 1:29:39
     Author     : ivana
 */
-
+.date-picker{
+    -fx-base: #2a2d4d;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #B2B2B2;
+}
 .raiz{
     -fx-background-color: #2a2d4d;
 }
@@ -24,6 +28,7 @@ and open the template in the editor.
     -fx-text-fill: derive(white, 20%);
 }
 .comboBox{
+    -fx-background-color: transparent;
     -fx-prompt-text-fill: #B2B2B2;
     -fx-font: bold 11pt "Courier";
     -fx-text-fill: white;
@@ -49,6 +54,7 @@ and open the template in the editor.
 }
 
 .button_1{
+    -fx-background-color: transparent;
     -fx-text-fill: #2b702b;
     -fx-font: bold 14pt "Courier";
     -fx-border-color: #2b702b;
@@ -64,6 +70,7 @@ and open the template in the editor.
 }
 
 .button_2{
+    -fx-background-color: transparent;
     -fx-text-fill: #990000;
     -fx-font: bold 14pt "Courier";
     -fx-border-color: #990000;
@@ -292,6 +299,7 @@ and open the template in the editor.
 }
 
 .button_3{
+    -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font: italic 14pt "Courier";
     -fx-border-color: #6262b3;

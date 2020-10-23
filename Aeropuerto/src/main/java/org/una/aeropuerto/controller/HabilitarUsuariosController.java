@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXComboBox;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -15,19 +16,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.service.EmpleadosService;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.RolesService;
+import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 
 public class HabilitarUsuariosController extends Controller implements Initializable{
 
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     @FXML
     private TableView<EmpleadosDTO> tvEmpleados;
     @FXML
@@ -41,11 +45,13 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     @FXML
     private TableColumn<EmpleadosDTO, String> tcEstado;
     @FXML
-    private ComboBox<RolesDTO> cbFiltro;
+    private JFXComboBox<RolesDTO> cbFiltro;
     
     private EmpleadosService empService;
     private RolesService rolService;
     private List<EmpleadosDTO> empleadosSeleccionados;
+    @FXML
+    private BorderPane bpRoot;
     
     @Override
     public void cargarTema() {
@@ -54,7 +60,8 @@ public class HabilitarUsuariosController extends Controller implements Initializ
 
     @Override
     public void initialize() {
-        
+        adjustWidth(contenedor.getWidth());
+        adjustHeight(contenedor.getHeight());
     }
 
     @Override
@@ -63,6 +70,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         empService = new EmpleadosService();
         initTableView();
         initComboBoxRoles();
+        addListener();
     }
     
     public void initTableView(){
@@ -139,5 +147,24 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Datos no seleccionados", "Seleccionar empleados de la tabla para aprobarlos.");
         }
+    }
+    
+    private void addListener(){
+        contenedor.widthProperty().addListener( w -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            adjustHeight(contenedor.getHeight());
+        });
+    }
+    
+    private void adjustWidth(double ancho){
+        bpRoot.setPrefWidth(ancho);
+        tvEmpleados.setPrefWidth(ancho);
+    }
+
+    private void adjustHeight(double alto){
+        bpRoot.setPrefHeight(alto);
+        tvEmpleados.setPrefHeight(alto-223);
     }
 }
