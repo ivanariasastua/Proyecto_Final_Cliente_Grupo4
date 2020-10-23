@@ -92,12 +92,12 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label prefHeight="21.0" prefWidth="44.0" text="Valor">
+                                    <Label prefHeight="21.0" prefWidth="44.0" styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Valor">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <JFXTextField fx:id="txtValor" prefHeight="29.0" prefWidth="320.0">
+                                    <JFXTextField fx:id="txtValor" prefHeight="29.0" prefWidth="320.0" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -106,12 +106,12 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Código Identificador">
+                                    <Label styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Código Identificador">
                                        <padding>
                                           <Insets left="10.0" />
                                        </padding>
                                     </Label>
-                                    <JFXTextField fx:id="txtCodigo" prefHeight="29.0" prefWidth="234.0">
+                                    <JFXTextField fx:id="txtCodigo" prefHeight="29.0" prefWidth="234.0" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -120,8 +120,8 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Descripción" />
-                                    <JFXTextArea fx:id="txtDescripcion">
+                                    <Label styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Descripción" />
+                                    <JFXTextArea fx:id="txtDescripcion" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -136,12 +136,12 @@
                                     <Insets top="90.0" />
                                  </VBox.margin>
                                  <children>
-                                    <JFXButton onAction="#agregarEditarParametro" prefHeight="38.0" prefWidth="177.0" text="Agregar">
+                                    <JFXButton onAction="#agregarEditarParametro" prefHeight="38.0" prefWidth="177.0" styleClass="button_1" stylesheets="@Tema_Oscuro.css" text="Agregar">
                                        <HBox.margin>
                                           <Insets top="80.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton onAction="#limpiarCampos" prefHeight="31.0" prefWidth="157.0" text="Limpiar Campos">
+                                    <JFXButton onAction="#limpiarCampos" prefHeight="31.0" prefWidth="157.0" styleClass="button_3" stylesheets="@Tema_Oscuro.css" text="Limpiar Campos">
                                        <HBox.margin>
                                           <Insets left="420.0" top="80.0" />
                                        </HBox.margin>

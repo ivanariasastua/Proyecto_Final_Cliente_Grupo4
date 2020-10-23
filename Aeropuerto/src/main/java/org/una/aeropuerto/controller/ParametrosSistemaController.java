@@ -188,10 +188,12 @@ public class ParametrosSistemaController extends Controller implements Initializ
         if(parametroSeleccionado != null){
             parametro.setCodigoIdentificador(txtCodigo.getText());
             parametro.setDescripcion(txtDescripcion.getText());
+            parametro.setEstado(parametroSeleccionado.isEstado());
+            parametro.setFechaModificacion(parametroSeleccionado.getFechaModificacion());
             parametro.setFechaRegistro(parametroSeleccionado.getFechaRegistro());
             parametro.setId(parametroSeleccionado.getId());
             parametro.setValor(txtValor.getText());
-            res = paramService.update(parametro, parametroSeleccionado.getId());
+            res = paramService.modificarParametro(parametroSeleccionado.getId(), parametro);
             if(res.getEstado()){
                 Mensaje.show(Alert.AlertType.CONFIRMATION, "Actualización Éxitosa", "El parametro del sistema de actualizó con éxito");
                 parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
@@ -205,6 +207,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
             parametro.setCodigoIdentificador(txtCodigo.getText());
             parametro.setDescripcion(txtDescripcion.getText());
             parametro.setValor(txtValor.getText());
+            parametro.setEstado(Boolean.TRUE);
             res = paramService.guardarParametro(parametro);
             if(res.getEstado()){
                 Mensaje.show(Alert.AlertType.CONFIRMATION, "Guardado Éxitosa", "El parametro del sistema de guardó con éxito");
