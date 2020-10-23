@@ -93,7 +93,7 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     private void accionHacerMarcaje(ActionEvent event) {
         if(horarioSelect != null){
             Respuesta res;
-            if(marcaje.getId() > 0L)
+            if(marcaje.getId() == 0L)
                 res = service.guardarEmpleadoMarcaje(marcaje);
             else
                 res = service.modificarEmpleadoMarcaje(marcaje.getId(), marcaje);

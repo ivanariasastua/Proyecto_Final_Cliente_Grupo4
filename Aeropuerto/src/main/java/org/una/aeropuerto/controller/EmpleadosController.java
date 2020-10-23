@@ -136,6 +136,14 @@ public class EmpleadosController extends Controller implements Initializable {
         cargarTablaAreas();
         txtId.setDisable(true);   
         addListener();
+        txtPass.textProperty().addListener( t -> {
+            if(cbViewPass.isSelected()){
+                txtViewPass.setText(txtPass.getText());
+            }
+        });
+        cbViewPass.selectedProperty().addListener( s -> {
+            txtViewPass.setText(cbViewPass.isSelected() ? txtPass.getText() : "");
+        });
     }
 
     @Override
@@ -146,6 +154,7 @@ public class EmpleadosController extends Controller implements Initializable {
         btnGuardarHorario.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
+        rowContrasena.setPrefHeight((contenedor.getHeight()-100) / 4);
     }
 
     public void llenarComboBoxs() {
@@ -254,6 +263,7 @@ public class EmpleadosController extends Controller implements Initializable {
         txtPass.setVisible(true);
         cbViewPass.setVisible(true);
         txtViewPass.setVisible(true);
+        rowContrasena.setPrefHeight((contenedor.getHeight()-100) / 4);
     }
 
     public void cargarDatos() {
@@ -265,6 +275,7 @@ public class EmpleadosController extends Controller implements Initializable {
             jefeSelect = emplSeleccionado.getJefe();
         }
         cbxRoles.setValue(emplSeleccionado.getRol());
+        rowContrasena.setPrefHeight(0);
     }
 
     public void cargarTablaHorarios() {
