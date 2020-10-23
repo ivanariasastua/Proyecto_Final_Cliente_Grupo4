@@ -276,6 +276,7 @@ public class EmpleadosController extends Controller implements Initializable {
         }
         cbxRoles.setValue(emplSeleccionado.getRol());
         rowContrasena.setPrefHeight(0);
+        txtCorreo.setText(emplSeleccionado.getCorreo());
     }
 
     public void cargarTablaHorarios() {
