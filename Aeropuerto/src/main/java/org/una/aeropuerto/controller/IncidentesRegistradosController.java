@@ -28,7 +28,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
@@ -59,7 +62,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private JFXTextField txtAreaSelec;
     @FXML
     private JFXTextArea txtDescripcionIncident;
-    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor"); 
     private IncidentesRegistradosService incidentService;
     private IncidentesRegistradosDTO incidentDTO;
     private AreasTrabajosDTO areaSelec = new AreasTrabajosDTO();
@@ -84,12 +87,21 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private TabPane tabPane;
     @FXML
     private JFXButton btnGuardar;
+    @FXML
+    private BorderPane bpRoot;
+    @FXML
+    private VBox vbRoot;
+    @FXML
+    private GridPane gpCrearEditar;
+    @FXML
+    private GridPane gpTabla;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> item = FXCollections.observableArrayList("Responsable", "Emisor", "Categoria", "Area");
         cbxFiltro.setItems(item);
         clickTabla();
+        addListener();
     }
 
     @Override
@@ -100,6 +112,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
         limpiar();
         llenarColumnas();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        adjustWidth(contenedor.getWidth());
+        adjustHeight(contenedor.getHeight());
     }
 
     public void clickTabla() {
@@ -367,5 +381,32 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @Override
     public void cargarTema() {
     }
+    
+    private void addListener(){
+        contenedor.widthProperty().addListener( w -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            adjustHeight(contenedor.getHeight());
+        });
+    }
+    
+    private void adjustWidth(double ancho){
+        bpRoot.setPrefWidth(ancho);
+        vbRoot.setPrefWidth(ancho);
+        gpCrearEditar.setPrefWidth(ancho);
+        gpTabla.setPrefWidth(ancho);
+        tabPane.setPrefWidth(ancho);
+        txtBuscarIncident.setPrefWidth(ancho-(145+115+50));
+        tablaIncident.setPrefWidth(ancho-60);
+    }
 
+    private void adjustHeight(double alto){
+        bpRoot.setPrefHeight(alto);
+        vbRoot.setPrefHeight(alto);
+        gpCrearEditar.setPrefHeight(alto-100);
+        gpTabla.setPrefHeight(alto-100);
+        tabPane.setPrefHeight(alto-40);
+        tablaIncident.setPrefHeight(alto-276);
+    }
 }
