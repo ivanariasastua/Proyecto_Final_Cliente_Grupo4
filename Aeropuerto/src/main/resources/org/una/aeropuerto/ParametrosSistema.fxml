@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -95,7 +97,7 @@
                                           <Insets left="10.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <JFXTextField prefHeight="29.0" prefWidth="320.0">
+                                    <JFXTextField fx:id="txtValor" prefHeight="29.0" prefWidth="320.0">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -109,7 +111,7 @@
                                           <Insets left="10.0" />
                                        </padding>
                                     </Label>
-                                    <JFXTextField prefHeight="29.0" prefWidth="234.0">
+                                    <JFXTextField fx:id="txtCodigo" prefHeight="29.0" prefWidth="234.0">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -119,10 +121,32 @@
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                  <children>
                                     <Label text="Descripción" />
+                                    <JFXTextArea fx:id="txtDescripcion">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </JFXTextArea>
                                  </children>
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
+                              </HBox>
+                              <HBox prefHeight="124.0" prefWidth="790.0">
+                                 <VBox.margin>
+                                    <Insets top="90.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <JFXButton onAction="#agregarEditarParametro" prefHeight="38.0" prefWidth="177.0" text="Agregar">
+                                       <HBox.margin>
+                                          <Insets top="80.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onAction="#limpiarCampos" prefHeight="31.0" prefWidth="157.0" text="Limpiar Campos">
+                                       <HBox.margin>
+                                          <Insets left="420.0" top="80.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                 </children>
                               </HBox>
                            </children>
                         </VBox>

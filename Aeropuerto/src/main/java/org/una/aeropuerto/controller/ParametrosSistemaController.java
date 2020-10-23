@@ -5,6 +5,8 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -48,6 +50,12 @@ public class ParametrosSistemaController extends Controller implements Initializ
     private TableColumn<ParametrosSistemaDTO, String> tcFechaRegistro;
     @FXML
     private TableColumn<ParametrosSistemaDTO, String> tcFechaModificacion;
+    @FXML
+    private JFXTextField txtValor;
+    @FXML
+    private JFXTextField txtCodigo;
+    @FXML
+    private JFXTextArea txtDescripcion;
     
     ParametrosSistemaDTO parametroSeleccionado;
     ParametrosSistemaService paramService;
@@ -121,6 +129,17 @@ public class ParametrosSistemaController extends Controller implements Initializ
         return fecha;
     }
     
+    public boolean validarCampos(){
+        return !(txtCodigo.getText().isEmpty() && txtDescripcion.getText().isEmpty() && txtValor.getText().isEmpty());
+    }
+    
+    public void resetearCampos(){
+        parametroSeleccionado = null;
+        txtCodigo.clear();
+        txtDescripcion.clear();
+        txtValor.clear();
+    }
+    
     @FXML
     private void filtrarParametros(ActionEvent event) {
         if(dpInicio.getValue() != null && dpFinal.getValue() != null){
@@ -155,8 +174,56 @@ public class ParametrosSistemaController extends Controller implements Initializ
     private void clickTableView(MouseEvent event) {
         if(tvParametros.getSelectionModel().getSelectedItem() != null){
             parametroSeleccionado = tvParametros.getSelectionModel().getSelectedItem();
-            System.out.println(parametroSeleccionado.isEstado());
+            txtCodigo.setText(parametroSeleccionado.getCodigoIdentificador());
+            txtDescripcion.setText(parametroSeleccionado.getDescripcion());
+            txtValor.setText(parametroSeleccionado.getValor());
+            txtCodigo.setEditable(false);
         }
+    }
+
+    @FXML
+    private void agregarEditarParametro(ActionEvent event) {
+        Respuesta res;
+        ParametrosSistemaDTO parametro = new ParametrosSistemaDTO();
+        if(parametroSeleccionado != null){
+            parametro.setCodigoIdentificador(txtCodigo.getText());
+            parametro.setDescripcion(txtDescripcion.getText());
+            parametro.setFechaRegistro(parametroSeleccionado.getFechaRegistro());
+            parametro.setId(parametroSeleccionado.getId());
+            parametro.setValor(txtValor.getText());
+            res = paramService.update(parametro, parametroSeleccionado.getId());
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Actualización Éxitosa", "El parametro del sistema de actualizó con éxito");
+                parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                tvParametros.getItems().remove(parametroSeleccionado);
+                tvParametros.getItems().add(parametro);
+                resetearCampos();
+            }else{
+                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló la acualización del parametro del sistema");
+            }
+        }else{
+            parametro.setCodigoIdentificador(txtCodigo.getText());
+            parametro.setDescripcion(txtDescripcion.getText());
+            parametro.setValor(txtValor.getText());
+            res = paramService.guardarParametro(parametro);
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Guardado Éxitosa", "El parametro del sistema de guardó con éxito");
+                parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                tvParametros.getItems().add(parametro);
+                resetearCampos();
+            }else{
+                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló el guardado del parametro del sistema");
+            }
+        }
+    }
+
+    @FXML
+    private void limpiarCampos(ActionEvent event) {
+        parametroSeleccionado = null;
+        txtCodigo.clear();
+        txtDescripcion.clear();
+        txtValor.clear();
+        txtCodigo.setEditable(true);
     }
     
 }
