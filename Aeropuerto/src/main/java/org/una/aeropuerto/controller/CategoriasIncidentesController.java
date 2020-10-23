@@ -25,6 +25,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
@@ -54,7 +58,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private JFXComboBox<String> cbxFiltroCategorias;
     @FXML
     private JFXTextField txtBuscarCateg;
-
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private IncidentesCategoriasDTO categoriaDTO = new IncidentesCategoriasDTO();
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias = new ArrayList<>();
@@ -63,12 +67,19 @@ public class CategoriasIncidentesController extends Controller implements Initia
     IncidentesCategoriasDTO categSuperiorSelec = new IncidentesCategoriasDTO();
     @FXML
     private JFXButton btnGuardar;
+    @FXML
+    private VBox vbContTabla;
+    @FXML
+    private GridPane gpCont;
+    @FXML
+    private BorderPane bpRoot;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroCategorias.setItems(filtro);
         clickTabla();
+        addListener();
     }
 
     @Override
@@ -76,6 +87,8 @@ public class CategoriasIncidentesController extends Controller implements Initia
         limpiarCampos();
         cargarColumnas();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        adjustWidth(contenedor.getWidth());
+        adjustHeigth(contenedor.getHeight());
     }
 
     public void clickTabla() {
@@ -264,5 +277,29 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @Override
     public void cargarTema() {
     }
+    
+    private void addListener(){
+        System.out.println("Entro listener");
+        contenedor.widthProperty().addListener( w -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            adjustHeigth(contenedor.getHeight());
+        });
+    }
 
+    private void adjustWidth(double ancho){
+        bpRoot.setPrefWidth(ancho);
+        vbContTabla.setPrefWidth(ancho);
+        gpCont.setPrefWidth(ancho);
+        txtBuscarCateg.setPrefWidth((ancho/2)-(108+87));
+        tablaCategorias.setPrefWidth(ancho-430);
+    }
+    
+    private void adjustHeigth(double altura){
+        bpRoot.setPrefHeight(altura);
+        vbContTabla.setPrefHeight(altura);
+        gpCont.setPrefHeight(altura);
+        tablaCategorias.setPrefHeight(altura-(79+104+20));
+    }
 }

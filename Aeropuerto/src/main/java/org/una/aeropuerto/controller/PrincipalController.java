@@ -97,6 +97,8 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        lvDesarrollo.setVisible(false);
+        vbDesarrollo.setVisible(false);
         lvDesarrollo.setPrefWidth(0);
         vbDesarrollo.setPrefWidth(0);
         AppContext.getInstance().set("Contenedor", paneContenerdor);

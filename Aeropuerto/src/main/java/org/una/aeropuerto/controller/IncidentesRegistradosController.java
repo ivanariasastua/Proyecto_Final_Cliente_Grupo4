@@ -28,6 +28,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
@@ -58,7 +59,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private JFXTextField txtAreaSelec;
     @FXML
     private JFXTextArea txtDescripcionIncident;
-
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private IncidentesRegistradosService incidentService;
     private IncidentesRegistradosDTO incidentDTO;
     private AreasTrabajosDTO areaSelec = new AreasTrabajosDTO();

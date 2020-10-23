@@ -36,6 +36,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -110,6 +112,16 @@ public class EmpleadosController extends Controller implements Initializable {
     private JFXButton btnGuardarArea;
     @FXML
     private JFXButton btnGuardarHorario;
+    @FXML
+    private GridPane gpCont;
+    @FXML
+    private VBox vbTableAreas;
+    @FXML
+    private HBox hbContHorarios;
+    @FXML
+    private HBox hbHorarios;
+    @FXML
+    private VBox vbTablaHorarios;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -122,7 +134,8 @@ public class EmpleadosController extends Controller implements Initializable {
         clickTablas();
         cargarTablaHorarios();
         cargarTablaAreas();
-        txtId.setDisable(true);    
+        txtId.setDisable(true);   
+        addListener();
     }
 
     @Override
@@ -131,6 +144,8 @@ public class EmpleadosController extends Controller implements Initializable {
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         btnGuardarArea.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         btnGuardarHorario.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        adjustWidth(contenedor.getWidth());
+        adjustHeight(contenedor.getHeight());
     }
 
     public void llenarComboBoxs() {
@@ -656,14 +671,31 @@ public class EmpleadosController extends Controller implements Initializable {
     
     private void addListener(){
         contenedor.widthProperty().addListener( w -> {
-            AdjustWidth(contenedor.getWidth());
+            adjustWidth(contenedor.getWidth());
         });
         contenedor.heightProperty().addListener( h -> {
-            System.out.println(h);
+            adjustHeight(contenedor.getHeight());
         });
     }
     
-    private void AdjustWidth(double ancho){
+    private void adjustWidth(double ancho){
         bpPantalla.setPrefWidth(ancho);
+        cbxRoles.setPrefWidth((ancho/2)-30);
+        txtPass.setPrefWidth((ancho/2)-72);
+        vbTableAreas.setPrefWidth(ancho-250);
+        tvAreas.setPrefWidth(ancho-280);
+        vbTablaHorarios.setPrefWidth(ancho-250);
+    }
+    
+    private void adjustHeight(double altura){
+        bpPantalla.setPrefHeight(altura);
+        vbContenedor.setPrefHeight(altura - 50);
+        tabPane.setPrefHeight(altura - 50);
+        gpCont.setPrefHeight(altura - 150);
+        hbContHorarios.setPrefHeight(altura - 50);
+        tvAreas.setPrefHeight(altura- 69);
+        hbContHorarios.setPrefHeight(altura - 50);
+        vbTablaHorarios.setPrefHeight(altura - 110);
+        tablaHorarios.setPrefHeight(altura - 140);
     }
 }
