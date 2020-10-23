@@ -16,9 +16,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.IncidentesRegistradosController">
+<BorderPane fx:id="bpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.IncidentesRegistradosController">
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbRoot" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="lblTitulo_1" text="Informacion de Incidentes">
                <VBox.margin>
@@ -29,7 +29,7 @@
               <tabs>
                 <Tab fx:id="tabCrear" text="Crear">
                      <content>
-                        <GridPane prefHeight="229.0" prefWidth="800.0">
+                        <GridPane fx:id="gpCrearEditar" prefHeight="229.0" prefWidth="800.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,7 +45,7 @@
                                     <Insets left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actBuscarCategoria" styleClass="button_3" text="Buscar Categoria" GridPane.halignment="CENTER">
+                              <JFXButton onAction="#actBuscarCategoria" prefWidth="200.0" styleClass="button_3" text="Buscar Categoria" GridPane.halignment="CENTER">
                                  <GridPane.margin>
                                     <Insets top="115.0" />
                                  </GridPane.margin>
@@ -55,7 +55,7 @@
                                     <Insets bottom="130.0" left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actBuscarEmisor" styleClass="button_3" text="Buscar Emisor" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                              <JFXButton onAction="#actBuscarEmisor" prefWidth="200.0" styleClass="button_3" text="Buscar Emisor" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="5.0" />
                                  </GridPane.margin>
@@ -65,7 +65,7 @@
                                     <Insets bottom="150.0" left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actBuscarResponsable" styleClass="button_3" text="Buscar Responsable" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                              <JFXButton onAction="#actBuscarResponsable" prefWidth="200.0" styleClass="button_3" text="Buscar Responsable" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets bottom="25.0" />
                                  </GridPane.margin>
@@ -75,7 +75,7 @@
                                     <Insets left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actBuscarArea" styleClass="button_3" text="Buscar Area" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                              <JFXButton onAction="#actBuscarArea" prefWidth="200.0" styleClass="button_3" text="Buscar Area" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                                  <GridPane.margin>
                                     <Insets top="115.0" />
                                  </GridPane.margin>
@@ -101,13 +101,13 @@
                 </Tab>
                 <Tab fx:id="tabIncidentes" text="Incidentes">
                      <content>
-                        <GridPane>
+                        <GridPane fx:id="gpTabla">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
-                            <RowConstraints maxHeight="275.0" minHeight="0.0" prefHeight="84.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="437.0" minHeight="10.0" prefHeight="347.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="84.0" minHeight="0.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="347.0" vgrow="SOMETIMES" />
                             <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>

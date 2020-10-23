@@ -399,13 +399,18 @@ public class ServiciosController extends Controller implements Initializable {
     }
     
     private void addListener(){
-        
+        contenedor.widthProperty().addListener( w -> {
+            adjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            adjustHeight(contenedor.getHeight());
+        });
     }
     
     private void adjustWidth(double ancho){
         
     }
-    
+
     private void adjustHeight(double alto){
         
     }
