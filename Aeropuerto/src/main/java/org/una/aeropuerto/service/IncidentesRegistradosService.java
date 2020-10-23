@@ -18,6 +18,22 @@ import org.una.aeropuerto.util.Respuesta;
  * @author cordo
  */
 public class IncidentesRegistradosService {
+    
+    public Respuesta findById(Long id){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            Request request = new Request("incidentes_registrados/get","/{id}",parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(),"Error al obtener el incidente");
+            }
+            IncidentesRegistradosDTO result = (IncidentesRegistradosDTO) request.readEntity(IncidentesRegistradosDTO.class);
+            return new Respuesta(true, "Incidentes_Registrados", result);
+        }catch(Exception ex){
+            return new Respuesta(false, ex.toString(), "No se estableció conexión con el servidor");
+        }
+    }
 
     public Respuesta guardarIncidenteRegistrado(IncidentesRegistradosDTO incidente) {
         try {

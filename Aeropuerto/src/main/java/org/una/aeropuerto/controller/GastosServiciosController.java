@@ -310,8 +310,6 @@ public class GastosServiciosController extends Controller implements Initializab
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
                     } else {
-                        System.out.println(servGastDTO);
-                        System.out.println("otro "+gastoSelecciondo);
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }
                 }
