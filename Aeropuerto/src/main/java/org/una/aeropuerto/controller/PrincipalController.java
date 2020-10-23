@@ -24,6 +24,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -31,6 +32,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -60,7 +62,6 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML private JFXToggleButton tbTema;
     @FXML private ImageView imvLight;
     @FXML private ImageView imvMaximizarRestaurar;
-    @FXML private VBox vbContenedor;
     @FXML private Label lblTitulo;
     @FXML private ScrollPane spMenu;
     @FXML private VBox vbMenu;
@@ -87,11 +88,19 @@ public class PrincipalController extends Controller implements Initializable {
     private TitledPane tpGastos;
     @FXML
     private TitledPane tpIncidentes;
+    @FXML
+    private VBox vbDesarrollo;
+    @FXML
+    private ListView<Label> lvDesarrollo;
+    @FXML
+    private Pane paneContenerdor;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        AppContext.getInstance().set("Contenedor", vbContenedor);
-        FlowController.getInstance().goViewPanel(vbContenedor, "Inicio");
+        lvDesarrollo.setPrefWidth(0);
+        vbDesarrollo.setPrefWidth(0);
+        AppContext.getInstance().set("Contenedor", paneContenerdor);
+        FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
         tt = new TranslateTransition(Duration.seconds(0.6));
         deslizar.setRate(1);
@@ -101,6 +110,7 @@ public class PrincipalController extends Controller implements Initializable {
         addListener();
         if(UserAuthenticated.getInstance().isRol("GERENTE"))
             crearCodigoGerente();
+        AppContext.getInstance().set("ListView", lvDesarrollo);
     }
 
     @FXML
@@ -113,7 +123,7 @@ public class PrincipalController extends Controller implements Initializable {
         } else {
             tt.setByX(-300);
             tt.setToX(0);
-            vbContenedor.setPrefWidth(vbContenedor.getWidth() - 300);
+            paneContenerdor.setPrefWidth(paneContenerdor.getWidth() - 300);
             vbMenu.setPrefWidth(300);
             vbMenu.getChildren().add(spMenu);
         }
@@ -206,24 +216,24 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionServicios(ActionEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "Servicios");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "Servicios");
     }
 
     @FXML
     private void accionRegistrarGasto(ActionEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "GastosServicios");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "GastosServicios");
     }
 
 
     @FXML
     private void accionCategorias(ActionEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "CategoriasIncidentes");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "CategoriasIncidentes");
 
     }
 
     @FXML
     private void accionRegistrarIncidente(ActionEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "IncidentesRegistrados");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "IncidentesRegistrados");
     }
 
     @FXML
@@ -256,17 +266,17 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionEmpleados(MouseEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "Empleados");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "Empleados");
     }
 
     @FXML
     private void accionAreasTrabajos(MouseEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "AreasTrabajos");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "AreasTrabajos");
     }
 
     @FXML
     private void accionTransacciones(MouseEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "Transacciones");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "Transacciones");
     }
 
     @FXML
@@ -285,15 +295,15 @@ public class PrincipalController extends Controller implements Initializable {
     public void adjustWidth(double witdh) {
         lblTitulo.setPrefWidth(witdh - 599);
         if (isShow) {
-            vbContenedor.setPrefWidth(witdh - 300);
+            paneContenerdor.setPrefWidth(witdh - 300);
         } else {
-            vbContenedor.setPrefWidth(witdh);
+            paneContenerdor.setPrefWidth(witdh);
         }
     }
 
     public void adjustHeigth(double height) {
         spMenu.setPrefHeight(height - 50);
-        vbContenedor.setPrefHeight(height - 50);
+        paneContenerdor.setPrefHeight(height - 50);
     }
 
     private void trasladar() {
@@ -305,7 +315,7 @@ public class PrincipalController extends Controller implements Initializable {
             if (isShow) {
                 vbMenu.getChildren().clear();
                 vbMenu.setPrefWidth(0);
-                vbContenedor.setPrefWidth(vbContenedor.getWidth() + 300);
+                paneContenerdor.setPrefWidth(paneContenerdor.getWidth() + 300);
             }
             isShow = !isShow;
         });
@@ -317,7 +327,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void actAutorizarRoles(ActionEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "HabilitarUsuarios");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "HabilitarUsuarios");
     }
 
     @FXML

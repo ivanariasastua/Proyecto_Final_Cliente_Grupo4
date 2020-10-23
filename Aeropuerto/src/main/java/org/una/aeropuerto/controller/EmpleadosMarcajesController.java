@@ -1,10 +1,13 @@
 
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,30 +49,32 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     /*Formato fechas*/
     private final String hora = "HH:mm:ss";
     private final String fecha = "yyyy-MM-dd";
-    private final TimeZone timeZone = TimeZone.getTimeZone("UTC");
     private final SimpleDateFormat formatoHora = new SimpleDateFormat(hora);
     private final SimpleDateFormat formatoFecha = new SimpleDateFormat(fecha);
     /*Datos para el marcaje*/
     private Date horaEntrada;
     private Date horaSalida;
     private Date fechaRegistro;
-    private Integer horasLaboradas;
+    private Integer horasLaboradas = 0;
     
     private EmpleadosHorariosDTO horarioSelect = null;
     private EmpleadosMarcajesDTO marcaje = null;
     private final EmpleadosMarcajesService service = new EmpleadosMarcajesService();
-    private LocalDateTime actual;
+    private ZonedDateTime actual;
+    @FXML
+    private JFXButton btnHacerMarcaje;
 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        formatoHora.setTimeZone(timeZone);
         initTablaHorarios();
     }    
 
     @Override
     public void initialize() {
-        actual = LocalDateTime.now();
+        btnHacerMarcaje.setVisible(true);
+        actual = ZonedDateTime.now(ZoneId.of("America/Costa_Rica"));
+        System.out.println(actual);
         tvHorarios.getItems().clear();
         horarioSelect = null;
         if(!selectHorarios(UserAuthenticated.getInstance().getUsuario().getHorarios()).isEmpty()) {
@@ -89,7 +94,18 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     @FXML
     private void accionHacerMarcaje(ActionEvent event) {
         if(horarioSelect != null){
-            
+            Respuesta res;
+            if(marcaje.getId() > 0L)
+                res = service.guardarEmpleadoMarcaje(marcaje);
+            else
+                res = service.modificarEmpleadoMarcaje(marcaje.getId(), marcaje);
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.INFORMATION, "Hacer Marcaje", "Marcaje exitoso");
+            }else{
+                Mensaje.show(Alert.AlertType.ERROR, "Hacer Marcaje", "No se pudo efectuar el marcaje");
+            }
+            marcaje = null;
+            cleanLabel();
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Hacer Marcaje", "No ha seleccionado ningun horario");
         }
@@ -108,17 +124,31 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
 
     @FXML
     private void accionSeleccionar(ActionEvent event) {
+        btnHacerMarcaje.setVisible(true);
         if(horarioSelect != null){
             Respuesta res = service.getLastByHorarioId(horarioSelect.getId());
             if(res.getEstado()){
                 marcaje = (EmpleadosMarcajesDTO) res.getResultado("Empleados_Marcajes");
                 if(marcaje == null){
-                    
-                }else if(marcaje.getHoraSalida() == null || marcaje.getHorasLaboradas() == null){
-                    
-                }else{
-                    
+                    marcaje = new EmpleadosMarcajesDTO(0L, horarioSelect, new Date(), null, new Date(), 0);
+                }else if(marcaje.getHoraSalida() == null && marcaje.getHorasLaboradas() == 0){
+                    marcaje.setEmpleadoHorario(horarioSelect);
+                    marcaje.setHoraSalida(new Date());
+                    horaEntrada = marcaje.getHoraEntrada();
+                    horaSalida = marcaje.getHoraSalida();
+                    calcularHorasLaboradas();
+                    marcaje.setHorasLaboradas(horasLaboradas);
+                }else if(marcaje.getHoraSalida() != null && marcaje.getHorasLaboradas() != 0){
+                    marcaje.setEmpleadoHorario(horarioSelect);
+                    LocalDateTime ldt = marcaje.getFechaRegistro().toInstant().atZone(ZoneId.of("UTC-6")).toLocalDateTime();
+                    if(!compararFechas(ldt)){
+                        marcaje = new EmpleadosMarcajesDTO(0L, horarioSelect, new Date(), null, new Date(), 0);
+                    }else{
+                        Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Horario", "Este horrio ya posee un marcaje reciente");
+                        btnHacerMarcaje.setVisible(false);
+                    }
                 }
+                cargarDatos();
             }else{
                 Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Horario", "Hubo un problema buscando el ultimo marcaje hecho");
             }
@@ -129,20 +159,21 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     
     public void cargarDatos(){
         if(horarioSelect != null){
-            lblDetalleHorario.setText(horarioSelect.getDiaEntrada()+" - "+horarioSelect.getDiaSalida()+"Horarios: "+formatoHora.format(horarioSelect.getHoraEntrada())+" - "+formatoHora.format(horarioSelect.getHoraSalida()));
-            lblFechaRegistro.setText(formatoFecha.format(fechaRegistro));
-            if(horaEntrada != null)
-                lblHoraEntrada.setText(formatoHora.format(horaEntrada));
-            if(horaSalida != null)
-                lblHoraSalida.setText(formatoHora.format(horaSalida));
+            lblDetalleHorario.setText("Dias: "+horarioSelect.getDiaEntrada()+" - "+horarioSelect.getDiaSalida()+" Horarios: "+formatoHora.format(horarioSelect.getHoraEntrada())+" - "+formatoHora.format(horarioSelect.getHoraSalida()));
+            lblFechaRegistro.setText(formatoFecha.format(marcaje.getFechaRegistro()));
+            if(marcaje.getHoraEntrada() != null)
+                lblHoraEntrada.setText(formatoHora.format(marcaje.getHoraEntrada()));
+            if(marcaje.getHoraSalida() != null)
+                lblHoraSalida.setText(formatoHora.format(marcaje.getHoraSalida()));
             lblHorasLaboradas.setText(String.valueOf(horasLaboradas));
         }
     }
     
     public List<EmpleadosHorariosDTO> selectHorarios(List<EmpleadosHorariosDTO> horarios){
         List<EmpleadosHorariosDTO> horariosSeleccionados = new ArrayList<>();
+        System.out.println(actual.getDayOfWeek().getValue());
         for(EmpleadosHorariosDTO h : horarios){
-            if(dayToNumber(h.getDiaEntrada()) >= actual.getDayOfWeek().getValue() && dayToNumber(h.getDiaSalida()) <= actual.getDayOfWeek().getValue()){
+            if(dayToNumber(h.getDiaEntrada()) == actual.getDayOfWeek().getValue() || dayToNumber(h.getDiaSalida()) == actual.getDayOfWeek().getValue()){
                 horariosSeleccionados.add(h);
             }
         }
@@ -168,8 +199,8 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     
     private Integer calcularHorasLaboradas(){
         if(horaEntrada != null && horaSalida != null){
-            int hora_entrada = horaEntrada.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime().getHour();
-            int hora_salida = horaSalida.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime().getHour();
+            int hora_entrada = horaEntrada.toInstant().atZone(ZoneId.of("UTC-6")).toLocalDateTime().getHour();
+            int hora_salida = horaSalida.toInstant().atZone(ZoneId.of("UTC-6")).toLocalDateTime().getHour();
             if(hora_entrada < hora_salida){
                 return getCantidadHoras(hora_entrada, hora_salida);
             }else{
@@ -186,5 +217,17 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
             aux++;
         }
         return cant;
+    }
+    
+    private void cleanLabel(){
+        lblDetalleHorario.setText("");
+        lblFechaRegistro.setText("");
+        lblHoraEntrada.setText("");
+        lblHorasLaboradas.setText("");
+        lblHoraSalida.setText("");
+    }
+    
+    private Boolean compararFechas(LocalDateTime compare){
+        return compare.getYear() == actual.getYear() && compare.getMonth() == actual.getMonth() && compare.getDayOfYear() == actual.getDayOfYear();
     }
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
@@ -66,8 +68,8 @@ public class EmpleadosController extends Controller implements Initializable {
     private final EmpleadosAreasTrabajosService empAreasService = new EmpleadosAreasTrabajosService();
     private final RolesService rolesService = new RolesService();
     private final EmpleadosHorariosService horarioService = new EmpleadosHorariosService();
-    
-    
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
+    private ObservableList itemsdias;
     private EmpleadosDTO empleadoDTO = null, jefeSelect = null, emplSeleccionado = null;
     private EmpleadosHorariosDTO horarioSeleccionado = null, horarioDTO = null;
     private AreasTrabajosDTO area = null;
@@ -114,6 +116,7 @@ public class EmpleadosController extends Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         llenarRelojs();
         ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+        itemsdias = items;
         cbxDiaEntrada.setItems(items);
         cbxDiaSalida.setItems(items);
         llenarComboBoxs();
@@ -577,5 +580,91 @@ public class EmpleadosController extends Controller implements Initializable {
         if(tvAreas.getSelectionModel().getSelectedItem() != null){
             areaSelected = tvAreas.getSelectionModel().getSelectedItem();
         }
+    }
+    
+    private void cargarSoloDiasValidos(List<EmpleadosHorariosDTO> horarios){
+        List<String> diasEntrada = new ArrayList<>(), diasSalida = new ArrayList<>();
+        Boolean isDayEnt = false, isDaySal = false;
+        System.out.println(itemsdias.size());
+        for(Object day : itemsdias){
+            System.out.println(day);
+            isDayEnt = false;
+            isDaySal = false;
+            for(EmpleadosHorariosDTO horario : horarios){
+                if(horario.isEstado()){
+                    if(day.equals(horario.getDiaEntrada())){
+                        isDayEnt = true;
+                    }
+                    if(day.equals(horario.getDiaSalida())){
+                        isDaySal = true;
+                    }
+                }
+            }
+            if(!isDayEnt)
+                diasEntrada.add(String.valueOf(day));
+            if(!isDaySal)
+                diasSalida.add(String.valueOf(day));
+        }
+        cbxDiaEntrada.getItems().clear();
+        cbxDiaEntrada.getItems().addAll(diasEntrada);
+        cbxDiaSalida.getItems().clear();
+        cbxDiaSalida.getItems().addAll(diasSalida);
+    }
+    
+    private Boolean validarLogicaHorarios() throws NumberFormatException{
+        String de, ds, he, hs, me, ms;
+        int num_he = 0, num_me = 0, num_hs = 0, num_ms = 0; 
+        de = cbxDiaEntrada.getValue();
+        ds = cbxDiaSalida.getValue();
+        he = entradaHoras.getValue();
+        me = entradaMinutos.getValue();
+        hs = salidaHoras.getValue();
+        ms = salidaMinutos.getValue();
+        num_he = Integer.parseInt(he);
+        num_me = Integer.parseInt(me);
+        num_hs = Integer.parseInt(hs);
+        num_ms = Integer.parseInt(ms);
+        if(de.equals(ds)){
+            int cantHoras = 0;
+            if(num_he < num_hs){
+                cantHoras = num_hs - num_he;
+            }
+            return cantHoras > 8;
+        }else{
+            int indexde = 0, indexds = 0, difdias = 0;
+            indexde = cbxDiaEntrada.getSelectionModel().getSelectedIndex();
+            indexds = cbxDiaSalida.getSelectionModel().getSelectedIndex();
+            if(indexde > indexds){
+                if(indexde == 7 && indexds != 1)
+                    return false;
+                difdias = indexde - indexds;
+            }else{
+                difdias = indexds - indexde;
+            }
+            if(difdias > 1){
+                return false;
+            }else{
+                int cantHoras = 0;
+                if(num_he > num_hs){
+                    cantHoras = ((24-num_he)+num_hs);
+                }else if(num_he < num_hs){
+                    cantHoras = num_hs - num_he;
+                }
+                return cantHoras > 8;
+            }
+        }
+    }
+    
+    private void addListener(){
+        contenedor.widthProperty().addListener( w -> {
+            AdjustWidth(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            System.out.println(h);
+        });
+    }
+    
+    private void AdjustWidth(double ancho){
+        bpPantalla.setPrefWidth(ancho);
     }
 }

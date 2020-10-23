@@ -88,7 +88,7 @@
                                     </Label>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
                                        <children>
-                                          <JFXButton onAction="#accionHacerMarcaje" prefHeight="43.0" prefWidth="224.0" styleClass="button_1" text="Hacer Marcaje" />
+                                          <JFXButton fx:id="btnHacerMarcaje" onAction="#accionHacerMarcaje" prefHeight="43.0" prefWidth="224.0" styleClass="button_1" text="Hacer Marcaje" />
                                        </children>
                                        <padding>
                                           <Insets right="15.0" />

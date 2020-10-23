@@ -18,8 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import org.una.aeropuerto.App;
 import org.una.aeropuerto.util.AppContext;
@@ -36,7 +35,7 @@ public class InicioController extends Controller implements Initializable {
     private List<Image> imagenes;
     private Timer hilo;
     private int index;
-    private VBox contenedor;
+    private Pane contenedor;
     private FadeTransition fade, fade2;
     
     
@@ -54,7 +53,7 @@ public class InicioController extends Controller implements Initializable {
             imvHome.setImage(imagenes.get(0));
         }catch(Exception ex){
         }
-        contenedor = (VBox) AppContext.getInstance().get("Contenedor");
+        contenedor = (Pane) AppContext.getInstance().get("Contenedor");
         addListener();
         initFades();
         initTimer();

@@ -6,6 +6,7 @@
 package org.una.aeropuerto.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import javax.json.bind.annotation.JsonbDateFormat;
 import lombok.AllArgsConstructor;

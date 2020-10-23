@@ -85,7 +85,7 @@ public class FlowController {
         }
     }
 
-    public void goViewPanel(VBox panel, String viewName){
+    public void goViewPanel(Pane panel, String viewName){
         FXMLLoader loader = getLoader(viewName);
         Controller controller = loader.getController();
         controller.setAccion(null);
