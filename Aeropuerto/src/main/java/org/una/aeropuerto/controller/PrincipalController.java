@@ -323,7 +323,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void actParametros(ActionEvent event) {
-        FlowController.getInstance().goViewPanel(vbContenedor, "ParametrosSistema");
+        FlowController.getInstance().goViewPanel(paneContenerdor, "ParametrosSistema");
     }
 
     @FXML
