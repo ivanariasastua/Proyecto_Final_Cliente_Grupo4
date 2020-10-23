@@ -48,67 +48,71 @@ public class IncidentesRegistradosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta findByArea(String area){
-        try{
+
+    public Respuesta findByArea(String area) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("term", area);
             Request request = new Request("incidentes_registrados/area", "/{term}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los incidentes registrados");
             }
-            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>(){});
-            return new Respuesta(true, "Incidentes_Registrados",result);
-        }catch(Exception ex){
+            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>() {
+            });
+            return new Respuesta(true, "Incidentes_Registrados", result);
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta findByEmisor(String emisor){
-        try{
+
+    public Respuesta findByEmisor(String emisor) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("term", emisor);
             Request request = new Request("incidentes_registrados/emisor", "/{term}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los incidentes registrados");
             }
-            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>(){});
-            return new Respuesta(true, "Incidentes_Registrados",result);
-        }catch(Exception ex){
+            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>() {
+            });
+            return new Respuesta(true, "Incidentes_Registrados", result);
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta findByCategoria(String categoria){
-        try{
+
+    public Respuesta findByCategoria(String categoria) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("term", categoria);
             Request request = new Request("incidentes_registrados/categoria", "/{term}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los incidentes registrados");
             }
-            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>(){});
-            return new Respuesta(true, "Incidentes_Registrados",result);
-        }catch(Exception ex){
+            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>() {
+            });
+            return new Respuesta(true, "Incidentes_Registrados", result);
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta findByResponsable(String responsable){
-        try{
+
+    public Respuesta findByResponsable(String responsable) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("term", responsable);
             Request request = new Request("incidentes_registrados/responsable", "/{term}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los incidentes registrados");
             }
-            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>(){});
-            return new Respuesta(true, "Incidentes_Registrados",result);
-        }catch(Exception ex){
+            List<IncidentesRegistradosDTO> result = (List<IncidentesRegistradosDTO>) request.readEntity(new GenericType<List<IncidentesRegistradosDTO>>() {
+            });
+            return new Respuesta(true, "Incidentes_Registrados", result);
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
@@ -130,4 +134,5 @@ public class IncidentesRegistradosService {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
+
 }

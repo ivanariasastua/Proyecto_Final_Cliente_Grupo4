@@ -182,7 +182,7 @@ public class GastosServiciosController extends Controller implements Initializab
             String num = duracion.charAt(0) + "" + duracion.charAt(1);
             cbxDuracion.setValue(Integer.valueOf(num));
             cbxTiempo.setValue(retornarPeriodo(duracion.charAt(2)));
-        } else {
+        } else if (duracion.length() == 2) {
             cbxDuracion.setValue(Integer.parseInt(String.valueOf(duracion.charAt(0))));
             cbxTiempo.setValue(retornarPeriodo(duracion.charAt(1)));
         }
@@ -305,10 +305,13 @@ public class GastosServiciosController extends Controller implements Initializab
                         servGastDTO.setEstado(true);
                     }
                     guardar();
+                    servGastDTO.setServicio(gastoSelecciondo.getServicio());
                     Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
                     } else {
+                        System.out.println(servGastDTO);
+                        System.out.println("otro "+gastoSelecciondo);
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }
                 }
@@ -352,8 +355,8 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actTabPane(MouseEvent event) {
         if (tabGastos.isSelected()) {
-        } else if (tabCrearEditar.isSelected() && gastSelec == false) {
-            limpiarCampos();
+        } else if (tabCrearEditar.isSelected()) {
+
         }
     }
 
