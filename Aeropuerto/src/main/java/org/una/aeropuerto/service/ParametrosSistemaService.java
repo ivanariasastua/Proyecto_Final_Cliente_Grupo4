@@ -82,7 +82,7 @@ public class ParametrosSistemaService {
         }
     }
     
-    public Respuesta getByFechaRegistro(Date fecha1, Date fecha2){
+    public Respuesta getByFechaRegistro(String fecha1, String fecha2){
         try{
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("fecha1", fecha1);
@@ -116,20 +116,18 @@ public class ParametrosSistemaService {
         }
     }
     
-    public Respuesta inactivar(ParametrosSistemaDTO parametro, Long id, String cedula, String codigo) {
-        try {
-            Map<String, Object> parametros = new HashMap<>();
+    public Respuesta update(ParametrosSistemaDTO paramSistema, Long id){
+        try{
+            Map<String,Object> parametros = new HashMap<>();
             parametros.put("id", id);
-            parametros.put("cedula", cedula);
-            parametros.put("codigo", codigo);
-            Request request = new Request("parametros_sistema/inactivar", "/{id}/{cedula}/{codigo}", parametros);
-            request.put(parametro);
+            Request request = new Request("parametros_sistema/editar","/{id}", parametros);
+            request.put(paramSistema);
             if (request.isError()) {
-                return new Respuesta(false, request.getError(), "No se pudo inactivar el parametro");
+                return new Respuesta(false, request.getError(), "Error al actualizar el parametro del sistema");
             }
             ParametrosSistemaDTO result = (ParametrosSistemaDTO) request.readEntity(ParametrosSistemaDTO.class);
-            return new Respuesta(true, "Empleados", result);
-        } catch (Exception ex) {
+            return new Respuesta(true, "Parametros_Sistema", result);
+        }catch(Exception ex){
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }

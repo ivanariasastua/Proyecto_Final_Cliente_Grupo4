@@ -1,6 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ParametrosSistemaController" />
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ParametrosSistemaController">
+   <top>
+      <Label text="Parametros del Sistema" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" top="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Información">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TableView fx:id="tvParametros" onMouseClicked="#clickTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="tcDescripcion" prefWidth="110.0" text="Descripción" />
+                            <TableColumn fx:id="tcValor" prefWidth="104.0" text="Valor" />
+                              <TableColumn fx:id="tcCodIdentificador" prefWidth="171.0" text="Código Identificador" />
+                              <TableColumn fx:id="tcFechaRegistro" prefWidth="171.0" text="Fecha Registro" />
+                              <TableColumn fx:id="tcFechaModificacion" prefWidth="213.0" text="Fecha Modificación" />
+                          </columns>
+                        </TableView>
+                     </center>
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                     <top>
+                        <HBox prefHeight="74.0" prefWidth="770.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="74.0" prefWidth="249.0">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Fecha Inicial">
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                    <DatePicker fx:id="dpInicio" prefHeight="31.0" prefWidth="219.0" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" prefHeight="74.0" prefWidth="233.0">
+                                 <children>
+                                    <Label text="Fecha Final">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <DatePicker fx:id="dpFinal" />
+                                 </children>
+                              </VBox>
+                              <Button mnemonicParsing="false" onAction="#filtrarParametros" prefHeight="31.0" prefWidth="155.0" text="Filtrar">
+                                 <HBox.margin>
+                                    <Insets left="55.0" top="30.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </top>
+                     <bottom>
+                        <Button mnemonicParsing="false" onAction="#inactivarParametro" prefHeight="31.0" prefWidth="147.0" text="Inactivar" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets right="640.0" top="5.0" />
+                           </BorderPane.margin>
+                        </Button>
+                     </bottom>
+                  </BorderPane>
+               </content>
+          </Tab>
+          <Tab text="Agregar/Editar">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefHeight="21.0" prefWidth="44.0" text="Valor">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <JFXTextField fx:id="txtValor" prefHeight="29.0" prefWidth="320.0">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Código Identificador">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <JFXTextField fx:id="txtCodigo" prefHeight="29.0" prefWidth="234.0">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Descripción" />
+                                    <JFXTextArea fx:id="txtDescripcion">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </JFXTextArea>
+                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox prefHeight="124.0" prefWidth="790.0">
+                                 <VBox.margin>
+                                    <Insets top="90.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <JFXButton onAction="#agregarEditarParametro" prefHeight="38.0" prefWidth="177.0" text="Agregar">
+                                       <HBox.margin>
+                                          <Insets top="80.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onAction="#limpiarCampos" prefHeight="31.0" prefWidth="157.0" text="Limpiar Campos">
+                                       <HBox.margin>
+                                          <Insets left="420.0" top="80.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </center>
+                  </BorderPane>
+               </content>
+          </Tab>
+        </tabs>
+         <BorderPane.margin>
+            <Insets left="5.0" right="5.0" />
+         </BorderPane.margin>
+      </TabPane>
+   </center>
+</BorderPane>

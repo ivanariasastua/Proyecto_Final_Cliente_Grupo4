@@ -25,6 +25,7 @@ import javafx.scene.control.TableView;
 import org.una.aeropuerto.dto.IncidentesRegistradosDTO;
 import org.una.aeropuerto.dto.IncidentesRegistradosEstadosDTO;
 import org.una.aeropuerto.service.IncidentesRegistradosEstadosService;
+import org.una.aeropuerto.service.IncidentesRegistradosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
@@ -48,6 +49,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
     List<IncidentesRegistradosEstadosDTO> listEstados = new ArrayList<>();
     Respuesta res;
     IncidentesRegistradosDTO incidenteRegistrado = new IncidentesRegistradosDTO();
+    IncidentesRegistradosService incidentService = new IncidentesRegistradosService();
     @FXML
     private JFXButton btnGuardar;
 
@@ -81,16 +83,21 @@ public class EstadosIncidentesController extends Controller implements Initializ
 
     public void cargarEstados() {
         tabla.getItems().clear();
-        if (incidenteRegistrado.getIncidentesRegistradosEstados() != null) {
-            tabla.getItems().addAll(incidenteRegistrado.getIncidentesRegistradosEstados());
+        Respuesta resp = incidentService.findById(incidenteRegistrado.getId());
+        if (resp.getEstado()) {
+            IncidentesRegistradosDTO incident = (IncidentesRegistradosDTO) resp.getResultado("Incidentes_Registrados");
+            if (incident.getIncidentesRegistradosEstados() != null) {
+                tabla.getItems().addAll((List<IncidentesRegistradosEstadosDTO>)incident.getIncidentesRegistradosEstados());
+            }
         }
+
     }
 
     @FXML
     private void actGuardar(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             if (cbxEstados.getValue().isEmpty() || cbxEstados.getValue() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo de estados es obligatorio");
             } else {
