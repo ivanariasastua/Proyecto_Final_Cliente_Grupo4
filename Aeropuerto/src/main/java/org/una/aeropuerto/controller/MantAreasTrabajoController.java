@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +31,7 @@ public class MantAreasTrabajoController extends Controller implements Initializa
     @FXML
     private JFXTextField txtNombre;
     @FXML
-    private JFXTextField txtDescripcion;
+    private JFXTextArea txtDescripcion;
     @FXML
     private JFXTextField txtEstado;
 

@@ -85,6 +85,7 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @Override
     public void initialize() {
+        tablaAreasTrabajo.getItems().clear();
         llenarColumnas();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
@@ -133,7 +134,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         }
     }
 
-    public void cargarVista(AreasTrabajosDTO area) throws IOException{
+    public void cargarVista(AreasTrabajosDTO area) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("MantAreasTrabajo.fxml"));
         Parent root = loader.load();
         Stage stage = new Stage();
@@ -142,7 +143,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         MantAreasTrabajoController editar = loader.getController();
         editar.cargarDatos(area);
     }
-    
+
     public void clickTablas() {
         tablaAreasTrabajo.setRowFactory(tv -> {
             TableRow<AreasTrabajosDTO> row = new TableRow();
@@ -157,6 +158,7 @@ public class AreasTrabajosController extends Controller implements Initializable
                         cargarVista(areaSeleccionada);
                         areaSelec = false;
                     } catch (IOException ex) {
+                        Logger.getLogger(AreasTrabajosController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
@@ -238,6 +240,10 @@ public class AreasTrabajosController extends Controller implements Initializable
 
     @FXML
     private void actMantAreasTrabajo(ActionEvent event) {
-        FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.UTILITY);
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
+            FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.UTILITY);
+        }
     }
 }

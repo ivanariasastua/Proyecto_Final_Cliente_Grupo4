@@ -49,10 +49,15 @@ public class LogInController extends Controller implements Initializable {
             }
         });
         cbPass.selectedProperty().addListener( t -> {
-            if(cbPass.isSelected())
+            if(cbPass.isSelected()){
+                txtViewPass.setVisible(true);
+                txtPassword.setVisible(false);
                 txtViewPass.setText(txtPassword.getText());
-            else
+            }else{
+                txtViewPass.setVisible(false);
+                txtPassword.setVisible(true);
                 txtViewPass.setText("");
+            }
         });
     }
 

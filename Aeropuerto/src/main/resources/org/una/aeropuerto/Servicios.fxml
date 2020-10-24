@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -33,7 +32,6 @@
                         <GridPane fx:id="gpTabla" prefHeight="610.0" prefWidth="1100.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
@@ -50,53 +48,34 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <GridPane.margin>
-                                    <Insets left="25.0" />
+                                    <Insets left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </TableView>
-                              <JFXButton fx:id="btnGuardar" onAction="#actGuardarServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_1" text="Guardar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                              <JFXButton fx:id="btnGuardar" onAction="#actCrearServicios" prefHeight="43.0" prefWidth="142.0" styleClass="button_1" text="Crear" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                  <GridPane.margin>
-                                    <Insets right="20.0" />
+                                    <Insets right="30.0" />
                                  </GridPane.margin>
                               </JFXButton>
                               <JFXTextField fx:id="txtBuscarServicio" prefHeight="41.0" prefWidth="263.0" promptText="Buscar" styleClass="campos_texto_1">
                                  <GridPane.margin>
-                                    <Insets left="160.0" right="95.0" />
+                                    <Insets left="170.0" right="140.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actInactivarServicio" prefHeight="43.0" prefWidth="116.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
+                              <JFXButton onAction="#actInactivarServicio" prefHeight="43.0" prefWidth="127.0" styleClass="button_2" text="Inactivar" GridPane.rowIndex="2">
                                  <GridPane.margin>
-                                    <Insets left="25.0" />
+                                    <Insets left="30.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXButton onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="88.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT">
+                              <JFXButton onAction="#actBuscarServicio" prefHeight="43.0" prefWidth="103.0" styleClass="button_3" text="Buscar" GridPane.halignment="RIGHT">
                                  <GridPane.margin>
-                                    <Insets top="7.0" />
+                                    <Insets right="30.0" top="7.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXButton onAction="#actLimpiarCamposServicio" prefHeight="43.0" prefWidth="123.0" styleClass="button_3" text="Limpiar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                              <JFXComboBox fx:id="cbxFiltroServicios" prefHeight="31.0" prefWidth="131.0" promptText="Filtrar por" styleClass="comboBox">
                                  <GridPane.margin>
-                                    <Insets right="155.0" />
-                                 </GridPane.margin>
-                              </JFXButton>
-                              <JFXComboBox fx:id="cbxFiltroServicios" prefHeight="31.0" prefWidth="130.0" promptText="Filtrar por" styleClass="comboBox">
-                                 <GridPane.margin>
-                                    <Insets left="25.0" top="11.0" />
+                                    <Insets left="30.0" top="11.0" />
                                  </GridPane.margin>
                               </JFXComboBox>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <children>
-                                    <JFXTextField fx:id="txtNombreServicio" labelFloat="true" prefHeight="55.0" prefWidth="400.0" promptText="Nombre" styleClass="campos_texto_1">
-                                       <VBox.margin>
-                                          <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-                                       </VBox.margin>
-                                    </JFXTextField>
-                                    <JFXTextArea fx:id="txtDescripcionServicio" labelFloat="true" prefHeight="224.0" prefWidth="400.0" promptText="Descripcion" styleClass="campos_texto_1">
-                                       <VBox.margin>
-                                          <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-                                       </VBox.margin>
-                                    </JFXTextArea>
-                                 </children>
-                              </VBox>
                            </children>
                         </GridPane>
                      </content>
@@ -111,9 +90,9 @@
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
                                 </columnConstraints>
                                 <rowConstraints>
-                                  <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="351.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="60.0" minHeight="7.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="101.0" minHeight="10.0" prefHeight="101.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="438.0" minHeight="10.0" prefHeight="389.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="73.0" minHeight="7.0" prefHeight="73.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
                                     <TableView fx:id="tablaPrecios" onMouseClicked="#actClickTablaPrecios" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
@@ -164,6 +143,11 @@
                                           <Insets left="25.0" />
                                        </GridPane.margin>
                                     </JFXButton>
+                                    <Label styleClass="lblTitulo_1" text="Crear Precio" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets bottom="300.0" />
+                                       </GridPane.margin>
+                                    </Label>
                                  </children>
                               </GridPane>
                            </children>

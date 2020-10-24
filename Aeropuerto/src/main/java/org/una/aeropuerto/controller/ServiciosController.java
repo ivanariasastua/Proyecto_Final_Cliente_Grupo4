@@ -9,17 +9,23 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
@@ -34,12 +40,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import org.una.aeropuerto.App;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.dto.ServiciosPreciosDTO;
 import org.una.aeropuerto.service.ServiciosPreciosService;
 import org.una.aeropuerto.service.ServiciosService;
 import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -52,17 +62,11 @@ import org.una.aeropuerto.util.UserAuthenticated;
 public class ServiciosController extends Controller implements Initializable {
 
     @FXML
-    private JFXTextField txtNombreServicio;
-    @FXML
-    private JFXTextArea txtDescripcionServicio;
-    @FXML
     private JFXTextField txtBuscarServicio;
-    private ServiciosDTO servicioDTO;
     private ServiciosService servService;
     @FXML
     private TableView tablaServicios;
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
-    private List<ServiciosDTO> listServic;
     ServiciosDTO servicSeleccionado = new ServiciosDTO();
     boolean servSelec = false;
     boolean precioSelec = false;
@@ -107,15 +111,23 @@ public class ServiciosController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        tablaServicios.getItems().clear();
         servService = new ServiciosService();
         precioService = new ServiciosPreciosService();
-        servicioDTO = new ServiciosDTO();
-        listServic = new ArrayList<>();
-        limpiarCampos();
         limpiarPrecios();
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
+    }
+
+    public void cargarVista(ServiciosDTO servicio) throws IOException {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("MantServicios.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+        MantServiciosController editar = loader.getController();
+        editar.cargarDatos(servicio);
     }
 
     public void clickTabla() {
@@ -125,8 +137,14 @@ public class ServiciosController extends Controller implements Initializable {
                 if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
                     servSelec = true;
                     servicSeleccionado = row.getItem();
-                    txtNombreServicio.setText(servicSeleccionado.getNombre());
-                    txtDescripcionServicio.setText(servicSeleccionado.getDescripcion());
+                }
+                if (!row.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                    try {
+                        servicSeleccionado = row.getItem();
+                        cargarVista(servicSeleccionado);
+                        servSelec = false;
+                    } catch (IOException ex) {
+                    }
                 }
             });
             return row;
@@ -152,54 +170,11 @@ public class ServiciosController extends Controller implements Initializable {
         tablaServicios.getColumns().addAll(colNomb, colDescrip, colEst);
     }
 
-    public boolean validarActivos() {
-        if (servicSeleccionado.isEstado() != true) {
-            Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
-            return false;
-        }
-        return true;
-    }
-
-    @FXML
-    private void actGuardarServicio(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
-            if (servSelec == true) {
-                if (validarActivos()) {
-                    servicSeleccionado.setId(servicSeleccionado.getId());
-                    servicSeleccionado.setDescripcion(txtDescripcionServicio.getText());
-                    servicSeleccionado.setNombre(txtNombreServicio.getText());
-                    Respuesta res = servService.modificarServicio(servicSeleccionado.getId(), servicSeleccionado);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Servicio editado correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
-                    }
-                }
-            } else {
-                if (txtNombreServicio.getText() != null) {
-                    servicioDTO = new ServiciosDTO();
-                    servicioDTO.setDescripcion(txtDescripcionServicio.getText());
-                    servicioDTO.setNombre(txtNombreServicio.getText());
-                    Respuesta res = servService.guardarServicio(servicioDTO);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Servicio guardado correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
-                    }
-                } else {
-                    Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Nombre es obligatorio");
-                }
-            }
-        }
-    }
-
     @FXML
     private void actBuscarServicio(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             cargarColumnas();
             tablaServicios.getItems().clear();
             if (cbxFiltroServicios.getValue() == null) {
@@ -226,60 +201,56 @@ public class ServiciosController extends Controller implements Initializable {
         }
     }
 
-    public void limpiarCampos() {
-        txtNombreServicio.setText(null);
-        txtDescripcionServicio.setText(null);
-        servSelec = false;
-
-    }
-
-    @FXML
-    private void actLimpiarCamposServicio(ActionEvent event) {
-        limpiarCampos();
-    }
-
     @FXML
     private void actInactivarServicio(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
-            if(servicSeleccionado != null){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
+            if (servicSeleccionado != null) {
                 Boolean puedeInactivar = Boolean.FALSE;
                 String cedula = "", codigo = "";
-                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                if (UserAuthenticated.getInstance().isRol("GERENTE")) {
                     cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
                     codigo = (String) AppContext.getInstance().get("CodigoGerente");
                     puedeInactivar = Boolean.TRUE;
-                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                } else if (UserAuthenticated.getInstance().isRol("GESTOR")) {
                     Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Servicio");
-                    if(result.isPresent()){
+                    if (result.isPresent()) {
                         cedula = result.get().getKey();
                         codigo = result.get().getValue();
                         puedeInactivar = Boolean.TRUE;
                     }
                 }
-                if(puedeInactivar){
+                if (puedeInactivar) {
                     Respuesta res = servService.inactivar(servicSeleccionado, servicSeleccionado.getId(), cedula, codigo);
-                    if(res.getEstado()){
+                    if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", "El servicio ha sido inactivado");
-                    }else{
+                    } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", res.getMensaje());
                     }
                 }
-            }else{
+            } else {
                 Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningun servicio");
             }
         }
     }
 
     @FXML
+    private void actCrearServicios(ActionEvent event) {
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
+            FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.UTILITY);
+        }
+    }
+
+    @FXML
     private void actGuardarPrecio(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             if (precioSelec == true) {
                 if (validarPreciosActivos()) {
-                    System.out.println("editando " + precioSelect);
                     precioSelect.setId(precioSelect.getId());
                     precioSelect.setCosto(Float.valueOf(txtCostoServico.getText()));
                     precioSelect.setServicio(servicSeleccionado);
@@ -317,6 +288,7 @@ public class ServiciosController extends Controller implements Initializable {
             selectionModel.select(tabServicios);
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
         } else if (tabPrecios.isSelected() && servSelec == true) {
+            tablaPrecios.getItems().clear();
             txtServicioSelec.setText(servicSeleccionado.getNombre());
             cargarPrecios();
             limpiarPrecios();
@@ -361,30 +333,30 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actInactivarPrecios(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
-            if(precioSelec){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
+            if (precioSelec) {
                 Boolean puedeInactivar = Boolean.FALSE;
                 String cedula = "", codigo = "";
-                if(UserAuthenticated.getInstance().isRol("GERENTE")){
+                if (UserAuthenticated.getInstance().isRol("GERENTE")) {
                     cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
                     codigo = (String) AppContext.getInstance().get("CodigoGerente");
                     puedeInactivar = Boolean.TRUE;
-                }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
+                } else if (UserAuthenticated.getInstance().isRol("GESTOR")) {
                     Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Precio de Servicio");
-                    if(result.isPresent()){
+                    if (result.isPresent()) {
                         cedula = result.get().getKey();
                         codigo = result.get().getValue();
                         puedeInactivar = Boolean.TRUE;
                     }
                 }
-                if(puedeInactivar){
+                if (puedeInactivar) {
                     Respuesta res = precioService.inactivar(precioSelect, precioSelect.getId(), cedula, codigo);
-                    if(res.getEstado()){
+                    if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
                         precioSelec = false;
-                    }else{
+                    } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
                     }
                 }
@@ -408,34 +380,35 @@ public class ServiciosController extends Controller implements Initializable {
     @Override
     public void cargarTema() {
     }
-    
-    private void addListener(){
-        contenedor.widthProperty().addListener( w -> {
+
+    private void addListener() {
+        contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());
         });
-        contenedor.heightProperty().addListener( h -> {
+        contenedor.heightProperty().addListener(h -> {
             adjustHeight(contenedor.getHeight());
         });
     }
-    
-    private void adjustWidth(double ancho){
+
+    private void adjustWidth(double ancho) {
         bpRoot.setPrefWidth(ancho);
         vbRoot.setPrefWidth(ancho);
         tabPane.setPrefWidth(ancho);
         gpTabla.setPrefWidth(ancho);
         gpServicio.setPrefWidth(ancho);
-        tablaServicios.setPrefWidth((ancho/2)-25);
-        txtBuscarServicio.setPrefWidth((ancho/2)-(25+130+88));
-        tablaPrecios.setPrefWidth((ancho/2)-25);
+        tablaServicios.setPrefWidth((ancho / 2) - 25);
+        txtBuscarServicio.setPrefWidth((ancho / 2) - (25 + 130 + 88));
+        tablaPrecios.setPrefWidth((ancho / 2) - 25);
     }
 
-    private void adjustHeight(double alto){
+    private void adjustHeight(double alto) {
         bpRoot.setPrefHeight(alto);
         vbRoot.setPrefHeight(alto);
-        tabPane.setPrefHeight(alto-48);
-        gpTabla.setPrefHeight(alto-87);
-        gpServicio.setPrefHeight(alto-87);
-        tablaServicios.setPrefHeight(alto-241);
-        tablaPrecios.setPrefHeight(alto-207);
+        tabPane.setPrefHeight(alto - 48);
+        gpTabla.setPrefHeight(alto - 87);
+        gpServicio.setPrefHeight(alto - 87);
+        tablaServicios.setPrefHeight(alto - 241);
+        tablaPrecios.setPrefHeight(alto - 207);
     }
+
 }
