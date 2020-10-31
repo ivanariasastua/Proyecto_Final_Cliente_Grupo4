@@ -49,7 +49,7 @@
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </GridPane.margin>
                                           </JFXTextField>
-                                          <JFXTextField fx:id="txtCedula" labelFloat="true" prefHeight="47.0" prefWidth="247.0" promptText="Cedula" styleClass="campos_texto_1" GridPane.rowIndex="2">
+                                          <JFXTextField fx:id="txtCedula" labelFloat="true" prefHeight="47.0" prefWidth="247.0" promptText="Cédula" styleClass="campos_texto_1" GridPane.rowIndex="2">
                                              <GridPane.margin>
                                                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                                              </GridPane.margin>
@@ -135,7 +135,7 @@
                                  <children>
                                     <TableView fx:id="tvAreas" onMouseClicked="#actTablaAreas" prefHeight="493.0" prefWidth="550.0">
                                       <columns>
-                                        <TableColumn fx:id="colArea" prefWidth="75.0" text="Area" />
+                                        <TableColumn fx:id="colArea" prefWidth="75.0" text="Área" />
                                         <TableColumn fx:id="colDescripcion" prefWidth="75.0" text="Descripcion" />
                                           <TableColumn fx:id="colEstado" prefWidth="75.0" text="Estado" />
                                       </columns>
@@ -159,15 +159,15 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="250.0">
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="261.0" styleClass="texto" text="Areas de Trabajo" textAlignment="CENTER">
+                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="261.0" styleClass="texto" text="Áreas de Trabajo" textAlignment="CENTER">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin></Label>
-                                    <JFXButton onAction="#actBuscarArea" prefHeight="50.0" prefWidth="160.0" styleClass="button_3" text="Buscar Area">
+                                    <JFXButton onAction="#actBuscarArea" prefHeight="50.0" prefWidth="160.0" styleClass="button_3" text="Buscar Área">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin></JFXButton>
-                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="239.0" styleClass="texto" text="Area Seleccionada">
+                                    <Label alignment="CENTER" prefHeight="50.0" prefWidth="239.0" styleClass="texto" text="Área Seleccionada">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
@@ -177,7 +177,7 @@
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <JFXButton fx:id="btnGuardarArea" onAction="#actAgregarArea" prefHeight="50.0" prefWidth="165.0" styleClass="button_1" text="Agregar Area">
+                                    <JFXButton fx:id="btnGuardarArea" onAction="#actAgregarArea" prefHeight="50.0" prefWidth="165.0" styleClass="button_1" text="Agregar Área">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
@@ -219,12 +219,12 @@
                               <Separator opacity="0.37" orientation="VERTICAL" prefHeight="511.0" prefWidth="0.0" />
                               <VBox alignment="CENTER" prefHeight="480.0" prefWidth="250.0">
                                  <children>
-                                    <JFXComboBox fx:id="cbxDiaEntrada" focusColor="WHITE" labelFloat="true" prefHeight="47.0" prefWidth="259.0" promptText="Dia de Entrada" styleClass="comboBox">
+                                    <JFXComboBox fx:id="cbxDiaEntrada" focusColor="WHITE" labelFloat="true" prefHeight="47.0" prefWidth="259.0" promptText="Día de Entrada" styleClass="comboBox">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>
                                     </JFXComboBox>
-                                    <JFXComboBox fx:id="cbxDiaSalida" labelFloat="true" prefHeight="47.0" prefWidth="253.0" promptText="Dia de Salida" styleClass="comboBox">
+                                    <JFXComboBox fx:id="cbxDiaSalida" labelFloat="true" prefHeight="47.0" prefWidth="253.0" promptText="Día de Salida" styleClass="comboBox">
                                        <VBox.margin>
                                           <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                                        </VBox.margin>

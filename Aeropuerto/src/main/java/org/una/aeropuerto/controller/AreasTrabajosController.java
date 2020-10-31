@@ -111,7 +111,7 @@ public class AreasTrabajosController extends Controller implements Initializable
             llenarColumnas();
             tablaAreasTrabajo.getItems().clear();
             if (cbxFiltroAreas.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
             } else {
                 Respuesta res;
                 if (cbxFiltroAreas.getValue().equals("Nombre")) {
@@ -198,7 +198,7 @@ public class AreasTrabajosController extends Controller implements Initializable
                 if (puedeInactivar) {
                     Respuesta res = areasService.inactivar(areaSeleccionada, areaSeleccionada.getId(), cedula, codigo);
                     if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", "La área de trabajo: " + areaSeleccionada.getNombre() + " ha sido inactivada");
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", "El área de trabajo: " + areaSeleccionada.getNombre() + " ha sido inactivada");
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", res.getMensaje());
                     }

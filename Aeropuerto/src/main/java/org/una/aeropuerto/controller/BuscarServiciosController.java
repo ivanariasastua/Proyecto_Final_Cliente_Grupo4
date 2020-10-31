@@ -57,7 +57,7 @@ public class BuscarServiciosController extends Controller implements Initializab
         tabla.getColumns().clear();
         TableColumn<ServiciosDTO, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getNombre())));
-        TableColumn<ServiciosDTO, String> colDescrip = new TableColumn<>("Descripcion");
+        TableColumn<ServiciosDTO, String> colDescrip = new TableColumn<>("Descripción");
         colDescrip.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<ServiciosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
@@ -113,7 +113,7 @@ public class BuscarServiciosController extends Controller implements Initializab
         if (servicSelec != null) {
             AppContext.getInstance().set("servSelect", servicSelec);
         } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar un servicio");
         }
     }
 

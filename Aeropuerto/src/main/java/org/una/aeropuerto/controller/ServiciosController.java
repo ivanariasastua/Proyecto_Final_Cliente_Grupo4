@@ -163,7 +163,7 @@ public class ServiciosController extends Controller implements Initializable {
         tablaServicios.getColumns().clear();
         TableColumn<ServiciosDTO, String> colNomb = new TableColumn<>("Nombre");
         colNomb.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
-        TableColumn<ServiciosDTO, String> colDescrip = new TableColumn<>("Descripcion");
+        TableColumn<ServiciosDTO, String> colDescrip = new TableColumn<>("Descripción");
         colDescrip.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDescripcion()));
         TableColumn<ServiciosDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
@@ -178,7 +178,7 @@ public class ServiciosController extends Controller implements Initializable {
             cargarColumnas();
             tablaServicios.getItems().clear();
             if (cbxFiltroServicios.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
             } else {
                 Respuesta res;
                 if (cbxFiltroServicios.getValue().equals("Nombre")) {
@@ -230,7 +230,7 @@ public class ServiciosController extends Controller implements Initializable {
                     }
                 }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningun servicio");
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningún servicio");
             }
         }
     }

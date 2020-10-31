@@ -148,7 +148,7 @@ public class PrincipalController extends Controller implements Initializable {
                 if(res.getEstado()){
                     param = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
                 }else{
-                    Mensaje.show(Alert.AlertType.ERROR, "Generar Condigo", "Hubo un error al generar el codigo: "+res.getMensaje());
+                    Mensaje.show(Alert.AlertType.ERROR, "Generar Código", "Hubo un error al generar el código: "+res.getMensaje());
                 }
             }else{
                 param = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
@@ -158,14 +158,14 @@ public class PrincipalController extends Controller implements Initializable {
                     if(res.getEstado()){
                         param = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
                     }else{
-                        Mensaje.show(Alert.AlertType.ERROR, "Generar Condigo", "Hubo un error al generar el codigo: "+res.getMensaje());
+                        Mensaje.show(Alert.AlertType.ERROR, "Generar Código", "Hubo un error al generar el código: "+res.getMensaje());
                     }
                 }
             }
             if(param != null){
                 if(param.getId() != null || param.getId() > 0L){
                     if(AppContext.getInstance().get("CodigoGerente") != null)
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Generar Codigo", "Este es su codigo:\n"+param.getValor());
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Generar Código", "Este es su código:\n"+param.getValor());
                     AppContext.getInstance().set("CodigoGerente", param.getValor());
                 }
             }
@@ -174,7 +174,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionCerrarSecion(ActionEvent event) {
-        if (Mensaje.showConfirmation("Cerrar Sesion", this.getStage(), "¿Seguro desea cerrar la sesion?")) {
+        if (Mensaje.showConfirmation("Cerrar Sesion", this.getStage(), "¿Seguro desea cerrar la sesión?")) {
             FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
             this.closeWindow();
         }

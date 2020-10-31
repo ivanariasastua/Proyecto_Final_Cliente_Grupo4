@@ -69,7 +69,7 @@ public class MantAreasTrabajoController extends Controller implements Initializa
                     areaSelec.setNombre(txtNombre.getText());
                     Respuesta res = areasService.modificarAreaTrabajo(areaSelec.getId(), areaSelec);
                     if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Area de trabajo editada correctamente");
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Área de trabajo editada correctamente");
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }
@@ -83,7 +83,7 @@ public class MantAreasTrabajoController extends Controller implements Initializa
                     areaDto.setNombre(txtNombre.getText());
                     Respuesta res = areasService.guardarAreaTrabajo(areaDto);
                     if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Area de trabajo guardada correctamente");
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Área de trabajo guardada correctamente");
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }

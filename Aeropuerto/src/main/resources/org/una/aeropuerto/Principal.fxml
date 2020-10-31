@@ -32,7 +32,7 @@
                      <graphic>
                         <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="lblCedula1" text="Cedula: 1-1111-1111" />
+                              <Label fx:id="lblCedula1" text="Cédula: 1-1111-1111" />
                               <Label fx:id="lblRol1" text="Rol: GESTOR" />
                            </children>
                         </VBox>
@@ -40,7 +40,7 @@
                   </MenuItem>
                   <MenuItem fx:id="miCodigo1" mnemonicParsing="false">
                      <graphic>
-                        <JFXButton onAction="#accionGenerarCodigo" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Generar Codigo" />
+                        <JFXButton onAction="#accionGenerarCodigo" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Generar Código" />
                      </graphic>
                   </MenuItem>
                   <MenuItem mnemonicParsing="false">
@@ -50,7 +50,7 @@
                   </MenuItem>
                   <MenuItem mnemonicParsing="false">
                      <graphic>
-                        <JFXButton onAction="#accionCerrarSecion" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Cerrar Sesion" />
+                        <JFXButton onAction="#accionCerrarSecion" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Cerrar Sesión" />
                      </graphic>
                   </MenuItem>
               </items>
@@ -104,7 +104,7 @@
                               <ImageView id="imvEmpleados" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane fx:id="tpAreas" alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" onMouseClicked="#accionAreasTrabajos" text="Areas de Trabajo">
+                        <TitledPane fx:id="tpAreas" alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" onMouseClicked="#accionAreasTrabajos" text="Áreas de Trabajo">
                            <graphic>
                               <ImageView id="imvAreas" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
@@ -137,7 +137,7 @@
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionCategorias" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Categorias">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionCategorias" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Categorías">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
@@ -177,14 +177,14 @@
                               <ImageView id="imvReport" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                         </TitledPane>
-                        <TitledPane fx:id="tpAdministracion" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="518.0" onMouseClicked="#accionParametros" text="Administracion">
+                        <TitledPane fx:id="tpAdministracion" alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="518.0" onMouseClicked="#accionParametros" text="Administración">
                            <graphic>
                               <ImageView id="imvParametros" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" smooth="false" />
                            </graphic>
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <JFXButton onAction="#actParametros" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Parametros del Sistema">
+                                    <JFXButton onAction="#actParametros" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Parámetros del Sistema">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>

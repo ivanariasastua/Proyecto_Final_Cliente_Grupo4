@@ -88,7 +88,7 @@ public class BuscarAreaController extends Controller implements Initializable {
                     Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
                 }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar el area de trabajo");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar el área de trabajo");
             }
         }
     }

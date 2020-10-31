@@ -105,7 +105,7 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
             marcaje = null;
             cleanLabel();
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Hacer Marcaje", "No ha seleccionado ningun horario");
+            Mensaje.show(Alert.AlertType.WARNING, "Hacer Marcaje", "No ha seleccionado ningún horario");
         }
     }
     
@@ -148,7 +148,7 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
                 }
                 cargarDatos();
             }else{
-                Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Horario", "Hubo un problema buscando el ultimo marcaje hecho");
+                Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Horario", "Hubo un problema buscando el último marcaje hecho");
             }
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Horario", "No hay seleccionado un marcaje");
@@ -157,7 +157,7 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     
     public void cargarDatos(){
         if(horarioSelect != null){
-            lblDetalleHorario.setText("Dias: "+horarioSelect.getDiaEntrada()+" - "+horarioSelect.getDiaSalida()+" Horarios: "+formatoHora.format(horarioSelect.getHoraEntrada())+" - "+formatoHora.format(horarioSelect.getHoraSalida()));
+            lblDetalleHorario.setText("Días: "+horarioSelect.getDiaEntrada()+" - "+horarioSelect.getDiaSalida()+" Horarios: "+formatoHora.format(horarioSelect.getHoraEntrada())+" - "+formatoHora.format(horarioSelect.getHoraSalida()));
             lblFechaRegistro.setText(formatoFecha.format(marcaje.getFechaRegistro()));
             if(marcaje.getHoraEntrada() != null)
                 lblHoraEntrada.setText(formatoHora.format(marcaje.getHoraEntrada()));

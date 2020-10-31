@@ -192,12 +192,12 @@ public class EmpleadosController extends Controller implements Initializable {
     public boolean validarCampos() {
         if(emplSeleccionado == null){
             if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null || txtPass.getText() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cedula y Contraseña son obligatorios");
+                Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cédula y Contraseña son obligatorios");
                 return false;
             }
         }else{
             if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre y Cedula son obligatorios");
+                Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre y Cédula son obligatorios");
                 return false;
             }
         }
@@ -285,9 +285,9 @@ public class EmpleadosController extends Controller implements Initializable {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         simpleDateFormat.setTimeZone(timeZone);
         tablaHorarios.getColumns().clear();
-        TableColumn<EmpleadosHorariosDTO, String> colDiaE = new TableColumn<>("Dia de entrada");
+        TableColumn<EmpleadosHorariosDTO, String> colDiaE = new TableColumn<>("Día de entrada");
         colDiaE.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDiaEntrada()));
-        TableColumn<EmpleadosHorariosDTO, String> colDiaS = new TableColumn<>("Dia de salida");
+        TableColumn<EmpleadosHorariosDTO, String> colDiaS = new TableColumn<>("Día de salida");
         colDiaS.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDiaSalida()));
         TableColumn<EmpleadosHorariosDTO, String> colHoraE = new TableColumn<>("Hora de entrada");
         colHoraE.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getHoraEntrada() == null ? "Sin Hora" : String.valueOf(simpleDateFormat.format(p.getValue().getHoraEntrada()))));
@@ -341,7 +341,7 @@ public class EmpleadosController extends Controller implements Initializable {
 
     public boolean validarCamposHorario() {
         if (cbxDiaEntrada.getValue() == null || entradaHoras.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los siguientes campos son obligatorios\nEmpleado\nDia de entrada\nHora de entrada");
+            Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los siguientes campos son obligatorios\nEmpleado\nDía de entrada\nHora de entrada");
             return false;
         }
         return true;
@@ -432,7 +432,7 @@ public class EmpleadosController extends Controller implements Initializable {
                     }
                 }
                 if(existe){
-                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Area", "El area de trabajo ya esta agregada");
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Área", "El área de trabajo ya esta agregada");
                 }else{
                     lblArea.setText(area.getNombre());
                 }
@@ -469,7 +469,7 @@ public class EmpleadosController extends Controller implements Initializable {
                     }
                 }
             }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área de Trabajo de empleado", "No ha seleccionado ninguna área de trabajo");
             }
         }
     }
@@ -532,13 +532,13 @@ public class EmpleadosController extends Controller implements Initializable {
                 if(puedeInactivar){
                     Respuesta res = empAreasService.inactivar(areaSelected, areaSelected.getId(), cedula, codigo);
                     if(res.getEstado()){
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleado", "El area ha sido inactivado");
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Área de Trabajo de empleado", "El área ha sido inactivado");
                     }else{
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Area de Trabajo de empleados", res.getMensaje());
                     }
                 }
             }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Area de Trabajo de empleado", "No ha seleccionado ninguna area de trabajo");
+                Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área de Trabajo de empleado", "No ha seleccionado ninguna área de trabajo");
             }
         }
     }
@@ -557,7 +557,7 @@ public class EmpleadosController extends Controller implements Initializable {
                     tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
                     lblArea.setText("");
                 }else{
-                    Mensaje.show(Alert.AlertType.ERROR, "Asignar Area de Trabajo", res.getMensaje());
+                    Mensaje.show(Alert.AlertType.ERROR, "Asignar Área de Trabajo", res.getMensaje());
                 }
             }
         }

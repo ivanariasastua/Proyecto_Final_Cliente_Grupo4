@@ -73,7 +73,7 @@ public class LogInController extends Controller implements Initializable {
         if (camposValidos()) {
             Respuesta respuesta = service.LogIn(txtUserName.getText(), txtPassword.getText());
             if (respuesta.getEstado()) {
-                Mensaje.show(Alert.AlertType.INFORMATION, "Inicio de sesion", "Inicio de sesion: Sesion iniciada correctamente");
+                Mensaje.show(Alert.AlertType.INFORMATION, "Inicio de sesión", "Inicio de sesión: Sesión iniciada correctamente");
                 if(UserAuthenticated.getInstance().isValid()){
                     FlowController.getInstance().goViewInResizableWindow("Principal", 0, 1100, 0, 700, Boolean.TRUE, StageStyle.UNDECORATED);
                 }else if(!UserAuthenticated.getInstance().isEstado()){
@@ -86,7 +86,7 @@ public class LogInController extends Controller implements Initializable {
                 }
                 this.closeWindow();
             } else {
-                Mensaje.show(Alert.AlertType.ERROR, "Inicio de sesion", respuesta.getMensaje());
+                Mensaje.show(Alert.AlertType.ERROR, "Inicio de sesión", respuesta.getMensaje());
             }
         }
     }
@@ -104,7 +104,7 @@ public class LogInController extends Controller implements Initializable {
     private Boolean camposValidos() {
         String mensaje = "";
         if (txtUserName.getText() == null || txtPassword.getText().isEmpty()) {
-            mensaje = "Campo de texto cedula, esta vacío\n";
+            mensaje = "Campo de texto cédula, esta vacío\n";
         }
         if (txtPassword.getText() == null || txtPassword.getText().isEmpty()) {
             mensaje += "El campo de contraseña esta vacío";
@@ -112,14 +112,14 @@ public class LogInController extends Controller implements Initializable {
         if (mensaje.isEmpty()) {
             return true;
         }
-        Mensaje.show(Alert.AlertType.WARNING, "Inicio de sesion", mensaje);
+        Mensaje.show(Alert.AlertType.WARNING, "Inicio de sesión", mensaje);
         return false;
     }
 
     @FXML
     private void actRestablecer(MouseEvent event) {
         if(txtUserName.getText() == null || txtUserName.getText().isEmpty()){
-            Mensaje.show(Alert.AlertType.WARNING, "Restablecer Contraseña", "Por favor ingrese su cedula");
+            Mensaje.show(Alert.AlertType.WARNING, "Restablecer Contraseña", "Por favor ingrese su cédula");
         }else{
             Respuesta res = contService.enviarCorreo(txtUserName.getText());
             if(res.getEstado()){

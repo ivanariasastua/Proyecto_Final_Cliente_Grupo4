@@ -292,15 +292,15 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     public void llenarColumnas() {
         tablaIncident.getColumns().clear();
-        TableColumn<IncidentesRegistradosDTO, String> colCatag = new TableColumn<>("Categoria");
+        TableColumn<IncidentesRegistradosDTO, String> colCatag = new TableColumn<>("Categoría");
         colCatag.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getCategoria())));
         TableColumn<IncidentesRegistradosDTO, String> colEmisor = new TableColumn<>("Emisor");
         colEmisor.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getEmisor())));
         TableColumn<IncidentesRegistradosDTO, String> colRespons = new TableColumn<>("Responable");
         colRespons.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getResponsable())));
-        TableColumn<IncidentesRegistradosDTO, String> colArea = new TableColumn<>("Area");
+        TableColumn<IncidentesRegistradosDTO, String> colArea = new TableColumn<>("Área");
         colArea.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getAreaTrabajo())));
-        TableColumn<IncidentesRegistradosDTO, String> colDesc = new TableColumn<>("Descripcion");
+        TableColumn<IncidentesRegistradosDTO, String> colDesc = new TableColumn<>("Descripción");
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getDescripcion()));
         TableColumn<IncidentesRegistradosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
@@ -331,7 +331,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
                 }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cual tipo desea filtrar");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar");
             }
         }
     }

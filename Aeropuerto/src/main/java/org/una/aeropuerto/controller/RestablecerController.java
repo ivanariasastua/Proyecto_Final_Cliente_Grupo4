@@ -74,7 +74,7 @@ public class RestablecerController extends Controller implements Initializable {
                     Mensaje.show(Alert.AlertType.ERROR, "Cambiar Contraseña", res.getMensaje());
                 }
             }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Cambiar Contraseña", "Las contraseñas no so iguales");
+                Mensaje.show(Alert.AlertType.WARNING, "Cambiar Contraseña", "Las contraseñas no son iguales");
             }
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Cambiar Contraseña", "Debe rellenar ambos campos de texto");

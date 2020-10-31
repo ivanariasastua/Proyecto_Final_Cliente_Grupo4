@@ -20,7 +20,7 @@
    <center>
       <VBox fx:id="vbRoot" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label styleClass="lblTitulo_1" text="Informacion de Incidentes">
+            <Label styleClass="lblTitulo_1" text="Información de Incidentes">
                <VBox.margin>
                   <Insets bottom="10.0" left="20.0" top="10.0" />
                </VBox.margin>
@@ -40,12 +40,12 @@
                             <RowConstraints maxHeight="232.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <JFXTextField fx:id="txtCategoriaSelec" editable="false" labelFloat="true" promptText="Categoria" styleClass="campos_texto_1">
+                              <JFXTextField fx:id="txtCategoriaSelec" editable="false" labelFloat="true" promptText="Categoría" styleClass="campos_texto_1">
                                  <GridPane.margin>
                                     <Insets left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actBuscarCategoria" prefWidth="200.0" styleClass="button_3" text="Buscar Categoria" GridPane.halignment="CENTER">
+                              <JFXButton onAction="#actBuscarCategoria" prefWidth="200.0" styleClass="button_3" text="Buscar Categoría" GridPane.halignment="CENTER">
                                  <GridPane.margin>
                                     <Insets top="115.0" />
                                  </GridPane.margin>
@@ -70,12 +70,12 @@
                                     <Insets bottom="25.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXTextField fx:id="txtAreaSelec" editable="false" labelFloat="true" promptText="Area" styleClass="campos_texto_1" GridPane.columnIndex="1">
+                              <JFXTextField fx:id="txtAreaSelec" editable="false" labelFloat="true" promptText="Área" styleClass="campos_texto_1" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets left="30.0" right="30.0" />
                                  </GridPane.margin>
                               </JFXTextField>
-                              <JFXButton onAction="#actBuscarArea" prefWidth="200.0" styleClass="button_3" text="Buscar Area" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                              <JFXButton onAction="#actBuscarArea" prefWidth="200.0" styleClass="button_3" text="Buscar Área" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                                  <GridPane.margin>
                                     <Insets top="115.0" />
                                  </GridPane.margin>
@@ -90,9 +90,9 @@
                                     <Insets right="155.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXTextArea fx:id="txtDescripcionIncident" labelFloat="true" promptText="Descripcion del incidente" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <JFXTextArea fx:id="txtDescripcionIncident" labelFloat="true" promptText="Descripción del incidente" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
-                                    <Insets bottom="110.0" left="30.0" right="30.0" top="45.0" />
+                                    <Insets bottom="180.0" left="30.0" right="30.0" top="20.0" />
                                  </GridPane.margin>
                               </JFXTextArea>
                            </children>

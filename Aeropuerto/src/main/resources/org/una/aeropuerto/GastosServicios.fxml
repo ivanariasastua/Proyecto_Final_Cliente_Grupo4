@@ -20,7 +20,7 @@
    <center>
       <VBox fx:id="vbRoot" BorderPane.alignment="CENTER">
          <children>
-            <Label styleClass="lblTitulo_1" text="Informacion de Gastos de Servicios">
+            <Label styleClass="lblTitulo_1" text="Información de Gastos de Servicios">
                <VBox.margin>
                   <Insets bottom="20.0" left="25.0" top="5.0" />
                </VBox.margin>
@@ -40,14 +40,14 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <JFXComboBox fx:id="cbxFiltro" prefHeight="31.0" prefWidth="108.0" promptText="Filtrar por" styleClass="comboBox">
+                                    <JFXComboBox fx:id="cbxFiltro" prefHeight="31.0" prefWidth="133.0" promptText="Filtrar por" styleClass="comboBox">
                                        <GridPane.margin>
                                           <Insets left="20.0" top="11.0" />
                                        </GridPane.margin>
                                     </JFXComboBox>
                                     <JFXTextField fx:id="txtBuscarGastosS" prefHeight="41.0" prefWidth="518.0" promptText="Buscar" styleClass="campos_texto_1">
                                        <GridPane.margin>
-                                          <Insets left="130.0" />
+                                          <Insets left="155.0" />
                                        </GridPane.margin>
                                     </JFXTextField>
                                     <JFXButton onAction="#actBuscarGastosServicios" prefHeight="43.0" prefWidth="138.0" styleClass="button_3" text="Buscar" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
@@ -114,7 +114,7 @@
                                     <Insets bottom="70.0" left="25.0" right="25.0" />
                                  </GridPane.margin>
                               </JFXComboBox>
-                              <JFXTextField fx:id="txtNumContrato" labelFloat="true" prefHeight="41.0" prefWidth="280.0" promptText="Numero de Contrato" styleClass="campos_texto_1">
+                              <JFXTextField fx:id="txtNumContrato" labelFloat="true" prefHeight="41.0" prefWidth="280.0" promptText="Número de Contrato" styleClass="campos_texto_1">
                                  <GridPane.margin>
                                     <Insets left="25.0" right="25.0" top="140.0" />
                                  </GridPane.margin>
@@ -134,7 +134,7 @@
                                     <Insets left="25.0" right="25.0" top="150.0" />
                                  </GridPane.margin>
                               </JFXComboBox>
-                              <JFXComboBox fx:id="cbxDuracion" labelFloat="true" prefHeight="31.0" prefWidth="596.0" promptText="Duracion" styleClass="comboBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <JFXComboBox fx:id="cbxDuracion" labelFloat="true" prefHeight="31.0" prefWidth="596.0" promptText="Duración" styleClass="comboBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="50.0" left="25.0" right="25.0" />
                                  </GridPane.margin>

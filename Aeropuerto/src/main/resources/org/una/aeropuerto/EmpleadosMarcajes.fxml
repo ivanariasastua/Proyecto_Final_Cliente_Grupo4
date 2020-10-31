@@ -60,7 +60,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="71.0" prefWidth="800.0" styleClass="texto" text="Informacion del Marcaje" GridPane.columnSpan="2" />
+                                    <Label alignment="CENTER" prefHeight="71.0" prefWidth="800.0" styleClass="texto" text="Información del Marcaje" GridPane.columnSpan="2" />
                                     <Label layoutX="10.0" layoutY="36.0" prefHeight="123.0" prefWidth="399.0" styleClass="texto" text="Detalle del Horario" GridPane.rowIndex="1">
                                        <padding>
                                           <Insets left="5.0" right="5.0" />

@@ -123,7 +123,7 @@ public class GastosServiciosController extends Controller implements Initializab
     }
 
     public void llenarComboBoxs() {
-        ObservableList filtro = FXCollections.observableArrayList("Empresa", "Numero de contraro", "Servicio");
+        ObservableList filtro = FXCollections.observableArrayList("Empresa", "Número de contrato", "Servicio");
         cbxFiltro.setItems(filtro);
 
         ObservableList<String> estadoPag = FXCollections.observableArrayList("Pago", "Pendiente");
@@ -142,7 +142,7 @@ public class GastosServiciosController extends Controller implements Initializab
         ObservableList<Integer> duaracion = FXCollections.observableArrayList(numeros);
         cbxDuracion.setItems(duaracion);
 
-        ObservableList<String> tiempo = FXCollections.observableArrayList("Dia(s)", "Semana(s)", "Mes(es)", "Año(s)");
+        ObservableList<String> tiempo = FXCollections.observableArrayList("Día(s)", "Semana(s)", "Mes(es)", "Año(s)");
         cbxTiempo.setItems(tiempo);
     }
 
@@ -182,7 +182,7 @@ public class GastosServiciosController extends Controller implements Initializab
 
     public String retornarPeriodo(char num) {
         if (num == '1') {
-            return "Dia(s)";
+            return "Día(s)";
         } else if (num == '2') {
             return "Semana(s)";
         } else if (num == '3') {
@@ -242,7 +242,7 @@ public class GastosServiciosController extends Controller implements Initializab
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
 
         } else {
-            if (gastSelec == true) {
+            if (gastSelec) {
                 if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
                     SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                     selectionModel.select(tabCrearEditar);
@@ -258,7 +258,7 @@ public class GastosServiciosController extends Controller implements Initializab
 
     public boolean validarCamposGastos() {
         if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || txtServicio.getText() == null || txtResponsable.getText() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Son obligatorios los siguientes campos: \nEmpresa\nNumero de contrato\nServicio\nResponsable");
+            Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Son obligatorios los siguientes campos: \nEmpresa\nNúmero de contrato\nServicio\nResponsable");
             return false;
         }
         return true;
@@ -288,7 +288,7 @@ public class GastosServiciosController extends Controller implements Initializab
         } else if (cbxPerioricidad.getValue().equals("Anual")) {
             servGastDTO.setPerioricidad(5);
         }
-        if (cbxTiempo.getValue().equals("Dia(s)")) {
+        if (cbxTiempo.getValue().equals("Día(s)")) {
             servGastDTO.setDuracion(Long.valueOf(cbxDuracion.getValue() + "1"));
         } else if (cbxTiempo.getValue().equals("Semana(s)")) {
             servGastDTO.setDuracion(Long.valueOf(cbxDuracion.getValue() + "2"));
@@ -425,7 +425,7 @@ public class GastosServiciosController extends Controller implements Initializab
         tablaGastosS.getColumns().clear();
         TableColumn<ServiciosGastosDTO, String> colEmpresa = new TableColumn<>("Empresa");
         colEmpresa.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getEmpresa()));
-        TableColumn<ServiciosGastosDTO, String> colNumC = new TableColumn<>("Numero contrato");
+        TableColumn<ServiciosGastosDTO, String> colNumC = new TableColumn<>("Número contrato");
         colNumC.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNumeroContrato()));
         TableColumn<ServiciosGastosDTO, String> colfecha = new TableColumn<>("Fecha registro");
         colfecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
@@ -451,12 +451,12 @@ public class GastosServiciosController extends Controller implements Initializab
             cargarColumnasTabla();
             tablaGastosS.getItems().clear();
             if (cbxFiltro.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cual tipo desea filtrar la informacion");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
             } else {
                 Respuesta res;
                 if (cbxFiltro.getValue().equals("Empresa")) {
                     res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
-                } else if (cbxFiltro.getValue().equals("Numero de contraro")) {
+                } else if (cbxFiltro.getValue().equals("Número de contrato")) {
                     res = servGastService.getByContrato(txtBuscarGastosS.getText());
                 } else {
                     res = servGastService.findByServicio(txtBuscarGastosS.getText());

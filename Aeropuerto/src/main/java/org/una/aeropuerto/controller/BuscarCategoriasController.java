@@ -73,7 +73,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
                         tablaCategorias.setItems(items);
                     }
                 } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorias", res.getMensaje());
+                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías", res.getMensaje());
                 }
             }
         }
@@ -91,7 +91,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
         tablaCategorias.getColumns().clear();
         TableColumn<IncidentesCategoriasDTO, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
-        TableColumn<IncidentesCategoriasDTO, String> colDesc = new TableColumn<>("Descripcion");
+        TableColumn<IncidentesCategoriasDTO, String> colDesc = new TableColumn<>("Descripción");
         colDesc.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getDescripcion())));
         TableColumn<IncidentesCategoriasDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
@@ -110,7 +110,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
                     Mensaje.show(Alert.AlertType.WARNING, "Inactivo", "El dato está inactivo, no puede realizar más acciones con dicha información");
                 }
             } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoría");
             }
         }
     }
@@ -126,7 +126,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
         if (tablaCategorias.getSelectionModel().getSelectedItem() != null) {
             AppContext.getInstance().set("CategoriaSup", tablaCategorias.getSelectionModel().getSelectedItem());
         } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoria");
+            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dato", "Debe seleccionar la categoría");
         }
     }
 

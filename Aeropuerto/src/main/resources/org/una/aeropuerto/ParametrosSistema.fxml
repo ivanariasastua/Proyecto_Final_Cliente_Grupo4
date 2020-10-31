@@ -20,7 +20,7 @@
 
 <BorderPane fx:id="bpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ParametrosSistemaController">
    <top>
-      <Label styleClass="lblTitulo_1" text="Parametros del Sistema" BorderPane.alignment="CENTER">
+      <Label styleClass="lblTitulo_1" text="Parámetros del Sistema" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="10.0" top="10.0" />
          </BorderPane.margin>

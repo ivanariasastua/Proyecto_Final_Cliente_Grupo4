@@ -118,7 +118,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
                         tvParametros.getItems().addAll((List<ParametrosSistemaDTO>)res.getResultado("Parametros_Sistema"));
                     }else{
                         System.out.println(res.getMensajeInterno());
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Parametros del Sistema", res.getMensaje());
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Parámetros del Sistema", res.getMensaje());
                     }
                 });
                 updateMessage("Filtrando empleados...");
@@ -161,7 +161,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
         if(dpInicio.getValue() != null && dpFinal.getValue() != null){
             if(dpInicio.getValue().isBefore(dpFinal.getValue()) ){
                 tvParametros.getItems().clear();
-                Mensaje.showProgressDialog(TaskFiltrarParametros(), "Filtrando Parametros", "Obteniendo los parametros de la base de datos");
+                Mensaje.showProgressDialog(TaskFiltrarParametros(), "Filtrando Parámetros", "Obteniendo los parámetros de la base de datos");
             }else{
                 Mensaje.show(Alert.AlertType.WARNING, "Fechas Incorrectas", "El orden de las fechas esta invertido");
             }
@@ -176,13 +176,13 @@ public class ParametrosSistemaController extends Controller implements Initializ
             parametroSeleccionado.setEstado(Boolean.FALSE);
             Respuesta res = paramService.update(parametroSeleccionado, parametroSeleccionado.getId());
             if(res.getEstado()){
-                Mensaje.show(Alert.AlertType.CONFIRMATION, "Éxito", "El parametro del sistema fue inactivado con éxito");
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Éxito", "El parámetro del sistema fue inactivado con éxito");
                 tvParametros.getItems().remove(parametroSeleccionado);
             }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Error", "No se pudo inactivar el parametro del sistema");
+                Mensaje.show(Alert.AlertType.WARNING, "Error", "No se pudo inactivar el parámetro del sistema");
             }
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Datos Insuficientes", "No se ha seleccionado un parametro para inactivar");
+            Mensaje.show(Alert.AlertType.WARNING, "Datos Insuficientes", "No se ha seleccionado un parámetro para inactivar");
         }
     }
 
@@ -211,13 +211,13 @@ public class ParametrosSistemaController extends Controller implements Initializ
             parametro.setValor(txtValor.getText());
             res = paramService.modificarParametro(parametroSeleccionado.getId(), parametro);
             if(res.getEstado()){
-                Mensaje.show(Alert.AlertType.CONFIRMATION, "Actualización Éxitosa", "El parametro del sistema de actualizó con éxito");
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Actualización Éxitosa", "El parámetro del sistema se actualizó con éxito");
                 parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
                 tvParametros.getItems().remove(parametroSeleccionado);
                 tvParametros.getItems().add(parametro);
                 resetearCampos();
             }else{
-                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló la acualización del parametro del sistema");
+                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló la acualización del parámetro del sistema");
             }
         }else{
             parametro.setCodigoIdentificador(txtCodigo.getText());
@@ -226,12 +226,12 @@ public class ParametrosSistemaController extends Controller implements Initializ
             parametro.setEstado(Boolean.TRUE);
             res = paramService.guardarParametro(parametro);
             if(res.getEstado()){
-                Mensaje.show(Alert.AlertType.CONFIRMATION, "Guardado Éxitosa", "El parametro del sistema de guardó con éxito");
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Guardado Éxitosa", "El parámetro del sistema se guardó con éxito");
                 parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
                 tvParametros.getItems().add(parametro);
                 resetearCampos();
             }else{
-                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló el guardado del parametro del sistema");
+                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló el guardado del parámetro del sistema");
             }
         }
     }
