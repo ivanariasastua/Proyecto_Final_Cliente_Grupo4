@@ -230,7 +230,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     public void cargarDatos() {
         txtDescripcion.setText(categoriaSelec.getDescripcion());
         txtNombre.setText(categoriaSelec.getNombre());
-        if (categoriaSelec.getCategoriaSuperior().getNombre() != null) {
+        if (categoriaSelec.getCategoriaSuperior() != null) {
             txtcategoriaSuperior.setText(categoriaSelec.getCategoriaSuperior().getNombre());
         } else {
             txtcategoriaSuperior.setText("(No tiene Categoría superior)");
