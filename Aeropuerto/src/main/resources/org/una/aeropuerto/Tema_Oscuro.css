@@ -9,8 +9,18 @@ and open the template in the editor.
 */
 .date-picker{
     -fx-base: #2a2d4d;
-    -fx-text-fill: white;
     -fx-prompt-text-fill: #B2B2B2;
+}
+
+.date-picker .text-field{
+    -fx-text-fill: white;
+    -fx-font: bold 16px "Courier";
+}
+.rb{
+   -fx-text-fill: white;
+   -fx-font: bold 16px "Courier"; 
+   -jfx-unselected-color: white;
+   -jfx-selected-color: royalblue;
 }
 .raiz{
     -fx-background-color: #2a2d4d;
@@ -54,8 +64,8 @@ and open the template in the editor.
 }
 
 .button_1{
-    -fx-background-color: transparent;
-    -fx-text-fill: #2b702b;
+    -fx-background-color: #2b702b;
+    -fx-text-fill: white;
     -fx-font: bold 14pt "Courier";
     -fx-border-color: #2b702b;
     -fx-border-radius: 15px;
