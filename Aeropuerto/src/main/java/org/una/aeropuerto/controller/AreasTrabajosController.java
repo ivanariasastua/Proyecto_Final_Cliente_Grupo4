@@ -7,7 +7,6 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
