@@ -12,7 +12,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -65,6 +67,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
     
     ParametrosSistemaDTO parametroSeleccionado;
     ParametrosSistemaService paramService;
+    Map<String,String> modoDesarrollo;
     
     private final String fecha = "yyyy-MM-dd";
     private final SimpleDateFormat formatoFecha = new SimpleDateFormat(fecha);
@@ -93,6 +96,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
         initTableView();
         paramService = new ParametrosSistemaService();
         addListener();
+        datosModoDesarrollo();
     }
 
     public void initTableView(){
@@ -101,6 +105,15 @@ public class ParametrosSistemaController extends Controller implements Initializ
         tcCodIdentificador.setCellValueFactory((p)-> new SimpleStringProperty(p.getValue().getCodigoIdentificador()));
         tcFechaRegistro.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(formatoFecha.format(p.getValue().getFechaRegistro()))));
         tcFechaModificacion.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(formatoFecha.format(p.getValue().getFechaModificacion()))));
+    }
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista ParametrosSistema");
+        modoDesarrollo.put("Inactivar", "Responde al método inactivarParametro");
+        modoDesarrollo.put("Filtrar", "Responde al método filtrarParametros");
+        modoDesarrollo.put("Agregar", "Responde al método agregarEditarParametro");
+        modoDesarrollo.put("Limpiar Campos", "Responde al método limpiarCampos");
     }
     
     public Task TaskFiltrarParametros(){

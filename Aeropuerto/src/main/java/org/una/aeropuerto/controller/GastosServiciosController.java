@@ -10,7 +10,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -88,6 +90,7 @@ public class GastosServiciosController extends Controller implements Initializab
     ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
     EmpleadosDTO responsableSelec;
     ServiciosDTO servicioSelec;
+    private Map<String,String> modoDesarrollo;
     @FXML
     private JFXTextField txtServicio;
     @FXML
@@ -107,6 +110,7 @@ public class GastosServiciosController extends Controller implements Initializab
         llenarComboBoxs();
         clickTabla();
         addListner();
+        datosModoDesarrollo();
     }
 
     @Override
@@ -122,6 +126,18 @@ public class GastosServiciosController extends Controller implements Initializab
         adjustHeigth(contenedor.getHeight());
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista GastosServicios");
+        modoDesarrollo.put("Buscar Gasto", "Responde al método actBuscarGastosServicios");
+        modoDesarrollo.put("Editar Gasto", "Responde al método actEditarGastoS");
+        modoDesarrollo.put("Inactivar Gasto", "Responde al método actInactivarGastoS");
+        modoDesarrollo.put("Buscar Servicio", "Responde al método actBuscarServicio");
+        modoDesarrollo.put("Buscar Empleado", "Responde al método actBuscarResponsable");
+        modoDesarrollo.put("Limpiar Gasto", "Responde al método actLimpiarGastoS");
+        modoDesarrollo.put("Guardar Gasto", "Responde al método actGuardarGastoS");
+    }
+    
     public void llenarComboBoxs() {
         ObservableList filtro = FXCollections.observableArrayList("Empresa", "Número de contrato", "Servicio");
         cbxFiltro.setItems(filtro);

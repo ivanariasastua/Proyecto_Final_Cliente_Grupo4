@@ -16,6 +16,8 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import javafx.animation.TranslateTransition;
@@ -72,6 +74,8 @@ public class PrincipalController extends Controller implements Initializable {
     private TranslateTransition tt;
     private AuthenticationRequest authetication;
     private final ParametrosSistemaService service = new ParametrosSistemaService();
+    private Map<String,String> modoDesarrollo;
+    
     @FXML
     private TitledPane tpReportes;
     @FXML
@@ -113,6 +117,7 @@ public class PrincipalController extends Controller implements Initializable {
         if(UserAuthenticated.getInstance().isRol("GERENTE"))
             crearCodigoGerente();
         AppContext.getInstance().set("ListView", lvDesarrollo);
+        datosModoDesarrollo();
     }
 
     @FXML
@@ -135,6 +140,25 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML
     private void accionGenerarCodigo(ActionEvent event) {
         crearCodigoGerente();
+    }
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista Principal");
+        modoDesarrollo.put("hamMenu", "Responde al método accionDeslizarMenu");
+        modoDesarrollo.put("tpInicio", "Responde al método accionInicio");
+        modoDesarrollo.put("tpEmpleados", "Responde al método accionEmpleados");
+        modoDesarrollo.put("tpAreas", "Responde al método accionAreasTrabajos");
+        modoDesarrollo.put("Servicios", "Responde al método accionServicios");
+        modoDesarrollo.put("Registro de Gastos", "Responde al método accionRegistrarGasto");
+        modoDesarrollo.put("Categorias", "Responde al método accionCategorias");
+        modoDesarrollo.put("Registro de Incidentes", "Responde al método accionRegistrarIncidente");
+        modoDesarrollo.put("Gastos de Servicios", "Responde al método accionReporteGastos");
+        modoDesarrollo.put("Incidentes Registrados", "Responde al método accionReporteIncidentes");
+        modoDesarrollo.put("Horas Laboradas", "Responde al método accionHoraLaboradas");
+        modoDesarrollo.put("Párametros del Sistema", "Responde al método actParametros");
+        modoDesarrollo.put("Autorizar Roles", "Responde al método actAutorizarRoles");
+        modoDesarrollo.put("tpTransacciones", "Responde al método accionTransacciones");
     }
     
     public void crearCodigoGerente(){

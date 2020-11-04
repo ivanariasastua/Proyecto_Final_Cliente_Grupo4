@@ -11,7 +11,9 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -62,6 +64,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
     IncidentesCategoriasDTO categSuperiorSelec = new IncidentesCategoriasDTO();
+    private Map<String,String> modoDesarrollo;
     @FXML
     private JFXButton btnGuardar;
     @FXML
@@ -87,6 +90,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         cbxFiltroCategorias.setItems(filtro);
         clickTabla();
         addListener();
+        datosModoDesarrollo();
     }
 
     @Override
@@ -99,6 +103,17 @@ public class CategoriasIncidentesController extends Controller implements Initia
         limpiarCampos();
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista CategoriasIncidentes");
+        modoDesarrollo.put("Buscar", "Responde al método actBuscarCategorias");
+        modoDesarrollo.put("Inactivar", "Responde al método actInactivarCateg");
+        modoDesarrollo.put("Editar", "Responde al método actEditarCategorias");
+        modoDesarrollo.put("Buscar Categoría", "Responde al método actBuscarCatSuperior");
+        modoDesarrollo.put("Limpiar", "Responde al método actLimpiar");
+        modoDesarrollo.put("Guardar", "Responde al método actGuardarCategoria");
+    }
+    
     public void clickTabla() {
         tablaCategorias.setRowFactory(tv -> {
             TableRow<IncidentesCategoriasDTO> row = new TableRow();

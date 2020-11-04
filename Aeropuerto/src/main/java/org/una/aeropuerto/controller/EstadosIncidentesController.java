@@ -10,7 +10,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -50,6 +52,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
     Respuesta res;
     IncidentesRegistradosDTO incidenteRegistrado = new IncidentesRegistradosDTO();
     IncidentesRegistradosService incidentService = new IncidentesRegistradosService();
+    Map<String,String> modoDesarrollo;
     @FXML
     private JFXButton btnGuardar;
 
@@ -72,6 +75,12 @@ public class EstadosIncidentesController extends Controller implements Initializ
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista EstadosIncidentes");
+        modoDesarrollo.put("Guardar", "Responde al método actGuardar");
+    }
+    
     public void cargarColumnas() {
         tabla.getColumns().clear();
         TableColumn<IncidentesRegistradosEstadosDTO, String> colEstado = new TableColumn<>("Estado");

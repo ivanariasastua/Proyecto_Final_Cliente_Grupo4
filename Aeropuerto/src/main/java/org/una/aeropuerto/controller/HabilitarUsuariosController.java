@@ -7,7 +7,9 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXComboBox;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -50,6 +52,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     private EmpleadosService empService;
     private RolesService rolService;
     private List<EmpleadosDTO> empleadosSeleccionados;
+    private Map<String,String> modoDesarrollo;
     @FXML
     private BorderPane bpRoot;
     
@@ -71,6 +74,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         initTableView();
         initComboBoxRoles();
         addListener();
+        datosModoDesarrollo();
     }
     
     public void initTableView(){
@@ -80,6 +84,13 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         tcJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
         tcRol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol() )));
         tcEstado.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactivo"));
+    }
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la ventana HabilitarUsuarios");
+        modoDesarrollo.put("Buscar", "Responde al método actFiltrarEmpleados");
+        modoDesarrollo.put("Habilitar", "Responde al método actHabilitarEmpleado");
     }
     
     public void initComboBoxRoles(){

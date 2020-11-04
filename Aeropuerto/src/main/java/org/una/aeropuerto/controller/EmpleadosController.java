@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -75,6 +77,7 @@ public class EmpleadosController extends Controller implements Initializable {
     private EmpleadosHorariosDTO horarioSeleccionado = null, horarioDTO = null;
     private AreasTrabajosDTO area = null;
     private EmpleadosAreasTrabajosDTO areaSelected = null;
+    private Map<String,String> modoDesarrollo;
     
     @FXML private TableView tablaHorarios;
     @FXML private BorderPane bpPantalla;
@@ -136,6 +139,7 @@ public class EmpleadosController extends Controller implements Initializable {
         cargarTablaAreas();
         txtId.setDisable(true);   
         addListener();
+        datosModoDesarrollo();
         txtPass.textProperty().addListener( t -> {
             if(cbViewPass.isSelected()){
                 txtViewPass.setText(txtPass.getText());
@@ -157,6 +161,21 @@ public class EmpleadosController extends Controller implements Initializable {
         rowContrasena.setPrefHeight((contenedor.getHeight()-100) / 4);
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista Empleados");
+        modoDesarrollo.put("Limpiar Empleado", "Responde al método actLimpiarCamposEmpleads");
+        modoDesarrollo.put("Buscar Empleado", "Responde al método actBuscarEmpleado");
+        modoDesarrollo.put("Inactivar Empleado", "Responde al método actInactivarEmpleado");
+        modoDesarrollo.put("Guardar Empleado", "Responde al método actGuardarEmpleado");
+        modoDesarrollo.put("Buscar Area", "Responde al método actBuscarArea");
+        modoDesarrollo.put("Agregar Area", "Responde al método actAgregarArea");
+        modoDesarrollo.put("Inactivar Area", "Responde al método actInactivarAreaEmpleado");
+        modoDesarrollo.put("Limpiar Horario", "Responde al método actLimpiarCamposHorario");
+        modoDesarrollo.put("Guardar Horario", "Responde al método actGuardarHorario");
+        modoDesarrollo.put("Inactivar Horario", "Responde al método actInactivarHorarioEmpleado");
+    }
+    
     public void llenarComboBoxs() {
         cbxRoles.getItems().clear();
         Respuesta resp = rolesService.getAll();

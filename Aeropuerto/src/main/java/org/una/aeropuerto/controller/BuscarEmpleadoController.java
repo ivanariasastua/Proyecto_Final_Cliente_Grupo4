@@ -8,7 +8,9 @@ package org.una.aeropuerto.controller;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,12 +44,14 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     private TableView<EmpleadosDTO> tablaEmpleados;
     
     private EmpleadosService service;
+    private Map<String,String> modoDesarrollo;
 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initVista();
         service = new EmpleadosService();
+        datosModoDesarrollo();
     }    
 
     @FXML
@@ -84,6 +88,13 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @FXML
     private void accionLimpiar(ActionEvent event) {
         Limpiar();
+    }
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista BuscarEmpleado");
+        modoDesarrollo.put("Limpiar", "Responde al método accionLimpiar");
+        modoDesarrollo.put("Seleccionar", "Responde al método accionSeleccionar");
     }
     
     public Task TaskFiltrarEmpleado(){

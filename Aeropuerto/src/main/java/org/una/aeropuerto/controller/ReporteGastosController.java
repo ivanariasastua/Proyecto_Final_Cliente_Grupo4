@@ -13,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,10 +58,11 @@ public class ReporteGastosController extends Controller implements Initializable
     private JFXTextField txtResponsable;
     
     private final ReporteService service = new ReporteService();
-
+    private Map<String,String> modoDesarrollo;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        datosModoDesarrollo();
     }    
 
     @Override
@@ -70,6 +73,12 @@ public class ReporteGastosController extends Controller implements Initializable
     public void initialize() {
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista ReporteGastos");
+        modoDesarrollo.put("Generar Reporte", "Responde al método actGenerarReporte");
+    }
+    
     @FXML
     private void actGenerarReporte(ActionEvent event) {
         Respuesta res = service.reporteGastosFechaAntesDe(new Date(), "a", "a", true, true, "a");

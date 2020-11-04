@@ -8,6 +8,8 @@ package org.una.aeropuerto.controller;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,13 +39,14 @@ public class MantServiciosController extends Controller implements Initializable
     private ServiciosDTO servSelect;
     private ServiciosDTO servicioDTO = new ServiciosDTO();
     private ServiciosService servService = new ServiciosService();
+    private Map<String,String> modoDesarrollo;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        datosModoDesarrollo();
     }
 
     @Override
@@ -90,6 +93,13 @@ public class MantServiciosController extends Controller implements Initializable
         }
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista MantServicios");
+        modoDesarrollo.put("Limpiar", "Responde al método actLimpiar");
+        modoDesarrollo.put("Guardar", "Responde al método actGuardar");
+    }
+    
     public boolean validarActivos() {
         if (servSelect.isEstado() != true) {
             Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");

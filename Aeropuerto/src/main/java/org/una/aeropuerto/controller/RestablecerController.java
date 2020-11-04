@@ -9,6 +9,8 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,6 +38,7 @@ public class RestablecerController extends Controller implements Initializable {
     @FXML private JFXCheckBox cbConf;
     @FXML private JFXTextField txtViewNew;
     @FXML private JFXTextField txtViewConf;
+    private Map<String,String> modoDesarrollo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,8 +60,15 @@ public class RestablecerController extends Controller implements Initializable {
         cbConf.selectedProperty().addListener( s -> {
             txtViewConf.setText(cbConf.isSelected() ? txtConfPass.getText() : "");
         });
+        datosModoDesarrollo();
     }    
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista Restablecer");
+        modoDesarrollo.put("Restaurar", "Responde al método accionRestaurar");
+    }
+    
     @FXML
     private void accionRestaurar(ActionEvent event) {
         if(validar()){

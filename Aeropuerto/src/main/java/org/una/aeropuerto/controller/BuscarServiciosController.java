@@ -8,7 +8,9 @@ package org.una.aeropuerto.controller;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -40,6 +42,7 @@ public class BuscarServiciosController extends Controller implements Initializab
     ServiciosDTO servicSelec;
     ServiciosService servService = new ServiciosService();
     List<ServiciosDTO> listServ;
+    Map<String,String> modoDesarrollo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -53,6 +56,14 @@ public class BuscarServiciosController extends Controller implements Initializab
         listServ = new ArrayList<>();
     }
 
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista BuscarServicios");
+        modoDesarrollo.put("Buscar", "Responde al método actBuscar");
+        modoDesarrollo.put("Seleccionar", "Responde al método actSeleccionarServicio");
+    }
+    
     public void cargarColumnas() {
         tabla.getColumns().clear();
         TableColumn<ServiciosDTO, String> colNombre = new TableColumn<>("Nombre");

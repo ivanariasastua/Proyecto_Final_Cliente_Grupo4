@@ -7,7 +7,9 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -42,15 +44,26 @@ public class BuscarAreaController extends Controller implements Initializable {
     private TableColumn<AreasTrabajosDTO, String> colArea;
     @FXML
     private TableColumn<AreasTrabajosDTO, String> colEstado;
+    
+    private Map<String,String> modoDesarrollo;
+    
     private final AreasTrabajosService service = new AreasTrabajosService();
     AreasTrabajosDTO areaSelec;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initVista();
+        datosModoDesarrollo();
 
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista BuscarArea");
+        modoDesarrollo.put("Buscar", "Responde al método accionBuscar");
+        modoDesarrollo.put("Seleccionar", "accionSeleccionar");
+    }
+    
     @FXML
     private void accionBuscar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){

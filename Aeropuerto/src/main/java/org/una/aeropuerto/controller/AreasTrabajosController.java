@@ -10,7 +10,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -53,12 +55,14 @@ import org.una.aeropuerto.util.UserAuthenticated;
  */
 public class AreasTrabajosController extends Controller implements Initializable {
 
-    @FXML
-    private TableView tablaAreasTrabajo;
+
+    private Map<String,String> modoDesarrollo;
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private AreasTrabajosService areasService = new AreasTrabajosService();
     private AreasTrabajosDTO areaSeleccionada = new AreasTrabajosDTO();
     boolean areaSelec = false;
+    @FXML
+    private TableView tablaAreasTrabajo;
     @FXML
     private JFXTextField txtBuscarAreasT;
     @FXML
@@ -80,6 +84,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         cbxFiltroAreas.setItems(filtro);
         clickTablas();
         addListener();
+        datosModoDesarrollo();
     }
 
     @Override
@@ -91,6 +96,15 @@ public class AreasTrabajosController extends Controller implements Initializable
         adjustHeigth(contenedor.getHeight());
     }
 
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista AreasTrabajos");
+        modoDesarrollo.put("Inactivar", "Responde al método actInactivarAreaT");
+        modoDesarrollo.put("Buscar", "Responde al método actBuscarAreasTrabajos");
+        modoDesarrollo.put("Crear", "Responde al método actMantAreasTrabajo");
+    }
+    
     public void llenarColumnas() {
         tablaAreasTrabajo.getColumns().clear();
         TableColumn<AreasTrabajosDTO, String> colNombre = new TableColumn<>("Nombre");

@@ -11,7 +11,9 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -79,6 +81,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     IncidentesRegistradosDTO incidentSeleccionado = new IncidentesRegistradosDTO();
     List<EmpleadosDTO> listEmpl = new ArrayList<>();
     List<AreasTrabajosDTO> listAreas = new ArrayList<>();
+    private Map<String,String> modoDesarrollo;
     @FXML
     private Tab tabCrear;
     @FXML
@@ -116,6 +119,21 @@ public class IncidentesRegistradosController extends Controller implements Initi
         adjustHeight(contenedor.getHeight());
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista IncidentesRegistrados");
+        modoDesarrollo.put("Buscar Categoria", "Responde al método actBuscarCategoria");
+        modoDesarrollo.put("Buscar Emisor", "Responde al método actBuscarEmisor");
+        modoDesarrollo.put("Buscar Responsable", "Responde al método actBuscarResponsable");
+        modoDesarrollo.put("Buscar Area", "Responde al método actBuscarArea");
+        modoDesarrollo.put("Limpiar", "Responde al método actLimpiarCamposIncidentes");
+        modoDesarrollo.put("Guardar", "Responde al método actGuardarIncidenteRegistrado");
+        modoDesarrollo.put("Buscar", "Responde al método actBuscarIncidente");
+        modoDesarrollo.put("Seguimiento", "Responde al método actSeguimientoIncidenteEstados");
+        modoDesarrollo.put("Editar", "Responde al método actEditarIncidente");
+        modoDesarrollo.put("Inactivar", "Responde al método actInactivarIncidente");
+    }
+    
     public void clickTabla() {
         tablaIncident.setRowFactory(tv -> {
             TableRow<IncidentesRegistradosDTO> row = new TableRow();

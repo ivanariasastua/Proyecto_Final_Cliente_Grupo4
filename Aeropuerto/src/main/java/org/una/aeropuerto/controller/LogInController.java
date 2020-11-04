@@ -9,6 +9,8 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,9 +40,11 @@ public class LogInController extends Controller implements Initializable {
     
     private final AuthenticationService service = new AuthenticationService();
     private final CambioContrasenaService contService = new CambioContrasenaService();
+    private Map<String,String> modoDesarrollo;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        datosModoDesarrollo();
         txtPassword.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         cbPass.setWrapText(true);
         txtPassword.textProperty().addListener( t -> {
@@ -99,6 +103,13 @@ public class LogInController extends Controller implements Initializable {
     @FXML
     private void accionMinimizar(MouseEvent event) {
         this.minimizeWindow();
+    }
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista LogIn");
+        modoDesarrollo.put("Restablecer Contraseña", "Responde al método actRestablecer");
+        modoDesarrollo.put("Ingresar", "Responde al método accionLogIn");
     }
 
     private Boolean camposValidos() {

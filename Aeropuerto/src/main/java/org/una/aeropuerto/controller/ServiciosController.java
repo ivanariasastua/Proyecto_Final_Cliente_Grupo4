@@ -12,7 +12,9 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -88,6 +90,7 @@ public class ServiciosController extends Controller implements Initializable {
     ServiciosPreciosService precioService;
     ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
     ServiciosPreciosDTO precioSelect = new ServiciosPreciosDTO();
+    Map<String,String> modoDesarrollo;
     @FXML
     private JFXButton btnGuardar;
     @FXML
@@ -107,6 +110,7 @@ public class ServiciosController extends Controller implements Initializable {
         cargarColumnasPrecios();
         cargarColumnas();
         addListener();
+        datosModoDesarrollo();
     }
 
     @Override
@@ -120,6 +124,18 @@ public class ServiciosController extends Controller implements Initializable {
         adjustHeight(contenedor.getHeight());
     }
 
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista Servicios");
+        modoDesarrollo.put("Buscar Servicio", "Responde al método actBuscarServicio");
+        modoDesarrollo.put("Inactivar Servicio", "Responde al método actInactivarServicio");
+        modoDesarrollo.put("Crear Servicio", "Responde al método actCrearServicios");
+        modoDesarrollo.put("Inactivar Precio", "Responde al método actInactivarPrecios");
+        modoDesarrollo.put("Limpiar Precio", "Responde al método actLimpiarCamposPrecio");
+        modoDesarrollo.put("Guardar Precio", "Responde al método actGuardarPrecio");
+    }
+    
     public void cargarVista(ServiciosDTO servicio) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("MantServicios.fxml"));
         Parent root = loader.load();
