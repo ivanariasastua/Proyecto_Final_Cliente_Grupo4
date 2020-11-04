@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ReporteIncidentesController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label styleClass="texto" text="Fecha de Registro">
+         <GridPane.margin>
+            <Insets left="30.0" />
+         </GridPane.margin>
+      </Label>
+      <Label styleClass="lblTitulo_1" text="Reporte de Incidentes" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="30.0" top="10.0" />
+         </GridPane.margin>
+      </Label>
+      <DatePicker fx:id="dpIni" prefHeight="37.0" prefWidth="591.0" promptText="Desde:">
+         <GridPane.margin>
+            <Insets left="30.0" right="25.0" top="110.0" />
+         </GridPane.margin>
+      </DatePicker>
+      <DatePicker fx:id="dpFin" prefHeight="37.0" prefWidth="590.0" promptText="Hasta:">
+         <GridPane.margin>
+            <Insets left="30.0" right="25.0" top="250.0" />
+         </GridPane.margin>
+      </DatePicker>
+      <Label styleClass="texto" text="Estado" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="30.0" top="20.0" />
+         </GridPane.margin>
+      </Label>
+      <JFXRadioButton fx:id="rbActivo" styleClass="rb" text="Activo" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="50.0" top="120.0" />
+         </GridPane.margin>
+      </JFXRadioButton>
+      <JFXRadioButton fx:id="rbInactivo" styleClass="rb" text="Inactivo" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets bottom="200.0" left="50.0" />
+         </GridPane.margin>
+      </JFXRadioButton>
+      <JFXRadioButton fx:id="rbAmbos" styleClass="rb" text="Ambos" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets bottom="80.0" left="50.0" />
+         </GridPane.margin>
+      </JFXRadioButton>
+      <JFXTextField fx:id="txtResponsable" editable="false" labelFloat="true" promptText="Responsble" styleClass="campos_texto_1" GridPane.columnIndex="1">
+         <GridPane.margin>
+            <Insets left="30.0" right="30.0" />
+         </GridPane.margin>
+      </JFXTextField>
+      <JFXTextField fx:id="txtEmisor" editable="false" labelFloat="true" promptText="Emisor" styleClass="campos_texto_1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="30.0" right="30.0" />
+         </GridPane.margin>
+      </JFXTextField>
+      <JFXButton onAction="#actBuscarResponsable" styleClass="button_3" text="Buscar Responsable" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+         <GridPane.margin>
+            <Insets top="120.0" />
+         </GridPane.margin>
+      </JFXButton>
+      <JFXButton onAction="#actBuscarEmisor" prefHeight="43.0" prefWidth="163.0" styleClass="button_3" text="Buscar Emisor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets top="120.0" />
+         </GridPane.margin>
+      </JFXButton>
+      <JFXButton onAction="#actGenerarReporte" styleClass="button_1" text="Generar Reporte" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets bottom="20.0" right="20.0" />
+         </GridPane.margin>
+      </JFXButton>
+   </children>
+</GridPane>
