@@ -17,6 +17,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,6 +57,7 @@ public class ReporteGastosController extends Controller implements Initializable
     private JFXTextField txtResponsable;
     
     private final ReporteService service = new ReporteService();
+
     @FXML
     private DatePicker dpFechaI;
     @FXML
@@ -65,9 +68,12 @@ public class ReporteGastosController extends Controller implements Initializable
     private JFXTextField txtEmpresa;
 
     private String empresa, responsable, servicio;
+
+    private Map<String,String> modoDesarrollo;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        datosModoDesarrollo();
     }    
 
     @Override
@@ -80,6 +86,12 @@ public class ReporteGastosController extends Controller implements Initializable
         rbP.setSelected(true);
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista ReporteGastos");
+        modoDesarrollo.put("Generar Reporte", "Responde al método actGenerarReporte");
+    }
+    
     @FXML
     private void actGenerarReporte(ActionEvent event) {
         if(validarCampos()){

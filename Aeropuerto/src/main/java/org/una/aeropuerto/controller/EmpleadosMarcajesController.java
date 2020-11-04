@@ -9,7 +9,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -59,6 +61,7 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     private EmpleadosMarcajesDTO marcaje = null;
     private final EmpleadosMarcajesService service = new EmpleadosMarcajesService();
     private ZonedDateTime actual;
+    private Map<String,String> modoDesarrollo;
     @FXML
     private JFXButton btnHacerMarcaje;
 
@@ -66,6 +69,7 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initTablaHorarios();
+        datosModoDesarrollo();
     }    
 
     @Override
@@ -153,6 +157,13 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
         }else{
             Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Horario", "No hay seleccionado un marcaje");
         }
+    }
+    
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista EmpleadosMarcajes");
+        modoDesarrollo.put("Seleccionar", "Responde al método accionSeleccionar");
+        modoDesarrollo.put("Hacer Marcaje", "Responde al metodo accionHacerMarcaje");
     }
     
     public void cargarDatos(){

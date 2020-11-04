@@ -8,7 +8,9 @@ package org.una.aeropuerto.controller;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -39,6 +41,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
     @FXML
     private JFXTextField txtBuscar;
 
+    private Map<String,String> modoDesarrollo;
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias;
     IncidentesCategoriasDTO catSelect;
@@ -57,6 +60,14 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista BuscarCategorias");
+        modoDesarrollo.put("Buscar", "Responde al método actBuscar");
+        modoDesarrollo.put("Seleccionar", "Responde al método actSeleccionar");
+        modoDesarrollo.put("Cancelar", "Responde al método actCancelar");
+    }
+    
     @FXML
     private void actBuscar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){

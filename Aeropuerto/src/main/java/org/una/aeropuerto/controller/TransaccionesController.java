@@ -7,6 +7,8 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,13 +26,14 @@ public class TransaccionesController extends Controller implements Initializable
     private TableView  tablaTransac;
     @FXML
     private JFXTextField txtBuscarTransacciones;
+    private Map<String,String> modoDesarrollo;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        datosModoDesarrollo();
     }    
 
     @Override
@@ -41,6 +44,12 @@ public class TransaccionesController extends Controller implements Initializable
     private void actBuscar(ActionEvent event) {
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista Transacciones");
+        modoDesarrollo.put("Buscar", "Responde al método actBuscar");
+    }
+    
     @Override
     public void cargarTema() {
     }

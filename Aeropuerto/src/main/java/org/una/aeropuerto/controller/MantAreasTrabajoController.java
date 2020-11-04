@@ -8,6 +8,8 @@ package org.una.aeropuerto.controller;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +40,7 @@ public class MantAreasTrabajoController extends Controller implements Initializa
     private AreasTrabajosDTO areaDto = new AreasTrabajosDTO();
     private AreasTrabajosDTO areaSelec = new AreasTrabajosDTO();
     private AreasTrabajosService areasService = new AreasTrabajosService();
+    private Map<String,String> modoDesarrollo;
     boolean areaSelect = false;
 
     /**
@@ -45,7 +48,7 @@ public class MantAreasTrabajoController extends Controller implements Initializa
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        datosModoDesarrollo();
     }
 
     @Override
@@ -92,6 +95,13 @@ public class MantAreasTrabajoController extends Controller implements Initializa
         }
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista MantAreasTrabajo");
+        modoDesarrollo.put("Limpiar", "Responde al método actLimpiar");
+        modoDesarrollo.put("Guardar", "Responde al método actGuardar");
+    }
+    
     public void limpiarAreas() {
         txtId.setText(null);
         txtDescripcion.setText(null);
