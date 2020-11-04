@@ -75,13 +75,13 @@ and open the template in the editor.
 }
 
 .button_1:hover{
-    -fx-background-color: #2b702b;
+    -fx-background-color: #78c578;
     -fx-text-fill: white;
 }
 
 .button_2{
-    -fx-background-color: transparent;
-    -fx-text-fill: #990000;
+    -fx-background-color: #990000;
+    -fx-text-fill: white;
     -fx-font: bold 14pt "Courier";
     -fx-border-color: #990000;
     -fx-border-radius: 15px;
@@ -91,7 +91,7 @@ and open the template in the editor.
 }
 
 .button_2:hover{
-    -fx-background-color: #990000;
+    -fx-background-color: #b84747;
     -fx-text-fill: white;
 }
 
@@ -309,7 +309,7 @@ and open the template in the editor.
 }
 
 .button_3{
-    -fx-background-color: transparent;
+    -fx-background-color: #6262b3;
     -fx-text-fill: white;
     -fx-font: italic 14pt "Courier";
     -fx-border-color: #6262b3;
@@ -318,7 +318,7 @@ and open the template in the editor.
 }
 
 .button_3:hover{
-    -fx-background-color: #6262b3;
+    -fx-background-color: #9797e0;
 }
 
 #lblUser{

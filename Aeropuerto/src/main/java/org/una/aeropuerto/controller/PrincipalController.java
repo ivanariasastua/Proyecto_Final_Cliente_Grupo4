@@ -245,6 +245,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionReporteIncidentes(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(paneContenerdor, "ReporteIncidentes");
     }
 
     @FXML

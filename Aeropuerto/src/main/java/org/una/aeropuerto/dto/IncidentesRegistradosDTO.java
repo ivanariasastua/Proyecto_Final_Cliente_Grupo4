@@ -6,7 +6,9 @@
 package org.una.aeropuerto.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.json.bind.annotation.JsonbDateFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +29,7 @@ public class IncidentesRegistradosDTO {
     private EmpleadosDTO emisor;
     private EmpleadosDTO responsable;
     private AreasTrabajosDTO areaTrabajo;
+    @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private Date fechaRegistro;
     private List<IncidentesRegistradosEstadosDTO> incidentesRegistradosEstados = new ArrayList<>();
 }
