@@ -106,7 +106,7 @@ public class ReporteService {
             parametros.put("estado", estado);
             parametros.put("responsable", responsable);
             parametros.put("emisor", emisor);
-            Request request = new Request("reportes/reporteIncidente2", "/{fechaIni}/{estado}/{responsable}/{emisor}", parametros);
+            Request request = new Request("reportes/reporteIncidente", "/{fechaIni}/{estado}/{responsable}/{emisor}", parametros);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError());
