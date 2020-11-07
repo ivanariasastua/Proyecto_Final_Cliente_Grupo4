@@ -46,17 +46,17 @@
             <Insets left="30.0" top="20.0" />
          </GridPane.margin>
       </Label>
-      <JFXRadioButton fx:id="rbActivo" styleClass="rb" text="Activo" GridPane.rowIndex="1">
+      <JFXRadioButton fx:id="rbActivo" onMouseClicked="#actActivo" styleClass="rb" text="Activo" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="50.0" top="120.0" />
          </GridPane.margin>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="rbInactivo" styleClass="rb" text="Inactivo" GridPane.rowIndex="2">
+      <JFXRadioButton fx:id="rbInactivo" onMouseClicked="#actInactivo" styleClass="rb" text="Inactivo" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="200.0" left="50.0" />
          </GridPane.margin>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="rbAmbos" styleClass="rb" text="Ambos" GridPane.rowIndex="2">
+      <JFXRadioButton fx:id="rbAmbos" onMouseClicked="#actAmbos" styleClass="rb" text="Ambos" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="80.0" left="50.0" />
          </GridPane.margin>
