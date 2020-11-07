@@ -274,6 +274,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionHoraLaboradas(ActionEvent event) {
+        FlowController.getInstance().goViewPanel(paneContenerdor, "ReporteHorasLaboradas");
     }
 
     @Override
