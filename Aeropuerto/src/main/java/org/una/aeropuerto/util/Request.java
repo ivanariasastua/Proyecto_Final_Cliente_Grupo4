@@ -39,6 +39,7 @@ public class Request {
     public Request(String direccion, String parametros, Map<String, Object> valores) {
         this.client = ClientBuilder.newClient();
         this.webTarget = client.target(apiUrl + direccion).path(parametros).resolveTemplates(valores);
+        System.out.println(this.webTarget.getUri());
         this.builder = webTarget.request(MediaType.APPLICATION_JSON);
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         headers.add("Content-Type", "application/json; charset=UTF-8");

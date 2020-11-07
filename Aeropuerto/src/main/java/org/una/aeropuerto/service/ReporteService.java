@@ -67,7 +67,7 @@ public class ReporteService {
             parametros.put("servicio", servicio);
             parametros.put("estGasto", estGasto);
             parametros.put("responsable", responsable);
-            Request request = new Request("reportes/reporteGastos1", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estGasto}/{responsable}", parametros);
+            Request request = new Request("reportes/reporteGastos4", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estGasto}/{responsable}", parametros);
             request.get();
             if(request.isError())
                 return new Respuesta(false, request.getError());

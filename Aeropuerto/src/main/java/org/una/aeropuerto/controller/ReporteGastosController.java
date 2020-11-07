@@ -95,10 +95,8 @@ public class ReporteGastosController extends Controller implements Initializable
     @FXML
     private void actGenerarReporte(ActionEvent event) {
         if(validarCampos()){
-            LocalDate dfi = LocalDate.parse(dpFechaI.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            LocalDate dff = LocalDate.parse(dpFechaF.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            Date fi = Date.from(dfi.atStartOfDay(ZoneId.of("UTC")).toInstant());
-            Date ff = Date.from(dff.atStartOfDay(ZoneId.of("UTC")).toInstant());
+            Date fi = Date.from(dpFechaI.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
+            Date ff = Date.from(dpFechaF.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
             Boolean estP = obtenerValorRadioButton(Boolean.TRUE), estG = obtenerValorRadioButton(Boolean.FALSE);
             Respuesta res;
             if(estP == null && estG == null){
@@ -141,16 +139,16 @@ public class ReporteGastosController extends Controller implements Initializable
     private Boolean validarCampos(){
         if(dpFechaI.getValue() != null && dpFechaF.getValue() != null){
             if(dpFechaI.getValue().isBefore(dpFechaF.getValue()) && (dpFechaF.getValue().isBefore(LocalDate.now())) || dpFechaF.getValue().equals(LocalDate.now())){
-                if(txtEmpresa.getText() == null || !txtEmpresa.getText().isEmpty())
-                    empresa = "%";
+                if(txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty())
+                    empresa = "null";
                 else
                     empresa = txtEmpresa.getText();
-                if(txtServicio.getText() == null || !txtEmpresa.getText().isEmpty())
-                    servicio = "%";
+                if(txtServicio.getText() == null || txtEmpresa.getText().isEmpty())
+                    servicio = "null";
                 else
                     servicio = txtServicio.getText();
-                if(txtResponsable.getText() == null || !txtResponsable.getText().isEmpty())
-                    responsable = "%";
+                if(txtResponsable.getText() == null || txtResponsable.getText().isEmpty())
+                    responsable = "null";
                 else
                     responsable = txtResponsable.getText();
                 return true;
