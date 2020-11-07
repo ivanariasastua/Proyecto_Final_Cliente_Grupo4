@@ -51,11 +51,11 @@ and open the template in the editor.
 }
 
 .combo-box-popup .list-view .list-cell{
-    -fx-background-color: #003366 
+    -fx-background-color: #2a2d4d; 
 }
 
 .combo-box-popup .list-view .list-cell:hover{
-    -fx-background-color: #a1bdf5
+    -fx-background-color: #363f78;
 }
 
 .button{ 
@@ -102,6 +102,14 @@ and open the template in the editor.
 }
 
 /*LogIn Exclusivo*/
+
+.buton_close{
+    -fx-font: bold 13pt "Times New Roman";
+    -fx-text-fill: red;
+    -fx-background-color: transparent;
+    -fx-border-color: red;
+    -fx-border-radius: 8;
+}
 
 #imvCedula{
     -fx-opacity: 0.8;

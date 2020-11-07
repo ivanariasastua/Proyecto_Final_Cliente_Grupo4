@@ -42,7 +42,7 @@
                   <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <DatePicker fx:id="dpFechaF" prefHeight="35.0" prefWidth="350.0">
+            <DatePicker fx:id="dpFechaF" prefHeight="35.0" prefWidth="350.0" styleClass="date-picker">
                <VBox.margin>
                   <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                </VBox.margin>

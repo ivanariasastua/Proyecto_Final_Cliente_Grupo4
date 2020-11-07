@@ -211,9 +211,9 @@
       </VBox>
    </left>
    <right>
-      <VBox fx:id="vbDesarrollo" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vbDesarrollo" prefHeight="200.0" prefWidth="0.0" BorderPane.alignment="CENTER">
          <children>
-            <ListView fx:id="lvDesarrollo" prefHeight="650.0" prefWidth="200.0" />
+            <ListView fx:id="lvDesarrollo" prefHeight="650.0" prefWidth="0.0" />
          </children>
       </VBox>
    </right>
