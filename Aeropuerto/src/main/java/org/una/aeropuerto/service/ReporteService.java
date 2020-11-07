@@ -7,9 +7,12 @@ package org.una.aeropuerto.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 
 /**
  *
@@ -52,6 +55,42 @@ public class ReporteService {
                 return new Respuesta(false, request.getError());
             }
             Object result = (String) request.readEntity(String.class);
+            return new Respuesta(true, "Reporte", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
+        }
+    }
+    
+    public Respuesta reporteHorasLaboradas(String cedula, Date fechaInicial, Date fechaFinal) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("cedula", cedula);
+            parametros.put("fecha1", fechaInicial);
+            parametros.put("fecha2", fechaFinal);
+            Request request = new Request("reportes/reporteHoras", "/{cedula}/{fecha1}/{fecha2}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError());
+            }
+            Object result = (String) request.readEntity(String.class);
+            return new Respuesta(true, "Reporte", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
+        }
+    }
+    
+    public Respuesta PruebaHorasLaboradas(String cedula, Date fechaInicial, Date fechaFinal){
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("cedula", cedula);
+            parametros.put("fecha1", fechaInicial);
+            parametros.put("fecha2", fechaFinal);
+            Request request = new Request("empleados_marcajes/reporteHoras", "/{cedula}/{fecha1}/{fecha2}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError());
+            }
+            Object result = request.readEntity(new GenericType<List<EmpleadosMarcajesDTO>>(){});
             return new Respuesta(true, "Reporte", result);
         } catch (Exception ex) {
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
