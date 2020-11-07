@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -27,6 +28,9 @@ public class AreasTrabajosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el area de trabajo");
             }
             AreasTrabajosDTO result = (AreasTrabajosDTO) request.readEntity(AreasTrabajosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar Area Trabajo");
+            }catch(Exception ex){}
             return new Respuesta(true, "Areas_Trabajos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
