@@ -13,8 +13,9 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
-
+import org.una.aeropuerto.util.UserAuthenticated;
 /**
  * FXML Controller class
  *
@@ -27,6 +28,10 @@ public class TransaccionesController extends Controller implements Initializable
     @FXML
     private JFXTextField txtBuscarTransacciones;
     private Map<String,String> modoDesarrollo;
+    @FXML
+    private DatePicker dpDesde;
+    @FXML
+    private DatePicker dpHasta;
 
     /**
      * Initializes the controller class.
@@ -42,16 +47,40 @@ public class TransaccionesController extends Controller implements Initializable
 
     @FXML
     private void actBuscar(ActionEvent event) {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            
+        }
     }
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista Transacciones");
         modoDesarrollo.put("Buscar", "Responde al método actBuscar");
+        modoDesarrollo.put("Generar", "Responde al método actGenerarReporte");
     }
     
     @Override
     public void cargarTema() {
+    }
+
+    @FXML
+    private void actGenerarReporte(ActionEvent event) {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            
+        }
+    }
+
+    @FXML
+    private void actBuscarEmpleado(ActionEvent event) {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            
+        }else{
+            
+        }
     }
     
 }

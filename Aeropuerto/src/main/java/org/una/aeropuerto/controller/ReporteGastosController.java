@@ -14,7 +14,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +27,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import org.una.aeropuerto.dto.EmpleadosDTO;
+import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.service.ReporteService;
 import org.una.aeropuerto.util.Mensaje;
@@ -74,6 +78,8 @@ public class ReporteGastosController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
+        txtResponsable.setEditable(false);
+        txtServicio.setEditable(false);
     }    
 
     @Override
@@ -130,10 +136,21 @@ public class ReporteGastosController extends Controller implements Initializable
 
     @FXML
     private void actBuscarServicio(ActionEvent event) {
+        AppContext.getInstance().set("servSelect", null);
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarServicio", false, StageStyle.DECORATED);
+        ServiciosDTO servicioDto = (ServiciosDTO) AppContext.getInstance().get("servSelect");
+        if(servicioDto != null){
+            txtServicio.setText(servicioDto.getNombre());
+        }
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
+        AppContext.getInstance().set("empSelect", null);
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
+        EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if(emplSeleccionado != null)
+            txtServicio.setText(emplSeleccionado.getCedula());
     }
     
     private Boolean validarCampos(){
