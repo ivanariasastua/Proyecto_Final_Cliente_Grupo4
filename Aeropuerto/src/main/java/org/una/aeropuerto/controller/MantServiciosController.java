@@ -117,6 +117,7 @@ public class MantServiciosController extends Controller implements Initializable
 
     @FXML
     private void actLimpiar(ActionEvent event) {
+        limpiarServicios();
     }
 
     public void cargarDatos(ServiciosDTO servicio) {
