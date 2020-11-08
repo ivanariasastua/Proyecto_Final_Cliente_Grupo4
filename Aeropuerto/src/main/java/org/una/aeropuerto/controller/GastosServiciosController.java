@@ -335,8 +335,6 @@ public class GastosServiciosController extends Controller implements Initializab
                         servGastDTO.setEstado(true);
                     }
                     guardar();
-                    System.out.println(responsableSelec);
-                    System.out.println(servicioSelec);
                     if (responsableSelec.getNombre() != null) {
                         servGastDTO.setResponsable(responsableSelec);
                     }else{

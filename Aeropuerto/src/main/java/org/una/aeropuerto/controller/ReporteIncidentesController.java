@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -20,10 +21,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.service.ReporteService;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
@@ -50,6 +55,8 @@ public class ReporteIncidentesController extends Controller implements Initializ
     private JFXTextField txtEmisor;
 
     private final ReporteService service = new ReporteService();
+    EmpleadosDTO emisorSelec;
+    EmpleadosDTO responsableSelec;
 
     /**
      * Initializes the controller class.
@@ -65,19 +72,44 @@ public class ReporteIncidentesController extends Controller implements Initializ
 
     @Override
     public void initialize() {
+        responsableSelec = new EmpleadosDTO();
+        emisorSelec = new EmpleadosDTO();
+        txtResponsable.setText(null);
+        txtEmisor.setText(null);
+        dpFin.setValue(null);
+        dpIni.setValue(null);
+        rbActivo.setSelected(true);
+        rbInactivo.setSelected(false);
+        rbAmbos.setSelected(false);
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
+        AppContext.getInstance().set("permisoFiltrar", true);
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if (responsableSelec != null) {
+            txtResponsable.setText(responsableSelec.getNombre());
+        }
     }
 
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
+        AppContext.getInstance().set("permisoFiltrar", true);
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if (emisorSelec != null) {
+            txtEmisor.setText(emisorSelec.getNombre());
+        }
     }
 
     public boolean validarCampos() {
-        if (dpFin.getValue() == null || dpIni.getValue() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Debe seleccionar las fechas", "Debe seleccionar el rango de fechas");
+        if (dpFin.getValue() == null || dpIni.getValue() == null || txtEmisor.getText() == null || txtResponsable.getText() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Campos obligatorios", "Los siguientes campos son obligatorios para generar el reporte\n*Fechas\n*Estado\n*Responsable\n*Emisor");
+            return false;
+        }
+        if (dpFin.getValue().isBefore(dpIni.getValue())) {
+            Mensaje.show(Alert.AlertType.WARNING, "Fechas Incorrectas", "Las fechas no son correctas");
             return false;
         }
         return true;
@@ -88,7 +120,14 @@ public class ReporteIncidentesController extends Controller implements Initializ
         if (validarCampos()) {
             Date ini = DateUtils.asDate(dpIni.getValue());
             Date fin = DateUtils.asDate(dpFin.getValue());
-            Respuesta res = service.reporteIncident(ini, fin, true, txtResponsable.getText(), txtEmisor.getText());
+            Respuesta res;
+            if (rbActivo.isSelected()) {
+                res = service.reporteIncident(ini, fin, true, txtResponsable.getText(), txtEmisor.getText(), true);
+            } else if (rbInactivo.isSelected()) {
+                res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), true);
+            } else {
+                res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), false);
+            }
             if (res.getEstado()) {
                 String resp = (String) res.getResultado("Reporte");
                 byte[] bytes = Base64.getDecoder().decode(resp);
