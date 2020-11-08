@@ -33,9 +33,6 @@ public class TransaccionesController extends Controller implements Initializable
     @FXML
     private DatePicker dpHasta;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
@@ -59,6 +56,7 @@ public class TransaccionesController extends Controller implements Initializable
         modoDesarrollo.put("Vista", "Nombre de la vista Transacciones");
         modoDesarrollo.put("Buscar", "Responde al método actBuscar");
         modoDesarrollo.put("Generar", "Responde al método actGenerarReporte");
+        modoDesarrollo.put("Empleado", "Responde al método atBuscarEmpleado");
     }
     
     @Override
