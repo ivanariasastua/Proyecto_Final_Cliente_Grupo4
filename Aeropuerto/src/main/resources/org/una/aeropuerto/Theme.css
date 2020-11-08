@@ -1,0 +1,369 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 7 nov 2020, 22:04:30
+    Author     : Ivan Josué Arias Astua
+*/
+/*
+    General
+*/
+
+.raiz{
+    -fx-background-color: #d3d3d3;
+}
+
+.texto{
+    -fx-font: normal 14pt "Bell MT";
+    -fx-text-fill: #1d1d1d;
+    -fx-alignment: CENTER;
+}
+
+.texto2{
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 0 0 2 0;
+}
+
+.lblTitulo_1{
+    -fx-text-fill: #1d1d1d;
+    -fx-alignment: CENTER;
+    -fx-font: bold 30pt "Bell MT";
+    -fx-underline: true;
+}
+
+.campos_texto_1{
+    -fx-text-fill: #1d1d1d;
+    -fx-font: normal 16pt "Courier";
+    -jfx-unfocus-color: #4d4d4d;
+    -fx-prompt-text-fill: #4d4d4d;
+    -jfx-focus-color: #1d1d1d;
+}
+
+.cb{
+    -jfx-unchecked-color: #4d4d4d;
+    -jfx-checked-color: #3fa875;
+}
+
+.boton{
+    -fx-text-fill: #1d1d1d;
+    -fx-font: bold 14pt "Courier";
+    -fx-background-radius: 25;
+    -fx-opacity: 0.8;
+}
+
+.button_1{
+    -fx-background-color: #328fa8;
+}
+
+.button_3{
+    -fx-background-color: #a7a8a8;
+}
+
+.button_2{
+    -fx-background-color: #e3750e;
+}
+
+.scroll-bar:horizontal .track, .scroll-bar:vertical .track{
+    -fx-background-color: #1e8f73;
+    -fx-border-color :#1e8f73;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :3.0em;
+}
+
+
+.scroll-bar:horizontal .increment-button , .scroll-bar:horizontal .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button , .scroll-bar:vertical .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 10.0 0.0 0.0;
+
+}
+
+ .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : -4 4 4 -4;
+}
+
+ .scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : -4 4 4 -4;
+}
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color: white;
+}
+
+.scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
+    -fx-background-color : white;
+}
+
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color: linear-gradient(to top, #1c755f, #1e8f73 80%, #1c755f);
+}
+
+.tab-pane {
+    -fx-tab-min-width:120px;
+    -fx-tab-max-width:120px;
+    -fx-tab-min-height:30px;
+    -fx-tab-max-height:30px;
+}
+
+.tab {
+    -fx-font: normal 15pt "Courier";
+    -fx-background-color:#28a889 ;  
+}
+
+.tab-label{
+    -fx-text-fill: #1d1d1d;
+}
+
+.tab:selected {
+    -fx-background-color:#4ecfb0 ;
+    -fx-focus-color: #4ecfb0;
+}
+
+.table-view{
+    -fx-control-inner-background: #d3d3d3;
+    -fx-font: normal 14px "Courier";
+    -fx-text-background-color: black;
+    -fx-border-color: #28a889;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+}
+
+.table-view .column-header .label{
+    -fx-font: normal 12.60pt "Courier";
+    -fx-text-fill: #1d1d1d;
+}
+
+.table-view .column-header, .table-view .filler{
+    -fx-size: 30;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color:  #28a889;
+    -fx-border-color: #28a889;
+    -fx-border-insets: 0 10 0 10;
+    -fx-text-fill: #1d1d1d;
+}
+
+.table-row-cell{
+    -fx-background-color: #d3d3d3;
+    -fx-text-fill: #1d1d1d;
+    -fx-font: bold 14px "Courier";
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected{
+    -fx-background-color: #28a889;
+    -fx-opacity: 5;
+    -fx-text-background-color: white;
+    -fx-table-cell-border-color: #28a889;
+    -fx-table-header-border-color: #28a889;  
+    -fx-opacity: 0.9;
+}
+
+.comboBox{
+    -fx-background-color: transparent;
+    -fx-prompt-text-fill: #1d1d1d;
+    -fx-font: normal 11pt "Courier";
+    -fx-text-fill: white;
+    -jfx-unfocus-color: #434343;
+    -jfx-focus-color: #1d1d1d;
+}
+
+.comboBox .list-cell {
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell{
+    -fx-background-color: #28a889; 
+}
+
+.combo-box-popup .list-view .list-cell:hover{
+    -fx-background-color: #4ecfb0;
+}
+
+/*
+    Iniciar Sesion exclusivo
+*/
+
+#imvCedula{
+    -fx-opacity: 0.6;
+    -fx-image:url('resources/id-card2.png')
+}
+
+#imvPassword{
+    -fx-opacity: 0.6;
+    -fx-image:url('resources/key2.png')
+}
+
+.buton_close{
+    -fx-font: bold 13pt "Times New Roman";
+    -fx-text-fill: #660000;
+    -fx-background-color: transparent;
+    -fx-border-color: #660000;
+    -fx-border-radius: 8;
+}
+
+#imvMinimizar{
+    -fx-opacity: 0.6;
+    -fx-image:url('resources/minimize2.png')
+}
+
+/*
+    Principal Exclusivo
+*/
+
+.marco{
+    -fx-background-color: #32a88b;
+}
+
+.titled-pane {
+    -fx-text-fill: #1d1d1d;
+    -fx-font: normal 13pt "Courier";
+}
+
+.titled-pane:hover .title{
+    -fx-background-color: #1e8f73;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #32a88b;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 2.5 0;
+}
+
+.titled-pane > .title > .arrow-button {
+    -fx-background-color: null;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: #1d1d1d;
+}
+
+.titled-pane > *.content {
+    -fx-background-color: #32a88b;
+    -fx-border-color: #32a88b;
+}
+
+.titled-pane:focused > .title > .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+#imvInicio{
+    -fx-image:url('resources/home2.png');
+}
+
+#imvEmpleados{
+    -fx-image:url('resources/employees2.png');
+}
+
+#imvAreas{
+    -fx-image:url('resources/workplace2.png');
+}
+
+#imvGastos{
+    -fx-image:url('resources/dollar2.png');
+}
+
+#imvIncidentes{
+    -fx-image:url('resources/alert2.png');
+}
+
+#imvReport{
+    -fx-image:url('resources/report2.png');
+}
+
+#imvTrasaccion{
+    -fx-image:url('resources/data-transfer2.png');
+}
+
+#imvParametros{
+    -fx-image:url('resources/filter2.png');
+}
+
+#imvUser{
+    -fx-image:url('resources/login2.png');
+}
+
+#menu{
+   -fx-background-color: #32a88b;
+}
+
+#menu > .viewport {
+   -fx-background-color: #32a88b;
+}
+
+#accordioMenu{
+    -fx-border-width: 0;
+}
+
+#imvMaxRes{
+    -fx-image:url('resources/maximize-size-option2.png');
+}
+
+#imvMin{
+    -fx-image:url('resources/minimize2.png');
+}
+
+#imvClose{
+    -fx-image:url('resources/cancel2.png');
+}
+
+.lblMarco{
+    -fx-background-radius: 10;
+}
+
+.lblMarco:hover{
+    -fx-background-color: #0f9d58;
+    -fx-opacity: 0.8;
+}
+
+#hamMenu StackPane {
+    -fx-background-color: #1d1d1d;
+}
+
+.menu-item{
+    -fx-background-color: #32a88b;
+}
+
+#lblCedula1, #lblRol1{
+    -fx-text-fill: #1d1d1d;
+    -fx-font: italic 14pt "Courier";
+}
+
+#smUser{
+    -fx-background-color: #32a88b;
+}
+
+#smUser .label {
+    -fx-text-fill: #1d1d1d;
+    -fx-font: italic 13pt "Courier";
+    -fx-background-color: #32a88b;
+}
+
+#smUser .arrow {
+    -fx-background-color: #1d1d1d;
+}
+
+#smUser .context-menu {
+    -fx-background-color: #32a88b;
+}
+
+#imvDark{
+    -fx-image:url('resources/sun2.png');
+}
+
+#imvLight{
+    -fx-image:url('resources/moon2.png');
+}
+
+#tbTema{
+    -jfx-toggle-color: #0f9d58;
+}

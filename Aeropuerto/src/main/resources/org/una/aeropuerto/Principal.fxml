@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXHamburger?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
@@ -40,17 +41,29 @@
                   </MenuItem>
                   <MenuItem fx:id="miCodigo1" mnemonicParsing="false">
                      <graphic>
-                        <JFXButton onAction="#accionGenerarCodigo" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Generar Código" />
+                        <JFXButton onAction="#accionGenerarCodigo" prefHeight="50.0" prefWidth="300.0" text="Generar Código">
+                           <styleClass>
+                              <String fx:value="button_3" />
+                              <String fx:value="boton" />
+                           </styleClass></JFXButton>
                      </graphic>
                   </MenuItem>
                   <MenuItem mnemonicParsing="false">
                      <graphic>
-                        <JFXButton onAction="#accionHacerMarcaje" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Hacer Marcaje" />
+                        <JFXButton onAction="#accionHacerMarcaje" prefHeight="50.0" prefWidth="300.0" text="Hacer Marcaje">
+                           <styleClass>
+                              <String fx:value="button_3" />
+                              <String fx:value="boton" />
+                           </styleClass></JFXButton>
                      </graphic>
                   </MenuItem>
                   <MenuItem mnemonicParsing="false">
                      <graphic>
-                        <JFXButton onAction="#accionCerrarSecion" prefHeight="50.0" prefWidth="300.0" styleClass="button_3" text="Cerrar Sesión" />
+                        <JFXButton onAction="#accionCerrarSecion" prefHeight="50.0" prefWidth="300.0" text="Cerrar Sesión">
+                           <styleClass>
+                              <String fx:value="button_3" />
+                              <String fx:value="boton" />
+                           </styleClass></JFXButton>
                      </graphic>
                   </MenuItem>
               </items>
@@ -116,15 +129,23 @@
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionServicios" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Servicios">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionServicios" prefHeight="50.0" prefWidth="260.0" text="Servicios">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionRegistrarGasto" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Registro de Gastos">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionRegistrarGasto" prefHeight="50.0" prefWidth="260.0" text="Registro de Gastos">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
                                  </children>
                               </VBox>
@@ -137,15 +158,23 @@
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionCategorias" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Categorías">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionCategorias" prefHeight="50.0" prefWidth="260.0" text="Categorías">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionRegistrarIncidente" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Registro de Incidentes">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" minWidth="208.0" onAction="#accionRegistrarIncidente" prefHeight="50.0" prefWidth="260.0" text="Registro de Incidentes">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
                                  </children>
                               </VBox>
@@ -155,20 +184,32 @@
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionReporteGastos" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Gastos de Servicios">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionReporteGastos" prefHeight="50.0" prefWidth="260.0" text="Gastos de Servicios">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionReporteIncidentes" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Incidentes Registrados">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionReporteIncidentes" prefHeight="50.0" prefWidth="260.0" text="Incidentes Registrados">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
-                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionHoraLaboradas" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Horas Laboradas">
+                                    <JFXButton maxHeight="50.0" minHeight="50.0" onAction="#accionHoraLaboradas" prefHeight="50.0" prefWidth="260.0" text="Horas Laboradas">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="button_3" />
+                                          <String fx:value="boton" />
+                                       </styleClass>
                                     </JFXButton>
                                  </children>
                               </VBox>
@@ -184,15 +225,23 @@
                            <content>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <JFXButton onAction="#actParametros" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Parámetros del Sistema">
+                                    <JFXButton onAction="#actParametros" prefHeight="50.0" prefWidth="260.0" text="Parámetros del Sistema">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="boton" />
+                                          <String fx:value="button_3" />
+                                       </styleClass>
                                     </JFXButton>
-                                    <JFXButton layoutX="23.0" layoutY="23.0" onAction="#actAutorizarRoles" prefHeight="50.0" prefWidth="260.0" styleClass="button_3" text="Autorizar Roles">
+                                    <JFXButton layoutX="23.0" layoutY="23.0" onAction="#actAutorizarRoles" prefHeight="50.0" prefWidth="260.0" text="Autorizar Roles">
                                        <VBox.margin>
                                           <Insets bottom="2.5" top="2.5" />
                                        </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="boton" />
+                                          <String fx:value="button_3" />
+                                       </styleClass>
                                     </JFXButton>
                                  </children>
                               </VBox>
