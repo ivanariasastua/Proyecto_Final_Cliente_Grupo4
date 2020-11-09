@@ -108,8 +108,8 @@ public class LogInController extends Controller implements Initializable {
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista LogIn");
-        modoDesarrollo.put("Restablecer Contraseña", "Responde al método actRestablecer");
-        modoDesarrollo.put("Ingresar", "Responde al método accionLogIn");
+        modoDesarrollo.put("Restablecer Contraseña", "Restablecer Contraseña responde al método actRestablecer");
+        modoDesarrollo.put("Ingresar", "Ingresar responde al método accionLogIn");
     }
 
     private Boolean camposValidos() {

@@ -106,12 +106,12 @@ public class CategoriasIncidentesController extends Controller implements Initia
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista CategoriasIncidentes");
-        modoDesarrollo.put("Buscar", "Responde al método actBuscarCategorias");
-        modoDesarrollo.put("Inactivar", "Responde al método actInactivarCateg");
-        modoDesarrollo.put("Editar", "Responde al método actEditarCategorias");
-        modoDesarrollo.put("Buscar Categoría", "Responde al método actBuscarCatSuperior");
-        modoDesarrollo.put("Limpiar", "Responde al método actLimpiar");
-        modoDesarrollo.put("Guardar", "Responde al método actGuardarCategoria");
+        modoDesarrollo.put("Buscar", "Buscar responde al método actBuscarCategorias");
+        modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarCateg");
+        modoDesarrollo.put("Editar", "Editar responde al método actEditarCategorias");
+        modoDesarrollo.put("Buscar Categoría", "Buscar Categoría responde al método actBuscarCatSuperior");
+        modoDesarrollo.put("Limpiar", "Limpiar responde al método actLimpiar");
+        modoDesarrollo.put("Guardar", "Guardar responde al método actGuardarCategoria");
     }
     
     public void clickTabla() {

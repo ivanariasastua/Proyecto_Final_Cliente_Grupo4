@@ -162,8 +162,8 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista EmpleadosMarcajes");
-        modoDesarrollo.put("Seleccionar", "Responde al método accionSeleccionar");
-        modoDesarrollo.put("Hacer Marcaje", "Responde al metodo accionHacerMarcaje");
+        modoDesarrollo.put("Seleccionar", "Seleccionar responde al método accionSeleccionar");
+        modoDesarrollo.put("Hacer Marcaje", "Hacer Marcaje responde al metodo accionHacerMarcaje");
     }
     
     public void cargarDatos(){

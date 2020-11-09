@@ -60,8 +60,8 @@ public class BuscarServiciosController extends Controller implements Initializab
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarServicios");
-        modoDesarrollo.put("Buscar", "Responde al método actBuscar");
-        modoDesarrollo.put("Seleccionar", "Responde al método actSeleccionarServicio");
+        modoDesarrollo.put("Buscar", "Buscar responde al método actBuscar");
+        modoDesarrollo.put("Seleccionar", "Seleccionar responde al método actSeleccionarServicio");
     }
     
     public void cargarColumnas() {

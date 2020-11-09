@@ -89,8 +89,8 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la ventana HabilitarUsuarios");
-        modoDesarrollo.put("Buscar", "Responde al método actFiltrarEmpleados");
-        modoDesarrollo.put("Habilitar", "Responde al método actHabilitarEmpleado");
+        modoDesarrollo.put("Buscar", "Buscar responde al método actFiltrarEmpleados");
+        modoDesarrollo.put("Habilitar", "Habilitar responde al método actHabilitarEmpleado");
     }
     
     public void initComboBoxRoles(){

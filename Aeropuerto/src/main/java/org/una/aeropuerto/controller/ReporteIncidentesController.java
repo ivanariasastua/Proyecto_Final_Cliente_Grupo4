@@ -13,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,15 +48,25 @@ public class ReporteIncidentesController extends Controller implements Initializ
     @FXML
     private JFXTextField txtEmisor;
 
+    Map<String,String> modoDesarrollo;
+    
     private final ReporteService service = new ReporteService();
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        datosModoDesarrollo();
     }    
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista es ReporteIncidentes");
+        modoDesarrollo.put("Buscar Responsable", "Buscar Responsable responde al método actBuscarResponsable");
+        modoDesarrollo.put("Buscar Emisor", "Buscar Emisor responde al método actBuscarEmisor");
+        modoDesarrollo.put("Generar Reporte", "Generar Reporte responde al método actGenerarReporte");
+    }
+    
     @Override
     public void cargarTema() {
     }

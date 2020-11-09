@@ -144,21 +144,21 @@ public class PrincipalController extends Controller implements Initializable {
     
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
-        modoDesarrollo.put("Vista", "Nombre de la vista Principal");
-        modoDesarrollo.put("hamMenu", "Responde al método accionDeslizarMenu");
-        modoDesarrollo.put("tpInicio", "Responde al método accionInicio");
-        modoDesarrollo.put("tpEmpleados", "Responde al método accionEmpleados");
-        modoDesarrollo.put("tpAreas", "Responde al método accionAreasTrabajos");
-        modoDesarrollo.put("Servicios", "Responde al método accionServicios");
-        modoDesarrollo.put("Registro de Gastos", "Responde al método accionRegistrarGasto");
-        modoDesarrollo.put("Categorias", "Responde al método accionCategorias");
-        modoDesarrollo.put("Registro de Incidentes", "Responde al método accionRegistrarIncidente");
-        modoDesarrollo.put("Gastos de Servicios", "Responde al método accionReporteGastos");
-        modoDesarrollo.put("Incidentes Registrados", "Responde al método accionReporteIncidentes");
-        modoDesarrollo.put("Horas Laboradas", "Responde al método accionHoraLaboradas");
-        modoDesarrollo.put("Párametros del Sistema", "Responde al método actParametros");
-        modoDesarrollo.put("Autorizar Roles", "Responde al método actAutorizarRoles");
-        modoDesarrollo.put("tpTransacciones", "Responde al método accionTransacciones");
+        modoDesarrollo.put("Vista", "Nombre de la vista es Principal");
+        modoDesarrollo.put("hamMenu", "hamMenu responde al método accionDeslizarMenu");
+        modoDesarrollo.put("tpInicio", "tpInicio responde al método accionInicio");
+        modoDesarrollo.put("tpEmpleados", "tpEmpleados responde al método accionEmpleados");
+        modoDesarrollo.put("tpAreas", "tpAreas responde al método accionAreasTrabajos");
+        modoDesarrollo.put("Servicios", "Servicios responde al método accionServicios");
+        modoDesarrollo.put("Registro de Gastos", "Registro de Gastos responde al método accionRegistrarGasto");
+        modoDesarrollo.put("Categorias", "Categorias responde al método accionCategorias");
+        modoDesarrollo.put("Registro de Incidentes", "Registro de Incidentes responde al método accionRegistrarIncidente");
+        modoDesarrollo.put("Gastos de Servicios", "Gastos de Servicios responde al método accionReporteGastos");
+        modoDesarrollo.put("Incidentes Registrados", "Incidentes Registrados responde al método accionReporteIncidentes");
+        modoDesarrollo.put("Horas Laboradas", "Horas Laboradas responde al método accionHoraLaboradas");
+        modoDesarrollo.put("Párametros del Sistema", "Párametros del Sistema responde al método actParametros");
+        modoDesarrollo.put("Autorizar Roles", "Autorizar Roles responde al método actAutorizarRoles");
+        modoDesarrollo.put("tpTransacciones", "tpTransacciones responde al método accionTransacciones");
     }
     
     public void crearCodigoGerente(){

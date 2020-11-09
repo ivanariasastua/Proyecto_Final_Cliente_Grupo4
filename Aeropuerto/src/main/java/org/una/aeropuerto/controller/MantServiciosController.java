@@ -96,8 +96,8 @@ public class MantServiciosController extends Controller implements Initializable
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista MantServicios");
-        modoDesarrollo.put("Limpiar", "Responde al método actLimpiar");
-        modoDesarrollo.put("Guardar", "Responde al método actGuardar");
+        modoDesarrollo.put("Limpiar", "Limpiar responde al método actLimpiar");
+        modoDesarrollo.put("Guardar", "Guardar responde al método actGuardar");
     }
     
     public boolean validarActivos() {

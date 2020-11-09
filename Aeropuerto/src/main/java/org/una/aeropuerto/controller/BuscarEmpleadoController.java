@@ -93,8 +93,8 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarEmpleado");
-        modoDesarrollo.put("Limpiar", "Responde al método accionLimpiar");
-        modoDesarrollo.put("Seleccionar", "Responde al método accionSeleccionar");
+        modoDesarrollo.put("Limpiar", "Limpiar responde al método accionLimpiar");
+        modoDesarrollo.put("Seleccionar", "Seleccionar responde al método accionSeleccionar");
     }
     
     public Task TaskFiltrarEmpleado(){

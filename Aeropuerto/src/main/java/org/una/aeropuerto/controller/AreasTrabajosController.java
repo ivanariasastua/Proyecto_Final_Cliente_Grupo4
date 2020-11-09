@@ -100,9 +100,9 @@ public class AreasTrabajosController extends Controller implements Initializable
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista AreasTrabajos");
-        modoDesarrollo.put("Inactivar", "Responde al método actInactivarAreaT");
-        modoDesarrollo.put("Buscar", "Responde al método actBuscarAreasTrabajos");
-        modoDesarrollo.put("Crear", "Responde al método actMantAreasTrabajo");
+        modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarAreaT");
+        modoDesarrollo.put("Buscar", "Buscar responde al método actBuscarAreasTrabajos");
+        modoDesarrollo.put("Crear", "Crear responde al método actMantAreasTrabajo");
     }
     
     public void llenarColumnas() {

@@ -78,7 +78,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista EstadosIncidentes");
-        modoDesarrollo.put("Guardar", "Responde al método actGuardar");
+        modoDesarrollo.put("Guardar", "Guardar responde al método actGuardar");
     }
     
     public void cargarColumnas() {

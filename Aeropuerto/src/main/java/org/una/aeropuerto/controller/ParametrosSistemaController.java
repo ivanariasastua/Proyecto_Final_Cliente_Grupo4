@@ -110,10 +110,10 @@ public class ParametrosSistemaController extends Controller implements Initializ
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista ParametrosSistema");
-        modoDesarrollo.put("Inactivar", "Responde al método inactivarParametro");
-        modoDesarrollo.put("Filtrar", "Responde al método filtrarParametros");
-        modoDesarrollo.put("Agregar", "Responde al método agregarEditarParametro");
-        modoDesarrollo.put("Limpiar Campos", "Responde al método limpiarCampos");
+        modoDesarrollo.put("Inactivar", "Inactivar responde al método inactivarParametro");
+        modoDesarrollo.put("Filtrar", "Filtrar responde al método filtrarParametros");
+        modoDesarrollo.put("Agregar", "Agregar responde al método agregarEditarParametro");
+        modoDesarrollo.put("Limpiar Campos", "Limpiar Campos responde al método limpiarCampos");
     }
     
     public Task TaskFiltrarParametros(){

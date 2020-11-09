@@ -28,6 +28,9 @@ import org.una.aeropuerto.service.ReporteService;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReporteHorasLaboradasController extends Controller implements Initializable{
 
@@ -39,6 +42,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     private DatePicker dpFinal;
     
     ReporteService reporteService;
+    Map<String,String> modoDesarrollo;
 
     @Override
     public void initialize() {
@@ -48,8 +52,15 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         reporteService = new ReporteService();
+        datosModoDesarrollo();
     }
 
+    public void datosModoDesarrollo(){
+        modoDesarrollo = new HashMap();
+        modoDesarrollo.put("Vista", "Nombre de la vista es ReporteHorasLaboradas");
+        modoDesarrollo.put("Generar Reporte", "Generar Reporte responde al método generarReporte");
+    }
+    
     public boolean validarDatos(){
         if(dpInicio.getValue() == null || dpFinal.getValue() == null){
             Mensaje.show(Alert.AlertType.WARNING, "Datos Faltantes", "Falta una fecha para generar el reporte\n"
