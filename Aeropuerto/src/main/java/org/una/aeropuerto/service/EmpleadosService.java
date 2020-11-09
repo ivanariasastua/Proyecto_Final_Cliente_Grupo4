@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -27,6 +28,9 @@ public class EmpleadosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el empleado");
             }
             EmpleadosDTO result = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar Empleado");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -43,6 +47,9 @@ public class EmpleadosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el empleado");
             }
             EmpleadosDTO result = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar Empleado");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -125,6 +132,9 @@ public class EmpleadosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el empleado");
             }
             EmpleadosDTO result = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar Empleado");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -141,6 +151,9 @@ public class EmpleadosService {
                 return new Respuesta(false, request.getError(), "No se pudo aprobar el empleado");
             }
             EmpleadosDTO result = (EmpleadosDTO) request.readEntity(EmpleadosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Aprobar Empleado");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

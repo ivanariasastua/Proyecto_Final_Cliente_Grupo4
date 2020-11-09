@@ -29,7 +29,7 @@ public class AreasTrabajosService {
             }
             AreasTrabajosDTO result = (AreasTrabajosDTO) request.readEntity(AreasTrabajosDTO.class);
             try{
-                TransactionRecorder.registrarTransaccion("Guardar Area Trabajo");
+                TransactionRecorder.registrarTransaccion("Guardar Area de Trabajo");
             }catch(Exception ex){}
             return new Respuesta(true, "Areas_Trabajos", result);
         } catch (Exception ex) {
@@ -47,6 +47,9 @@ public class AreasTrabajosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el area de trabajo");
             }
             AreasTrabajosDTO result = (AreasTrabajosDTO) request.readEntity(AreasTrabajosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar Area de Trabajo");
+            }catch(Exception ex){}
             return new Respuesta(true, "Areas_Trabajos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -97,6 +100,9 @@ public class AreasTrabajosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar area de trabajo");
             }
             AreasTrabajosDTO result = (AreasTrabajosDTO) request.readEntity(AreasTrabajosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar Area de Trabajo");
+            }catch(Exception ex){}
             return new Respuesta(true, "Areas_Trabajos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

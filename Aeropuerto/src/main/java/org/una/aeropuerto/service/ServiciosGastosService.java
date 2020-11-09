@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.ServiciosGastosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -27,6 +28,9 @@ public class ServiciosGastosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el gasto de servicio");
             }
             ServiciosGastosDTO result = (ServiciosGastosDTO) request.readEntity(ServiciosGastosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar Gasto de Servicio");
+            }catch(Exception ex){}
             return new Respuesta(true, "Servicios_Gastos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -43,6 +47,9 @@ public class ServiciosGastosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el gasto de servicio");
             }
             ServiciosGastosDTO result = (ServiciosGastosDTO) request.readEntity(ServiciosGastosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar Gasto de Servicio");
+            }catch(Exception ex){}
             return new Respuesta(true, "Servicios_Gastos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -109,6 +116,9 @@ public class ServiciosGastosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el servicio");
             }
             ServiciosGastosDTO result = (ServiciosGastosDTO) request.readEntity(ServiciosGastosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar Gasto de Servicio");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

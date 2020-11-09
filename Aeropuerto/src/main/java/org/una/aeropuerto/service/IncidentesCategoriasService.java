@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -27,6 +28,9 @@ public class IncidentesCategoriasService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar la categoria de incidente");
             }
             IncidentesCategoriasDTO result = (IncidentesCategoriasDTO) request.readEntity(IncidentesCategoriasDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar Categoria");
+            }catch(Exception ex){}
             return new Respuesta(true, "Incidentes_Categorias", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -43,6 +47,9 @@ public class IncidentesCategoriasService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar la categoria de incidente");
             }
             IncidentesCategoriasDTO result = (IncidentesCategoriasDTO) request.readEntity(IncidentesCategoriasDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar Categoria");
+            }catch(Exception ex){}
             return new Respuesta(true, "Incidentes_Categorias", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -93,6 +100,9 @@ public class IncidentesCategoriasService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar la categoria");
             }
             IncidentesCategoriasDTO result = (IncidentesCategoriasDTO) request.readEntity(IncidentesCategoriasDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar Categoria");
+            }catch(Exception ex){}
             return new Respuesta(true, "Incidentes_Categorias", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

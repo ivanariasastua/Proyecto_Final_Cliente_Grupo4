@@ -10,6 +10,7 @@ import java.util.Map;
 import org.una.aeropuerto.dto.ServiciosPreciosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -25,6 +26,9 @@ public class ServiciosPreciosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el precio de servicio");
             }
             ServiciosPreciosDTO result = (ServiciosPreciosDTO) request.readEntity(ServiciosPreciosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar Precio del Servicio");
+            }catch(Exception ex){}
             return new Respuesta(true, "Servicios_Precios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -41,6 +45,9 @@ public class ServiciosPreciosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el precio de servicio");
             }
             ServiciosPreciosDTO result = (ServiciosPreciosDTO) request.readEntity(ServiciosPreciosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar Precio del Servicio");
+            }catch(Exception ex){}
             return new Respuesta(true, "Servicios_Precios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -59,6 +66,9 @@ public class ServiciosPreciosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el precio");
             }
             ServiciosPreciosDTO result = (ServiciosPreciosDTO) request.readEntity(ServiciosPreciosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar Precio del Servicio");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

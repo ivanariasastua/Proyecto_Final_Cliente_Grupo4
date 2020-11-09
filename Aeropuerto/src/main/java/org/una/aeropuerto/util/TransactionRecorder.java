@@ -8,6 +8,7 @@ package org.una.aeropuerto.util;
 import java.util.Date;
 import org.una.aeropuerto.service.TransaccionesService;
 import org.una.aeropuerto.dto.TransaccionesDTO;
+import org.una.aeropuerto.dto.EmpleadosDTO;
 /**
  *
  * @author Ivan Josué Arias Astua
@@ -17,7 +18,9 @@ public class TransactionRecorder {
     private final static TransaccionesService service = new TransaccionesService();
     
     public static void registrarTransaccion(String accion){
-        TransaccionesDTO dto = new TransaccionesDTO(0L, UserAuthenticated.getInstance().getUsuario(), accion, new Date());
-        service.guardarTransaccion(dto);
+        EmpleadosDTO usu =UserAuthenticated.getInstance().getUsuario();
+        TransaccionesDTO dto = new TransaccionesDTO(0L,usu,accion,new Date());
+        Respuesta res =service.guardarTransaccion(dto);
+        System.out.println(res.getMensaje());
     }
 }

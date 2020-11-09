@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.EmpleadosHorariosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -43,6 +44,9 @@ public class EmpleadosHorariosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el horario del empleado");
             }
             EmpleadosHorariosDTO result = (EmpleadosHorariosDTO) request.readEntity(EmpleadosHorariosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar Horario");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Horarios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -59,6 +63,9 @@ public class EmpleadosHorariosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el horario del empleado");
             }
             EmpleadosHorariosDTO result = (EmpleadosHorariosDTO) request.readEntity(EmpleadosHorariosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar Horario");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Horarios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -77,6 +84,9 @@ public class EmpleadosHorariosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el horario de trabajo del empleado");
             }
             EmpleadosHorariosDTO result = (EmpleadosHorariosDTO) request.readEntity(EmpleadosHorariosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar Horario");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Horarios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
