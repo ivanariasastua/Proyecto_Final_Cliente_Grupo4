@@ -7,9 +7,102 @@ and open the template in the editor.
     Created on : 20 sep 2020, 1:29:39
     Author     : ivana
 */
+.progreso{
+    -fx-progress-color: white;
+}
+
 .date-picker{
-    -fx-base: #2a2d4d;
-    -fx-prompt-text-fill: #B2B2B2;
+    -fx-background-color: transparent;
+    -fx-focus-color: null;
+}
+.date-picker .text-field{
+    -fx-font: normal 13pt "Courier";
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 2 0;
+    -fx-text-fill:white;
+}
+.date-picker > .arrow-button{
+    -fx-background-color: #6262b3;
+    -fx-border-color: #6262b3;
+    -fx-border-radius: 0 5 5 0;; 
+}
+.date-picker > .arrow-button > .arrow {
+    -fx-shape: "M0,0v9h9V0H0z M2,8H1V7h1V8z M2,6H1V5h1V6z M2,4H1V3h1V4z M4,8H3V7h1V8z M4,6H3V5h1V6z M4,4H3V3h1V4z M6,8H5V7h1V8z M6,6H5 V5h1V6z M6,4H5V3h1V4z M8,8H7V7h1V8z M8,6H7V5h1V6z M8,4H7V3h1V4z";
+    -fx-background-color: white, #434343;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.416667em 0.416667em 0.333333em 0.333333em; /* 5 5 4 4 */
+    -fx-scale-shape: true;
+}
+
+.date-picker-popup {
+    -fx-background-color: #1d1d1d;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0;
+    -fx-alignment: CENTER; /* VBox */
+    -fx-spacing: 0; /* VBox */
+    -fx-padding: 0.083333em; /* 1 1 1 1 */
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-font: normal 14pt "Courier";
+    -fx-padding: 0.588883em 0.5em 0.666667em 0.5em; /* 7 6 8 6 */
+    -fx-background-color: #6262b3;
+    -fx-background-insets: 0 0 0 0, 0 0 1 0;
+}
+
+.date-picker-popup > * > .spinner {
+    -fx-spacing: 0.25em; /* 3 */
+    -fx-alignment: CENTER;
+    -fx-fill-height: false;
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup > * > .spinner > .button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 1, 2;
+    -fx-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.date-picker-popup > * > .spinner > .button:focused {
+    -fx-color: white;
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+}
+
+.date-picker-popup > * > .spinner > .button > .left-arrow,
+.date-picker-popup > * > .spinner > .button > .right-arrow {
+    -fx-background-color: #1d1d1d;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.333333em 0.166667em 0.333333em 0.166667em; /* 4 2 4 2 */
+    -fx-effect: dropshadow(two-pass-box , -fx-shadow-highlight-color, 1, 0.0 , 0, 1.4);
+}
+
+.date-picker-popup > * > .spinner > .button:hover > .left-arrow,
+.date-picker-popup > * > .spinner > .button:hover > .right-arrow {
+    -fx-background-color: white;
+}
+
+.date-picker-popup > .calendar-grid {
+    -fx-font: normal 13pt "Courier";
+    -fx-background-color: #d3d3d3;
+    /*-fx-background-insets: 1 0 0 0;*/
+    -fx-padding: 0;
+}
+
+.date-picker-popup > * > .day-cell:hover{
+    -fx-background: #6262b3;
+}
+
+.date-picker-popup > * > .today {
+    -fx-background-color: #2a2d4d;
+    -fx-text-fill: white;
+    -fx-background-insets: 1, 2, 3;
+}
+
+.date-picker-popup > * > .today:hover {
+    -fx-background-color: #6262b3;
 }
 
 .date-picker .text-field{
@@ -51,11 +144,11 @@ and open the template in the editor.
 }
 
 .combo-box-popup .list-view .list-cell{
-    -fx-background-color: #003366 
+    -fx-background-color: #2a2d4d; 
 }
 
 .combo-box-popup .list-view .list-cell:hover{
-    -fx-background-color: #a1bdf5
+    -fx-background-color: #363f78;
 }
 
 .button{ 
@@ -102,6 +195,14 @@ and open the template in the editor.
 }
 
 /*LogIn Exclusivo*/
+
+.buton_close{
+    -fx-font: bold 13pt "Times New Roman";
+    -fx-text-fill: red;
+    -fx-background-color: transparent;
+    -fx-border-color: red;
+    -fx-border-radius: 8;
+}
 
 #imvCedula{
     -fx-opacity: 0.8;
@@ -184,7 +285,7 @@ and open the template in the editor.
 .titled-pane > *.content {
     -fx-background-color: #2a2746;
     -fx-border-color: #2a3167;
- }
+}
 
 .titled-pane:focused > .title > .arrow-button .arrow {
     -fx-background-color: white;
@@ -253,7 +354,6 @@ and open the template in the editor.
     -fx-border-radius :2.0em;
 }
 
-
 .scroll-bar:horizontal .increment-button , .scroll-bar:horizontal .decrement-button {
     -fx-background-color :transparent;
     -fx-background-radius : 0.0em;
@@ -285,7 +385,6 @@ and open the template in the editor.
 .scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
     -fx-background-color : #2a4085;
 }
-
 
 #imvMaxRes{
     -fx-image:url('resources/maximize-size-option.png');
@@ -382,7 +481,6 @@ and open the template in the editor.
     -fx-background-color: #1d1d1d;
     -fx-opacity: 0.7;
 }
-
 
 .table-view{
     -fx-control-inner-background: whitesmoke;

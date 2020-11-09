@@ -4,110 +4,337 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 20 sep 2020, 1:29:39
-    Author     : ivana
+    Created on : 7 nov 2020, 22:04:30
+    Author     : Ivan Josué Arias Astua
 */
+/*
+    General
+*/
+.rb{
+   -fx-text-fill: white;
+   -fx-font: bold 16px "Courier"; 
+   -jfx-unselected-color: #434343;
+   -jfx-selected-color: #328fa8;
+}
 
 .raiz{
     -fx-background-color: #d3d3d3;
 }
 
 .texto{
-    -fx-text-fill: black;
-    -fx-font: bold 12pt "Courier";
-}
-
-.campos_texto_1{
-    -jfx-unfocus-color: #1d1d1d;
-    -fx-prompt-text-fill: #1d1d1d;
-    -fx-font: bold 14pt "Courier";
-    -jfx-focus-color: #1496db;
-    -fx-text-fill: derive(#1d1d1d, 20%);
-}
-
-.button{ 
-    -fx-rippler-fill:firebrick;
-    -jfx-rippler-fill: transparent; 
-}
-
-.button_1{
-    -fx-text-fill: white;
-    -fx-font: bold 14pt "Courier";
-    -fx-border-color: #2b702b;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
-    -jfx-button-type: FLAT;
-    -jfx-rippler-fill: red;
-    -fx-background-color: #2b702b;
-}
-
-.button_1:hover{
-    -fx-opacity: 0.8;
-}
-
-.button_2{
-    -fx-text-fill: white;
-    -fx-font: bold 14pt "Courier";
-    -fx-border-color: #990000;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
-    -jfx-button-type: FLAT;
-    -jfx-rippler-fill: red;
-    -fx-background-color: #990000;
-}
-
-.button_2:hover{
-    -fx-opacity: 0.8;
-}
-
-.lblTitulo_1{
-    -fx-font: bold 22pt "Courier";
+    -fx-font: normal 14pt "Bell MT";
     -fx-text-fill: #1d1d1d;
     -fx-alignment: CENTER;
 }
 
-/*LogIn Exclusivo*/
+.texto2{
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 0 0 2 0;
+}
+
+.lblTitulo_1{
+    -fx-text-fill: #1d1d1d;
+    -fx-alignment: CENTER;
+    -fx-font: bold 30pt "Bell MT";
+    -fx-underline: true;
+}
+
+.campos_texto_1{
+    -fx-text-fill: #1d1d1d;
+    -fx-font: normal 16pt "Courier";
+    -jfx-unfocus-color: #4d4d4d;
+    -fx-prompt-text-fill: #4d4d4d;
+    -jfx-focus-color: #1d1d1d;
+}
+
+.cb{
+    -jfx-unchecked-color: #4d4d4d;
+    -jfx-checked-color: #3fa875;
+}
+
+.boton{
+    -fx-text-fill: #1d1d1d;
+    -fx-font: bold 14pt "Courier";
+    -fx-background-radius: 25;
+    -fx-opacity: 0.8;
+}
+
+.button_1{
+    -fx-background-color: #328fa8;
+}
+
+.button_3{
+    -fx-background-color: #a7a8a8;
+}
+
+.button_2{
+    -fx-background-color: #e3750e;
+}
+
+.scroll-bar:horizontal .track, .scroll-bar:vertical .track{
+    -fx-background-color: #1e8f73;
+    -fx-border-color :#1e8f73;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :3.0em;
+}
+
+
+.scroll-bar:horizontal .increment-button , .scroll-bar:horizontal .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button , .scroll-bar:vertical .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 10.0 0.0 0.0;
+
+}
+
+ .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : -4 4 4 -4;
+}
+
+ .scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : -4 4 4 -4;
+}
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color: white;
+}
+
+.scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
+    -fx-background-color : white;
+}
+
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color: linear-gradient(to top, #1c755f, #1e8f73 80%, #1c755f);
+}
+
+.tab-pane {
+    -fx-tab-min-width:120px;
+    -fx-tab-max-width:120px;
+    -fx-tab-min-height:30px;
+    -fx-tab-max-height:30px;
+}
+
+.tab {
+    -fx-font: normal 15pt "Courier";
+    -fx-background-color:#28a889 ;  
+}
+
+.tab-label{
+    -fx-text-fill: #1d1d1d;
+}
+
+.tab:selected {
+    -fx-background-color:#4ecfb0 ;
+    -fx-focus-color: #4ecfb0;
+}
+
+.table-view{
+    -fx-control-inner-background: #d3d3d3;
+    -fx-font: normal 14px "Courier";
+    -fx-text-background-color: black;
+    -fx-border-color: #28a889;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+}
+
+.table-view .column-header .label{
+    -fx-font: normal 12.60pt "Courier";
+    -fx-text-fill: #1d1d1d;
+}
+
+.table-view .column-header, .table-view .filler{
+    -fx-size: 30;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color:  #28a889;
+    -fx-border-color: #28a889;
+    -fx-border-insets: 0 10 0 10;
+    -fx-text-fill: #1d1d1d;
+}
+
+.table-row-cell{
+    -fx-background-color: #d3d3d3;
+    -fx-text-fill: #1d1d1d;
+    -fx-font: bold 14px "Courier";
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected{
+    -fx-background-color: #28a889;
+    -fx-opacity: 5;
+    -fx-text-background-color: white;
+    -fx-table-cell-border-color: #28a889;
+    -fx-table-header-border-color: #28a889;  
+    -fx-opacity: 0.9;
+}
+
+.comboBox{
+    -fx-background-color: transparent;
+    -fx-prompt-text-fill: #1d1d1d;
+    -fx-font: normal 11pt "Courier";
+    -fx-text-fill: white;
+    -jfx-unfocus-color: #434343;
+    -jfx-focus-color: #1d1d1d;
+}
+
+.comboBox .list-cell {
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell{
+    -fx-background-color: #28a889; 
+}
+
+.combo-box-popup .list-view .list-cell:hover{
+    -fx-background-color: #4ecfb0;
+}
+
+.date-picker{
+    -fx-background-color: transparent;
+    -fx-focus-color: null;
+}
+.date-picker .text-field{
+    -fx-font: normal 13pt "Courier";
+    -fx-background-color: #d3d3d3;
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 0 0 2 0;
+}
+.date-picker > .arrow-button{
+    -fx-background-color: #328fa8;
+    -fx-border-color: #328fa8;
+    -fx-border-radius: 0 5 5 0;; 
+}
+.date-picker > .arrow-button > .arrow {
+    -fx-shape: "M0,0v9h9V0H0z M2,8H1V7h1V8z M2,6H1V5h1V6z M2,4H1V3h1V4z M4,8H3V7h1V8z M4,6H3V5h1V6z M4,4H3V3h1V4z M6,8H5V7h1V8z M6,6H5 V5h1V6z M6,4H5V3h1V4z M8,8H7V7h1V8z M8,6H7V5h1V6z M8,4H7V3h1V4z";
+    -fx-background-color: lightgray, #1d1d1d;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.416667em 0.416667em 0.333333em 0.333333em; /* 5 5 4 4 */
+    -fx-scale-shape: true;
+}
+
+.date-picker-popup {
+    -fx-background-color: #1d1d1d;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0;
+    -fx-alignment: CENTER; /* VBox */
+    -fx-spacing: 0; /* VBox */
+    -fx-padding: 0.083333em; /* 1 1 1 1 */
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-font: normal 14pt "Courier";
+    -fx-padding: 0.588883em 0.5em 0.666667em 0.5em; /* 7 6 8 6 */
+    -fx-background-color: #328fa8;
+    -fx-background-insets: 0 0 0 0, 0 0 1 0;
+}
+
+.date-picker-popup > * > .spinner {
+    -fx-spacing: 0.25em; /* 3 */
+    -fx-alignment: CENTER;
+    -fx-fill-height: false;
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup > * > .spinner > .button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 1, 2;
+    -fx-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.date-picker-popup > * > .spinner > .button:focused {
+    -fx-color: white;
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+}
+
+.date-picker-popup > * > .spinner > .button > .left-arrow,
+.date-picker-popup > * > .spinner > .button > .right-arrow {
+    -fx-background-color: #1d1d1d;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.333333em 0.166667em 0.333333em 0.166667em; /* 4 2 4 2 */
+    -fx-effect: dropshadow(two-pass-box , -fx-shadow-highlight-color, 1, 0.0 , 0, 1.4);
+}
+
+.date-picker-popup > * > .spinner > .button:hover > .left-arrow,
+.date-picker-popup > * > .spinner > .button:hover > .right-arrow {
+    -fx-background-color: white;
+}
+
+.date-picker-popup > .calendar-grid {
+    -fx-font: normal 13pt "Courier";
+    -fx-background-color: #d3d3d3;
+    /*-fx-background-insets: 1 0 0 0;*/
+    -fx-padding: 0;
+}
+
+.date-picker-popup > * > .day-cell:hover{
+    -fx-background: #328fa8;
+}
+
+.date-picker-popup > * > .today {
+    -fx-background-color: #0f9d58;
+    -fx-background-insets: 1, 2, 3;
+}
+
+.date-picker-popup > * > .today:hover {
+    -fx-background-color: #28a889;
+}
+/*
+    Iniciar Sesion exclusivo
+*/
 
 #imvCedula{
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.6;
     -fx-image:url('resources/id-card2.png')
 }
 
 #imvPassword{
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.6;
     -fx-image:url('resources/key2.png')
 }
 
+.buton_close{
+    -fx-font: bold 13pt "Times New Roman";
+    -fx-text-fill: #660000;
+    -fx-background-color: transparent;
+    -fx-border-color: #660000;
+    -fx-border-radius: 8;
+}
+
 #imvMinimizar{
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.6;
     -fx-image:url('resources/minimize2.png')
 }
-/*Principal Exclusivo*/
+
+/*
+    Principal Exclusivo
+*/
 
 .marco{
-    -fx-background-color: #1496db;
+    -fx-background-color: #32a88b;
 }
 
 .titled-pane {
     -fx-text-fill: #1d1d1d;
-    -fx-font: bold 12pt "Courier";
-}
-
-.titled-pane:selected {
-    -fx-text-fill: white;
-    -fx-border-color: white;
-    -fx-border-width: 0 0 0 5;
+    -fx-font: normal 13pt "Courier";
 }
 
 .titled-pane:hover .title{
-    -fx-background-color: #017fbe;
-    -fx-border-color: #017fbe;
-    -fx-border-width: 0 0 0 5;
+    -fx-background-color: #1e8f73;
 }
 
 .titled-pane > .title {
-    -fx-background-color: #1496db
-;}
+    -fx-background-color: #32a88b;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 2.5 0;
+}
 
 .titled-pane > .title > .arrow-button {
     -fx-background-color: null;
@@ -117,17 +344,13 @@ and open the template in the editor.
     -fx-background-color: #1d1d1d;
 }
 
-.titled-pane:collapsed > .title > .arrow-button .arrow {
-    -fx-rotate: -90;
+.titled-pane > *.content {
+    -fx-background-color: #32a88b;
+    -fx-border-color: #32a88b;
 }
 
-.titled-pane > *.content {
-    -fx-background-color: #1496db;
-    -fx-border-color: #1496db;
- }
-
 .titled-pane:focused > .title > .arrow-button .arrow {
-    -fx-background-color: #1d1d1d;
+    -fx-background-color: white;
 }
 
 #imvInicio{
@@ -158,10 +381,6 @@ and open the template in the editor.
     -fx-image:url('resources/data-transfer2.png');
 }
 
-#imvCerrarSesion{
-    -fx-image:url('resources/logout2.png');
-}
-
 #imvParametros{
     -fx-image:url('resources/filter2.png');
 }
@@ -171,61 +390,16 @@ and open the template in the editor.
 }
 
 #menu{
-   -fx-background-color: #1496db;
+   -fx-background-color: #32a88b;
 }
 
 #menu > .viewport {
-   -fx-background-color: #1496db;
+   -fx-background-color: #32a88b;
 }
 
 #accordioMenu{
     -fx-border-width: 0;
 }
-
-#meno:focused{
-    -fx-color: #2a2746;
-}
-
-.scroll-bar:horizontal .track, .scroll-bar:vertical .track{
-    -fx-background-color: #66ccff;
-    -fx-border-color :#66ccff;
-    -fx-background-radius : 0.0em;
-    -fx-border-radius :2.0em;
-}
-
-
-.scroll-bar:horizontal .increment-button , .scroll-bar:horizontal .decrement-button {
-    -fx-background-color :transparent;
-    -fx-background-radius : 0.0em;
-    -fx-padding :0.0 0.0 10.0 0.0;
-
-}
-
-.scroll-bar:vertical .increment-button , .scroll-bar:vertical .decrement-button {
-    -fx-background-color :transparent;
-    -fx-background-radius : 0.0em;
-    -fx-padding :0.0 10.0 0.0 0.0;
-
-}
-
- .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow{
-    -fx-shape : " ";    
-    -fx-padding : -4 4 4 -4;
-}
-
- .scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow{
-    -fx-shape : " ";    
-    -fx-padding : -4 4 4 -4;
-}
-
-.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
-    -fx-background-color: #003366;
-}
-
-.scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
-    -fx-background-color : #003366;
-}
-
 
 #imvMaxRes{
     -fx-image:url('resources/maximize-size-option2.png');
@@ -244,21 +418,8 @@ and open the template in the editor.
 }
 
 .lblMarco:hover{
-    -fx-background-color: #6262b3;
+    -fx-background-color: #0f9d58;
     -fx-opacity: 0.8;
-}
-
-.button_3{
-    -fx-text-fill: #1d1d1d;
-    -fx-font: italic 14pt "Courier";
-    -fx-border-color: #003366;
-    -fx-border-radius: 15;
-    -fx-background-radius: 15;
-}
-
-.button_3:hover{
-    -fx-background-color: #003366;
-    -fx-text-fill: white;
 }
 
 #hamMenu StackPane {
@@ -266,30 +427,30 @@ and open the template in the editor.
 }
 
 .menu-item{
-    -fx-background-color: #1496db;
+    -fx-background-color: #32a88b;
 }
 
-#lblCedula, #lblRol{
-    -fx-text-fill: white;
+#lblCedula1, #lblRol1{
+    -fx-text-fill: #1d1d1d;
     -fx-font: italic 14pt "Courier";
 }
 
 #smUser{
-    -fx-background-color: #1496db;
+    -fx-background-color: #32a88b;
 }
 
 #smUser .label {
     -fx-text-fill: #1d1d1d;
     -fx-font: italic 13pt "Courier";
-    -fx-background-color: #1496db;
+    -fx-background-color: #32a88b;
 }
 
 #smUser .arrow {
-    -fx-background-color: #2a4085;
+    -fx-background-color: #1d1d1d;
 }
 
 #smUser .context-menu {
-    -fx-background-color: #003366;
+    -fx-background-color: #32a88b;
 }
 
 #imvDark{
@@ -301,9 +462,5 @@ and open the template in the editor.
 }
 
 #tbTema{
-    -jfx-toggle-color: #1496db;
-}
-
-#imvHome{
-    -fx-opacity: 0.8;
+    -jfx-toggle-color: #0f9d58;
 }

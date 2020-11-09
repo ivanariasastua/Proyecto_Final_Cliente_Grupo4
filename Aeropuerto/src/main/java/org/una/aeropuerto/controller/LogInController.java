@@ -127,8 +127,12 @@ public class LogInController extends Controller implements Initializable {
         return false;
     }
 
+    @Override
+    public void cargarTema() {
+    }
+
     @FXML
-    private void actRestablecer(MouseEvent event) {
+    private void actRestablecer(ActionEvent event) {
         if(txtUserName.getText() == null || txtUserName.getText().isEmpty()){
             Mensaje.show(Alert.AlertType.WARNING, "Restablecer Contraseña", "Por favor ingrese su cédula");
         }else{
@@ -139,10 +143,6 @@ public class LogInController extends Controller implements Initializable {
                 Mensaje.show(Alert.AlertType.ERROR, "Restaurar Contraseña", res.getMensaje());
             }  
         }
-    }
-
-    @Override
-    public void cargarTema() {
     }
 
 }

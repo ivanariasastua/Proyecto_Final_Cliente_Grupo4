@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -42,7 +43,7 @@
                   <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <DatePicker fx:id="dpFechaF" prefHeight="35.0" prefWidth="350.0">
+            <DatePicker fx:id="dpFechaF" prefHeight="35.0" prefWidth="350.0" styleClass="date-picker">
                <VBox.margin>
                   <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                </VBox.margin>
@@ -105,10 +106,14 @@
       </VBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <JFXButton onAction="#actGenerarReporte" prefHeight="35.0" prefWidth="200.0" styleClass="button_1" text="Generar reporte">
+            <JFXButton onAction="#actGenerarReporte" prefHeight="35.0" prefWidth="200.0" text="Generar reporte">
                <HBox.margin>
                   <Insets right="25.0" />
                </HBox.margin>
+               <styleClass>
+                  <String fx:value="button_1" />
+                  <String fx:value="boton" />
+               </styleClass>
             </JFXButton>
          </children>
       </HBox>

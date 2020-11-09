@@ -64,7 +64,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private JFXTextField txtAreaSelec;
     @FXML
     private JFXTextArea txtDescripcionIncident;
-    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor"); 
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private IncidentesRegistradosService incidentService;
     private IncidentesRegistradosDTO incidentDTO;
     private AreasTrabajosDTO areaSelec = new AreasTrabajosDTO();
@@ -81,7 +81,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     IncidentesRegistradosDTO incidentSeleccionado = new IncidentesRegistradosDTO();
     List<EmpleadosDTO> listEmpl = new ArrayList<>();
     List<AreasTrabajosDTO> listAreas = new ArrayList<>();
-    private Map<String,String> modoDesarrollo;
+    private Map<String, String> modoDesarrollo;
     @FXML
     private Tab tabCrear;
     @FXML
@@ -119,7 +119,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         adjustHeight(contenedor.getHeight());
     }
 
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista IncidentesRegistrados");
         modoDesarrollo.put("Buscar Categoria", "Buscar Categoria responde al método actBuscarCategoria");
@@ -133,7 +133,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         modoDesarrollo.put("Editar", "Editar responde al método actEditarIncidente");
         modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarIncidente");
     }
-    
+
     public void clickTabla() {
         tablaIncident.setRowFactory(tv -> {
             TableRow<IncidentesRegistradosDTO> row = new TableRow();
@@ -149,9 +149,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarCategoria(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
             categoriaSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
             if (categoriaSelec != null) {
@@ -162,9 +162,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (emisorSelec != null) {
@@ -175,9 +175,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (responsableSelec != null) {
@@ -188,9 +188,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarArea(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
             areaSelec = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
             if (areaSelec != null) {
@@ -217,9 +217,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actGuardarIncidenteRegistrado(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             if (incidentSelec == true) {
                 if (validarActivos()) {
                     incidentSeleccionado.setId(incidentSeleccionado.getId());
@@ -270,34 +270,38 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actInactivarIncidente(ActionEvent event) {
-        if (incidentSelec == true) {
-            Boolean puedeInactivar = Boolean.FALSE;
-            String cedula = "", codigo = "";
-            if(UserAuthenticated.getInstance().isRol("GERENTE")){
-                cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
-                codigo = (String) AppContext.getInstance().get("CodigoGerente");
-                puedeInactivar = Boolean.TRUE;
-            }else if(UserAuthenticated.getInstance().isRol("GESTOR")){
-                Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Precio de Servicio");
-                if(result.isPresent()){
-                    cedula = result.get().getKey();
-                    codigo = result.get().getValue();
-                    puedeInactivar = Boolean.TRUE;
-                }
-            }
-            if(puedeInactivar){
-                Respuesta res = incidentService.inactivar(incidentSeleccionado, incidentSeleccionado.getId(), cedula, codigo);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
-                    incidentSelec = false;
-                }else{
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
-                }
-            }
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
         } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+            if (incidentSelec == true) {
+                Boolean puedeInactivar = Boolean.FALSE;
+                String cedula = "", codigo = "";
+                if (UserAuthenticated.getInstance().isRol("GERENTE")) {
+                    cedula = UserAuthenticated.getInstance().getUsuario().getCedula();
+                    codigo = (String) AppContext.getInstance().get("CodigoGerente");
+                    puedeInactivar = Boolean.TRUE;
+                } else if (UserAuthenticated.getInstance().isRol("GESTOR")) {
+                    Optional<Pair<String, String>> result = Mensaje.showDialogoParaCodigoGerente("Inactivar Precio de Servicio");
+                    if (result.isPresent()) {
+                        cedula = result.get().getKey();
+                        codigo = result.get().getValue();
+                        puedeInactivar = Boolean.TRUE;
+                    }
+                }
+                if (puedeInactivar) {
+                    Respuesta res = incidentService.inactivar(incidentSeleccionado, incidentSeleccionado.getId(), cedula, codigo);
+                    if (res.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
+                        incidentSelec = false;
+                    } else {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
+                    }
+                }
+            } else {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+            }
+            incidentSelec = false;
         }
-        incidentSelec = false;
     }
 
     public String estado(boolean estad) {
@@ -327,9 +331,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actBuscarIncidente(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             llenarColumnas();
             tablaIncident.getItems().clear();
             if (cbxFiltro.getValue() != null) {
@@ -368,24 +372,28 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actEditarIncidente(ActionEvent event) {
-        if (incidentSelec == true) {
-            if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
-                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-                selectionModel.select(tabCrear);
-                cargarDatos();
-            } else {
-                incidentSelec = false;
-            }
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
         } else {
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+            if (incidentSelec == true) {
+                if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
+                    SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                    selectionModel.select(tabCrear);
+                    cargarDatos();
+                } else {
+                    incidentSelec = false;
+                }
+            } else {
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
+            }
         }
     }
 
     @FXML
     private void actSeguimientoIncidenteEstados(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+
+        } else {
             if (incidentSelec == true) {
                 AppContext.getInstance().set("EstadosIncidentes", incidentSeleccionado);
                 FlowController.getInstance().goViewInNoResizableWindow("EstadosIncidentes", false, StageStyle.UTILITY);
@@ -399,32 +407,32 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @Override
     public void cargarTema() {
     }
-    
-    private void addListener(){
-        contenedor.widthProperty().addListener( w -> {
+
+    private void addListener() {
+        contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());
         });
-        contenedor.heightProperty().addListener( h -> {
+        contenedor.heightProperty().addListener(h -> {
             adjustHeight(contenedor.getHeight());
         });
     }
-    
-    private void adjustWidth(double ancho){
+
+    private void adjustWidth(double ancho) {
         bpRoot.setPrefWidth(ancho);
         vbRoot.setPrefWidth(ancho);
         gpCrearEditar.setPrefWidth(ancho);
         gpTabla.setPrefWidth(ancho);
         tabPane.setPrefWidth(ancho);
-        txtBuscarIncident.setPrefWidth(ancho-(145+115+50));
-        tablaIncident.setPrefWidth(ancho-60);
+        txtBuscarIncident.setPrefWidth(ancho - (145 + 115 + 50));
+        tablaIncident.setPrefWidth(ancho - 60);
     }
 
-    private void adjustHeight(double alto){
+    private void adjustHeight(double alto) {
         bpRoot.setPrefHeight(alto);
         vbRoot.setPrefHeight(alto);
-        gpCrearEditar.setPrefHeight(alto-100);
-        gpTabla.setPrefHeight(alto-100);
-        tabPane.setPrefHeight(alto-40);
-        tablaIncident.setPrefHeight(alto-276);
+        gpCrearEditar.setPrefHeight(alto - 100);
+        gpTabla.setPrefHeight(alto - 100);
+        tabPane.setPrefHeight(alto - 40);
+        tablaIncident.setPrefHeight(alto - 276);
     }
 }

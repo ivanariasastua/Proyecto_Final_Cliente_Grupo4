@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -27,6 +28,9 @@ public class EmpleadosMarcajesService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el marcaje del empleado");
             }
             EmpleadosMarcajesDTO result = (EmpleadosMarcajesDTO) request.readEntity(EmpleadosMarcajesDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Guardar marcaje");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Marcajes", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -43,6 +47,9 @@ public class EmpleadosMarcajesService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el marcaje del empleado");
             }
             EmpleadosMarcajesDTO result = (EmpleadosMarcajesDTO) request.readEntity(EmpleadosMarcajesDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar marcaje");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Marcajes", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

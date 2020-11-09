@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -42,24 +42,28 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     private JFXComboBox<String> cbBuscarEmpleado;
     @FXML
     private TableView<EmpleadosDTO> tablaEmpleados;
-    
-    private EmpleadosService service;
-    private Map<String,String> modoDesarrollo;
 
-    
+    private EmpleadosService service;
+    private Map<String, String> modoDesarrollo;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initVista();
         service = new EmpleadosService();
         datosModoDesarrollo();
-    }    
+    }
 
     @FXML
     private void accionBuscarEmpleado(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-        }else{
-            if(cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+            if (AppContext.getInstance().get("permisoFiltrar").equals(true)) {
+                if (cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()) {
+                    tablaEmpleados.getItems().clear();
+                    Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
+                }
+            }
+        } else {
+            if (cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()) {
                 tablaEmpleados.getItems().clear();
                 Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
             }
@@ -68,14 +72,23 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
 
     @FXML
     private void accionTablaEmpleados(MouseEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
-            }else{
-            if(tablaEmpleados.getSelectionModel().getSelectedItem() != null){
-                if(tablaEmpleados.getSelectionModel().getSelectedItem().isEstado())
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+            if (AppContext.getInstance().get("permisoFiltrar").equals(true)) {
+                if (tablaEmpleados.getSelectionModel().getSelectedItem() != null) {
+                    if (tablaEmpleados.getSelectionModel().getSelectedItem().isEstado()) {
+                        AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
+                    } else {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
+                    }
+                }
+            }
+        } else {
+            if (tablaEmpleados.getSelectionModel().getSelectedItem() != null) {
+                if (tablaEmpleados.getSelectionModel().getSelectedItem().isEstado()) {
                     AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
-                else
+                } else {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
+                }
             }
         }
     }
@@ -89,15 +102,15 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     private void accionLimpiar(ActionEvent event) {
         Limpiar();
     }
-    
-    public void datosModoDesarrollo(){
+
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarEmpleado");
         modoDesarrollo.put("Limpiar", "Limpiar responde al método accionLimpiar");
         modoDesarrollo.put("Seleccionar", "Seleccionar responde al método accionSeleccionar");
     }
-    
-    public Task TaskFiltrarEmpleado(){
+
+    public Task TaskFiltrarEmpleado() {
         return new Task() {
             @Override
             protected Object call() throws Exception {
@@ -105,19 +118,19 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
                 Respuesta res;
                 updateMessage("Filtrando empleados.");
                 updateProgress(1, 3);
-                if(var.equals("Por nombre")){
+                if (var.equals("Por nombre")) {
                     res = service.getByNombre(txtBuscarEmpleados.getText());
-                }else if(var.equals("Por area")){
+                } else if (var.equals("Por area")) {
                     res = service.getByArea(txtBuscarEmpleados.getText());
-                }else{
+                } else {
                     res = service.getByCedula(txtBuscarEmpleados.getText());
                 }
                 updateMessage("Filtrando empleados..");
                 updateProgress(2, 3);
-                Platform.runLater( () -> {
-                    if(res.getEstado()){
-                        tablaEmpleados.getItems().addAll((List<EmpleadosDTO>)res.getResultado("Empleados"));
-                    }else{
+                Platform.runLater(() -> {
+                    if (res.getEstado()) {
+                        tablaEmpleados.getItems().addAll((List<EmpleadosDTO>) res.getResultado("Empleados"));
+                    } else {
                         System.out.println(res.getMensajeInterno());
                         Mensaje.show(Alert.AlertType.ERROR, "Buscar Empleados", res.getMensaje());
                     }
@@ -125,11 +138,11 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
                 updateMessage("Filtrando empleados...");
                 updateProgress(3, 3);
                 return true;
-            } 
+            }
         };
     }
-    
-    private void initVista(){
+
+    private void initVista() {
         cbBuscarEmpleado.getItems().clear();
         cbBuscarEmpleado.getItems().add("Por nombre");
         cbBuscarEmpleado.getItems().add("Por area");
@@ -142,13 +155,13 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Jefe");
         colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
         TableColumn<EmpleadosDTO, String> colrol = new TableColumn<>("Rol");
-        colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol() )));
+        colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol())));
         TableColumn<EmpleadosDTO, String> colestado = new TableColumn<>("Estado");
         colestado.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactivo"));
         tablaEmpleados.getColumns().addAll(colNombre, colCedula, colJefe, colrol, colestado);
     }
-    
-    private void Limpiar(){
+
+    private void Limpiar() {
         tablaEmpleados.getItems().clear();
         txtBuscarEmpleados.clear();
         cbBuscarEmpleado.getSelectionModel().clearSelection();
@@ -162,5 +175,5 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @Override
     public void cargarTema() {
     }
-    
+
 }

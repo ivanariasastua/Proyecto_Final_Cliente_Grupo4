@@ -101,15 +101,22 @@ public class ReporteService {
         }
     }
 
-    public Respuesta reporteIncident(Date fechaIni, boolean estado, String responsable, String emisor) {
+    public Respuesta reporteIncident(Date fechaIni, Date fechaFin, boolean estado, String responsable, String emisor,boolean est) {
         try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("fechaIni", fechaIni);
-          //  parametros.put("fechaFin", fechaFin);
-            parametros.put("estado", estado);
+            parametros.put("fechaFin", fechaFin);
+            if(est){
+                parametros.put("estado", estado);
+            }
             parametros.put("responsable", responsable);
             parametros.put("emisor", emisor);
-            Request request = new Request("reportes/reporteIncidente", "/{fechaIni}/{estado}/{responsable}/{emisor}", parametros);
+            Request request;
+            if(est){
+                request = new Request("reportes/reporteIncidente", "/{fechaIni}/{fechaFin}/{estado}/{responsable}/{emisor}", parametros);
+            }else{
+                request = new Request("reportes/reporteIncidente2", "/{fechaIni}/{fechaFin}/{responsable}/{emisor}", parametros);
+            }
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError());

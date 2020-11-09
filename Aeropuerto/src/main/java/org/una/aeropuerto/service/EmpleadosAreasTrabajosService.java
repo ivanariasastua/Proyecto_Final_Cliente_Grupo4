@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -42,6 +43,9 @@ public class EmpleadosAreasTrabajosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el empleados area de trabajo");
             }
             EmpleadosAreasTrabajosDTO result = (EmpleadosAreasTrabajosDTO) request.readEntity(EmpleadosAreasTrabajosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Asignar Area de Trabajo");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Areas_Trabajos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -58,6 +62,9 @@ public class EmpleadosAreasTrabajosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el empleados area de trabajo");
             }
             EmpleadosAreasTrabajosDTO result = (EmpleadosAreasTrabajosDTO) request.readEntity(EmpleadosAreasTrabajosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Modificar asignacion del Area de Trabajo");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Areas_Trabajos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -92,6 +99,9 @@ public class EmpleadosAreasTrabajosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar area de trabajo del empleado");
             }
             EmpleadosAreasTrabajosDTO result = (EmpleadosAreasTrabajosDTO) request.readEntity(EmpleadosAreasTrabajosDTO.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Inactivar asignacion de Area de Trabajo");
+            }catch(Exception ex){}
             return new Respuesta(true, "Empleados_Areas_Trabajos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

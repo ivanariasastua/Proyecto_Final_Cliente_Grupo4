@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,11 +20,18 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.service.ReporteService;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 
 /**
@@ -51,6 +59,9 @@ public class ReporteIncidentesController extends Controller implements Initializ
     Map<String,String> modoDesarrollo;
     
     private final ReporteService service = new ReporteService();
+    EmpleadosDTO emisorSelec;
+    EmpleadosDTO responsableSelec;
+
     /**
      * Initializes the controller class.
      */
@@ -58,6 +69,8 @@ public class ReporteIncidentesController extends Controller implements Initializ
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
     }    
+        // TODO
+    }
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
@@ -73,37 +86,104 @@ public class ReporteIncidentesController extends Controller implements Initializ
 
     @Override
     public void initialize() {
+        responsableSelec = new EmpleadosDTO();
+        emisorSelec = new EmpleadosDTO();
+        txtResponsable.setText(null);
+        txtEmisor.setText(null);
+        dpFin.setValue(null);
+        dpIni.setValue(null);
+        rbActivo.setSelected(true);
+        rbInactivo.setSelected(false);
+        rbAmbos.setSelected(false);
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
+        AppContext.getInstance().set("permisoFiltrar", true);
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if (responsableSelec != null) {
+            txtResponsable.setText(responsableSelec.getNombre());
+        }
     }
 
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
+        AppContext.getInstance().set("permisoFiltrar", true);
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+        if (emisorSelec != null) {
+            txtEmisor.setText(emisorSelec.getNombre());
+        }
+    }
+
+    public boolean validarCampos() {
+        if (dpFin.getValue() == null || dpIni.getValue() == null || txtEmisor.getText() == null || txtResponsable.getText() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Campos obligatorios", "Los siguientes campos son obligatorios para generar el reporte\n*Fechas\n*Estado\n*Responsable\n*Emisor");
+            return false;
+        }
+        if (dpFin.getValue().isBefore(dpIni.getValue())) {
+            Mensaje.show(Alert.AlertType.WARNING, "Fechas Incorrectas", "Las fechas no son correctas");
+            return false;
+        }
+        return true;
     }
 
     @FXML
     private void actGenerarReporte(ActionEvent event) {
-        Respuesta res = service.reporteIncident(new Date(), true,"a","a");
-        if(res.getEstado()){
-            String resp = (String) res.getResultado("Reporte");
-            System.out.println("Exito: "+resp);
-            byte[] bytes = Base64.getDecoder().decode(resp);
-            try{
-                ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                ObjectInputStream bytesArray = new ObjectInputStream(array);
-                JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                JasperViewer viewer = new JasperViewer(jp, false);
-                viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
-                viewer.setVisible(true);
-            }catch(IOException | ClassNotFoundException ex){
-                System.out.println(ex);
+        if (validarCampos()) {
+            Date ini = DateUtils.asDate(dpIni.getValue());
+            Date fin = DateUtils.asDate(dpFin.getValue());
+            Respuesta res;
+            if (rbActivo.isSelected()) {
+                res = service.reporteIncident(ini, fin, true, txtResponsable.getText(), txtEmisor.getText(), true);
+            } else if (rbInactivo.isSelected()) {
+                res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), true);
+            } else {
+                res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), false);
             }
-        }else{
-            System.out.println("error "+res.getMensaje());
-            System.out.println("Error: "+res.getMensajeInterno());
+            if (res.getEstado()) {
+                String resp = (String) res.getResultado("Reporte");
+                byte[] bytes = Base64.getDecoder().decode(resp);
+                try {
+                    ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                    ObjectInputStream bytesArray = new ObjectInputStream(array);
+                    JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                    JasperViewer viewer = new JasperViewer(jp, false);
+                    viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    viewer.setVisible(true);
+                } catch (IOException | ClassNotFoundException ex) {
+                    System.out.println(ex);
+                }
+            } else {
+                System.out.println("error " + res.getMensaje());
+            }
         }
     }
-    
+
+    public boolean estadoSeleccionado(boolean estado) {
+        if (estado) {
+
+        }
+        return false;
+    }
+
+    @FXML
+    private void actActivo(MouseEvent event) {
+        rbAmbos.setSelected(false);
+        rbInactivo.setSelected(false);
+    }
+
+    @FXML
+    private void actInactivo(MouseEvent event) {
+        rbAmbos.setSelected(false);
+        rbActivo.setSelected(false);
+    }
+
+    @FXML
+    private void actAmbos(MouseEvent event) {
+        rbActivo.setSelected(false);
+        rbInactivo.setSelected(false);
+    }
+
 }

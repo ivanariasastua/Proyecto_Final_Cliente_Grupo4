@@ -12,13 +12,14 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
  * @author cordo
  */
 public class ServiciosService {
-    
+
     public Respuesta getAll() {
         try {
             Request request = new Request("servicios/get");
@@ -42,6 +43,10 @@ public class ServiciosService {
                 return new Respuesta(false, request.getError(), "No se pudo guardar el servicio");
             }
             ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
+            try {
+                TransactionRecorder.registrarTransaccion("Guardar Servicio");
+            } catch (Exception ex) {
+            }
             return new Respuesta(true, "Servicios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
@@ -58,60 +63,66 @@ public class ServiciosService {
                 return new Respuesta(false, request.getError(), "No se pudo modificar el servicio");
             }
             ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
+            try {
+                TransactionRecorder.registrarTransaccion("Modificar Servicio");
+            } catch (Exception ex) {
+            }
             return new Respuesta(true, "Servicios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta getByNombre(String nombre){
-        try{
+
+    public Respuesta getByNombre(String nombre) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("term", nombre);
             Request request = new Request("servicios/nombre", "/{term}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los servicios");
             }
-            List<ServiciosDTO> result = (List<ServiciosDTO>) request.readEntity(new GenericType<List<ServiciosDTO>>(){});
-            return new Respuesta(true, "Servicios",result);
-        }catch(Exception ex){
+            List<ServiciosDTO> result = (List<ServiciosDTO>) request.readEntity(new GenericType<List<ServiciosDTO>>() {
+            });
+            return new Respuesta(true, "Servicios", result);
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-    public Respuesta getByEstado(boolean estado){
-        try{
+
+    public Respuesta getByEstado(boolean estado) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("term", estado);
             Request request = new Request("servicios/estado", "/{term}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los servicios");
             }
-            List<ServiciosDTO> result = (List<ServiciosDTO>) request.readEntity(new GenericType<List<ServiciosDTO>>(){});
-            return new Respuesta(true, "Servicios",result);
-        }catch(Exception ex){
+            List<ServiciosDTO> result = (List<ServiciosDTO>) request.readEntity(new GenericType<List<ServiciosDTO>>() {
+            });
+            return new Respuesta(true, "Servicios", result);
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }
     }
-    
-        public Respuesta findById(Long id){
-        try{
+
+    public Respuesta findById(Long id) {
+        try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("id", id);
-            Request request = new Request("servicios/get","/{id}",parametros);
+            Request request = new Request("servicios/get", "/{id}", parametros);
             request.get();
-            if(request.isError()){
-                return new Respuesta(false, request.getError(),"Error al obtener el servicio");
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "Error al obtener el servicio");
             }
             ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
             return new Respuesta(true, "Servicios", result);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No se estableció conexión con el servidor");
         }
     }
-        
+
     public Respuesta inactivar(ServiciosDTO servicio, Long id, String cedula, String codigo) {
         try {
             Map<String, Object> parametros = new HashMap<>();
@@ -124,6 +135,10 @@ public class ServiciosService {
                 return new Respuesta(false, request.getError(), "No se pudo inactivar el servicio");
             }
             ServiciosDTO result = (ServiciosDTO) request.readEntity(ServiciosDTO.class);
+            try {
+                TransactionRecorder.registrarTransaccion("Inactivar Servicio");
+            } catch (Exception ex) {
+            }
             return new Respuesta(true, "Empleados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");

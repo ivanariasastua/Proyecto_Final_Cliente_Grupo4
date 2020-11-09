@@ -4,22 +4,31 @@
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" minHeight="435.0" minWidth="540.0" prefHeight="481.0" prefWidth="540.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.LogInController">
+<AnchorPane id="AnchorPane" minHeight="423.0" minWidth="540.0" prefHeight="423.0" prefWidth="540.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.LogInController">
    <children>
       <JFXTextField fx:id="txtViewPass" editable="false" layoutX="107.0" layoutY="248.0" prefHeight="45.0" prefWidth="378.0" styleClass="campos_texto_1" visible="false" />
-      <Label focusTraversable="false" layoutY="21.0" prefHeight="83.0" prefWidth="540.0" styleClass="lblTitulo_1" text="Iniciar Sesión" />
-      <JFXButton focusTraversable="false" layoutX="280.0" layoutY="407.0" onAction="#accionLogIn" prefHeight="60.0" prefWidth="246.0" ripplerFill="TRANSPARENT" styleClass="button_1" text="Ingresar" />
-      <JFXButton focusTraversable="false" layoutX="485.0" layoutY="15.0" onAction="#accionCerrar" prefHeight="34.0" prefWidth="41.0" style="-fx-background-color: transparent;" styleClass="button_2" text="X" />
-      <JFXTextField fx:id="txtUserName" labelFloat="true" layoutX="107.0" layoutY="134.0" prefHeight="45.0" prefWidth="410.0" promptText="Cédula" styleClass="campos_texto_1" />
-      <JFXPasswordField fx:id="txtPassword" labelFloat="true" layoutX="107.0" layoutY="248.0" prefHeight="45.0" prefWidth="378.0" promptText="Contraseña" styleClass="campos_texto_1" />
+      <Label focusTraversable="false" prefHeight="83.0" prefWidth="540.0" styleClass="lblTitulo_1" text="Iniciar Sesión" />
+      <JFXButton focusTraversable="false" layoutX="275.0" layoutY="339.0" onAction="#accionLogIn" prefHeight="60.0" prefWidth="246.0" ripplerFill="TRANSPARENT" text="Ingresar">
+         <styleClass>
+            <String fx:value="button_1" />
+            <String fx:value="boton" />
+         </styleClass></JFXButton>
+      <JFXButton focusTraversable="false" layoutX="489.0" layoutY="14.0" onAction="#accionCerrar" prefHeight="40.0" prefWidth="40.0" styleClass="buton_close" text="X" />
+      <JFXTextField fx:id="txtUserName" focusColor="#3fa875" labelFloat="true" layoutX="107.0" layoutY="134.0" prefHeight="45.0" prefWidth="410.0" promptText="Cédula" styleClass="campos_texto_1" />
+      <JFXPasswordField fx:id="txtPassword" labelFloat="true" layoutX="107.0" layoutY="248.0" prefHeight="45.0" prefWidth="406.0" promptText="Contraseña" styleClass="campos_texto_1" />
       <ImageView id="imvCedula" fitHeight="60.0" fitWidth="60.0" layoutX="24.0" layoutY="127.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView id="imvPassword" fitHeight="60.0" fitWidth="60.0" layoutX="24.0" layoutY="238.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView id="imvMinimizar" fitHeight="40.0" fitWidth="40.0" layoutX="433.0" layoutY="16.0" onMouseClicked="#accionMinimizar" pickOnBounds="true" preserveRatio="true" />
-      <Label id="lblRestablecer" layoutX="14.0" layoutY="407.0" onMouseClicked="#actRestablecer" prefHeight="60.0" prefWidth="246.0" styleClass="button_3" text="Restablecer Contraseña" />
-      <JFXCheckBox fx:id="cbPass" ellipsisString="" layoutX="473.0" layoutY="269.0" prefHeight="25.0" prefWidth="30.0" styleClass="cb" text=" " wrapText="true" />
+      <ImageView id="imvMinimizar" fitHeight="40.0" fitWidth="40.0" layoutX="441.0" layoutY="14.0" onMouseClicked="#accionMinimizar" pickOnBounds="true" preserveRatio="true" />
+      <JFXCheckBox fx:id="cbPass" checkedColor="#9c6e10" ellipsisString="" layoutX="473.0" layoutY="269.0" prefHeight="26.0" prefWidth="39.0" styleClass="cb" text=" " unCheckedColor="#595959" wrapText="true" />
+      <JFXButton layoutX="19.0" layoutY="339.0" onAction="#actRestablecer" prefHeight="60.0" prefWidth="246.0" text="Restablecer Contraseña">
+         <styleClass>
+            <String fx:value="button_3" />
+            <String fx:value="boton" />
+         </styleClass></JFXButton>
    </children>
 </AnchorPane>

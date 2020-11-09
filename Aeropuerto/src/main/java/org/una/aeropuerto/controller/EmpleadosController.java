@@ -174,6 +174,18 @@ public class EmpleadosController extends Controller implements Initializable {
         modoDesarrollo.put("Limpiar Horario", "Limpiar responde al método actLimpiarCamposHorario");
         modoDesarrollo.put("Guardar Horario", "Guardar responde al método actGuardarHorario");
         modoDesarrollo.put("Inactivar Horario", "Inactivar responde al método actInactivarHorarioEmpleado");
+        modoDesarrollo.put("Limpiar Empleado", "Responde al método actLimpiarCamposEmpleads");
+        modoDesarrollo.put("Buscar Empleado", "Responde al método actBuscarEmpleado");
+        modoDesarrollo.put("Inactivar Empleado", "Responde al método actInactivarEmpleado");
+        modoDesarrollo.put("Guardar Empleado", "Responde al método actGuardarEmpleado");
+        modoDesarrollo.put("Buscar Area", "Responde al método actBuscarArea");
+        modoDesarrollo.put("Agregar Area", "Responde al método actAgregarArea");
+        modoDesarrollo.put("Inactivar Area", "Responde al método actInactivarAreaEmpleado");
+        modoDesarrollo.put("Limpiar Horario", "Responde al método actLimpiarCamposHorario");
+        modoDesarrollo.put("Guardar Horario", "Responde al método actGuardarHorario");
+        modoDesarrollo.put("Inactivar Horario", "Responde al método actInactivarHorarioEmpleado");
+        modoDesarrollo.keySet();
+        
     }
     
     public void llenarComboBoxs() {
@@ -205,6 +217,7 @@ public class EmpleadosController extends Controller implements Initializable {
     
     @FXML
     private void actLimpiarCamposEmplead(ActionEvent event) {
+        
         limpiarCampos();
     }
 
@@ -439,22 +452,21 @@ public class EmpleadosController extends Controller implements Initializable {
     private void actBuscarArea(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             
-        }else{
-            boolean existe = false;
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
-            if(AppContext.getInstance().get("Area") != null){
-                area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
-                for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
-                    if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
-                        existe = true;
-                        break;
-                    }
+        }
+        boolean existe = false;
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+        if(AppContext.getInstance().get("Area") != null){
+            area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
+            for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
+                if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
+                    existe = true;
+                    break;
                 }
-                if(existe){
-                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Área", "El área de trabajo ya esta agregada");
-                }else{
-                    lblArea.setText(area.getNombre());
-                }
+            }
+            if(existe){
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Área", "El área de trabajo ya esta agregada");
+            }else{
+                lblArea.setText(area.getNombre());
             }
         }
     }
