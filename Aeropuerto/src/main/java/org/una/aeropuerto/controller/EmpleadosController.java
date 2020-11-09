@@ -174,6 +174,8 @@ public class EmpleadosController extends Controller implements Initializable {
         modoDesarrollo.put("Limpiar Horario", "Responde al método actLimpiarCamposHorario");
         modoDesarrollo.put("Guardar Horario", "Responde al método actGuardarHorario");
         modoDesarrollo.put("Inactivar Horario", "Responde al método actInactivarHorarioEmpleado");
+        modoDesarrollo.keySet();
+        
     }
     
     public void llenarComboBoxs() {
@@ -205,6 +207,7 @@ public class EmpleadosController extends Controller implements Initializable {
     
     @FXML
     private void actLimpiarCamposEmplead(ActionEvent event) {
+        
         limpiarCampos();
     }
 
@@ -439,22 +442,21 @@ public class EmpleadosController extends Controller implements Initializable {
     private void actBuscarArea(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             
-        }else{
-            boolean existe = false;
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
-            if(AppContext.getInstance().get("Area") != null){
-                area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
-                for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
-                    if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
-                        existe = true;
-                        break;
-                    }
+        }
+        boolean existe = false;
+        FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+        if(AppContext.getInstance().get("Area") != null){
+            area = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
+            for(EmpleadosAreasTrabajosDTO empArea : emplSeleccionado.getEmpleadosAreasTrabajo()){
+                if(empArea.getAreaTrabajo().getNombre().equals(area.getNombre())){
+                    existe = true;
+                    break;
                 }
-                if(existe){
-                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Área", "El área de trabajo ya esta agregada");
-                }else{
-                    lblArea.setText(area.getNombre());
-                }
+            }
+            if(existe){
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Área", "El área de trabajo ya esta agregada");
+            }else{
+                lblArea.setText(area.getNombre());
             }
         }
     }

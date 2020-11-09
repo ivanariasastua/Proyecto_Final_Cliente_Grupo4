@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.stage.StageStyle;
 import org.una.aeropuerto.dto.EmpleadosDTO;
@@ -47,20 +48,31 @@ public class TransaccionesController extends Controller implements Initializable
     private DatePicker dpHasta;
     private final TransaccionesService service = new TransaccionesService();
     private String empleado;
+    private ListView<String> lv;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
         txtBuscarTransacciones.setMouseTransparent(true);
+        lv = (ListView<String>) AppContext.getInstance().get("ListView");
     }    
 
     @Override
     public void initialize() {
     }
+    
+    private void asignarModoDesarrollor(){
+        lv.getItems().clear();
+        for(String elemento : modoDesarrollo.keySet()){
+            lv.getItems().add(modoDesarrollo.get(elemento));
+        }
+    }
 
     @FXML
     private void actBuscar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lv.getSelectionModel().select(modoDesarrollo.get("Buscar"));
+        }else{
             if(validarCampos()){
                 Respuesta res = service.getByFiltro(Date.from(dpDesde.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant()), Date.from(dpHasta.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant()), empleado);
                 if(res.getEstado()){
@@ -69,8 +81,6 @@ public class TransaccionesController extends Controller implements Initializable
                     Mensaje.show(Alert.AlertType.ERROR, "Buscar Transacciones", res.getMensaje());
                 }
             }
-        }else{
-            
         }
     }
 
@@ -79,7 +89,7 @@ public class TransaccionesController extends Controller implements Initializable
         modoDesarrollo.put("Vista", "Nombre de la vista Transacciones");
         modoDesarrollo.put("Buscar", "Responde al método actBuscar");
         modoDesarrollo.put("Generar", "Responde al método actGenerarReporte");
-        modoDesarrollo.put("Empleado", "Responde al método atBuscarEmpleado");
+        modoDesarrollo.put("Empleado", "Responde al método atBuscarEmpleado");   
     }
     
     private Boolean validarCampos(){

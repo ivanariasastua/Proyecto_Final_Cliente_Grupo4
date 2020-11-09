@@ -95,23 +95,12 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML
     private VBox vbDesarrollo;
     @FXML
-    private ListView<Label> lvDesarrollo;
+    private ListView<String> lvDesarrollo;
     @FXML
     private Pane paneContenerdor;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if(UserAuthenticated.getInstance().isRol("Administrador")){
-            lvDesarrollo.setVisible(true);
-            vbDesarrollo.setVisible(true);
-            lvDesarrollo.setPrefWidth(250);
-            vbDesarrollo.setPrefWidth(250);
-        }else{
-            lvDesarrollo.setVisible(false);
-            vbDesarrollo.setVisible(false);
-            lvDesarrollo.setPrefWidth(0);
-            vbDesarrollo.setPrefWidth(0);
-        }
         AppContext.getInstance().set("Contenedor", paneContenerdor);
         FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
@@ -412,5 +401,16 @@ public class PrincipalController extends Controller implements Initializable {
         tpReportes.setVisible(!UserAuthenticated.getInstance().isRol("GESTOR"));
         tpAdministracion.setVisible(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         tpTransacciones.setVisible(UserAuthenticated.getInstance().isRol("AUDITOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.setVisible(true);
+            vbDesarrollo.setVisible(true);
+            lvDesarrollo.setPrefWidth(250);
+            vbDesarrollo.setPrefWidth(250);
+        }else{
+            lvDesarrollo.setVisible(false);
+            vbDesarrollo.setVisible(false);
+            lvDesarrollo.setPrefWidth(0);
+            vbDesarrollo.setPrefWidth(0);
+        }
     }
 }
