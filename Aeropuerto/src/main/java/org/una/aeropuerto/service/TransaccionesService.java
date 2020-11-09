@@ -80,7 +80,7 @@ public class TransaccionesService {
             if (request.isError()) {
                 return new Respuesta(false, request.getError(),"Error al obtener las transacciones");
             }
-            Object result = (String) request.readEntity(String.class);
+            List<TransaccionesDTO> result = (List<TransaccionesDTO>) request.readEntity(new GenericType<List<TransaccionesDTO>>() {});
             return new Respuesta(true, "Transacciones", result);
         } catch (Exception ex) {
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
