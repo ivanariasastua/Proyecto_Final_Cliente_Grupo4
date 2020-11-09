@@ -129,13 +129,13 @@ public class GastosServiciosController extends Controller implements Initializab
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista GastosServicios");
-        modoDesarrollo.put("Buscar Gasto", "Responde al método actBuscarGastosServicios");
-        modoDesarrollo.put("Editar Gasto", "Responde al método actEditarGastoS");
-        modoDesarrollo.put("Inactivar Gasto", "Responde al método actInactivarGastoS");
-        modoDesarrollo.put("Buscar Servicio", "Responde al método actBuscarServicio");
-        modoDesarrollo.put("Buscar Empleado", "Responde al método actBuscarResponsable");
-        modoDesarrollo.put("Limpiar Gasto", "Responde al método actLimpiarGastoS");
-        modoDesarrollo.put("Guardar Gasto", "Responde al método actGuardarGastoS");
+        modoDesarrollo.put("Buscar Gasto", "Buscar responde al método actBuscarGastosServicios");
+        modoDesarrollo.put("Editar Gasto", "Editar responde al método actEditarGastoS");
+        modoDesarrollo.put("Inactivar Gasto", "Inactivar responde al método actInactivarGastoS");
+        modoDesarrollo.put("Buscar Servicio", "Buscar Servicio responde al método actBuscarServicio");
+        modoDesarrollo.put("Buscar Empleado", "Buscar Empleado responde al método actBuscarResponsable");
+        modoDesarrollo.put("Limpiar Gasto", "Limpiar responde al método actLimpiarGastoS");
+        modoDesarrollo.put("Guardar Gasto", "Guardar responde al método actGuardarGastoS");
     }
     
     public void llenarComboBoxs() {

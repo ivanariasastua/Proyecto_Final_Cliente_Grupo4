@@ -63,9 +63,9 @@ public class BuscarCategoriasController extends Controller implements Initializa
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarCategorias");
-        modoDesarrollo.put("Buscar", "Responde al método actBuscar");
-        modoDesarrollo.put("Seleccionar", "Responde al método actSeleccionar");
-        modoDesarrollo.put("Cancelar", "Responde al método actCancelar");
+        modoDesarrollo.put("Buscar", "Buscar responde al método actBuscar");
+        modoDesarrollo.put("Seleccionar", "Seleccionar responde al método actSeleccionar");
+        modoDesarrollo.put("Cancelar", "Cancelar responde al método actCancelar");
     }
     
     @FXML

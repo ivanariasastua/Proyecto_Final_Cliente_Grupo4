@@ -128,12 +128,12 @@ public class ServiciosController extends Controller implements Initializable {
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista Servicios");
-        modoDesarrollo.put("Buscar Servicio", "Responde al método actBuscarServicio");
-        modoDesarrollo.put("Inactivar Servicio", "Responde al método actInactivarServicio");
-        modoDesarrollo.put("Crear Servicio", "Responde al método actCrearServicios");
-        modoDesarrollo.put("Inactivar Precio", "Responde al método actInactivarPrecios");
-        modoDesarrollo.put("Limpiar Precio", "Responde al método actLimpiarCamposPrecio");
-        modoDesarrollo.put("Guardar Precio", "Responde al método actGuardarPrecio");
+        modoDesarrollo.put("Buscar Servicio", "Buscar responde al método actBuscarServicio");
+        modoDesarrollo.put("Inactivar Servicio", "Inactivar responde al método actInactivarServicio");
+        modoDesarrollo.put("Crear Servicio", "Crear responde al método actCrearServicios");
+        modoDesarrollo.put("Inactivar Precio", "Inactivar responde al método actInactivarPrecios");
+        modoDesarrollo.put("Limpiar Precio", "Limpiar responde al método actLimpiarCamposPrecio");
+        modoDesarrollo.put("Guardar Precio", "Guardar responde al método actGuardarPrecio");
     }
     
     public void cargarVista(ServiciosDTO servicio) throws IOException {

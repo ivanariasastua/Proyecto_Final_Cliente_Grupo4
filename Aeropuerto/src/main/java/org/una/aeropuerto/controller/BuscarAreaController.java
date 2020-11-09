@@ -60,8 +60,8 @@ public class BuscarAreaController extends Controller implements Initializable {
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarArea");
-        modoDesarrollo.put("Buscar", "Responde al método accionBuscar");
-        modoDesarrollo.put("Seleccionar", "accionSeleccionar");
+        modoDesarrollo.put("Buscar", "Buscar responde al método accionBuscar");
+        modoDesarrollo.put("Seleccionar", "Seleccionar reponde al método accionSeleccionar");
     }
     
     @FXML

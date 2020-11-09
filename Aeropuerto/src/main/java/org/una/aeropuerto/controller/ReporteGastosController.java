@@ -95,7 +95,7 @@ public class ReporteGastosController extends Controller implements Initializable
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista ReporteGastos");
-        modoDesarrollo.put("Generar Reporte", "Responde al método actGenerarReporte");
+        modoDesarrollo.put("Generar Reporte", "Generar Reporte Responde al método actGenerarReporte");
     }
     
     @FXML

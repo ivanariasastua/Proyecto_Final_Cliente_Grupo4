@@ -98,8 +98,8 @@ public class MantAreasTrabajoController extends Controller implements Initializa
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista MantAreasTrabajo");
-        modoDesarrollo.put("Limpiar", "Responde al método actLimpiar");
-        modoDesarrollo.put("Guardar", "Responde al método actGuardar");
+        modoDesarrollo.put("Limpiar", "Limpiar responde al método actLimpiar");
+        modoDesarrollo.put("Guardar", "Guardar responde al método actGuardar");
     }
     
     public void limpiarAreas() {

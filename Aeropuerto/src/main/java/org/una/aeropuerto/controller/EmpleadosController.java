@@ -164,6 +164,16 @@ public class EmpleadosController extends Controller implements Initializable {
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista Empleados");
+        modoDesarrollo.put("Limpiar Empleado", "Limpiar responde al método actLimpiarCamposEmpleads");
+        modoDesarrollo.put("Buscar Empleado", "Buscar responde al método actBuscarEmpleado");
+        modoDesarrollo.put("Inactivar Empleado", "Inactivar responde al método actInactivarEmpleado");
+        modoDesarrollo.put("Guardar Empleado", "Guardar responde al método actGuardarEmpleado");
+        modoDesarrollo.put("Buscar Area", "Buscar Área responde al método actBuscarArea");
+        modoDesarrollo.put("Agregar Area", "Agregar Área responde al método actAgregarArea");
+        modoDesarrollo.put("Inactivar Area", "Inactivar responde al método actInactivarAreaEmpleado");
+        modoDesarrollo.put("Limpiar Horario", "Limpiar responde al método actLimpiarCamposHorario");
+        modoDesarrollo.put("Guardar Horario", "Guardar responde al método actGuardarHorario");
+        modoDesarrollo.put("Inactivar Horario", "Inactivar responde al método actInactivarHorarioEmpleado");
         modoDesarrollo.put("Limpiar Empleado", "Responde al método actLimpiarCamposEmpleads");
         modoDesarrollo.put("Buscar Empleado", "Responde al método actBuscarEmpleado");
         modoDesarrollo.put("Inactivar Empleado", "Responde al método actInactivarEmpleado");

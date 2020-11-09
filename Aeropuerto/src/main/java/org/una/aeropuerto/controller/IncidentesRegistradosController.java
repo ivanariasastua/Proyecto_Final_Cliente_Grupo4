@@ -122,16 +122,16 @@ public class IncidentesRegistradosController extends Controller implements Initi
     public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista IncidentesRegistrados");
-        modoDesarrollo.put("Buscar Categoria", "Responde al método actBuscarCategoria");
-        modoDesarrollo.put("Buscar Emisor", "Responde al método actBuscarEmisor");
-        modoDesarrollo.put("Buscar Responsable", "Responde al método actBuscarResponsable");
-        modoDesarrollo.put("Buscar Area", "Responde al método actBuscarArea");
-        modoDesarrollo.put("Limpiar", "Responde al método actLimpiarCamposIncidentes");
-        modoDesarrollo.put("Guardar", "Responde al método actGuardarIncidenteRegistrado");
-        modoDesarrollo.put("Buscar", "Responde al método actBuscarIncidente");
-        modoDesarrollo.put("Seguimiento", "Responde al método actSeguimientoIncidenteEstados");
-        modoDesarrollo.put("Editar", "Responde al método actEditarIncidente");
-        modoDesarrollo.put("Inactivar", "Responde al método actInactivarIncidente");
+        modoDesarrollo.put("Buscar Categoria", "Buscar Categoria responde al método actBuscarCategoria");
+        modoDesarrollo.put("Buscar Emisor", "Buscar Emisor responde al método actBuscarEmisor");
+        modoDesarrollo.put("Buscar Responsable", "Buscar Responsable responde al método actBuscarResponsable");
+        modoDesarrollo.put("Buscar Area", "Buscar Área responde al método actBuscarArea");
+        modoDesarrollo.put("Limpiar", "Limpiar responde al método actLimpiarCamposIncidentes");
+        modoDesarrollo.put("Guardar", "Guardar responde al método actGuardarIncidenteRegistrado");
+        modoDesarrollo.put("Buscar", "Buscar responde al método actBuscarIncidente");
+        modoDesarrollo.put("Seguimiento", "Seguimiento responde al método actSeguimientoIncidenteEstados");
+        modoDesarrollo.put("Editar", "Editar responde al método actEditarIncidente");
+        modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarIncidente");
     }
 
     public void clickTabla() {

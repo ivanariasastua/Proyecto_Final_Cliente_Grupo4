@@ -66,7 +66,7 @@ public class RestablecerController extends Controller implements Initializable {
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista Restablecer");
-        modoDesarrollo.put("Restaurar", "Responde al método accionRestaurar");
+        modoDesarrollo.put("Restaurar", "Restaurar responde al método accionRestaurar");
     }
     
     @FXML
