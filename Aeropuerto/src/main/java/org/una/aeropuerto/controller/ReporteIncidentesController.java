@@ -69,8 +69,6 @@ public class ReporteIncidentesController extends Controller implements Initializ
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
     }    
-        // TODO
-    }
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
@@ -159,13 +157,6 @@ public class ReporteIncidentesController extends Controller implements Initializ
                 System.out.println("error " + res.getMensaje());
             }
         }
-    }
-
-    public boolean estadoSeleccionado(boolean estado) {
-        if (estado) {
-
-        }
-        return false;
     }
 
     @FXML
