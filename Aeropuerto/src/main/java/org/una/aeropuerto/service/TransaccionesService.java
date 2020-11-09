@@ -68,4 +68,22 @@ public class TransaccionesService {
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
         }
     }
+    
+    public Respuesta getByFiltro(Date fechaInicio, Date fechaFinal, String empleado){
+        try{
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("fecha1", fechaInicio);
+            parametros.put("fecha2", fechaFinal);
+            parametros.put("empleado", empleado);
+            Request request = new Request("transacciones/filtro", "/{fecha1}/{fecha2}/{empleado}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(),"Error al obtener las transacciones");
+            }
+            Object result = (String) request.readEntity(String.class);
+            return new Respuesta(true, "Transacciones", result);
+        } catch (Exception ex) {
+            return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
+        }
+    }
 }

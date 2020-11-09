@@ -101,10 +101,17 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        lvDesarrollo.setVisible(false);
-        vbDesarrollo.setVisible(false);
-        lvDesarrollo.setPrefWidth(0);
-        vbDesarrollo.setPrefWidth(0);
+        if(UserAuthenticated.getInstance().isRol("Administrador")){
+            lvDesarrollo.setVisible(true);
+            vbDesarrollo.setVisible(true);
+            lvDesarrollo.setPrefWidth(250);
+            vbDesarrollo.setPrefWidth(250);
+        }else{
+            lvDesarrollo.setVisible(false);
+            vbDesarrollo.setVisible(false);
+            lvDesarrollo.setPrefWidth(0);
+            vbDesarrollo.setPrefWidth(0);
+        }
         AppContext.getInstance().set("Contenedor", paneContenerdor);
         FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
