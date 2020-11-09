@@ -19,9 +19,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.service.IncidentesCategoriasService;
 import org.una.aeropuerto.util.AppContext;
@@ -45,6 +47,10 @@ public class BuscarCategoriasController extends Controller implements Initializa
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias;
     IncidentesCategoriasDTO catSelect;
+    @FXML
+    private VBox vbDevelop;
+    @FXML
+    private ListView<?> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,6 +63,17 @@ public class BuscarCategoriasController extends Controller implements Initializa
         cargarColumnas();
         listCategorias = new ArrayList<>();
         catSelect = new IncidentesCategoriasDTO();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            vbDevelop.setPrefWidth(250);
+            lvDevelop.setPrefWidth(250);
+            vbDevelop.setVisible(true);
+            lvDevelop.setVisible(true);
+        }else{
+            vbDevelop.setPrefWidth(0);
+            lvDevelop.setPrefWidth(0);
+            vbDevelop.setVisible(false);
+            lvDevelop.setVisible(false);
+        }
 
     }
 

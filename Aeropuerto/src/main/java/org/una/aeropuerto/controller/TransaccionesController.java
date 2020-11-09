@@ -76,13 +76,13 @@ public class TransaccionesController extends Controller implements Initializable
     private void initTabla(){
         SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
         tablaTransac.getColumns().clear();
-        TableColumn<TransaccionesDTO, String> colId = new TableColumn<>();
+        TableColumn<TransaccionesDTO, String> colId = new TableColumn<>("ID");
         colId.setCellValueFactory((t) -> new SimpleStringProperty(t.getValue().getId().toString()));
-        TableColumn<TransaccionesDTO, String> colAccion = new TableColumn<>();
+        TableColumn<TransaccionesDTO, String> colAccion = new TableColumn<>("Acción");
         colAccion.setCellValueFactory((t) -> new SimpleStringProperty(t.getValue().getAccion()));
-        TableColumn<TransaccionesDTO, String> colEmpleado = new TableColumn<>();
+        TableColumn<TransaccionesDTO, String> colEmpleado = new TableColumn<>("Empleado");
         colEmpleado.setCellValueFactory((t) -> new SimpleStringProperty(t.getValue().getEmpleado().getNombre()+" "+t.getValue().getEmpleado().getCedula()));
-        TableColumn<TransaccionesDTO, String> colFecha = new TableColumn<>();
+        TableColumn<TransaccionesDTO, String> colFecha = new TableColumn<>("Fecha de Registro");
         colFecha.setCellValueFactory((t) -> new SimpleStringProperty(formato.format(t.getValue().getFechaRegistro())));
         tablaTransac.getColumns().addAll(colId, colAccion, colEmpleado, colFecha);
     }

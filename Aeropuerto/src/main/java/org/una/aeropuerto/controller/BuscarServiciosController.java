@@ -17,9 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.service.ServiciosService;
 import org.una.aeropuerto.util.AppContext;
@@ -43,6 +45,10 @@ public class BuscarServiciosController extends Controller implements Initializab
     ServiciosService servService = new ServiciosService();
     List<ServiciosDTO> listServ;
     Map<String,String> modoDesarrollo;
+    @FXML
+    private VBox vbDevelop;
+    @FXML
+    private ListView<?> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -54,6 +60,17 @@ public class BuscarServiciosController extends Controller implements Initializab
         tabla.getItems().clear();
         servicSelec = new ServiciosDTO();
         listServ = new ArrayList<>();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            vbDevelop.setPrefWidth(250);
+            lvDevelop.setPrefWidth(250);
+            vbDevelop.setVisible(true);
+            lvDevelop.setVisible(true);
+        }else{
+            vbDevelop.setPrefWidth(0);
+            lvDevelop.setPrefWidth(0);
+            vbDevelop.setVisible(false);
+            lvDevelop.setVisible(false);
+        }
     }
 
     

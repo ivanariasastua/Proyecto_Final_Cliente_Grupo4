@@ -3,20 +3,17 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="800.0" styleClass="raiz" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.BuscarEmpleadoController">
-    <stylesheets>
-        <URL value="@Tema_Oscuro.css" />
-    </stylesheets>
-   <children>
-      <VBox alignment="TOP_RIGHT" prefHeight="511.0" prefWidth="800.0">
+<BorderPane prefHeight="535.0" prefWidth="996.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.BuscarEmpleadoController">
+   <center>
+      <VBox alignment="TOP_RIGHT" prefHeight="511.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="68.0" prefWidth="746.0">
                <children>
@@ -59,5 +56,12 @@
             </HBox>
          </children>
       </VBox>
-   </children>
-</AnchorPane>
+   </center>
+   <right>
+      <VBox fx:id="vbDevelop" minWidth="0.0" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+         <children>
+            <ListView fx:id="lvDevelop" minWidth="0.0" prefHeight="536.0" prefWidth="250.0" />
+         </children>
+      </VBox>
+   </right>
+</BorderPane>
