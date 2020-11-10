@@ -23,6 +23,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -57,10 +59,13 @@ public class ReporteIncidentesController extends Controller implements Initializ
     private JFXTextField txtEmisor;
 
     Map<String,String> modoDesarrollo;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     
     private final ReporteService service = new ReporteService();
     EmpleadosDTO emisorSelec;
     EmpleadosDTO responsableSelec;
+    @FXML
+    private GridPane gpRoot;
 
     /**
      * Initializes the controller class.
@@ -68,6 +73,7 @@ public class ReporteIncidentesController extends Controller implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
+        ajustarPantalla();
     }    
 
     public void datosModoDesarrollo(){
@@ -93,6 +99,9 @@ public class ReporteIncidentesController extends Controller implements Initializ
         rbActivo.setSelected(true);
         rbInactivo.setSelected(false);
         rbAmbos.setSelected(false);
+        ajustarAlto(contenedor.getHeight());
+        ajustarAncho(contenedor.getWidth());
+        
     }
 
     @FXML
@@ -175,6 +184,23 @@ public class ReporteIncidentesController extends Controller implements Initializ
     private void actAmbos(MouseEvent event) {
         rbActivo.setSelected(false);
         rbInactivo.setSelected(false);
+    }
+    
+    private void ajustarPantalla(){
+        contenedor.widthProperty().addListener( w -> {
+            ajustarAncho(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            ajustarAlto(Double.NaN);
+        });
+    }
+    
+    private void ajustarAncho(Double ancho){
+        gpRoot.setPrefWidth(ancho);
+    }
+    
+    private void ajustarAlto(Double Alto){
+        gpRoot.setPrefHeight(Alto);
     }
 
 }

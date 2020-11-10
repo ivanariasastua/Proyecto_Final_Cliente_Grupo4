@@ -31,6 +31,9 @@ import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import org.una.aeropuerto.util.AppContext;
 
 public class ReporteHorasLaboradasController extends Controller implements Initializable{
 
@@ -43,16 +46,21 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     
     ReporteService reporteService;
     Map<String,String> modoDesarrollo;
+    @FXML
+    private GridPane gpRoot;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
 
     @Override
     public void initialize() {
-        
+        ajustarAlto(contenedor.getHeight());
+        ajustarAncho(contenedor.getWidth());
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         reporteService = new ReporteService();
         datosModoDesarrollo();
+        ajustarPantalla();
     }
 
     public void datosModoDesarrollo(){
@@ -98,5 +106,22 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     @Override
     public void cargarTema() {
         
+    }
+    
+    private void ajustarPantalla(){
+        contenedor.widthProperty().addListener( w -> {
+            ajustarAncho(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            ajustarAlto(Double.NaN);
+        });
+    }
+    
+    private void ajustarAncho(Double ancho){
+        gpRoot.setPrefWidth(ancho);
+    }
+    
+    private void ajustarAlto(Double Alto){
+        gpRoot.setPrefHeight(Alto);
     }
 }

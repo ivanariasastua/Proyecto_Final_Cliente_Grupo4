@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +27,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JRException;
@@ -64,6 +64,10 @@ public class TransaccionesController extends Controller implements Initializable
     private ListView<String> lv;
     private List<ReporteTransacciones> listaReporte;
     private Map<String,String> modoDesarrollo;
+    @FXML
+    private GridPane gpRoot;
+    
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -71,6 +75,7 @@ public class TransaccionesController extends Controller implements Initializable
         datosModoDesarrollo();
         txtBuscarTransacciones.setEditable(false);
         lv = (ListView<String>) AppContext.getInstance().get("ListView");
+        ajustarPantalla();
     }    
 
     private void initTabla(){
@@ -89,6 +94,8 @@ public class TransaccionesController extends Controller implements Initializable
     
     @Override
     public void initialize() {
+        ajustarAlto(contenedor.getHeight());
+        ajustarAncho(contenedor.getWidth());
     }
     
     private void asignarModoDesarrollor(){
@@ -198,4 +205,20 @@ public class TransaccionesController extends Controller implements Initializable
         }
     }
     
+    private void ajustarPantalla(){
+        contenedor.widthProperty().addListener( w -> {
+            ajustarAncho(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            ajustarAlto(Double.NaN);
+        });
+    }
+    
+    private void ajustarAncho(Double ancho){
+        gpRoot.setPrefWidth(ancho);
+    }
+    
+    private void ajustarAlto(Double Alto){
+        gpRoot.setPrefHeight(Alto);
+    }
 }
