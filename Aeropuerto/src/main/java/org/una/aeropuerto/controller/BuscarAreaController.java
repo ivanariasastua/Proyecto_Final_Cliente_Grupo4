@@ -16,10 +16,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
 import org.una.aeropuerto.util.AppContext;
@@ -49,6 +51,10 @@ public class BuscarAreaController extends Controller implements Initializable {
     
     private final AreasTrabajosService service = new AreasTrabajosService();
     AreasTrabajosDTO areaSelec;
+    @FXML
+    private VBox vbDevelop;
+    @FXML
+    private ListView<?> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -129,6 +135,17 @@ public class BuscarAreaController extends Controller implements Initializable {
     public void initialize() {
         Limpiar();
         areaSelec = new AreasTrabajosDTO();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            vbDevelop.setPrefWidth(250);
+            lvDevelop.setPrefWidth(250);
+            vbDevelop.setVisible(true);
+            lvDevelop.setVisible(true);
+        }else{
+            vbDevelop.setPrefWidth(0);
+            lvDevelop.setPrefWidth(0);
+            vbDevelop.setVisible(false);
+            lvDevelop.setVisible(false);
+        }
     }
 
     @Override

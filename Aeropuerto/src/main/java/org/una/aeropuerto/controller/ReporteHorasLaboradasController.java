@@ -34,6 +34,9 @@ import java.util.Map;
 import javafx.scene.control.ListView;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.UserAuthenticated;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import org.una.aeropuerto.util.AppContext;
 
 public class ReporteHorasLaboradasController extends Controller implements Initializable{
 
@@ -53,6 +56,14 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             asignarInfoModoDesarrollo();
         }
+    @FXML
+    private GridPane gpRoot;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
+
+    @Override
+    public void initialize() {
+        ajustarAlto(contenedor.getHeight());
+        ajustarAncho(contenedor.getWidth());
     }
 
     @Override
@@ -60,6 +71,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         reporteService = new ReporteService();
         datosModoDesarrollo();
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
+        ajustarPantalla();
     }
 
     public void datosModoDesarrollo(){
@@ -117,5 +129,22 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     @Override
     public void cargarTema() {
         
+    }
+    
+    private void ajustarPantalla(){
+        contenedor.widthProperty().addListener( w -> {
+            ajustarAncho(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            ajustarAlto(Double.NaN);
+        });
+    }
+    
+    private void ajustarAncho(Double ancho){
+        gpRoot.setPrefWidth(ancho);
+    }
+    
+    private void ajustarAlto(Double Alto){
+        gpRoot.setPrefHeight(Alto);
     }
 }

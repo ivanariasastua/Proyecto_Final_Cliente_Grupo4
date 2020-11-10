@@ -2,21 +2,51 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="572.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.BuscarAreaController">
-   <children>
-      <JFXTextField fx:id="txtBuscar" layoutX="14.0" layoutY="14.0" prefHeight="50.0" prefWidth="385.0" promptText="Buscar por nombre" styleClass="campos_texto_1" />
-      <TableView fx:id="tvAreas" layoutX="14.0" layoutY="105.0" onMouseClicked="#accionTabla" prefHeight="348.0" prefWidth="539.0">
-        <columns>
-          <TableColumn fx:id="colId" prefWidth="98.0" text="ID" />
-          <TableColumn fx:id="colArea" prefWidth="340.0" text="Area" />
-            <TableColumn fx:id="colEstado" prefWidth="99.0" text="Estado" />
-        </columns>
-      </TableView>
-      <JFXButton layoutX="395.0" layoutY="466.0" onAction="#accionSeleccionar" prefHeight="37.0" prefWidth="156.0" styleClass="button_1" text="Seleccionar" />
-      <JFXButton layoutX="413.0" layoutY="21.0" onAction="#accionBuscar" prefHeight="43.0" prefWidth="138.0" styleClass="button_3" text="Buscar" />
-   </children>
-</AnchorPane>
+<BorderPane prefHeight="535.0" prefWidth="897.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.BuscarAreaController">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="647.0">
+               <children>
+                  <JFXTextField fx:id="txtBuscar" prefHeight="50.0" prefWidth="448.0" promptText="Buscar por nombre" styleClass="campos_texto_1" />
+                  <JFXButton onAction="#accionBuscar" prefHeight="43.0" prefWidth="138.0" styleClass="button_3" text="Buscar" />
+               </children>
+            </HBox>
+            <TableView fx:id="tvAreas" onMouseClicked="#accionTabla" prefHeight="395.0" prefWidth="587.0">
+              <columns>
+                <TableColumn fx:id="colId" prefWidth="98.0" text="ID" />
+                <TableColumn fx:id="colArea" prefWidth="340.0" text="Area" />
+                  <TableColumn fx:id="colEstado" prefWidth="99.0" text="Estado" />
+              </columns>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" top="15.0" />
+               </VBox.margin>
+            </TableView>
+            <HBox alignment="CENTER_RIGHT" prefHeight="66.0" prefWidth="647.0">
+               <children>
+                  <JFXButton onAction="#accionSeleccionar" prefHeight="37.0" prefWidth="156.0" styleClass="button_1" text="Seleccionar">
+                     <HBox.margin>
+                        <Insets right="30.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <right>
+      <VBox fx:id="vbDevelop" minWidth="0.0" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+         <children>
+            <ListView fx:id="lvDevelop" minWidth="0.0" prefHeight="535.0" prefWidth="250.0" />
+         </children>
+      </VBox>
+   </right>
+</BorderPane>

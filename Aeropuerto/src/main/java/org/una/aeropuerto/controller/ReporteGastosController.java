@@ -28,6 +28,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -77,6 +79,9 @@ public class ReporteGastosController extends Controller implements Initializable
     private String empresa, responsable, servicio;
 
     private Map<String,String> modoDesarrollo;
+    @FXML
+    private GridPane gpRoot;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -84,6 +89,7 @@ public class ReporteGastosController extends Controller implements Initializable
         datosModoDesarrollo();
         txtResponsable.setEditable(false);
         txtServicio.setEditable(false);
+        ajustarPantalla();
     }    
 
     @Override
@@ -97,6 +103,8 @@ public class ReporteGastosController extends Controller implements Initializable
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             asignarInfoModoDesarrollo();
         }
+        ajustarAlto(contenedor.getHeight());
+        ajustarAncho(contenedor.getWidth());
     }
 
     public void datosModoDesarrollo(){
@@ -224,5 +232,22 @@ public class ReporteGastosController extends Controller implements Initializable
                 return false;
         }
         return null;
+    }
+    
+    private void ajustarPantalla(){
+        contenedor.widthProperty().addListener( w -> {
+            ajustarAncho(contenedor.getWidth());
+        });
+        contenedor.heightProperty().addListener( h -> {
+            ajustarAlto(Double.NaN);
+        });
+    }
+    
+    private void ajustarAncho(Double ancho){
+        gpRoot.setPrefWidth(ancho);
+    }
+    
+    private void ajustarAlto(Double Alto){
+        gpRoot.setPrefHeight(Alto);
     }
 }

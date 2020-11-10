@@ -2,74 +2,35 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ReporteHorasLaboradasController">
-   <center>
-      <HBox prefHeight="360.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="398.0">
-               <children>
-                  <DatePicker fx:id="dpInicio" promptText="Desde:">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </DatePicker>
-               </children>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="404.0">
-               <children>
-                  <DatePicker fx:id="dpFinal" promptText="Hasta:">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </DatePicker>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-   </center>
-   <top>
-      <VBox alignment="TOP_CENTER" prefHeight="169.0" prefWidth="800.0" BorderPane.alignment="TOP_CENTER">
-         <children>
-            <Label styleClass="lblTitulo_1" stylesheets="@Tema_Oscuro.css" text="Reporte de Horas Laboradas">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Label>
-            <Label styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css" text="Generar reporte por rango de fechas">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-            </Label>
-            <Label styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Cédula">
-               <VBox.margin>
-                  <Insets bottom="5.0" top="50.0" />
-               </VBox.margin>
-            </Label>
-            <JFXTextField fx:id="txtCedula" prefHeight="29.0" prefWidth="755.0" promptText="Digite la cédula de un empleado o dejar en blanco para obtener todos los empleados" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css">
-               <VBox.margin>
-                  <Insets bottom="40.0" left="20.0" right="20.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <Label alignment="CENTER" prefHeight="25.0" prefWidth="137.0" styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Fecha de Regitro">
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin>
-            </Label>
-         </children>
-      </VBox>
-   </top>
-   <bottom>
-      <JFXButton onAction="#generarReporte" styleClass="button_1" stylesheets="@Tema_Oscuro.css" text="Generar Reporte" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="15.0" left="550.0" />
-         </BorderPane.margin>
-      </JFXButton>
-   </bottom>
-</BorderPane>
+
+<GridPane fx:id="gpRoot" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ReporteHorasLaboradasController">
+  <columnConstraints>
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="486.0" minWidth="10.0" prefWidth="420.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="380.0" minWidth="10.0" prefWidth="380.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label styleClass="lblTitulo_1" stylesheets="@Tema_Oscuro.css" text="Reporte de Horas Laboradas" GridPane.columnSpan="2" />
+      <Label styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css" text="Generar reporte por rango de fechas" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <Label styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Cédula" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+      <JFXTextField fx:id="txtCedula" prefHeight="29.0" prefWidth="755.0" promptText="Digite la cédula de un empleado o dejar en blanco para obtener todos los empleados" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+      <Label alignment="CENTER" prefHeight="25.0" prefWidth="137.0" styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Fecha de Regitro" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+      <DatePicker fx:id="dpInicio" promptText="Desde:" GridPane.rowIndex="5" />
+      <DatePicker fx:id="dpFinal" promptText="Hasta:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <JFXButton onAction="#generarReporte" styleClass="button_1" stylesheets="@Tema_Oscuro.css" text="Generar Reporte" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+   </children>
+</GridPane>
