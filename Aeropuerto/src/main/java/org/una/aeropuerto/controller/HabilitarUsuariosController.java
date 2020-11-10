@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,6 +31,7 @@ import org.una.aeropuerto.dto.RolesDTO;
 import org.una.aeropuerto.service.RolesService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 public class HabilitarUsuariosController extends Controller implements Initializable{
 
@@ -53,6 +55,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     private RolesService rolService;
     private List<EmpleadosDTO> empleadosSeleccionados;
     private Map<String,String> modoDesarrollo;
+    private ListView<String> lvDesarrollo;
     @FXML
     private BorderPane bpRoot;
     
@@ -65,6 +68,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     public void initialize() {
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
+        asignarInfoModoDesarrollo();
     }
 
     @Override
@@ -75,6 +79,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         initComboBoxRoles();
         addListener();
         datosModoDesarrollo();
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
     }
     
     public void initTableView(){
@@ -91,6 +96,13 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         modoDesarrollo.put("Vista", "Nombre de la ventana HabilitarUsuarios");
         modoDesarrollo.put("Buscar", "Buscar responde al método actFiltrarEmpleados");
         modoDesarrollo.put("Habilitar", "Habilitar responde al método actHabilitarEmpleado");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void initComboBoxRoles(){
@@ -128,35 +140,43 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     
     @FXML
     private void actFiltrarEmpleados(ActionEvent event) {
-        if(cbFiltro.getSelectionModel().getSelectedItem() != null){
-            tvEmpleados.getItems().clear();
-            Mensaje.showProgressDialog(TaskFiltradoEmpleadoNoAprobado(), "Buscar Empleados", "Filtrando empleados");
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "No es posible filtrar", "Elija un rol para filtrar los empleados no aprobados");
+            if(cbFiltro.getSelectionModel().getSelectedItem() != null){
+                tvEmpleados.getItems().clear();
+                Mensaje.showProgressDialog(TaskFiltradoEmpleadoNoAprobado(), "Buscar Empleados", "Filtrando empleados");
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "No es posible filtrar", "Elija un rol para filtrar los empleados no aprobados");
+            }
         }
     }
 
     @FXML
     private void actHabilitarEmpleado(ActionEvent event) {
-        Respuesta res;
-        String empAprobados = "";
-        empleadosSeleccionados = tvEmpleados.getSelectionModel().getSelectedItems();
-        if(!empleadosSeleccionados.isEmpty()){
-            for(EmpleadosDTO empleado : empleadosSeleccionados){
-                res = empService.Aprobar(empleado.getId());
-                if(res.getEstado()){
-                    empAprobados += empleado.getNombre()+" "+empleado.getCedula()+"\n";
-                    tvEmpleados.getItems().remove(empleado);
-                }else{
-                    System.out.println(empleado.getId());
-                    System.out.println("error");
-                    System.out.println(res.getMensaje());
-                    System.out.println(res.getMensajeInterno());
-                }
-            }
-            Mensaje.show(Alert.AlertType.CONFIRMATION, "Empleados Aprobados", empAprobados);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Habilitar"));
         }else{
-            Mensaje.show(Alert.AlertType.WARNING, "Datos no seleccionados", "Seleccionar empleados de la tabla para aprobarlos.");
+            Respuesta res;
+            String empAprobados = "";
+            empleadosSeleccionados = tvEmpleados.getSelectionModel().getSelectedItems();
+            if(!empleadosSeleccionados.isEmpty()){
+                for(EmpleadosDTO empleado : empleadosSeleccionados){
+                    res = empService.Aprobar(empleado.getId());
+                    if(res.getEstado()){
+                        empAprobados += empleado.getNombre()+" "+empleado.getCedula()+"\n";
+                        tvEmpleados.getItems().remove(empleado);
+                    }else{
+                        System.out.println(empleado.getId());
+                        System.out.println("error");
+                        System.out.println(res.getMensaje());
+                        System.out.println(res.getMensajeInterno());
+                    }
+                }
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Empleados Aprobados", empAprobados);
+            }else{
+                Mensaje.show(Alert.AlertType.WARNING, "Datos no seleccionados", "Seleccionar empleados de la tabla para aprobarlos.");
+            }
         }
     }
     

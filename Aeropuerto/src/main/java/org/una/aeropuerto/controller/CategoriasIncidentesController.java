@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -83,6 +84,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private Tab tabCrearEditar;
     @FXML
     private TabPane tabPane;
+    private ListView<String> lvDesarrollo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -91,6 +93,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
         clickTabla();
         addListener();
         datosModoDesarrollo();
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
     }
 
     @Override
@@ -101,6 +104,9 @@ public class CategoriasIncidentesController extends Controller implements Initia
         adjustWidth(contenedor.getWidth());
         adjustHeigth(contenedor.getHeight());
         limpiarCampos();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     public void datosModoDesarrollo(){
@@ -112,6 +118,13 @@ public class CategoriasIncidentesController extends Controller implements Initia
         modoDesarrollo.put("Buscar Categoría", "Buscar Categoría responde al método actBuscarCatSuperior");
         modoDesarrollo.put("Limpiar", "Limpiar responde al método actLimpiar");
         modoDesarrollo.put("Guardar", "Guardar responde al método actGuardarCategoria");
+    }
+    
+    public void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void clickTabla() {
@@ -151,7 +164,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actBuscarCategorias(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
             cargarColumnas();
             tablaCategorias.getItems().clear();
@@ -182,7 +195,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actInactivarCateg(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar"));
         } else {
             if (catSelec == true) {
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -256,7 +269,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actEditarCategorias(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Editar"));
         } else {
             if (catSelec) {
                 if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
@@ -275,7 +288,8 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actBuscarCatSuperior(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Categoría"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
             categSuperiorSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
@@ -288,7 +302,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     @FXML
     private void actGuardarCategoria(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar"));
         } else {
             if (catSelec == true) {
                 if (validarActivos()) {
@@ -336,7 +350,12 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @FXML
     private void actLimpiar(ActionEvent event) {
-        limpiarCampos();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar"));
+        }else{
+            limpiarCampos();
+        }
+        
     }
 
     public void limpiarCampos() {

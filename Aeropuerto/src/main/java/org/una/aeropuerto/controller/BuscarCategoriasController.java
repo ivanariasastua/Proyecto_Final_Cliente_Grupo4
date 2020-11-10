@@ -50,11 +50,11 @@ public class BuscarCategoriasController extends Controller implements Initializa
     @FXML
     private VBox vbDevelop;
     @FXML
-    private ListView<?> lvDevelop;
+    private ListView<String> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        datosModoDesarrollo();
     }
 
     @Override
@@ -68,6 +68,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
             lvDevelop.setPrefWidth(250);
             vbDevelop.setVisible(true);
             lvDevelop.setVisible(true);
+            asignarInfoModoDesarrollo();
         }else{
             vbDevelop.setPrefWidth(0);
             lvDevelop.setPrefWidth(0);
@@ -85,10 +86,17 @@ public class BuscarCategoriasController extends Controller implements Initializa
         modoDesarrollo.put("Cancelar", "Cancelar responde al método actCancelar");
     }
     
+    private void asignarInfoModoDesarrollo(){
+        lvDevelop.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDevelop.getItems().add(modoDesarrollo.get(info));
+        }
+    }
+    
     @FXML
     private void actBuscar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
             tablaCategorias.getItems().clear();
             if (txtBuscar.getText() != null) {
@@ -129,7 +137,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
     @FXML
     private void actSeleccionar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Seleccionar"));
         }else{
             if (catSelect.getNombre() != null) {
                 if (catSelect.isEstado()) {
@@ -160,7 +168,12 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actCancelar(ActionEvent event) {
-        this.closeWindow();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Cancelar"));
+        }else{
+           this.closeWindow(); 
+        }
+        
     }
 
     @Override
