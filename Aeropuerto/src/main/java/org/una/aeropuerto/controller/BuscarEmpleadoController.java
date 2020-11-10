@@ -29,6 +29,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.service.EmpleadosService;
+import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
@@ -62,16 +63,13 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @FXML
     private void accionBuscarEmpleado(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-            if (AppContext.getInstance().get("permisoFiltrar").equals(true)) {
-                if (cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()) {
-                    tablaEmpleados.getItems().clear();
-                    Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
-                }
-            }
+            
         } else {
             if (cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()) {
                 tablaEmpleados.getItems().clear();
-                Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
+                //Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
+                AppContext.getInstance().set("Task", TaskFiltrarEmpleado());
+                FlowController.getInstance().goViewCargar();
             }
         }
     }
@@ -79,15 +77,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @FXML
     private void accionTablaEmpleados(MouseEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-            if (AppContext.getInstance().get("permisoFiltrar").equals(true)) {
-                if (tablaEmpleados.getSelectionModel().getSelectedItem() != null) {
-                    if (tablaEmpleados.getSelectionModel().getSelectedItem().isEstado()) {
-                        AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
-                    } else {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
-                    }
-                }
-            }
+            
         } else {
             if (tablaEmpleados.getSelectionModel().getSelectedItem() != null) {
                 if (tablaEmpleados.getSelectionModel().getSelectedItem().isEstado()) {

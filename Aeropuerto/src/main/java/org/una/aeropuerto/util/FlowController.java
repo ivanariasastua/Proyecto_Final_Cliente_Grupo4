@@ -8,6 +8,8 @@ package org.una.aeropuerto.util;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -166,6 +168,35 @@ public class FlowController {
         else
             stage.showAndWait();
     }
+    
+    public void goViewCargar() {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("Cargar.fxml"));
+            loader.load();
+            Controller controller = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Sistema Aeropuerto");
+            /* stage.getIcons().add(new Image(""));
+            */
+            stage.setOnHidden((WindowEvent event) -> {
+                controller.getStage().getScene().setRoot(new Pane());
+                controller.setStage(null);
+            });
+            Parent root = loader.getRoot();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setAlwaysOnTop(true);
+            stage.setResizable(Boolean.FALSE);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.sizeToScene();
+            controller.setStage(stage);
+            controller.initialize();
+            controller.initEvents();
+            stage.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(FlowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public Controller getController(String viewName) {
         return getLoader(viewName).getController();
@@ -201,4 +232,5 @@ public class FlowController {
     public void clear(){
         loaders.clear();
     }
+
 }

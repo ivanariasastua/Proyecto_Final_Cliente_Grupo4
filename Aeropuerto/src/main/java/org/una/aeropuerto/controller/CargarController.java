@@ -7,7 +7,10 @@ package org.una.aeropuerto.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
+import org.una.aeropuerto.util.AppContext;
 
 /**
  * FXML Controller class
@@ -31,6 +34,15 @@ public class CargarController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        Task tarea = (Task) AppContext.getInstance().get("Task");
+        tarea.setOnSucceeded( t -> {
+            System.out.println("Fin");
+            Platform.runLater(() -> {
+                this.closeWindow();
+            });
+        });
+        Thread hilo = new Thread(tarea);
+        hilo.start();
     }
     
 }
