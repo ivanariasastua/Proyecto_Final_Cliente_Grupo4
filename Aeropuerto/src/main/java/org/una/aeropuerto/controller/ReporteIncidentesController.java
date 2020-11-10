@@ -77,10 +77,9 @@ public class ReporteIncidentesController extends Controller implements Initializ
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo(); 
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
-    }
         datosModoDesarrollo();
         ajustarPantalla();
-    }    
+    }   
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();

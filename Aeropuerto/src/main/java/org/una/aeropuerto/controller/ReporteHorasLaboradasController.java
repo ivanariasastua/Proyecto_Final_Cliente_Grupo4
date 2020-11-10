@@ -46,6 +46,9 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     private DatePicker dpInicio;
     @FXML
     private DatePicker dpFinal;
+    @FXML
+    private GridPane gpRoot;
+    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     
     ReporteService reporteService;
     Map<String,String> modoDesarrollo;
@@ -56,12 +59,6 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             asignarInfoModoDesarrollo();
         }
-    @FXML
-    private GridPane gpRoot;
-    private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
-
-    @Override
-    public void initialize() {
         ajustarAlto(contenedor.getHeight());
         ajustarAncho(contenedor.getWidth());
     }
