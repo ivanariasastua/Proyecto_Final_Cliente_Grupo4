@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -98,6 +99,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private GridPane gpCrearEditar;
     @FXML
     private GridPane gpTabla;
+    private ListView<String> lvDesarrollo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -105,6 +107,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
         cbxFiltro.setItems(item);
         clickTabla();
         addListener();
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
+        datosModoDesarrollo();
     }
 
     @Override
@@ -117,6 +121,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     public void datosModoDesarrollo() {
@@ -132,6 +139,13 @@ public class IncidentesRegistradosController extends Controller implements Initi
         modoDesarrollo.put("Seguimiento", "Seguimiento responde al método actSeguimientoIncidenteEstados");
         modoDesarrollo.put("Editar", "Editar responde al método actEditarIncidente");
         modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarIncidente");
+    }
+    
+    public void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
 
     public void clickTabla() {
@@ -150,7 +164,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actBuscarCategoria(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Categoria"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
             categoriaSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
@@ -163,7 +178,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Emisor"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -176,7 +192,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Responsable"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -189,7 +206,8 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actBuscarArea(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Area"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
             areaSelec = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
@@ -218,7 +236,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actGuardarIncidenteRegistrado(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar"));
         } else {
             if (incidentSelec == true) {
                 if (validarActivos()) {
@@ -265,13 +283,17 @@ public class IncidentesRegistradosController extends Controller implements Initi
 
     @FXML
     private void actLimpiarCamposIncidentes(ActionEvent event) {
-        limpiar();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar"));
+        }else{
+            limpiar(); 
+        }
     }
 
     @FXML
     private void actInactivarIncidente(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar"));
         } else {
             if (incidentSelec == true) {
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -332,7 +354,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actBuscarIncidente(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
             llenarColumnas();
             tablaIncident.getItems().clear();
@@ -373,7 +395,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actEditarIncidente(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Editar"));
         } else {
             if (incidentSelec == true) {
                 if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
@@ -392,7 +414,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
     @FXML
     private void actSeguimientoIncidenteEstados(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Seguimiento"));
         } else {
             if (incidentSelec == true) {
                 AppContext.getInstance().set("EstadosIncidentes", incidentSeleccionado);

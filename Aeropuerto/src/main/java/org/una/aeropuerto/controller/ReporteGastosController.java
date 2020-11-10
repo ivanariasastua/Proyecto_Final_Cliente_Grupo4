@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -36,6 +37,7 @@ import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.service.ReporteService;
 import org.una.aeropuerto.util.Mensaje;
+import org.una.aeropuerto.util.UserAuthenticated;
 /**
  * FXML Controller class
  *
@@ -61,6 +63,7 @@ public class ReporteGastosController extends Controller implements Initializable
     private JFXTextField txtResponsable;
     
     private final ReporteService service = new ReporteService();
+    private ListView<String> lvDesarrollo;
 
     @FXML
     private DatePicker dpFechaI;
@@ -77,6 +80,7 @@ public class ReporteGastosController extends Controller implements Initializable
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         datosModoDesarrollo();
         txtResponsable.setEditable(false);
         txtServicio.setEditable(false);
@@ -90,67 +94,95 @@ public class ReporteGastosController extends Controller implements Initializable
     public void initialize() {
         rbA.setSelected(true);
         rbP.setSelected(true);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista ReporteGastos");
-        modoDesarrollo.put("Generar Reporte", "Generar Reporte Responde al método actGenerarReporte");
+        modoDesarrollo.put("Generar Reporte", "Generar Reporte rsesponde al método actGenerarReporte");
+        modoDesarrollo.put("Servicio", "Servicio responde al método actBuscarServicio");
+        modoDesarrollo.put("Responsable", "Responsable responde al método actBuscarResponsable");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     @FXML
     private void actGenerarReporte(ActionEvent event) {
-        if(validarCampos()){
-            Date fi = Date.from(dpFechaI.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
-            Date ff = Date.from(dpFechaF.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
-            Boolean estP = obtenerValorRadioButton(Boolean.TRUE), estG = obtenerValorRadioButton(Boolean.FALSE);
-            Respuesta res;
-            if(estP == null && estG == null){
-                res = service.reporteGastos(fi, ff, empresa, servicio, responsable);
-            }else if(estP != null && estG == null){
-                res = service.reporteGastos(fi, ff, empresa, servicio, estP, responsable);
-            }else if(estP == null && estG != null){
-                res = service.reporteGastos(fi, ff, empresa, servicio, responsable, estG);
-            }else{
-                res = service.reporteGastos(fi, ff, empresa, servicio, estP, estG, responsable);
-            }
-            if(res.getEstado()){
-                String resp = (String) res.getResultado("Reporte");
-                System.out.println("Exito: "+resp);
-                byte[] bytes = Base64.getDecoder().decode(resp);
-                try{
-                    ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                    ObjectInputStream bytesArray = new ObjectInputStream(array);
-                    JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                    JasperViewer viewer = new JasperViewer(jp, false);
-                    viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
-                    viewer.setVisible(true);
-                }catch(IOException | ClassNotFoundException ex){
-                    System.out.println(ex);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
+        }else{
+            if(validarCampos()){
+                Date fi = Date.from(dpFechaI.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
+                Date ff = Date.from(dpFechaF.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
+                Boolean estP = obtenerValorRadioButton(Boolean.TRUE), estG = obtenerValorRadioButton(Boolean.FALSE);
+                Respuesta res;
+                if(estP == null && estG == null){
+                    res = service.reporteGastos(fi, ff, empresa, servicio, responsable);
+                }else if(estP != null && estG == null){
+                    res = service.reporteGastos(fi, ff, empresa, servicio, estP, responsable);
+                }else if(estP == null && estG != null){
+                    res = service.reporteGastos(fi, ff, empresa, servicio, responsable, estG);
+                }else{
+                    res = service.reporteGastos(fi, ff, empresa, servicio, estP, estG, responsable);
                 }
-            }else{
-                System.out.println("Error: "+res.getMensajeInterno());
+                if(res.getEstado()){
+                    String resp = (String) res.getResultado("Reporte");
+                    System.out.println("Exito: "+resp);
+                    byte[] bytes = Base64.getDecoder().decode(resp);
+                    try{
+                        ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                        ObjectInputStream bytesArray = new ObjectInputStream(array);
+                        JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                        JasperViewer viewer = new JasperViewer(jp, false);
+                        viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+                        viewer.setVisible(true);
+                    }catch(IOException | ClassNotFoundException ex){
+                        System.out.println(ex);
+                    }
+                }else{
+                    System.out.println("Error: "+res.getMensajeInterno());
+                }
             }
         }
     }
 
     @FXML
     private void actBuscarServicio(ActionEvent event) {
-        AppContext.getInstance().set("servSelect", null);
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarServicio", false, StageStyle.DECORATED);
-        ServiciosDTO servicioDto = (ServiciosDTO) AppContext.getInstance().get("servSelect");
-        if(servicioDto != null){
-            txtServicio.setText(servicioDto.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Servicio"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicio", false, StageStyle.DECORATED);
+        }else{
+            AppContext.getInstance().set("servSelect", null);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicio", false, StageStyle.DECORATED);
+            ServiciosDTO servicioDto = (ServiciosDTO) AppContext.getInstance().get("servSelect");
+            if(servicioDto != null){
+                txtServicio.setText(servicioDto.getNombre());
+            }
         }
+        
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
-        AppContext.getInstance().set("empSelect", null);
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
-        EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if(emplSeleccionado != null)
-            txtServicio.setText(emplSeleccionado.getCedula());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Responsable"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
+        }else{
+            AppContext.getInstance().set("empSelect", null);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
+            EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if(emplSeleccionado != null)
+                txtServicio.setText(emplSeleccionado.getCedula());
+        }
+        
     }
     
     private Boolean validarCampos(){

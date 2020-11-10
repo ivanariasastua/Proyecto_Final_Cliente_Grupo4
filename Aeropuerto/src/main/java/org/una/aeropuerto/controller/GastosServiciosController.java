@@ -22,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -90,6 +91,7 @@ public class GastosServiciosController extends Controller implements Initializab
     ServiciosGastosDTO gastoSelecciondo = new ServiciosGastosDTO();
     EmpleadosDTO responsableSelec;
     ServiciosDTO servicioSelec;
+    private ListView<String> lvDesarrollo;
     private Map<String,String> modoDesarrollo;
     @FXML
     private JFXTextField txtServicio;
@@ -106,6 +108,7 @@ public class GastosServiciosController extends Controller implements Initializab
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         listServicios = new ArrayList<>();
         llenarComboBoxs();
         clickTabla();
@@ -124,6 +127,9 @@ public class GastosServiciosController extends Controller implements Initializab
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeigth(contenedor.getHeight());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     public void datosModoDesarrollo(){
@@ -136,6 +142,13 @@ public class GastosServiciosController extends Controller implements Initializab
         modoDesarrollo.put("Buscar Empleado", "Buscar Empleado responde al método actBuscarResponsable");
         modoDesarrollo.put("Limpiar Gasto", "Limpiar responde al método actLimpiarGastoS");
         modoDesarrollo.put("Guardar Gasto", "Guardar responde al método actGuardarGastoS");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void llenarComboBoxs() {
@@ -256,7 +269,7 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actEditarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Editar Gasto"));
         } else {
             if (gastSelec) {
                 if (Mensaje.showConfirmation("Editar ", null, "Seguro que desea editar la información?")) {
@@ -326,7 +339,7 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actGuardarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar Gasto"));
         } else {
             if (gastSelec == true) {
                 if (validarActivos()) {
@@ -389,7 +402,11 @@ public class GastosServiciosController extends Controller implements Initializab
 
     @FXML
     private void actLimpiarGastoS(ActionEvent event) {
-        limpiarCampos();
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Gasto"));
+        } else {
+            limpiarCampos();
+        }
     }
 
     @FXML
@@ -403,7 +420,7 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actInactivarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar Gasto"));
         } else {
             if (gastoSelecciondo != null) {
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -460,7 +477,7 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actBuscarGastosServicios(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Gasto"));
         } else {
             cargarColumnasTabla();
             tablaGastosS.getItems().clear();
@@ -487,7 +504,8 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Empleado"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -500,7 +518,8 @@ public class GastosServiciosController extends Controller implements Initializab
     @FXML
     private void actBuscarServicio(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Servicio"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
             servicioSelec = (ServiciosDTO) AppContext.getInstance().get("servSelect");

@@ -30,6 +30,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -91,6 +92,8 @@ public class ServiciosController extends Controller implements Initializable {
     ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
     ServiciosPreciosDTO precioSelect = new ServiciosPreciosDTO();
     Map<String,String> modoDesarrollo;
+    private ListView<String> lvDesarrollo;
+    
     @FXML
     private JFXButton btnGuardar;
     @FXML
@@ -104,6 +107,7 @@ public class ServiciosController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroServicios.setItems(filtro);
         clickTabla();
@@ -122,6 +126,9 @@ public class ServiciosController extends Controller implements Initializable {
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     
@@ -134,6 +141,13 @@ public class ServiciosController extends Controller implements Initializable {
         modoDesarrollo.put("Inactivar Precio", "Inactivar responde al método actInactivarPrecios");
         modoDesarrollo.put("Limpiar Precio", "Limpiar responde al método actLimpiarCamposPrecio");
         modoDesarrollo.put("Guardar Precio", "Guardar responde al método actGuardarPrecio");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void cargarVista(ServiciosDTO servicio) throws IOException {
@@ -189,7 +203,7 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actBuscarServicio(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Servicio"));
         } else {
             cargarColumnas();
             tablaServicios.getItems().clear();
@@ -220,7 +234,7 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actInactivarServicio(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar Servicio"));
         } else {
             if (servicSeleccionado != null) {
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -254,7 +268,8 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actCrearServicios(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Crear Servicio"));
+            FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.UTILITY);
         }
@@ -263,7 +278,7 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actGuardarPrecio(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar Precio"));
         } else {
             if (precioSelec == true) {
                 if (validarPreciosActivos()) {
@@ -299,17 +314,19 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actPane(MouseEvent event) {
-        if (tabPrecios.isSelected() && servSelec == false) {
-            SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-            selectionModel.select(tabServicios);
-            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
-        } else if (tabPrecios.isSelected() && servSelec == true) {
-            tablaPrecios.getItems().clear();
-            txtServicioSelec.setText(servicSeleccionado.getNombre());
-            cargarPrecios();
-            limpiarPrecios();
+        if(!UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            if (tabPrecios.isSelected() && servSelec == false) {
+                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(tabServicios);
+                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
+            }else if (tabPrecios.isSelected() && servSelec == true) {
+                tablaPrecios.getItems().clear();
+                txtServicioSelec.setText(servicSeleccionado.getNombre());
+                cargarPrecios();
+                limpiarPrecios();
+            }
+            servSelec = false;
         }
-        servSelec = false;
     }
 
     public void cargarColumnasPrecios() {
@@ -350,7 +367,7 @@ public class ServiciosController extends Controller implements Initializable {
     @FXML
     private void actInactivarPrecios(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar Precio"));
         } else {
             if (precioSelec) {
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -390,7 +407,11 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actLimpiarCamposPrecio(ActionEvent event) {
-        limpiarPrecios();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Precio"));
+        }else{
+            limpiarPrecios();
+        }
     }
 
     @Override

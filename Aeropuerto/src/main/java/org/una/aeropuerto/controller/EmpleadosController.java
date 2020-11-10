@@ -30,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -78,6 +79,7 @@ public class EmpleadosController extends Controller implements Initializable {
     private AreasTrabajosDTO area = null;
     private EmpleadosAreasTrabajosDTO areaSelected = null;
     private Map<String,String> modoDesarrollo;
+    private ListView<String> lvDesarrollo;
     
     @FXML private TableView tablaHorarios;
     @FXML private BorderPane bpPantalla;
@@ -128,6 +130,7 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         llenarRelojs();
         ObservableList items = FXCollections.observableArrayList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
         itemsdias = items;
@@ -159,12 +162,15 @@ public class EmpleadosController extends Controller implements Initializable {
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
         rowContrasena.setPrefHeight((contenedor.getHeight()-100) / 4);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista Empleados");
-        modoDesarrollo.put("Limpiar Empleado", "Limpiar responde al método actLimpiarCamposEmpleads");
+        modoDesarrollo.put("Limpiar Empleado", "Limpiar responde al método actLimpiarCamposEmplead");
         modoDesarrollo.put("Buscar Empleado", "Buscar responde al método actBuscarEmpleado");
         modoDesarrollo.put("Inactivar Empleado", "Inactivar responde al método actInactivarEmpleado");
         modoDesarrollo.put("Guardar Empleado", "Guardar responde al método actGuardarEmpleado");
@@ -174,18 +180,13 @@ public class EmpleadosController extends Controller implements Initializable {
         modoDesarrollo.put("Limpiar Horario", "Limpiar responde al método actLimpiarCamposHorario");
         modoDesarrollo.put("Guardar Horario", "Guardar responde al método actGuardarHorario");
         modoDesarrollo.put("Inactivar Horario", "Inactivar responde al método actInactivarHorarioEmpleado");
-        modoDesarrollo.put("Limpiar Empleado", "Responde al método actLimpiarCamposEmpleads");
-        modoDesarrollo.put("Buscar Empleado", "Responde al método actBuscarEmpleado");
-        modoDesarrollo.put("Inactivar Empleado", "Responde al método actInactivarEmpleado");
-        modoDesarrollo.put("Guardar Empleado", "Responde al método actGuardarEmpleado");
-        modoDesarrollo.put("Buscar Area", "Responde al método actBuscarArea");
-        modoDesarrollo.put("Agregar Area", "Responde al método actAgregarArea");
-        modoDesarrollo.put("Inactivar Area", "Responde al método actInactivarAreaEmpleado");
-        modoDesarrollo.put("Limpiar Horario", "Responde al método actLimpiarCamposHorario");
-        modoDesarrollo.put("Guardar Horario", "Responde al método actGuardarHorario");
-        modoDesarrollo.put("Inactivar Horario", "Responde al método actInactivarHorarioEmpleado");
-        modoDesarrollo.keySet();
-        
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void llenarComboBoxs() {
@@ -217,8 +218,11 @@ public class EmpleadosController extends Controller implements Initializable {
     
     @FXML
     private void actLimpiarCamposEmplead(ActionEvent event) {
-        
-        limpiarCampos();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Empleado"));
+        }else{
+            limpiarCampos();
+        }
     }
 
     public boolean validarCampos() {
@@ -239,7 +243,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actGuardarEmpleado(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar Empleado"));
         }else{
             if (emplSeleccionado != null) {  //editar
                 if (validarCampos()) {
@@ -382,7 +386,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actGuardarHorario(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar Horario"));
         }else{
             if (horarioSeleccionado != null) {
                 if (validarCamposHorario()) {
@@ -436,22 +440,28 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void actLimpiarCamposHorario(ActionEvent event) {
-        cbxDiaEntrada.setValue(null);
-        cbxDiaSalida.setValue(null);
-        entradaHoras.setValue(null);
-        entradaMinutos.setValue(null);
-        salidaHoras.setValue(null);
-        salidaMinutos.setValue(null);
-        horarioSeleccionado = null;
-        area = null;
-        areaSelected = null;
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Horario"));
+        }else{
+            cbxDiaEntrada.setValue(null);
+            cbxDiaSalida.setValue(null);
+            entradaHoras.setValue(null);
+            entradaMinutos.setValue(null);
+            salidaHoras.setValue(null);
+            salidaMinutos.setValue(null);
+            horarioSeleccionado = null;
+            area = null;
+            areaSelected = null;
+        }
+        
     }
 
 
     @FXML
     private void actBuscarArea(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Area"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
         }
         boolean existe = false;
         FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
@@ -474,7 +484,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actInactivarHorarioEmpleado(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar Horario"));
         }else{
             if(horarioSeleccionado != null){
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -509,7 +519,8 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actBuscarEmpleado(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Empleado"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
         }else{
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -528,7 +539,8 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void accionBuscraJefe(MouseEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Empleado"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
         }else{
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
             jefeSelect  = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -543,7 +555,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actInactivarAreaEmpleado(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar Area"));
         }else{
             if(areaSelected != null){
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -577,7 +589,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actAgregarArea(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Agregar Area"));
         }else{
             if(area != null){
                 EmpleadosAreasTrabajosDTO areaDto = new EmpleadosAreasTrabajosDTO(Long.valueOf("0"), emplSeleccionado, area, true);
@@ -597,7 +609,7 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML
     private void actInactivarEmpleado(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar Empleado"));
         }else{
             if(emplSeleccionado != null){
                 Boolean puedeInactivar = Boolean.FALSE;

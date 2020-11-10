@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -33,6 +34,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  * FXML Controller class
@@ -61,15 +63,15 @@ public class ReporteIncidentesController extends Controller implements Initializ
     private final ReporteService service = new ReporteService();
     EmpleadosDTO emisorSelec;
     EmpleadosDTO responsableSelec;
+    private ListView<String> lvDesarrollo;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        datosModoDesarrollo();
-    }    
-        // TODO
+        datosModoDesarrollo(); 
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
     }
 
     public void datosModoDesarrollo(){
@@ -78,6 +80,13 @@ public class ReporteIncidentesController extends Controller implements Initializ
         modoDesarrollo.put("Buscar Responsable", "Buscar Responsable responde al método actBuscarResponsable");
         modoDesarrollo.put("Buscar Emisor", "Buscar Emisor responde al método actBuscarEmisor");
         modoDesarrollo.put("Generar Reporte", "Generar Reporte responde al método actGenerarReporte");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     @Override
@@ -95,25 +104,36 @@ public class ReporteIncidentesController extends Controller implements Initializ
         rbActivo.setSelected(true);
         rbInactivo.setSelected(false);
         rbAmbos.setSelected(false);
+        asignarInfoModoDesarrollo();
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
-        AppContext.getInstance().set("permisoFiltrar", true);
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if (responsableSelec != null) {
-            txtResponsable.setText(responsableSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Responsable"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        }else{
+            AppContext.getInstance().set("permisoFiltrar", true);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if (responsableSelec != null) {
+                txtResponsable.setText(responsableSelec.getNombre());
+            }
         }
     }
 
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
-        AppContext.getInstance().set("permisoFiltrar", true);
-        FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
-        emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-        if (emisorSelec != null) {
-            txtEmisor.setText(emisorSelec.getNombre());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Emisor"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+        }else{
+            AppContext.getInstance().set("permisoFiltrar", true);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if (emisorSelec != null) {
+                txtEmisor.setText(emisorSelec.getNombre());
+            }
         }
     }
 
@@ -131,32 +151,36 @@ public class ReporteIncidentesController extends Controller implements Initializ
 
     @FXML
     private void actGenerarReporte(ActionEvent event) {
-        if (validarCampos()) {
-            Date ini = DateUtils.asDate(dpIni.getValue());
-            Date fin = DateUtils.asDate(dpFin.getValue());
-            Respuesta res;
-            if (rbActivo.isSelected()) {
-                res = service.reporteIncident(ini, fin, true, txtResponsable.getText(), txtEmisor.getText(), true);
-            } else if (rbInactivo.isSelected()) {
-                res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), true);
-            } else {
-                res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), false);
-            }
-            if (res.getEstado()) {
-                String resp = (String) res.getResultado("Reporte");
-                byte[] bytes = Base64.getDecoder().decode(resp);
-                try {
-                    ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                    ObjectInputStream bytesArray = new ObjectInputStream(array);
-                    JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                    JasperViewer viewer = new JasperViewer(jp, false);
-                    viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                    viewer.setVisible(true);
-                } catch (IOException | ClassNotFoundException ex) {
-                    System.out.println(ex);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
+        }else{
+            if (validarCampos()) {
+                Date ini = DateUtils.asDate(dpIni.getValue());
+                Date fin = DateUtils.asDate(dpFin.getValue());
+                Respuesta res;
+                if (rbActivo.isSelected()) {
+                    res = service.reporteIncident(ini, fin, true, txtResponsable.getText(), txtEmisor.getText(), true);
+                } else if (rbInactivo.isSelected()) {
+                    res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), true);
+                } else {
+                    res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), false);
                 }
-            } else {
-                System.out.println("error " + res.getMensaje());
+                if (res.getEstado()) {
+                    String resp = (String) res.getResultado("Reporte");
+                    byte[] bytes = Base64.getDecoder().decode(resp);
+                    try {
+                        ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                        ObjectInputStream bytesArray = new ObjectInputStream(array);
+                        JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                        JasperViewer viewer = new JasperViewer(jp, false);
+                        viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                        viewer.setVisible(true);
+                    } catch (IOException | ClassNotFoundException ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    System.out.println("error " + res.getMensaje());
+                }
             }
         }
     }

@@ -27,6 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -77,6 +78,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     private VBox vpRoot;
     @FXML
     private ColumnConstraints row;
+    private ListView<String> lvDesarrollo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,6 +87,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         clickTablas();
         addListener();
         datosModoDesarrollo();
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
     }
 
     @Override
@@ -94,6 +97,9 @@ public class AreasTrabajosController extends Controller implements Initializable
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeigth(contenedor.getHeight());
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+           asignarInfoModoDesarrollo();
+        }
     }
 
     
@@ -103,6 +109,13 @@ public class AreasTrabajosController extends Controller implements Initializable
         modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarAreaT");
         modoDesarrollo.put("Buscar", "Buscar responde al método actBuscarAreasTrabajos");
         modoDesarrollo.put("Crear", "Crear responde al método actMantAreasTrabajo");
+    }
+    
+    public void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void llenarColumnas() {
@@ -119,7 +132,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actBuscarAreasTrabajos(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
             llenarColumnas();
             tablaAreasTrabajo.getItems().clear();
@@ -190,7 +203,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actInactivarAreaT(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar"));
         } else {
             if (areaSeleccionada != null) {
                 Boolean puedeInactivar = Boolean.FALSE;
@@ -254,7 +267,8 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private void actMantAreasTrabajo(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Crear"));
+            FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.UTILITY);
         } else {
             FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.UTILITY);
         }

@@ -31,6 +31,9 @@ import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.control.ListView;
+import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 public class ReporteHorasLaboradasController extends Controller implements Initializable{
 
@@ -43,22 +46,33 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     
     ReporteService reporteService;
     Map<String,String> modoDesarrollo;
+    private ListView<String> lvDesarrollo;
 
     @Override
     public void initialize() {
-        
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            asignarInfoModoDesarrollo();
+        }
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         reporteService = new ReporteService();
         datosModoDesarrollo();
+        lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
     }
 
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista es ReporteHorasLaboradas");
         modoDesarrollo.put("Generar Reporte", "Generar Reporte responde al método generarReporte");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDesarrollo.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDesarrollo.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public boolean validarDatos(){
@@ -72,27 +86,32 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     
     @FXML
     private void generarReporte(ActionEvent event) {
-        if(validarDatos()){
-            Date fecha1 = Date.from(dpInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-            Date fecha2 = Date.from(dpFinal.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-            Respuesta respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
-            if(respuesta.getEstado()){
-                String res = (String) respuesta.getResultado("Reporte");
-                byte[] bytes = Base64.getDecoder().decode(res);
-                try{
-                    ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                    ObjectInputStream bytesArray = new ObjectInputStream(array);
-                    JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                    JasperViewer viewer = new JasperViewer(jp, false);
-                    viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
-                    viewer.setVisible(true);
-                }catch(IOException | ClassNotFoundException ex){
-                    System.out.println(ex);
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
+        }else{
+            if(validarDatos()){
+                Date fecha1 = Date.from(dpInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                Date fecha2 = Date.from(dpFinal.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                Respuesta respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
+                if(respuesta.getEstado()){
+                    String res = (String) respuesta.getResultado("Reporte");
+                    byte[] bytes = Base64.getDecoder().decode(res);
+                    try{
+                        ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                        ObjectInputStream bytesArray = new ObjectInputStream(array);
+                        JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                        JasperViewer viewer = new JasperViewer(jp, false);
+                        viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+                        viewer.setVisible(true);
+                    }catch(IOException | ClassNotFoundException ex){
+                        System.out.println(ex);
+                    }
+                }else{
+                    System.out.println(respuesta.getMensajeInterno());
                 }
-            }else{
-                System.out.println(respuesta.getMensajeInterno());
             }
         }
+        
     }
     
     @Override
