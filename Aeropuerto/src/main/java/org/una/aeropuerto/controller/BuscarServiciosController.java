@@ -48,11 +48,12 @@ public class BuscarServiciosController extends Controller implements Initializab
     @FXML
     private VBox vbDevelop;
     @FXML
-    private ListView<?> lvDevelop;
+    private ListView<String> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cargarColumnas();
+        datosModoDesarrollo();
     }
 
     @Override
@@ -65,6 +66,7 @@ public class BuscarServiciosController extends Controller implements Initializab
             lvDevelop.setPrefWidth(250);
             vbDevelop.setVisible(true);
             lvDevelop.setVisible(true);
+            asignarInfoModoDesarrollo();
         }else{
             vbDevelop.setPrefWidth(0);
             lvDevelop.setPrefWidth(0);
@@ -79,6 +81,13 @@ public class BuscarServiciosController extends Controller implements Initializab
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarServicios");
         modoDesarrollo.put("Buscar", "Buscar responde al método actBuscar");
         modoDesarrollo.put("Seleccionar", "Seleccionar responde al método actSeleccionarServicio");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDevelop.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDevelop.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     public void cargarColumnas() {
@@ -103,7 +112,7 @@ public class BuscarServiciosController extends Controller implements Initializab
     @FXML
     private void actBuscar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
             tabla.getItems().clear();
             if (txtBuscar.getText() != null) {
@@ -121,7 +130,7 @@ public class BuscarServiciosController extends Controller implements Initializab
     @FXML
     private void actSeleccionarServicio(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Seleccionar"));
         }else{
             if (servicSelec.getNombre() != null) {
                 if (servicSelec.isEstado()) {

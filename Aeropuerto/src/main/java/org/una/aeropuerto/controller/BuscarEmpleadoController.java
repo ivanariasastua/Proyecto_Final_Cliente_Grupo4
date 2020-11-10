@@ -50,7 +50,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @FXML
     private VBox vbDevelop;
     @FXML
-    private ListView<?> lvDevelop;
+    private ListView<String> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -101,12 +101,22 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
 
     @FXML
     private void accionSeleccionar(ActionEvent event) {
-        this.getStage().close();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Seleccionar"));
+        }else{
+           this.getStage().close(); 
+        }
+        
     }
 
     @FXML
     private void accionLimpiar(ActionEvent event) {
-        Limpiar();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Limpiar"));
+        }else{
+            Limpiar();
+        }
+        
     }
 
     public void datosModoDesarrollo() {
@@ -114,6 +124,13 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarEmpleado");
         modoDesarrollo.put("Limpiar", "Limpiar responde al método accionLimpiar");
         modoDesarrollo.put("Seleccionar", "Seleccionar responde al método accionSeleccionar");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDevelop.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDevelop.getItems().add(modoDesarrollo.get(info));
+        }
     }
 
     public Task TaskFiltrarEmpleado() {
@@ -181,6 +198,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
             lvDevelop.setPrefWidth(250);
             vbDevelop.setVisible(true);
             lvDevelop.setVisible(true);
+            asignarInfoModoDesarrollo();
         }else{
             vbDevelop.setPrefWidth(0);
             lvDevelop.setPrefWidth(0);

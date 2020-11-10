@@ -54,26 +54,50 @@ public class BuscarAreaController extends Controller implements Initializable {
     @FXML
     private VBox vbDevelop;
     @FXML
-    private ListView<?> lvDevelop;
+    private ListView<String> lvDevelop;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initVista();
         datosModoDesarrollo();
-
     }
 
+    @Override
+    public void initialize() {
+        Limpiar();
+        areaSelec = new AreasTrabajosDTO();
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            vbDevelop.setPrefWidth(250);
+            lvDevelop.setPrefWidth(250);
+            vbDevelop.setVisible(true);
+            lvDevelop.setVisible(true);
+            asignarInfoModoDesarrollo();
+        }else{
+            vbDevelop.setPrefWidth(0);
+            lvDevelop.setPrefWidth(0);
+            vbDevelop.setVisible(false);
+            lvDevelop.setVisible(false);
+        }
+    }
+    
     public void datosModoDesarrollo(){
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarArea");
         modoDesarrollo.put("Buscar", "Buscar responde al método accionBuscar");
-        modoDesarrollo.put("Seleccionar", "Seleccionar reponde al método accionSeleccionar");
+        modoDesarrollo.put("Seleccionar", "Seleccionar responde al método accionSeleccionar");
+    }
+    
+    private void asignarInfoModoDesarrollo(){
+        lvDevelop.getItems().clear();
+        for(String info : modoDesarrollo.keySet()){
+            lvDevelop.getItems().add(modoDesarrollo.get(info));
+        }
     }
     
     @FXML
     private void accionBuscar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
             if (!txtBuscar.getText().isEmpty()) {
                 Respuesta res = service.getByNombre(txtBuscar.getText());
@@ -98,7 +122,7 @@ public class BuscarAreaController extends Controller implements Initializable {
     @FXML
     private void accionSeleccionar(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Seleccionar"));
         }else{
             if (areaSelec.getNombre() != null) {
                 if (areaSelec.isEstado()) {
@@ -129,23 +153,6 @@ public class BuscarAreaController extends Controller implements Initializable {
     private void Limpiar() {
         txtBuscar.clear();
         tvAreas.getItems().clear();
-    }
-
-    @Override
-    public void initialize() {
-        Limpiar();
-        areaSelec = new AreasTrabajosDTO();
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            vbDevelop.setPrefWidth(250);
-            lvDevelop.setPrefWidth(250);
-            vbDevelop.setVisible(true);
-            lvDevelop.setVisible(true);
-        }else{
-            vbDevelop.setPrefWidth(0);
-            lvDevelop.setPrefWidth(0);
-            vbDevelop.setVisible(false);
-            lvDevelop.setVisible(false);
-        }
     }
 
     @Override
