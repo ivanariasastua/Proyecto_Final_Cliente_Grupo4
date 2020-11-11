@@ -17,13 +17,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import javafx.animation.TranslateTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -98,6 +102,10 @@ public class PrincipalController extends Controller implements Initializable {
     private ListView<String> lvDesarrollo;
     @FXML
     private Pane paneContenerdor;
+    
+    private ObservableList<TitledPane> menu;
+    @FXML
+    private Accordion acMenu;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -114,6 +122,7 @@ public class PrincipalController extends Controller implements Initializable {
             crearCodigoGerente();
         AppContext.getInstance().set("ListView", lvDesarrollo);
         datosModoDesarrollo();
+        menu = FXCollections.observableArrayList(acMenu.getPanes());
     }
 
     @FXML
@@ -287,6 +296,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionInicio(MouseEvent event) {
+        FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
     }
 
     @FXML
@@ -394,13 +404,45 @@ public class PrincipalController extends Controller implements Initializable {
     }
     
     private void visualizarTitledPane(){
+        acMenu.getPanes().clear();
+        acMenu.getPanes().addAll(menu);
+        if(UserAuthenticated.getInstance().isRol("AUDITOR")){
+            acMenu.getPanes().remove(tpEmpleados);
+            acMenu.getPanes().remove(tpAreas);
+            acMenu.getPanes().remove(tpGastos);
+            acMenu.getPanes().remove(tpIncidentes);
+        }
+        if(UserAuthenticated.getInstance().isRol("GESTOR")){
+            acMenu.getPanes().remove(tpReportes);
+        }
+        if(!UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            acMenu.getPanes().remove(tpAdministracion);
+        }
+        if(!UserAuthenticated.getInstance().isRol("AUDITOR") && !UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            acMenu.getPanes().remove(tpTransacciones);
+        }
+        /*
         tpEmpleados.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpEmpleados.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
+        
         tpAreas.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpAreas.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
+        
         tpGastos.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpGastos.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
+        
         tpIncidentes.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
+        tpIncidentes.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
+        
         tpReportes.setVisible(!UserAuthenticated.getInstance().isRol("GESTOR"));
+        tpReportes.setPrefHeight(!UserAuthenticated.getInstance().isRol("GESTOR") ? 79 : 0);
+        
         tpAdministracion.setVisible(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        tpAdministracion.setPrefHeight(UserAuthenticated.getInstance().isRol("ADMINISTRADOR") ? 79 : 0);
+        
         tpTransacciones.setVisible(UserAuthenticated.getInstance().isRol("AUDITOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
+        tpTransacciones.setPrefHeight((UserAuthenticated.getInstance().isRol("AUDITOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR") ? 79 : 0));
+        */
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.setVisible(true);
             vbDesarrollo.setVisible(true);

@@ -105,7 +105,7 @@
          <children>
             <ScrollPane id="menu" fx:id="spMenu" hbarPolicy="NEVER" prefHeight="650.0" prefWidth="300.0">
                <content>
-                  <Accordion id="accordioMenu" prefHeight="650.0" prefWidth="286.0">
+                  <Accordion id="accordioMenu" fx:id="acMenu" prefHeight="650.0" prefWidth="286.0">
                      <panes>
                         <TitledPane fx:id="tpInicio" alignment="CENTER" animated="false" collapsible="false" contentDisplay="TOP" expanded="false" onMouseClicked="#accionInicio" prefHeight="0.0" prefWidth="250.0" text="Inicio">
                            <graphic>
