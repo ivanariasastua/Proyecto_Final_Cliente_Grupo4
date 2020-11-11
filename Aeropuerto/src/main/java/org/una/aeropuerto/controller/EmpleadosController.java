@@ -111,22 +111,14 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private JFXPasswordField txtPass;
     @FXML private JFXCheckBox cbViewPass;
     @FXML private JFXTextField txtViewPass;
-    @FXML
-    private JFXButton btnGuardar;
-    @FXML
-    private JFXButton btnGuardarArea;
-    @FXML
-    private JFXButton btnGuardarHorario;
-    @FXML
-    private GridPane gpCont;
-    @FXML
-    private VBox vbTableAreas;
-    @FXML
-    private HBox hbContHorarios;
-    @FXML
-    private HBox hbHorarios;
-    @FXML
-    private VBox vbTablaHorarios;
+    @FXML private JFXButton btnGuardar;
+    @FXML private JFXButton btnGuardarArea;
+    @FXML private JFXButton btnGuardarHorario;
+    @FXML private GridPane gpCont;
+    @FXML private VBox vbTableAreas;
+    @FXML private HBox hbContHorarios;
+    @FXML private HBox hbHorarios;
+    @FXML private VBox vbTablaHorarios;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -390,6 +382,7 @@ public class EmpleadosController extends Controller implements Initializable {
         }else{
             if (horarioSeleccionado != null) {
                 if (validarCamposHorario()) {
+                    horarioDTO = new EmpleadosHorariosDTO();
                     horarioDTO.setId(horarioSeleccionado.getId());
                     horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
                     horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
@@ -398,8 +391,11 @@ public class EmpleadosController extends Controller implements Initializable {
                     horarioDTO.setHoraSalida(obtenerFecha(false));
                     Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
                     if (res.getEstado()) {
+                        EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
-                        cargarTablaHorarios();
+                        sustituirId(tablaHorarios.getItems(), save);
+                        sustituirId(emplSeleccionado.getHorarios(), save);
+                        tablaHorarios.refresh();
                     }
                 }
             } else {
@@ -412,14 +408,40 @@ public class EmpleadosController extends Controller implements Initializable {
                     horarioDTO.setHoraSalida(obtenerFecha(false));
                     Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
                     if (res.getEstado()) {
+                        EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
                         Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
-                        cargarTablaHorarios();
+                        tablaHorarios.getItems().add(save);
+                        emplSeleccionado.getHorarios().add(save);
+                        tablaHorarios.refresh();
                     }
                 }
             }
+            LimpiarCamposHorarios();
+            
         }
     }
     
+    void LimpiarCamposHorarios(){
+        cbxDiaEntrada.setValue(null);
+        cbxDiaSalida.setValue(null);
+        entradaHoras.setValue(null);
+        entradaMinutos.setValue(null);
+        salidaHoras.setValue(null);
+        salidaMinutos.setValue(null);
+        horarioSeleccionado = null;
+}
+    
+    private void sustituirId(List<EmpleadosHorariosDTO> lista, EmpleadosHorariosDTO sustituir){
+        lista.stream().filter(hor -> (hor.getId().equals(sustituir.getId()))).forEachOrdered(hor -> {
+            hor = sustituir;
+        });
+    }
+    
+    private void sustituirId(List<EmpleadosAreasTrabajosDTO> lista, EmpleadosAreasTrabajosDTO sustituir){
+        lista.stream().filter(areaT -> (areaT.getId().equals(sustituir.getId()))).forEach(areaT -> {
+            areaT = sustituir;
+        });
+    }
     private Date obtenerFecha(boolean horaEntrada){
         LocalDateTime ldt = LocalDateTime.now(), ldt2;
         int hora = 0, min = 0;
@@ -450,12 +472,9 @@ public class EmpleadosController extends Controller implements Initializable {
             salidaHoras.setValue(null);
             salidaMinutos.setValue(null);
             horarioSeleccionado = null;
-            area = null;
-            areaSelected = null;
         }
         
     }
-
 
     @FXML
     private void actBuscarArea(ActionEvent event) {
@@ -514,7 +533,6 @@ public class EmpleadosController extends Controller implements Initializable {
             }
         }
     }
-
 
     @FXML
     private void actBuscarEmpleado(ActionEvent event) {
@@ -651,34 +669,6 @@ public class EmpleadosController extends Controller implements Initializable {
         }
     }
     
-    private void cargarSoloDiasValidos(List<EmpleadosHorariosDTO> horarios){
-        List<String> diasEntrada = new ArrayList<>(), diasSalida = new ArrayList<>();
-        Boolean isDayEnt = false, isDaySal = false;
-        System.out.println(itemsdias.size());
-        for(Object day : itemsdias){
-            System.out.println(day);
-            isDayEnt = false;
-            isDaySal = false;
-            for(EmpleadosHorariosDTO horario : horarios){
-                if(horario.isEstado()){
-                    if(day.equals(horario.getDiaEntrada())){
-                        isDayEnt = true;
-                    }
-                    if(day.equals(horario.getDiaSalida())){
-                        isDaySal = true;
-                    }
-                }
-            }
-            if(!isDayEnt)
-                diasEntrada.add(String.valueOf(day));
-            if(!isDaySal)
-                diasSalida.add(String.valueOf(day));
-        }
-        cbxDiaEntrada.getItems().clear();
-        cbxDiaEntrada.getItems().addAll(diasEntrada);
-        cbxDiaSalida.getItems().clear();
-        cbxDiaSalida.getItems().addAll(diasSalida);
-    }
     
     private Boolean validarLogicaHorarios() throws NumberFormatException{
         String de, ds, he, hs, me, ms;
@@ -752,5 +742,94 @@ public class EmpleadosController extends Controller implements Initializable {
         hbContHorarios.setPrefHeight(altura - 50);
         vbTablaHorarios.setPrefHeight(altura - 110);
         tablaHorarios.setPrefHeight(altura - 140);
+    }
+
+    @FXML
+    private void actDiaEntrada(ActionEvent event) {
+        if(cbxDiaEntrada.getSelectionModel().getSelectedItem() != null){
+            Long id = 0L;
+            if(horarioSeleccionado != null){
+                id = horarioSeleccionado.getId();
+            } 
+            String dia = cbxDiaEntrada.getSelectionModel().getSelectedItem();
+            if(!emplSeleccionado.getHorarios().isEmpty()){
+                Boolean isSelect = false;
+                for(EmpleadosHorariosDTO horario : emplSeleccionado.getHorarios()){
+                    if(horario.isEstado() && !horario.getId().equals(id)){
+                        if(horario.getDiaEntrada().equals(dia)){
+                            isSelect = true;
+                        }
+                    }
+                }
+                if(isSelect){
+                    cbxDiaEntrada.getSelectionModel().select(null);
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dia de entrada", "El dia ya esta seleccionado");
+                }else{
+                    if(cbxDiaSalida.getSelectionModel().getSelectedItem() != null){
+                        if(dayToNumber(dia) < 7  && dayToNumber(cbxDiaSalida.getSelectionModel().getSelectedItem()) - dayToNumber(dia) > 1 || dayToNumber(cbxDiaSalida.getSelectionModel().getSelectedItem()) - dayToNumber(dia) < 0){
+                            cbxDiaSalida.getSelectionModel().select(null);
+                            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dia de entrada", "La diferencia entre dia de salida y dia de entrada\nes mayor a un día");
+                        }else if(dayToNumber(dia) == 7){
+                            if(dayToNumber(cbxDiaSalida.getSelectionModel().getSelectedItem()) != 1 && dayToNumber(cbxDiaSalida.getSelectionModel().getSelectedItem()) != 7){
+                                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dia de entrada", "La diferencia entre dia de salida y dia de entrada\nes mayor a un día");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private int dayToNumber(String day){
+        if(day.equals("Lunes"))
+            return 1;
+        else if(day.equals("Martes"))
+            return 2;
+        else if(day.equals("Miércoles"))
+            return 3;
+        else if(day.equals("Jueves"))
+            return 4;
+        else if(day.equals("Viernes"))
+            return 5;
+        else if(day.equals("Sábado"))
+            return 6;
+        else 
+            return 7;
+    }
+
+    @FXML
+    private void actDiaSalida(ActionEvent event) {
+        if(cbxDiaSalida.getSelectionModel().getSelectedItem() != null){
+            Long id = 0L;
+            if(horarioSeleccionado != null){
+                id = horarioSeleccionado.getId();
+            }
+            String dia = cbxDiaSalida.getSelectionModel().getSelectedItem();
+            if(!emplSeleccionado.getHorarios().isEmpty()){
+                Boolean isSelect = false;
+                for(EmpleadosHorariosDTO horario : emplSeleccionado.getHorarios()){
+                    if(horario.isEstado()){
+                        if(horario.getDiaEntrada().equals(dia)){
+                            isSelect = true;
+                        }
+                    }
+                }
+                if(isSelect){
+                    cbxDiaSalida.getSelectionModel().select(null);
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dia de entrada", "El dia ya esta seleccionado");
+                }else{
+                    if(cbxDiaEntrada.getSelectionModel().getSelectedItem() != null){
+                        if(dayToNumber(dia) < 7  && dayToNumber(dia) - dayToNumber(cbxDiaEntrada.getSelectionModel().getSelectedItem()) > 1 || dayToNumber(dia) - dayToNumber(cbxDiaEntrada.getSelectionModel().getSelectedItem()) < 0){
+                            cbxDiaEntrada.getSelectionModel().select(null);
+                            Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dia de entrada", "La diferencia entre dia de salida y dia de entrada\nes mayor a un día");
+                        }else if(dayToNumber(dia) == 7){
+                            if(dayToNumber(cbxDiaEntrada.getSelectionModel().getSelectedItem()) != 1 && dayToNumber(cbxDiaEntrada.getSelectionModel().getSelectedItem()) != 7){
+                                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar dia de entrada", "La diferencia entre dia de salida y dia de entrada\nes mayor a un día");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

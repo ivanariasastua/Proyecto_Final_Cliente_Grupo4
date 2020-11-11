@@ -265,12 +265,12 @@
                                           <String fx:value="boton" />
                                        </styleClass>
                                     </JFXButton>
-                                    <JFXComboBox fx:id="cbxDiaEntrada" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="240.0" promptText="Día de Entrada" styleClass="comboBox">
+                                    <JFXComboBox fx:id="cbxDiaEntrada" focusColor="WHITE" labelFloat="true" onAction="#actDiaEntrada" prefHeight="40.0" prefWidth="240.0" promptText="Día de Entrada" styleClass="comboBox">
                                        <VBox.margin>
                                           <Insets bottom="20.0" left="5.0" right="5.0" top="20.0" />
                                        </VBox.margin>
                                     </JFXComboBox>
-                                    <JFXComboBox fx:id="cbxDiaSalida" labelFloat="true" prefHeight="40.0" prefWidth="240.0" promptText="Día de Salida" styleClass="comboBox">
+                                    <JFXComboBox fx:id="cbxDiaSalida" labelFloat="true" onAction="#actDiaSalida" prefHeight="40.0" prefWidth="240.0" promptText="Día de Salida" styleClass="comboBox">
                                        <VBox.margin>
                                           <Insets bottom="20.0" left="5.0" right="5.0" top="20.0" />
                                        </VBox.margin>
