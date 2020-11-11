@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -222,11 +224,21 @@ public class EmpleadosController extends Controller implements Initializable {
             if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null || txtPass.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre, Cédula y Contraseña son obligatorios");
                 return false;
+            }else{
+                if(!validarCorreo()){
+                    Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "El correo insertado no es valido");
+                    return false;
+                }
             }
         }else{
             if (txtCedula.getText() == null || txtNombre.getText() == null || txtCorreo.getText() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Los campos Nombre y Cédula son obligatorios");
                 return false;
+            }else{
+                if(!validarCorreo()){
+                    Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "El correo insertado no es valido");
+                    return false;
+                }
             }
         }
         return true;
@@ -239,6 +251,7 @@ public class EmpleadosController extends Controller implements Initializable {
         }else{
             if (emplSeleccionado != null) {  //editar
                 if (validarCampos()) {
+                    empleadoDTO = emplSeleccionado;
                     empleadoDTO.setId(emplSeleccionado.getId());
                     empleadoDTO.setCedula(txtCedula.getText());
                     empleadoDTO.setCorreo(txtCorreo.getText());
@@ -249,6 +262,7 @@ public class EmpleadosController extends Controller implements Initializable {
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
                     } else {
+                        System.out.println(res.getMensajeInterno());
                         Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
                     }
                 }
@@ -831,5 +845,12 @@ public class EmpleadosController extends Controller implements Initializable {
                 }
             }
         }
+    }
+
+    private Boolean validarCorreo(){
+        String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@"+"[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(txtCorreo.getText());
+        return matcher.matches();
     }
 }
