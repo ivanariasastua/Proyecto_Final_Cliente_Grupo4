@@ -165,9 +165,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private void actBuscarCategoria(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Categoria"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.DECORATED);
             categoriaSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
             if (categoriaSelec != null) {
                 txtCategoriaSelec.setText(categoriaSelec.getNombre());
@@ -179,9 +179,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private void actBuscarEmisor(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Emisor"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (emisorSelec != null) {
                 txtEmisorSelec.setText(emisorSelec.getNombre());
@@ -193,9 +193,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private void actBuscarResponsable(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Responsable"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (responsableSelec != null) {
                 txtResponsableSelec.setText(responsableSelec.getNombre());
@@ -207,9 +207,9 @@ public class IncidentesRegistradosController extends Controller implements Initi
     private void actBuscarArea(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Area"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarArea", false, StageStyle.DECORATED);
             areaSelec = (AreasTrabajosDTO) AppContext.getInstance().get("Area");
             if (areaSelec != null) {
                 txtAreaSelec.setText(areaSelec.getNombre());
@@ -418,7 +418,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         } else {
             if (incidentSelec == true) {
                 AppContext.getInstance().set("EstadosIncidentes", incidentSeleccionado);
-                FlowController.getInstance().goViewInNoResizableWindow("EstadosIncidentes", false, StageStyle.UTILITY);
+                FlowController.getInstance().goViewInNoResizableWindow("EstadosIncidentes", false, StageStyle.DECORATED);
             } else {
                 Mensaje.show(Alert.AlertType.WARNING, "Seleccionar incidente", "Debe seleccionar un incidente");
             }

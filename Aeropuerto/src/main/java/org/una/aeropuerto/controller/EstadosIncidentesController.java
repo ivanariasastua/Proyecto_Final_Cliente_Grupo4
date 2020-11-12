@@ -52,7 +52,8 @@ public class EstadosIncidentesController extends Controller implements Initializ
     Respuesta res;
     IncidentesRegistradosDTO incidenteRegistrado = new IncidentesRegistradosDTO();
     IncidentesRegistradosService incidentService = new IncidentesRegistradosService();
-    Map<String,String> modoDesarrollo;
+    Map<String, String> modoDesarrollo;
+    List<IncidentesRegistradosEstadosDTO> estados;
     @FXML
     private JFXButton btnGuardar;
 
@@ -68,6 +69,7 @@ public class EstadosIncidentesController extends Controller implements Initializ
 
     @Override
     public void initialize() {
+        estados = new ArrayList<>();
         cbxEstados.setValue(null);
         incidenteRegistrado = (IncidentesRegistradosDTO) AppContext.getInstance().get("EstadosIncidentes");
         txtIncidente.setText(incidenteRegistrado.getId().toString());
@@ -75,12 +77,12 @@ public class EstadosIncidentesController extends Controller implements Initializ
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
     }
 
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista EstadosIncidentes");
         modoDesarrollo.put("Guardar", "Guardar responde al método actGuardar");
     }
-    
+
     public void cargarColumnas() {
         tabla.getColumns().clear();
         TableColumn<IncidentesRegistradosEstadosDTO, String> colEstado = new TableColumn<>("Estado");
@@ -91,15 +93,33 @@ public class EstadosIncidentesController extends Controller implements Initializ
     }
 
     public void cargarEstados() {
+        estados = new ArrayList<>();
         tabla.getItems().clear();
         Respuesta resp = incidentService.findById(incidenteRegistrado.getId());
         if (resp.getEstado()) {
             IncidentesRegistradosDTO incident = (IncidentesRegistradosDTO) resp.getResultado("Incidentes_Registrados");
             if (incident.getIncidentesRegistradosEstados() != null) {
-                tabla.getItems().addAll((List<IncidentesRegistradosEstadosDTO>)incident.getIncidentesRegistradosEstados());
+                tabla.getItems().addAll((List<IncidentesRegistradosEstadosDTO>) incident.getIncidentesRegistradosEstados());
+                estados = incident.getIncidentesRegistradosEstados();
             }
         }
 
+    }
+
+    private boolean validarEstados() {
+        if (estados != null) {
+            for (int i = 0; i < estados.size(); i++) { 
+                if (estados.get(i).getEstado().equals("Anulado")) {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", "El incidente ya se encuentra Anulado");
+                    return false;
+                }
+                if (estados.get(i).getEstado().equals("Resuelto")) {
+                    Mensaje.show(Alert.AlertType.ERROR, "Error", "El incidente ya se encuentra Resuelto");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @FXML
@@ -113,12 +133,14 @@ public class EstadosIncidentesController extends Controller implements Initializ
                 estadosDto = new IncidentesRegistradosEstadosDTO();
                 estadosDto.setEstado(cbxEstados.getValue());
                 estadosDto.setIncidenteRegistrado(incidenteRegistrado);
-                Respuesta resp = estadosService.guardarIncidentesRegistradosEstados(estadosDto);
-                if (resp.getEstado()) {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Estado del incidente guardado correctamente");
-                    cargarEstados();
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                if (validarEstados()) {
+                    Respuesta resp = estadosService.guardarIncidentesRegistradosEstados(estadosDto);
+                    if (resp.getEstado()) {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Estado del incidente guardado correctamente");
+                        cargarEstados();
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    }
                 }
             }
         }
