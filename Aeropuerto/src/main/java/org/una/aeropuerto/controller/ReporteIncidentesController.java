@@ -60,42 +60,43 @@ public class ReporteIncidentesController extends Controller implements Initializ
     @FXML
     private JFXTextField txtEmisor;
 
-    Map<String,String> modoDesarrollo;
+    Map<String, String> modoDesarrollo;
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
-    
+
     private final ReporteService service = new ReporteService();
     EmpleadosDTO emisorSelec;
     EmpleadosDTO responsableSelec;
     private ListView<String> lvDesarrollo;
     @FXML
     private GridPane gpRoot;
+    String responsable, emisor;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        datosModoDesarrollo(); 
+        datosModoDesarrollo();
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         datosModoDesarrollo();
         ajustarPantalla();
-    }   
+    }
 
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista es ReporteIncidentes");
         modoDesarrollo.put("Buscar Responsable", "Buscar Responsable responde al método actBuscarResponsable");
         modoDesarrollo.put("Buscar Emisor", "Buscar Emisor responde al método actBuscarEmisor");
         modoDesarrollo.put("Generar Reporte", "Generar Reporte responde al método actGenerarReporte");
     }
-    
-    private void asignarInfoModoDesarrollo(){
+
+    private void asignarInfoModoDesarrollo() {
         lvDesarrollo.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     @Override
     public void cargarTema() {
     }
@@ -114,15 +115,15 @@ public class ReporteIncidentesController extends Controller implements Initializ
         asignarInfoModoDesarrollo();
         ajustarAlto(contenedor.getHeight());
         ajustarAncho(contenedor.getWidth());
-        
+
     }
 
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Responsable"));
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
-        }else{
+        } else {
             AppContext.getInstance().set("permisoFiltrar", true);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -134,10 +135,10 @@ public class ReporteIncidentesController extends Controller implements Initializ
 
     @FXML
     private void actBuscarEmisor(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Emisor"));
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
-        }else{
+        } else {
             AppContext.getInstance().set("permisoFiltrar", true);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
@@ -148,8 +149,8 @@ public class ReporteIncidentesController extends Controller implements Initializ
     }
 
     public boolean validarCampos() {
-        if (dpFin.getValue() == null || dpIni.getValue() == null || txtEmisor.getText() == null || txtResponsable.getText() == null) {
-            Mensaje.show(Alert.AlertType.WARNING, "Campos obligatorios", "Los siguientes campos son obligatorios para generar el reporte\n*Fechas\n*Estado\n*Responsable\n*Emisor");
+        if (dpFin.getValue() == null || dpIni.getValue() == null) {
+            Mensaje.show(Alert.AlertType.WARNING, "Campos obligatorios", "Los siguientes campos son obligatorios para generar el reporte\n*Fechas\n*Estado");
             return false;
         }
         if (dpFin.getValue().isBefore(dpIni.getValue())) {
@@ -161,19 +162,19 @@ public class ReporteIncidentesController extends Controller implements Initializ
 
     @FXML
     private void actGenerarReporte(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
-        }else{
+        } else {
             if (validarCampos()) {
                 Date ini = DateUtils.asDate(dpIni.getValue());
                 Date fin = DateUtils.asDate(dpFin.getValue());
                 Respuesta res;
                 if (rbActivo.isSelected()) {
-                    res = service.reporteIncident(ini, fin, true, txtResponsable.getText(), txtEmisor.getText(), true);
+                    res = validarBusqueda(ini, fin,true,true);
                 } else if (rbInactivo.isSelected()) {
-                    res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), true);
+                    res = validarBusqueda(ini, fin,false,true);
                 } else {
-                    res = service.reporteIncident(ini, fin, false, txtResponsable.getText(), txtEmisor.getText(), false);
+                    res = validarBusqueda(ini, fin,false,false);
                 }
                 if (res.getEstado()) {
                     String resp = (String) res.getResultado("Reporte");
@@ -195,6 +196,19 @@ public class ReporteIncidentesController extends Controller implements Initializ
         }
     }
 
+    public Respuesta validarBusqueda(Date ini, Date fin,boolean estado,boolean est) {
+        Respuesta res;
+        if ((txtResponsable.getText() == null && txtEmisor.getText() == null)) {
+            return res = service.reporteIncident(ini, fin, estado, "null", "null", est);
+        } else if ((txtResponsable.getText() != null && txtEmisor.getText() == null)) {
+            return res = service.reporteIncident(ini, fin, estado, txtResponsable.getText(), "null", est);
+        } else if ((txtResponsable.getText() == null && txtEmisor.getText() != null)) {
+            return res = service.reporteIncident(ini, fin, estado, "null", txtEmisor.getText(), est);
+        } else {
+            return res = service.reporteIncident(ini, fin, estado, txtResponsable.getText(), txtEmisor.getText(), est);
+        }
+    }
+
     @FXML
     private void actActivo(MouseEvent event) {
         rbAmbos.setSelected(false);
@@ -212,21 +226,21 @@ public class ReporteIncidentesController extends Controller implements Initializ
         rbActivo.setSelected(false);
         rbInactivo.setSelected(false);
     }
-    
-    private void ajustarPantalla(){
-        contenedor.widthProperty().addListener( w -> {
+
+    private void ajustarPantalla() {
+        contenedor.widthProperty().addListener(w -> {
             ajustarAncho(contenedor.getWidth());
         });
-        contenedor.heightProperty().addListener( h -> {
+        contenedor.heightProperty().addListener(h -> {
             ajustarAlto(Double.NaN);
         });
     }
-    
-    private void ajustarAncho(Double ancho){
+
+    private void ajustarAncho(Double ancho) {
         gpRoot.setPrefWidth(ancho);
     }
-    
-    private void ajustarAlto(Double Alto){
+
+    private void ajustarAlto(Double Alto) {
         gpRoot.setPrefHeight(Alto);
     }
 
