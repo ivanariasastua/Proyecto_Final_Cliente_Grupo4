@@ -56,8 +56,7 @@ import org.una.aeropuerto.util.UserAuthenticated;
  */
 public class AreasTrabajosController extends Controller implements Initializable {
 
-
-    private Map<String,String> modoDesarrollo;
+    private Map<String, String> modoDesarrollo;
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private AreasTrabajosService areasService = new AreasTrabajosService();
     private AreasTrabajosDTO areaSeleccionada = new AreasTrabajosDTO();
@@ -97,27 +96,26 @@ public class AreasTrabajosController extends Controller implements Initializable
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeigth(contenedor.getHeight());
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-           asignarInfoModoDesarrollo();
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
+            asignarInfoModoDesarrollo();
         }
     }
 
-    
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista AreasTrabajos");
         modoDesarrollo.put("Inactivar", "Inactivar responde al método actInactivarAreaT");
         modoDesarrollo.put("Buscar", "Buscar responde al método actBuscarAreasTrabajos");
         modoDesarrollo.put("Crear", "Crear responde al método actMantAreasTrabajo");
     }
-    
-    public void asignarInfoModoDesarrollo(){
+
+    public void asignarInfoModoDesarrollo() {
         lvDesarrollo.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     public void llenarColumnas() {
         tablaAreasTrabajo.getColumns().clear();
         TableColumn<AreasTrabajosDTO, String> colNombre = new TableColumn<>("Nombre");
@@ -134,27 +132,29 @@ public class AreasTrabajosController extends Controller implements Initializable
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            llenarColumnas();
-            tablaAreasTrabajo.getItems().clear();
             if (cbxFiltroAreas.getValue() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
             } else {
-                Respuesta res;
-                if (cbxFiltroAreas.getValue().equals("Nombre")) {
-                    res = areasService.getByNombre(txtBuscarAreasT.getText());
-                } else {
-                    if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
-                        res = areasService.getByEstado(true);
-                    } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
-                        res = areasService.getByEstado(false);
+                if (!txtBuscarAreasT.getText().isEmpty()) {
+                    llenarColumnas();
+                    tablaAreasTrabajo.getItems().clear();
+                    Respuesta res;
+                    if (cbxFiltroAreas.getValue().equals("Nombre")) {
+                        res = areasService.getByNombre(txtBuscarAreasT.getText());
                     } else {
-                        res = areasService.getByNombre("");
+                        if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
+                            res = areasService.getByEstado(true);
+                        } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
+                            res = areasService.getByEstado(false);
+                        } else {
+                            res = areasService.getByNombre("");
+                        }
                     }
-                }
-                if (res.getEstado()) {
-                    tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
+                    if (res.getEstado()) {
+                        tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
+                    }
                 }
             }
         }
@@ -268,9 +268,9 @@ public class AreasTrabajosController extends Controller implements Initializable
     private void actMantAreasTrabajo(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Crear"));
-            FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.DECORATED);
         }
     }
 }

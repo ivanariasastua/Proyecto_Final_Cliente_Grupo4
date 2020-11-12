@@ -98,8 +98,8 @@ public class BuscarCategoriasController extends Controller implements Initializa
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            tablaCategorias.getItems().clear();
-            if (txtBuscar.getText() != null) {
+            if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
+                tablaCategorias.getItems().clear();
                 cargarColumnas();
                 Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
                 if (res.getEstado()) {

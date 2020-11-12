@@ -143,7 +143,7 @@
                                           <Insets left="25.0" />
                                        </GridPane.margin>
                                     </JFXButton>
-                                    <Label styleClass="lblTitulo_1" text="Crear Precio" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                    <Label styleClass="lblTitulo_1" text="Guardar Costo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                        <GridPane.margin>
                                           <Insets bottom="300.0" />
                                        </GridPane.margin>

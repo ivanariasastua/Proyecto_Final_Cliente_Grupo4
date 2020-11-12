@@ -121,10 +121,10 @@ public class ReporteIncidentesController extends Controller implements Initializ
     private void actBuscarResponsable(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Responsable"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
         }else{
             AppContext.getInstance().set("permisoFiltrar", true);
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (responsableSelec != null) {
                 txtResponsable.setText(responsableSelec.getNombre());
@@ -136,10 +136,10 @@ public class ReporteIncidentesController extends Controller implements Initializ
     private void actBuscarEmisor(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Emisor"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
         }else{
             AppContext.getInstance().set("permisoFiltrar", true);
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (emisorSelec != null) {
                 txtEmisor.setText(emisorSelec.getNombre());

@@ -53,6 +53,7 @@ import org.una.aeropuerto.service.ServiciosPreciosService;
 import org.una.aeropuerto.service.ServiciosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -91,9 +92,9 @@ public class ServiciosController extends Controller implements Initializable {
     ServiciosPreciosService precioService;
     ServiciosPreciosDTO preciosDto = new ServiciosPreciosDTO();
     ServiciosPreciosDTO precioSelect = new ServiciosPreciosDTO();
-    Map<String,String> modoDesarrollo;
+    Map<String, String> modoDesarrollo;
     private ListView<String> lvDesarrollo;
-    
+
     @FXML
     private JFXButton btnGuardar;
     @FXML
@@ -107,6 +108,7 @@ public class ServiciosController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        txtCostoServico.setTextFormatter(Formato.getInstance().twoDecimalFormat());
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         ObservableList filtro = FXCollections.observableArrayList("Nombre", "Estado");
         cbxFiltroServicios.setItems(filtro);
@@ -126,13 +128,12 @@ public class ServiciosController extends Controller implements Initializable {
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             asignarInfoModoDesarrollo();
         }
     }
 
-    
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista Servicios");
         modoDesarrollo.put("Buscar Servicio", "Buscar responde al método actBuscarServicio");
@@ -142,14 +143,14 @@ public class ServiciosController extends Controller implements Initializable {
         modoDesarrollo.put("Limpiar Precio", "Limpiar responde al método actLimpiarCamposPrecio");
         modoDesarrollo.put("Guardar Precio", "Guardar responde al método actGuardarPrecio");
     }
-    
-    private void asignarInfoModoDesarrollo(){
+
+    private void asignarInfoModoDesarrollo() {
         lvDesarrollo.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     public void cargarVista(ServiciosDTO servicio) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("MantServicios.fxml"));
         Parent root = loader.load();
@@ -205,27 +206,29 @@ public class ServiciosController extends Controller implements Initializable {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Servicio"));
         } else {
-            cargarColumnas();
-            tablaServicios.getItems().clear();
-            if (cbxFiltroServicios.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-            } else {
-                Respuesta res;
-                if (cbxFiltroServicios.getValue().equals("Nombre")) {
-                    res = servService.getByNombre(txtBuscarServicio.getText());
+            if (!txtBuscarServicio.getText().isEmpty()) {
+                cargarColumnas();
+                tablaServicios.getItems().clear();
+                if (cbxFiltroServicios.getValue() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
                 } else {
-                    if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
-                        res = servService.getByEstado(true);
-                    } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
-                        res = servService.getByEstado(false);
+                    Respuesta res;
+                    if (cbxFiltroServicios.getValue().equals("Nombre")) {
+                        res = servService.getByNombre(txtBuscarServicio.getText());
                     } else {
-                        res = servService.getByNombre("");
+                        if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
+                            res = servService.getByEstado(true);
+                        } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
+                            res = servService.getByEstado(false);
+                        } else {
+                            res = servService.getByNombre("");
+                        }
                     }
-                }
-                if (res.getEstado()) {
-                    tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                    if (res.getEstado()) {
+                        tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                    }
                 }
             }
         }
@@ -269,9 +272,9 @@ public class ServiciosController extends Controller implements Initializable {
     private void actCrearServicios(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Crear Servicio"));
-            FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("MantServicios", false, StageStyle.DECORATED);
         }
     }
 
@@ -286,25 +289,15 @@ public class ServiciosController extends Controller implements Initializable {
                     precioSelect.setCosto(Float.valueOf(txtCostoServico.getText()));
                     precioSelect.setServicio(servicSeleccionado);
                     Respuesta resp = precioService.modificarPrecioServicio(precioSelect.getId(), precioSelect);
-                    if (resp.getEstado()) {
-                        cargarPrecios();
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado Correctamente", "Precio editado correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
-                    }
+                    respuesta(resp);
                 }
             } else {
-                if (txtCostoServico.getText() != null) {
+                if (txtCostoServico.getText() != null || !txtCostoServico.getText().isEmpty()) {
                     preciosDto = new ServiciosPreciosDTO();
                     preciosDto.setCosto(Float.valueOf(txtCostoServico.getText()));
                     preciosDto.setServicio(servicSeleccionado);
                     Respuesta resp = precioService.guardarPrecioServicio(preciosDto);
-                    if (resp.getEstado()) {
-                        cargarPrecios();
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
-                    }
+                    respuesta(resp);
                 } else {
                     Mensaje.show(Alert.AlertType.WARNING, "Campo requerido", "El campo Precio es obligatorio");
                 }
@@ -312,14 +305,23 @@ public class ServiciosController extends Controller implements Initializable {
         }
     }
 
+    private void respuesta(Respuesta resp) {
+        if (resp.getEstado()) {
+            cargarPrecios();
+            Mensaje.show(Alert.AlertType.INFORMATION, "Guardado Correctamente", "Precio guardado correctamente");
+        } else {
+            Mensaje.show(Alert.AlertType.ERROR, "Error", resp.getMensaje());
+        }
+    }
+
     @FXML
     private void actPane(MouseEvent event) {
-        if(!UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (!UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             if (tabPrecios.isSelected() && servSelec == false) {
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(tabServicios);
                 Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Servicio", "Debe seleccionar un servicio");
-            }else if (tabPrecios.isSelected() && servSelec == true) {
+            } else if (tabPrecios.isSelected() && servSelec == true) {
                 tablaPrecios.getItems().clear();
                 txtServicioSelec.setText(servicSeleccionado.getNombre());
                 cargarPrecios();
@@ -341,10 +343,10 @@ public class ServiciosController extends Controller implements Initializable {
     }
 
     public void cargarPrecios() {
+        tablaPrecios.getItems().clear();
         Respuesta res = servService.findById(servicSeleccionado.getId());
         if (res.getEstado()) {
             ServiciosDTO servic = (ServiciosDTO) res.getResultado("Servicios");
-            tablaPrecios.getItems().clear();
             if (servic.getServiciosPrecios() != null) {
                 tablaPrecios.getItems().addAll((List<ServiciosPreciosDTO>) servic.getServiciosPrecios());
             }
@@ -407,9 +409,9 @@ public class ServiciosController extends Controller implements Initializable {
 
     @FXML
     private void actLimpiarCamposPrecio(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Precio"));
-        }else{
+        } else {
             limpiarPrecios();
         }
     }
