@@ -9,7 +9,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ProgressIndicator;
 import org.una.aeropuerto.util.AppContext;
 
 /**
@@ -18,6 +20,9 @@ import org.una.aeropuerto.util.AppContext;
  * @author Ivan Josué Arias Astua
  */
 public class CargarController extends Controller implements Initializable {
+
+    @FXML
+    private ProgressIndicator piCargar;
 
 
     /**

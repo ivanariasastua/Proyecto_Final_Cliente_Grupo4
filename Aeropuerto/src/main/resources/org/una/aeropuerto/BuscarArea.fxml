@@ -16,8 +16,14 @@
          <children>
             <HBox alignment="CENTER" prefHeight="74.0" prefWidth="647.0">
                <children>
-                  <JFXTextField fx:id="txtBuscar" prefHeight="50.0" prefWidth="448.0" promptText="Buscar por nombre" styleClass="campos_texto_1" />
-                  <JFXButton onAction="#accionBuscar" prefHeight="43.0" prefWidth="138.0" styleClass="button_3" text="Buscar" />
+                  <JFXTextField fx:id="txtBuscar" prefHeight="50.0" prefWidth="969.0" promptText="Buscar por nombre" styleClass="campos_texto_1">
+                     <HBox.margin>
+                        <Insets left="30.0" right="10.0" />
+                     </HBox.margin></JFXTextField>
+                  <JFXButton minWidth="-Infinity" onAction="#accionBuscar" prefHeight="43.0" prefWidth="138.0" styleClass="button_3" text="Buscar">
+                     <HBox.margin>
+                        <Insets left="10.0" right="30.0" />
+                     </HBox.margin></JFXButton>
                </children>
             </HBox>
             <TableView fx:id="tvAreas" onMouseClicked="#accionTabla" prefHeight="395.0" prefWidth="587.0">

@@ -720,8 +720,7 @@ public class EmpleadosController extends Controller implements Initializable {
             areaSelected = tvAreas.getSelectionModel().getSelectedItem();
         }
     }
-    
-    
+       
     private Boolean validarLogicaHorarios() throws NumberFormatException{
         String diaEntrada = cbxDiaEntrada.getSelectionModel().getSelectedItem(), diaSalida = cbxDiaSalida.getSelectionModel().getSelectedItem();
         String de, ds, he, hs, me, ms;

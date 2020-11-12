@@ -17,12 +17,12 @@
          <children>
             <HBox alignment="CENTER" prefHeight="68.0" prefWidth="746.0">
                <children>
-                  <JFXTextField fx:id="txtBuscarEmpleados" prefHeight="38.0" prefWidth="583.0" styleClass="campos_texto_1">
+                  <JFXTextField fx:id="txtBuscarEmpleados" prefHeight="38.0" prefWidth="912.0" styleClass="campos_texto_1">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JFXTextField>
-                  <JFXComboBox fx:id="cbBuscarEmpleado" onAction="#accionBuscarEmpleado" prefHeight="38.0" prefWidth="174.0" promptText="Buscar por:" styleClass="comboBox" />
+                  <JFXComboBox fx:id="cbBuscarEmpleado" minWidth="-Infinity" onAction="#accionBuscarEmpleado" prefHeight="38.0" prefWidth="174.0" promptText="Buscar por:" styleClass="comboBox" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
