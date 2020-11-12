@@ -114,8 +114,8 @@ public class BuscarServiciosController extends Controller implements Initializab
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            tabla.getItems().clear();
-            if (txtBuscar.getText() != null) {
+            if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
+                tabla.getItems().clear();
                 cargarColumnas();
                 Respuesta res = servService.getByNombre(txtBuscar.getText());
                 if (res.getEstado()) {

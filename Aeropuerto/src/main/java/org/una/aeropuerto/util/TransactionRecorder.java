@@ -21,6 +21,5 @@ public class TransactionRecorder {
         EmpleadosDTO usu =UserAuthenticated.getInstance().getUsuario();
         TransaccionesDTO dto = new TransaccionesDTO(0L,usu,accion,new Date());
         Respuesta res =service.guardarTransaccion(dto);
-        System.out.println(res.getMensaje());
     }
 }

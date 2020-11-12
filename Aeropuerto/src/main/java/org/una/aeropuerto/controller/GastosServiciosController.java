@@ -92,7 +92,7 @@ public class GastosServiciosController extends Controller implements Initializab
     EmpleadosDTO responsableSelec;
     ServiciosDTO servicioSelec;
     private ListView<String> lvDesarrollo;
-    private Map<String,String> modoDesarrollo;
+    private Map<String, String> modoDesarrollo;
     @FXML
     private JFXTextField txtServicio;
     @FXML
@@ -127,12 +127,12 @@ public class GastosServiciosController extends Controller implements Initializab
         btnGuardar.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeigth(contenedor.getHeight());
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             asignarInfoModoDesarrollo();
         }
     }
 
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista GastosServicios");
         modoDesarrollo.put("Buscar Gasto", "Buscar responde al método actBuscarGastosServicios");
@@ -143,14 +143,14 @@ public class GastosServiciosController extends Controller implements Initializab
         modoDesarrollo.put("Limpiar Gasto", "Limpiar responde al método actLimpiarGastoS");
         modoDesarrollo.put("Guardar Gasto", "Guardar responde al método actGuardarGastoS");
     }
-    
-    private void asignarInfoModoDesarrollo(){
+
+    private void asignarInfoModoDesarrollo() {
         lvDesarrollo.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     public void llenarComboBoxs() {
         ObservableList filtro = FXCollections.observableArrayList("Empresa", "Número de contrato", "Servicio");
         cbxFiltro.setItems(filtro);
@@ -350,13 +350,13 @@ public class GastosServiciosController extends Controller implements Initializab
                     guardar();
                     if (responsableSelec.getNombre() != null) {
                         servGastDTO.setResponsable(responsableSelec);
-                    }else{
+                    } else {
                         servGastDTO.setResponsable(gastoSelecciondo.getResponsable());
                     }
                     if (servicioSelec.getNombre() == null) {
                         servGastDTO.setServicio(gastoSelecciondo.getServicio());
-                        
-                    }else{
+
+                    } else {
                         servGastDTO.setServicio(servicioSelec);
                     }
                     Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
@@ -459,7 +459,7 @@ public class GastosServiciosController extends Controller implements Initializab
         TableColumn<ServiciosGastosDTO, String> colNumC = new TableColumn<>("Número contrato");
         colNumC.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNumeroContrato()));
         TableColumn<ServiciosGastosDTO, String> colfecha = new TableColumn<>("Fecha registro");
-        colfecha.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getFechaRegistro())));
+        colfecha.setCellValueFactory((p) -> new SimpleStringProperty(DateUtils.asLocalDate(p.getValue().getFechaRegistro()).toString()));
         TableColumn<ServiciosGastosDTO, String> colServi = new TableColumn<>("Servicio");
         colServi.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getServicio())));
         TableColumn<ServiciosGastosDTO, String> colPago = new TableColumn<>("Estado de Pago");
@@ -479,23 +479,25 @@ public class GastosServiciosController extends Controller implements Initializab
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Gasto"));
         } else {
-            cargarColumnasTabla();
-            tablaGastosS.getItems().clear();
             if (cbxFiltro.getValue() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
             } else {
-                Respuesta res;
-                if (cbxFiltro.getValue().equals("Empresa")) {
-                    res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
-                } else if (cbxFiltro.getValue().equals("Número de contrato")) {
-                    res = servGastService.getByContrato(txtBuscarGastosS.getText());
-                } else {
-                    res = servGastService.findByServicio(txtBuscarGastosS.getText());
-                }
-                if (res.getEstado()) {
-                    tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+                if (!txtBuscarGastosS.getText().isEmpty()) {
+                    cargarColumnasTabla();
+                    tablaGastosS.getItems().clear();
+                    Respuesta res;
+                    if (cbxFiltro.getValue().equals("Empresa")) {
+                        res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
+                    } else if (cbxFiltro.getValue().equals("Número de contrato")) {
+                        res = servGastService.getByContrato(txtBuscarGastosS.getText());
+                    } else {
+                        res = servGastService.findByServicio(txtBuscarGastosS.getText());
+                    }
+                    if (res.getEstado()) {
+                        tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+                    }
                 }
             }
         }
@@ -505,9 +507,9 @@ public class GastosServiciosController extends Controller implements Initializab
     private void actBuscarResponsable(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Empleado"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if (responsableSelec != null) {
                 txtResponsable.setText(responsableSelec.getNombre());
@@ -519,9 +521,9 @@ public class GastosServiciosController extends Controller implements Initializab
     private void actBuscarServicio(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Servicio"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.DECORATED);
             servicioSelec = (ServiciosDTO) AppContext.getInstance().get("servSelect");
             if (servicioSelec != null) {
                 txtServicio.setText(servicioSelec.getNombre());
@@ -533,35 +535,35 @@ public class GastosServiciosController extends Controller implements Initializab
     public void cargarTema() {
     }
 
-    private void addListner(){
-        contenedor.widthProperty().addListener( w -> {
+    private void addListner() {
+        contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());
         });
-        contenedor.heightProperty().addListener( h -> {
+        contenedor.heightProperty().addListener(h -> {
             adjustHeigth(contenedor.getHeight());
         });
     }
-    
-    private void adjustWidth(double ancho){
+
+    private void adjustWidth(double ancho) {
         bpRoot.setPrefWidth(ancho);
         vbRoot.setPrefWidth(ancho);
         tabPane.setPrefWidth(ancho);
         vbTabla.setPrefWidth(ancho);
         tablaGastosS.setPrefWidth(ancho);
         gpCrearEditar.setPrefWidth(ancho);
-        cbxDuracion.setPrefWidth((ancho/2)-50);
-        cbxEstadoGasto.setPrefWidth((ancho/2)-50);
-        cbxEstadoPago.setPrefWidth((ancho/2)-50);
-        cbxPerioricidad.setPrefWidth((ancho/2)-50);
-        cbxTiempo.setPrefWidth((ancho/2)-50);
+        cbxDuracion.setPrefWidth((ancho / 2) - 50);
+        cbxEstadoGasto.setPrefWidth((ancho / 2) - 50);
+        cbxEstadoPago.setPrefWidth((ancho / 2) - 50);
+        cbxPerioricidad.setPrefWidth((ancho / 2) - 50);
+        cbxTiempo.setPrefWidth((ancho / 2) - 50);
     }
-    
-    private void adjustHeigth(double altura){
+
+    private void adjustHeigth(double altura) {
         bpRoot.setPrefHeight(altura);
         vbRoot.setPrefHeight(altura);
-        tabPane.setPrefHeight(altura-50);
-        vbTabla.setPrefHeight(altura-100);
-        tablaGastosS.setPrefHeight(altura-261);
+        tabPane.setPrefHeight(altura - 50);
+        vbTabla.setPrefHeight(altura - 100);
+        tablaGastosS.setPrefHeight(altura - 261);
         gpCrearEditar.setPrefHeight(altura);
     }
 }

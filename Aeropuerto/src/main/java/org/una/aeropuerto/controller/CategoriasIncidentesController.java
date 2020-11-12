@@ -65,7 +65,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
     IncidentesCategoriasDTO categSuperiorSelec = new IncidentesCategoriasDTO();
-    private Map<String,String> modoDesarrollo;
+    private Map<String, String> modoDesarrollo;
     @FXML
     private JFXButton btnGuardar;
     @FXML
@@ -104,12 +104,12 @@ public class CategoriasIncidentesController extends Controller implements Initia
         adjustWidth(contenedor.getWidth());
         adjustHeigth(contenedor.getHeight());
         limpiarCampos();
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             asignarInfoModoDesarrollo();
         }
     }
 
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista CategoriasIncidentes");
         modoDesarrollo.put("Buscar", "Buscar responde al método actBuscarCategorias");
@@ -119,14 +119,14 @@ public class CategoriasIncidentesController extends Controller implements Initia
         modoDesarrollo.put("Limpiar", "Limpiar responde al método actLimpiar");
         modoDesarrollo.put("Guardar", "Guardar responde al método actGuardarCategoria");
     }
-    
-    public void asignarInfoModoDesarrollo(){
+
+    public void asignarInfoModoDesarrollo() {
         lvDesarrollo.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     public void clickTabla() {
         tablaCategorias.setRowFactory(tv -> {
             TableRow<IncidentesCategoriasDTO> row = new TableRow();
@@ -166,27 +166,29 @@ public class CategoriasIncidentesController extends Controller implements Initia
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            cargarColumnas();
-            tablaCategorias.getItems().clear();
             if (cbxFiltroCategorias.getValue() == null) {
                 Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
             } else {
-                Respuesta res;
-                if (cbxFiltroCategorias.getValue().equals("Nombre")) {
-                    res = categoriaService.getByNombre(txtBuscarCateg.getText());
-                } else {
-                    if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
-                        res = categoriaService.getByEstado(true);
-                    } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
-                        res = categoriaService.getByEstado(false);
+                if (!txtBuscarCateg.getText().isEmpty() || txtBuscarCateg.getText() != null) {
+                    cargarColumnas();
+                    tablaCategorias.getItems().clear();
+                    Respuesta res;
+                    if (cbxFiltroCategorias.getValue().equals("Nombre")) {
+                        res = categoriaService.getByNombre(txtBuscarCateg.getText());
                     } else {
-                        res = categoriaService.getByNombre("");
+                        if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
+                            res = categoriaService.getByEstado(true);
+                        } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
+                            res = categoriaService.getByEstado(false);
+                        } else {
+                            res = categoriaService.getByNombre("");
+                        }
                     }
-                }
-                if (res.getEstado()) {
-                    tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías ", res.getMensaje());
+                    if (res.getEstado()) {
+                        tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías ", res.getMensaje());
+                    }
                 }
             }
         }
@@ -289,14 +291,26 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private void actBuscarCatSuperior(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Categoría"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.DECORATED);
         } else {
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.UTILITY);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarCategorias", false, StageStyle.DECORATED);
             categSuperiorSelec = (IncidentesCategoriasDTO) AppContext.getInstance().get("CategoriaSup");
             if (categSuperiorSelec != null) {
                 txtcategoriaSuperior.setText(categSuperiorSelec.getNombre());
             }
         }
+    }
+
+    private boolean validarCategoriaSuperior(IncidentesCategoriasDTO categoria, IncidentesCategoriasDTO superior) {
+        if (categSuperiorSelec.getNombre() != null && txtcategoriaSuperior.getText() != "(No tiene categoria superior)") {
+            if (categoria.getId().equals(superior.getId())) {
+                Mensaje.show(Alert.AlertType.ERROR, "Error al guardar la Categoría", "La Categoría superior no puede ser ella misma");
+                return false;
+            }else{
+                return true;
+            }
+        }
+        return true;
     }
 
     @FXML
@@ -312,11 +326,13 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     if (categSuperiorSelec.getNombre() != null && txtcategoriaSuperior.getText() != "(No tiene categoria superior)") {
                         categoriaSelec.setCategoriaSuperior(categSuperiorSelec);
                     }
-                    Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoría editada correctamente");
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                    if (validarCategoriaSuperior(categoriaSelec, categSuperiorSelec)) {
+                        Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
+                        if (res.getEstado()) {
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoría editada correctamente");
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
+                        }
                     }
                 }
             } else {
@@ -350,12 +366,12 @@ public class CategoriasIncidentesController extends Controller implements Initia
 
     @FXML
     private void actLimpiar(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar"));
-        }else{
+        } else {
             limpiarCampos();
         }
-        
+
     }
 
     public void limpiarCampos() {
