@@ -2,12 +2,12 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-
 
 <GridPane fx:id="gpRoot" prefHeight="650.0" prefWidth="800.0" styleClass="raiz" stylesheets="@Tema_Oscuro.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.una.aeropuerto.controller.ReporteHorasLaboradasController">
   <columnConstraints>
@@ -27,7 +27,10 @@
       <Label styleClass="lblTitulo_1" stylesheets="@Tema_Oscuro.css" text="Reporte de Horas Laboradas" GridPane.columnSpan="2" />
       <Label styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css" text="Generar reporte por rango de fechas" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <Label styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Cédula" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-      <JFXTextField fx:id="txtCedula" prefHeight="29.0" prefWidth="755.0" promptText="Digite la cédula de un empleado o dejar en blanco para obtener todos los empleados" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+      <JFXTextField fx:id="txtCedula" onMouseClicked="#actSeleccionarEmpleado" prefHeight="29.0" prefWidth="755.0" promptText="Seleccionar empleado" styleClass="campos_texto_1" stylesheets="@Tema_Oscuro.css" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="10.0" right="10.0" />
+         </GridPane.margin></JFXTextField>
       <Label alignment="CENTER" prefHeight="25.0" prefWidth="137.0" styleClass="texto" stylesheets="@Tema_Oscuro.css" text="Fecha de Regitro" GridPane.columnSpan="2" GridPane.rowIndex="4" />
       <DatePicker fx:id="dpInicio" promptText="Desde:" GridPane.rowIndex="5" />
       <DatePicker fx:id="dpFinal" promptText="Hasta:" GridPane.columnIndex="1" GridPane.rowIndex="5" />

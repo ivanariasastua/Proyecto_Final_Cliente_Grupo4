@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
@@ -32,11 +33,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.UserAuthenticated;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.StageStyle;
 import org.una.aeropuerto.util.AppContext;
+import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.dto.EmpleadosDTO;
 
 public class ReporteHorasLaboradasController extends Controller implements Initializable{
 
@@ -75,6 +80,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista es ReporteHorasLaboradas");
         modoDesarrollo.put("Generar Reporte", "Generar Reporte responde al método generarReporte");
+        modoDesarrollo.put("Seleccionar Empleado", "Seleccionar empleado responde al método actSeleccionarEmpleado");
     }
     
     private void asignarInfoModoDesarrollo(){
@@ -90,6 +96,16 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
                                                 + "Seleccione el rango de fechas para generar el reporte");
             return false;
         }
+        
+        if(dpInicio.getValue().isAfter(dpFinal.getValue())){
+            Mensaje.show(Alert.AlertType.WARNING, "Error de fechas", "El orden de las fechas esta invertido");
+            return false;
+        }
+        
+        if(dpInicio.getValue().isAfter(LocalDate.now()) || dpFinal.getValue().isAfter(LocalDate.now())){
+            Mensaje.show(Alert.AlertType.WARNING, "Error de fechas", "No se puede seleccionar fecha porteriores a la actual");
+            return false;
+        }
         return true;
     }
     
@@ -101,7 +117,13 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
             if(validarDatos()){
                 Date fecha1 = Date.from(dpInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
                 Date fecha2 = Date.from(dpFinal.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-                Respuesta respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
+                Respuesta respuesta;
+                if(txtCedula.getText().isBlank()){
+                    respuesta = reporteService.reporteHorasLaboradas("null", fecha1, fecha2);
+                }else{
+                    respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
+                }
+                
                 if(respuesta.getEstado()){
                     String res = (String) respuesta.getResultado("Reporte");
                     byte[] bytes = Base64.getDecoder().decode(res);
@@ -143,5 +165,19 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     
     private void ajustarAlto(Double Alto){
         gpRoot.setPrefHeight(Alto);
+    }
+
+    @FXML
+    private void actSeleccionarEmpleado(MouseEvent event) {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Seleccionar Empleado"));
+        }else{
+            AppContext.getInstance().set("empSelect", null);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", Boolean.FALSE, StageStyle.DECORATED);
+            EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            if(emplSeleccionado != null){
+                txtCedula.setText(emplSeleccionado.getCedula());
+            }  
+        }
     }
 }
