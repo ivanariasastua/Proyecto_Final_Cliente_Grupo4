@@ -598,7 +598,24 @@ public class EmpleadosController extends Controller implements Initializable {
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             jefeSelect  = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             if(jefeSelect != null){
-                txtJefe.setText(jefeSelect.getNombre());
+                String mensaje = "";
+                if(emplSeleccionado != null){
+                    if(jefeSelect.getJefe() != null){
+                       if(jefeSelect.getJefe().getId().equals(emplSeleccionado.getId())){
+                           Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Jefe", "El jefe seleccionado, tiene como jefe el empleado que esta siendo editando\nNo se puede proceder");
+                           jefeSelect = null;
+                       }else if(jefeSelect.getId().equals(emplSeleccionado.getId())){
+                           Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Jefe", "El jefe seleccionado, es el empleado que esta siendo editando\nNo se puede proceder");
+                           jefeSelect = null;
+                       }else{
+                           txtJefe.setText(jefeSelect.getNombre());
+                       }
+                    }else{
+                        txtJefe.setText(jefeSelect.getNombre());
+                    }
+                }else{
+                    txtJefe.setText(jefeSelect.getNombre());
+                }
             }else{
                 txtJefe.setText("Sin jefe directo");
             }
