@@ -17,7 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -110,18 +112,30 @@ public class TransaccionesController extends Controller implements Initializable
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lv.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            if(validarCampos()){
-                Respuesta res = service.getByFiltro(Date.from(dpDesde.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(dpHasta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), empleado);
-                if(res.getEstado()){
-                    List<TransaccionesDTO> lista = (List<TransaccionesDTO>) res.getResultado("Transacciones");
-                    tranformarDatos(lista);
-                    tablaTransac.getItems().clear();
-                    tablaTransac.getItems().addAll(lista);
-                }else{
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Transacciones", res.getMensaje());
-                }
-            }
+            AppContext.getInstance().set("Task", buscarTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task buscarTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if(validarCampos()){
+                    Respuesta res = service.getByFiltro(Date.from(dpDesde.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(dpHasta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), empleado);
+                    if(res.getEstado()){
+                        List<TransaccionesDTO> lista = (List<TransaccionesDTO>) res.getResultado("Transacciones");
+                        tranformarDatos(lista);
+                        tablaTransac.getItems().clear();
+                        tablaTransac.getItems().addAll(lista);
+                    }else{
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Transacciones", res.getMensaje());
+                    }
+                }
+                return true;
+            }
+            
+        };
     }
     
     private void tranformarDatos(List<TransaccionesDTO> lista){
@@ -177,18 +191,32 @@ public class TransaccionesController extends Controller implements Initializable
         }
         return null;
     }
+    
+    private Task crearReporteTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                JasperPrint jp = crearJasperPrint();
+                    if(jp != null){
+                    JasperViewer viewer = new JasperViewer(jp, false);
+                    viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+                    Platform.runLater(() -> {
+                        viewer.setVisible(true);
+                    });
+                }
+                return true;
+            }
+            
+        };
+    }
 
     @FXML
     private void actGenerarReporte(ActionEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            
+           lv.getSelectionModel().select(modoDesarrollo.get("Generar"));
         }else{
-            JasperPrint jp = crearJasperPrint();
-            if(jp != null){
-                JasperViewer viewer = new JasperViewer(jp, false);
-                viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
-                viewer.setVisible(true);
-            }
+            AppContext.getInstance().set("Task", crearReporteTask());
+            FlowController.getInstance().goViewCargar();
         }
     }
     

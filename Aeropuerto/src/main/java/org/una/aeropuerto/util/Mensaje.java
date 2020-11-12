@@ -6,6 +6,7 @@
 package org.una.aeropuerto.util;
 
 import java.util.Optional;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -28,20 +29,24 @@ public class Mensaje {
     
 
     public static void show(AlertType tipo, String titulo, String mensaje) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(tipo);
+            alert.setTitle(titulo);
+            alert.setHeaderText(null);
+            alert.setContentText(mensaje);
+            alert.showAndWait();
+        });
     }
 
     public static void showModal(AlertType tipo, String titulo, Window padre, String mensaje) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.initOwner(padre);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(tipo);
+            alert.setTitle(titulo);
+            alert.setHeaderText(null);
+            alert.initOwner(padre);
+            alert.setContentText(mensaje);
+            alert.showAndWait();
+        });
     }
     
     public static Boolean showConfirmation(String titulo, Window padre, String mensaje) {

@@ -24,9 +24,11 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -249,45 +251,58 @@ public class EmpleadosController extends Controller implements Initializable {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar Empleado"));
         }else{
-            if (emplSeleccionado != null) {  //editar
-                if (validarCampos()) {
-                    empleadoDTO = emplSeleccionado;
-                    empleadoDTO.setId(emplSeleccionado.getId());
-                    empleadoDTO.setCedula(txtCedula.getText());
-                    empleadoDTO.setCorreo(txtCorreo.getText());
-                    empleadoDTO.setJefe(jefeSelect);
-                    empleadoDTO.setNombre(txtNombre.getText());
-                    empleadoDTO.setRol(cbxRoles.getValue());
-                    Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
-                    } else {
-                        System.out.println(res.getMensajeInterno());
-                        Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
-                    }
-                }
-            } else {  //guardar nuevo
-                if (validarCampos()) {
-                    empleadoDTO = new EmpleadosDTO();
-                    empleadoDTO.setCedula(txtCedula.getText());
-                    empleadoDTO.setCorreo(txtCorreo.getText());
-                    empleadoDTO.setContrasenaEncriptada(txtPass.getText());
-                    empleadoDTO.setJefe(jefeSelect);
-                    empleadoDTO.setNombre(txtNombre.getText());
-                    empleadoDTO.setRol(cbxRoles.getValue());
-                    Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
-                    if (res.getEstado()) {
-                        Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
-                        emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
-                        tablaHorarios.getItems().clear();
-                        tvAreas.getItems().clear();
-                    } else {
-                        System.out.println(res.getMensajeInterno());
-                        Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
-                    }
-                }
-            }
+            AppContext.getInstance().set("Task", guardarEmpleadoTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task guardarEmpleadoTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                Platform.runLater(() -> {
+                    if (emplSeleccionado != null) {  //editar
+                        if (validarCampos()) {
+                            empleadoDTO = emplSeleccionado;
+                            empleadoDTO.setId(emplSeleccionado.getId());
+                            empleadoDTO.setCedula(txtCedula.getText());
+                            empleadoDTO.setCorreo(txtCorreo.getText());
+                            empleadoDTO.setJefe(jefeSelect);
+                            empleadoDTO.setNombre(txtNombre.getText());
+                            empleadoDTO.setRol(cbxRoles.getValue());
+                            Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
+                            if (res.getEstado()) {
+                                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
+                            } else {
+                                System.out.println(res.getMensajeInterno());
+                                Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
+                            }
+                        }
+                    } else {  //guardar nuevo
+                        if (validarCampos()) {
+                            empleadoDTO = new EmpleadosDTO();
+                            empleadoDTO.setCedula(txtCedula.getText());
+                            empleadoDTO.setCorreo(txtCorreo.getText());
+                            empleadoDTO.setContrasenaEncriptada(txtPass.getText());
+                            empleadoDTO.setJefe(jefeSelect);
+                            empleadoDTO.setNombre(txtNombre.getText());
+                            empleadoDTO.setRol(cbxRoles.getValue());
+                            Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
+                            if (res.getEstado()) {
+                                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
+                                emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
+                                tablaHorarios.getItems().clear();
+                                tvAreas.getItems().clear();
+                            } else {
+                                Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
+                            }
+                        }
+                    }
+                });
+                return true;
+            }
+        
+        };
     }
 
     void limpiarCampos() {
@@ -395,55 +410,68 @@ public class EmpleadosController extends Controller implements Initializable {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Guardar Horario"));
         }else{
-            if (horarioSeleccionado != null) {
-                if (validarCamposHorario()) {
-                    horarioDTO = new EmpleadosHorariosDTO();
-                    horarioDTO.setId(horarioSeleccionado.getId());
-                    horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
-                    horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-                    horarioDTO.setEmpleado(emplSeleccionado);
-                    horarioDTO.setHoraEntrada(obtenerFecha(true));
-                    horarioDTO.setHoraSalida(obtenerFecha(false));
-                    if(validarChoqueHorarios(horarioDTO)){
-                        Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
-                        if (res.getEstado()) {
-                            EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
-                            Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
-                            sustituirId(tablaHorarios.getItems(), save);
-                            sustituirId(emplSeleccionado.getHorarios(), save);
-                            tablaHorarios.refresh();
-                            LimpiarCamposHorarios();
-                        }else{
-                            Mensaje.show(Alert.AlertType.WARNING, "Guardar Areas", res.getMensaje());
-                        }
-                    }
-                }
-            } else {
-                if (validarCamposHorario()) {
-                    horarioDTO = new EmpleadosHorariosDTO();
-                    horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
-                    horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
-                    horarioDTO.setEmpleado(emplSeleccionado);
-                    horarioDTO.setHoraEntrada(obtenerFecha(true));
-                    horarioDTO.setHoraSalida(obtenerFecha(false));
-                    if(validarChoqueHorarios(horarioDTO)){
-                    Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
-                        if (res.getEstado()) {
-                            EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
-                            Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
-                            tablaHorarios.getItems().add(save);
-                            emplSeleccionado.getHorarios().add(save);
-                            tablaHorarios.refresh();
-                            LimpiarCamposHorarios();
-                        }else{
-                            Mensaje.show(Alert.AlertType.WARNING, "Guardar Areas", res.getMensaje());
-                        }
-                    }
-                }
-            }
-            
-            
+            AppContext.getInstance().set("Task", guardarHorarioTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task guardarHorarioTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (horarioSeleccionado != null) {
+                    if (validarCamposHorario()) {
+                        horarioDTO = new EmpleadosHorariosDTO();
+                        horarioDTO.setId(horarioSeleccionado.getId());
+                        horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
+                        horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
+                        horarioDTO.setEmpleado(emplSeleccionado);
+                        horarioDTO.setHoraEntrada(obtenerFecha(true));
+                        horarioDTO.setHoraSalida(obtenerFecha(false));
+                        if(validarChoqueHorarios(horarioDTO)){
+                            Respuesta res = horarioService.modificarEmpleadoHorario(horarioSeleccionado.getId(), horarioDTO);
+                            if (res.getEstado()) {
+                                EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
+                                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
+                                sustituirId(tablaHorarios.getItems(), save);
+                                sustituirId(emplSeleccionado.getHorarios(), save);
+                                Platform.runLater(() -> {
+                                    tablaHorarios.refresh();
+                                    LimpiarCamposHorarios();
+                                });
+                            }else{
+                                Mensaje.show(Alert.AlertType.WARNING, "Guardar Areas", res.getMensaje());
+                            }
+                        }
+                    }
+                } else {
+                    if (validarCamposHorario()) {
+                        horarioDTO = new EmpleadosHorariosDTO();
+                        horarioDTO.setDiaEntrada(cbxDiaEntrada.getValue());
+                        horarioDTO.setDiaSalida(cbxDiaSalida.getValue());
+                        horarioDTO.setEmpleado(emplSeleccionado);
+                        horarioDTO.setHoraEntrada(obtenerFecha(true));
+                        horarioDTO.setHoraSalida(obtenerFecha(false));
+                        if(validarChoqueHorarios(horarioDTO)){
+                        Respuesta res = horarioService.guardarEmpleadoHorario(horarioDTO);
+                            if (res.getEstado()) {
+                                EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
+                                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
+                                tablaHorarios.getItems().add(save);
+                                emplSeleccionado.getHorarios().add(save);
+                                Platform.runLater(() -> {
+                                    tablaHorarios.refresh();
+                                    LimpiarCamposHorarios();
+                                });
+                            }else{
+                                Mensaje.show(Alert.AlertType.WARNING, "Guardar Areas", res.getMensaje());
+                            }
+                        }
+                    }
+                }
+                return true;
+            }  
+        };
     }
     
     void LimpiarCamposHorarios(){
@@ -464,15 +492,6 @@ public class EmpleadosController extends Controller implements Initializable {
                 horario.setHoraEntrada(sustituir.getHoraEntrada());
                 horario.setHoraSalida(sustituir.getHoraSalida());
                 horario.setEstado(sustituir.isEstado());
-            }
-        }
-    }
-    
-    private void sustituirId(List<EmpleadosAreasTrabajosDTO> lista, EmpleadosAreasTrabajosDTO sustituir){
-        for(EmpleadosAreasTrabajosDTO area : lista){
-            if(area.getId().equals(sustituir.getId())){
-                area.setAreaTrabajo(sustituir.getAreaTrabajo());
-                area.setEstado(sustituir.isEstado());
             }
         }
     }
@@ -661,19 +680,33 @@ public class EmpleadosController extends Controller implements Initializable {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Agregar Area"));
         }else{
-            if(area != null){
-                EmpleadosAreasTrabajosDTO areaDto = new EmpleadosAreasTrabajosDTO(Long.valueOf("0"), emplSeleccionado, area, true);
-                Respuesta res = empAreasService.guardarEmpleadoAreaTrabajo(areaDto);
-                if(res.getEstado()){
-                    emplSeleccionado.getEmpleadosAreasTrabajo().add((EmpleadosAreasTrabajosDTO) res.getResultado("Empleados_Areas_Trabajos"));
-                    tvAreas.getItems().clear();
-                    tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
-                    lblArea.setText("");
-                }else{
-                    Mensaje.show(Alert.AlertType.ERROR, "Asignar Área de Trabajo", res.getMensaje());
-                }
-            }
+            AppContext.getInstance().set("Task", guardarAreaTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task guardarAreaTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if(area != null){
+                    EmpleadosAreasTrabajosDTO areaDto = new EmpleadosAreasTrabajosDTO(Long.valueOf("0"), emplSeleccionado, area, true);
+                    Respuesta res = empAreasService.guardarEmpleadoAreaTrabajo(areaDto);
+                    if(res.getEstado()){
+                        emplSeleccionado.getEmpleadosAreasTrabajo().add((EmpleadosAreasTrabajosDTO) res.getResultado("Empleados_Areas_Trabajos"));
+                        tvAreas.getItems().clear();
+                        tvAreas.getItems().addAll(emplSeleccionado.getEmpleadosAreasTrabajo());
+                        Platform.runLater(() -> {
+                            lblArea.setText("");
+                        });
+                    }else{
+                        Mensaje.show(Alert.AlertType.ERROR, "Asignar Área de Trabajo", res.getMensaje());
+                    }
+                }
+                return true;
+            }
+            
+        };
     }
 
     @FXML
