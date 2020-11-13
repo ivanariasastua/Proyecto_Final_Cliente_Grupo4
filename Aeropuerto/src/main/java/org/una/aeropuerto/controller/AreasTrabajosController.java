@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -146,7 +147,9 @@ public class AreasTrabajosController extends Controller implements Initializable
                     Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
                 } else {
                     if (!txtBuscarAreasT.getText().isEmpty()) {
-                        llenarColumnas();
+                        Platform.runLater(() -> {
+                            llenarColumnas();
+                        });
                         tablaAreasTrabajo.getItems().clear();
                         Respuesta res;
                         if (cbxFiltroAreas.getValue().equals("Nombre")) {

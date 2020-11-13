@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.exit;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -227,7 +228,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @FXML
     private void accionMinimizar(MouseEvent event) {
-        this.minimizeWindow();
+        exit(1);
     }
 
     @FXML

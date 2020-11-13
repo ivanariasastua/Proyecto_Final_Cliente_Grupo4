@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -203,7 +204,8 @@ public class ServiciosController extends Controller implements Initializable {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Servicio"));
         } else {
-            
+            AppContext.getInstance().set("Task", buscarServicioTask());
+            FlowController.getInstance().goViewCargar();
         }
     }
     
@@ -212,7 +214,9 @@ public class ServiciosController extends Controller implements Initializable {
             @Override
             protected Object call() throws Exception {
                 if (!txtBuscarServicio.getText().isEmpty()) {
-                    cargarColumnas();
+                    Platform.runLater(() -> {
+                        cargarColumnas();
+                    });
                     tablaServicios.getItems().clear();
                     if (cbxFiltroServicios.getValue() == null) {
                         Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");

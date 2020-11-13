@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -180,7 +181,9 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
                 } else {
                     if (!txtBuscarCateg.getText().isEmpty() || txtBuscarCateg.getText() != null) {
-                        cargarColumnas();
+                        Platform.runLater(() -> {
+                            cargarColumnas();
+                        });
                         tablaCategorias.getItems().clear();
                         Respuesta res;
                         if (cbxFiltroCategorias.getValue().equals("Nombre")) {
