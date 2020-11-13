@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -127,39 +129,53 @@ public class ReporteGastosController extends Controller implements Initializable
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
         }else{
-            if(validarCampos()){
-                Date fi = Date.from(dpFechaI.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
-                Date ff = Date.from(dpFechaF.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
-                Boolean estP = obtenerValorRadioButton(Boolean.TRUE), estG = obtenerValorRadioButton(Boolean.FALSE);
-                Respuesta res;
-                if(estP == null && estG == null){
-                    res = service.reporteGastos(fi, ff, empresa, servicio, responsable);
-                }else if(estP != null && estG == null){
-                    res = service.reporteGastos(fi, ff, empresa, servicio, estP, responsable);
-                }else if(estP == null && estG != null){
-                    res = service.reporteGastos(fi, ff, empresa, servicio, responsable, estG);
-                }else{
-                    res = service.reporteGastos(fi, ff, empresa, servicio, estP, estG, responsable);
-                }
-                if(res.getEstado()){
-                    String resp = (String) res.getResultado("Reporte");
-                    System.out.println("Exito: "+resp);
-                    byte[] bytes = Base64.getDecoder().decode(resp);
-                    try{
-                        ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                        ObjectInputStream bytesArray = new ObjectInputStream(array);
-                        JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                        JasperViewer viewer = new JasperViewer(jp, false);
-                        viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
-                        viewer.setVisible(true);
-                    }catch(IOException | ClassNotFoundException ex){
-                        System.out.println(ex);
-                    }
-                }else{
-                    System.out.println("Error: "+res.getMensajeInterno());
-                }
-            }
+            AppContext.getInstance().set("Task", reporteTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task reporteTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if(validarCampos()){
+                    Date fi = Date.from(dpFechaI.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
+                    Date ff = Date.from(dpFechaF.getValue().atStartOfDay(ZoneId.of("UTC")).toInstant());
+                    Boolean estP = obtenerValorRadioButton(Boolean.TRUE), estG = obtenerValorRadioButton(Boolean.FALSE);
+                    Respuesta res;
+                    if(estP == null && estG == null){
+                        res = service.reporteGastos(fi, ff, empresa, servicio, responsable);
+                    }else if(estP != null && estG == null){
+                        res = service.reporteGastos(fi, ff, empresa, servicio, estP, responsable);
+                    }else if(estP == null && estG != null){
+                        res = service.reporteGastos(fi, ff, empresa, servicio, responsable, estG);
+                    }else{
+                        res = service.reporteGastos(fi, ff, empresa, servicio, estP, estG, responsable);
+                    }
+                    if(res.getEstado()){
+                        String resp = (String) res.getResultado("Reporte");
+                        System.out.println("Exito: "+resp);
+                        byte[] bytes = Base64.getDecoder().decode(resp);
+                        try{
+                            ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                            ObjectInputStream bytesArray = new ObjectInputStream(array);
+                            JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                            JasperViewer viewer = new JasperViewer(jp, false);
+                            viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                            Platform.runLater(() -> {
+                                viewer.setVisible(true);
+                            });
+                        }catch(IOException | ClassNotFoundException ex){
+                            System.out.println(ex);
+                        }
+                    }else{
+                        System.out.println("Error: "+res.getMensajeInterno());
+                    }
+                }
+                return true;
+            }
+        
+        };
     }
 
     @FXML

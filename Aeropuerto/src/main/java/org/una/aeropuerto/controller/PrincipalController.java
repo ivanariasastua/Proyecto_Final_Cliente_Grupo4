@@ -12,12 +12,12 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.exit;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -110,7 +110,6 @@ public class PrincipalController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         AppContext.getInstance().set("Contenedor", paneContenerdor);
-        FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
         deslizar = new HamburgerBackArrowBasicTransition(hamMenu);
         tt = new TranslateTransition(Duration.seconds(0.6));
         deslizar.setRate(1);
@@ -284,6 +283,7 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
         try {
             miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         } catch (Exception ex) {
@@ -421,28 +421,6 @@ public class PrincipalController extends Controller implements Initializable {
         if(!UserAuthenticated.getInstance().isRol("AUDITOR") && !UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             acMenu.getPanes().remove(tpTransacciones);
         }
-        /*
-        tpEmpleados.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
-        tpEmpleados.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
-        
-        tpAreas.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
-        tpAreas.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
-        
-        tpGastos.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
-        tpGastos.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
-        
-        tpIncidentes.setVisible(!UserAuthenticated.getInstance().isRol("AUDITOR"));
-        tpIncidentes.setPrefHeight(!UserAuthenticated.getInstance().isRol("AUDITOR") ? 79 : 0);
-        
-        tpReportes.setVisible(!UserAuthenticated.getInstance().isRol("GESTOR"));
-        tpReportes.setPrefHeight(!UserAuthenticated.getInstance().isRol("GESTOR") ? 79 : 0);
-        
-        tpAdministracion.setVisible(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
-        tpAdministracion.setPrefHeight(UserAuthenticated.getInstance().isRol("ADMINISTRADOR") ? 79 : 0);
-        
-        tpTransacciones.setVisible(UserAuthenticated.getInstance().isRol("AUDITOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
-        tpTransacciones.setPrefHeight((UserAuthenticated.getInstance().isRol("AUDITOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR") ? 79 : 0));
-        */
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.setVisible(true);
             vbDesarrollo.setVisible(true);
@@ -454,5 +432,9 @@ public class PrincipalController extends Controller implements Initializable {
             lvDesarrollo.setPrefWidth(0);
             vbDesarrollo.setPrefWidth(0);
         }
+    }
+    
+    public void cerrarWindow(){
+        exit(1);
     }
 }

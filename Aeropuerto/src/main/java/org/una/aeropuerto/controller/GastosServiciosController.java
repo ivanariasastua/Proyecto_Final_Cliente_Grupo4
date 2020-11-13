@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,6 +45,7 @@ import org.una.aeropuerto.dto.ServiciosGastosDTO;
 import org.una.aeropuerto.service.ServiciosGastosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -53,7 +56,7 @@ import org.una.aeropuerto.util.UserAuthenticated;
  * @author cordo
  */
 public class GastosServiciosController extends Controller implements Initializable {
-
+    
     @FXML
     private TableView tablaGastosS;
     @FXML
@@ -82,7 +85,7 @@ public class GastosServiciosController extends Controller implements Initializab
     private JFXComboBox<String> cbxFiltro;
     @FXML
     private JFXTextField txtResponsable;
-
+    
     List<ServiciosDTO> listServicios;
     private ServiciosGastosDTO servGastDTO = new ServiciosGastosDTO();
     private ServiciosGastosService servGastService = new ServiciosGastosService();
@@ -105,7 +108,7 @@ public class GastosServiciosController extends Controller implements Initializab
     private VBox vbTabla;
     @FXML
     private GridPane gpCrearEditar;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
@@ -114,8 +117,10 @@ public class GastosServiciosController extends Controller implements Initializab
         clickTabla();
         addListner();
         datosModoDesarrollo();
+        txtEmpresa.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+        txtNumContrato.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
     }
-
+    
     @Override
     public void initialize() {
         listServicios = new ArrayList<>();
@@ -131,7 +136,7 @@ public class GastosServiciosController extends Controller implements Initializab
             asignarInfoModoDesarrollo();
         }
     }
-
+    
     public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista GastosServicios");
@@ -143,38 +148,38 @@ public class GastosServiciosController extends Controller implements Initializab
         modoDesarrollo.put("Limpiar Gasto", "Limpiar responde al método actLimpiarGastoS");
         modoDesarrollo.put("Guardar Gasto", "Guardar responde al método actGuardarGastoS");
     }
-
+    
     private void asignarInfoModoDesarrollo() {
         lvDesarrollo.getItems().clear();
         for (String info : modoDesarrollo.keySet()) {
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
     }
-
+    
     public void llenarComboBoxs() {
         ObservableList filtro = FXCollections.observableArrayList("Empresa", "Número de contrato", "Servicio");
         cbxFiltro.setItems(filtro);
-
+        
         ObservableList<String> estadoPag = FXCollections.observableArrayList("Pago", "Pendiente");
         cbxEstadoPago.setItems(estadoPag);
-
+        
         ObservableList<String> estadoGast = FXCollections.observableArrayList("Activo", "Anulado");
         cbxEstadoGasto.setItems(estadoGast);
-
+        
         ObservableList<String> periodici = FXCollections.observableArrayList("Diario", "Semanal", "Quincenal", "Mensual", "Anual");
         cbxPerioricidad.setItems(periodici);
-
+        
         List<Integer> numeros = new ArrayList<>();
         for (int i = 1; i <= 31; i++) {
             numeros.add(i);
         }
         ObservableList<Integer> duaracion = FXCollections.observableArrayList(numeros);
         cbxDuracion.setItems(duaracion);
-
+        
         ObservableList<String> tiempo = FXCollections.observableArrayList("Día(s)", "Semana(s)", "Mes(es)", "Año(s)");
         cbxTiempo.setItems(tiempo);
     }
-
+    
     public String estadoPago(boolean num) {
         if (num == true) {
             return "Pago";
@@ -183,7 +188,7 @@ public class GastosServiciosController extends Controller implements Initializab
         }
         return "";
     }
-
+    
     public String estadoGasto(boolean num) {
         if (num == true) {
             return "Activo";
@@ -192,7 +197,7 @@ public class GastosServiciosController extends Controller implements Initializab
         }
         return "";
     }
-
+    
     public String periodicidad(Integer num) {
         switch (num) {
             case 1:
@@ -208,7 +213,7 @@ public class GastosServiciosController extends Controller implements Initializab
         }
         return "";
     }
-
+    
     public String retornarPeriodo(char num) {
         if (num == '1') {
             return "Día(s)";
@@ -221,7 +226,7 @@ public class GastosServiciosController extends Controller implements Initializab
         }
         return "";
     }
-
+    
     public void duracion(String duracion) {
         if (duracion.length() == 3) {
             String num = duracion.charAt(0) + "" + duracion.charAt(1);
@@ -232,7 +237,7 @@ public class GastosServiciosController extends Controller implements Initializab
             cbxTiempo.setValue(retornarPeriodo(duracion.charAt(1)));
         }
     }
-
+    
     public void clickTabla() {
         tablaGastosS.setRowFactory(tv -> {
             TableRow<ServiciosGastosDTO> row = new TableRow();
@@ -245,7 +250,7 @@ public class GastosServiciosController extends Controller implements Initializab
             return row;
         });
     }
-
+    
     public String estado(boolean estad) {
         if (estad == true) {
             return "Activo";
@@ -253,7 +258,7 @@ public class GastosServiciosController extends Controller implements Initializab
             return "Inactivo";
         }
     }
-
+    
     public void cargarDatos() {
         responsableSelec = gastoSelecciondo.getResponsable();
         txtEmpresa.setText(gastoSelecciondo.getEmpresa());
@@ -265,7 +270,7 @@ public class GastosServiciosController extends Controller implements Initializab
         cbxPerioricidad.setValue(periodicidad(gastoSelecciondo.getPerioricidad()));
         duracion(String.valueOf(gastoSelecciondo.getDuracion()));
     }
-
+    
     @FXML
     private void actEditarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
@@ -284,7 +289,7 @@ public class GastosServiciosController extends Controller implements Initializab
             }
         }
     }
-
+    
     public boolean validarCamposGastos() {
         if (txtEmpresa.getText() == null || txtEmpresa.getText().isEmpty() || txtNumContrato.getText() == null || txtNumContrato.getText().isEmpty() || txtServicio.getText() == null || txtResponsable.getText() == null) {
             Mensaje.show(Alert.AlertType.WARNING, "Campos requeridos", "Son obligatorios los siguientes campos: \nEmpresa\nNúmero de contrato\nServicio\nResponsable");
@@ -292,7 +297,7 @@ public class GastosServiciosController extends Controller implements Initializab
         }
         return true;
     }
-
+    
     public void guardar() {
         servGastDTO.setEmpresa(txtEmpresa.getText());
         servGastDTO.setNumeroContrato(txtNumContrato.getText());
@@ -327,7 +332,7 @@ public class GastosServiciosController extends Controller implements Initializab
             servGastDTO.setDuracion(Long.valueOf(cbxDuracion.getValue() + "4"));
         }
     }
-
+    
     public boolean validarActivos() {
         if (gastoSelecciondo.isEstado() != true) {
             Mensaje.show(Alert.AlertType.WARNING, "Inactivado", "El dato se encuentra inactivo, no puede realizar más acciones con dicha información");
@@ -335,7 +340,7 @@ public class GastosServiciosController extends Controller implements Initializab
         }
         return true;
     }
-
+    
     @FXML
     private void actGuardarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
@@ -355,13 +360,18 @@ public class GastosServiciosController extends Controller implements Initializab
                     }
                     if (servicioSelec.getNombre() == null) {
                         servGastDTO.setServicio(gastoSelecciondo.getServicio());
-
+                        
                     } else {
                         servGastDTO.setServicio(servicioSelec);
                     }
                     Respuesta res = servGastService.modificarGastoServicio(gastoSelecciondo.getId(), servGastDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Gasto de servicio editado corectamente");
+                        ServiciosGastosDTO act = (ServiciosGastosDTO) res.getResultado("Servicios_Gastos");
+                        actualizarDatos(tablaGastosS.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaGastosS.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }
@@ -375,6 +385,11 @@ public class GastosServiciosController extends Controller implements Initializab
                     Respuesta res = servGastService.guardarGastoServicio(servGastDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Gasto de servicio guardado corectamente");
+                        ServiciosGastosDTO act = (ServiciosGastosDTO) res.getResultado("Servicios_Gastos");
+                        tablaGastosS.getItems().add(act);
+                        Platform.runLater(() -> {
+                            tablaGastosS.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }
@@ -382,7 +397,7 @@ public class GastosServiciosController extends Controller implements Initializab
             }
         }
     }
-
+    
     public void limpiarCampos() {
         servGastDTO = new ServiciosGastosDTO();
         txtServicio.setText(null);
@@ -399,7 +414,7 @@ public class GastosServiciosController extends Controller implements Initializab
         responsableSelec = new EmpleadosDTO();
         servicioSelec = new ServiciosDTO();
     }
-
+    
     @FXML
     private void actLimpiarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
@@ -408,15 +423,15 @@ public class GastosServiciosController extends Controller implements Initializab
             limpiarCampos();
         }
     }
-
+    
     @FXML
     private void actTabPane(MouseEvent event) {
         if (tabGastos.isSelected()) {
         } else if (tabCrearEditar.isSelected()) {
-
+            
         }
     }
-
+    
     @FXML
     private void actInactivarGastoS(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
@@ -442,6 +457,11 @@ public class GastosServiciosController extends Controller implements Initializab
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", "El Gasto en Servicio ha sido inactivado");
                         gastSelec = false;
+                        ServiciosGastosDTO act = (ServiciosGastosDTO) res.getResultado("Servicios_Gastos");
+                        actualizarDatos(tablaGastosS.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaGastosS.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Gasto en Servicio", res.getMensaje());
                     }
@@ -451,7 +471,16 @@ public class GastosServiciosController extends Controller implements Initializab
             }
         }
     }
-
+    
+    private void actualizarDatos(List<ServiciosGastosDTO> list, ServiciosGastosDTO gat) {
+        for (ServiciosGastosDTO s : list) {
+            if (s.getId().equals(gat.getId())) {
+                s.setEstado(gat.isEstado());
+                s = gat;
+            }
+        }
+    }
+    
     public void cargarColumnasTabla() {
         tablaGastosS.getColumns().clear();
         TableColumn<ServiciosGastosDTO, String> colEmpresa = new TableColumn<>("Empresa");
@@ -470,39 +499,53 @@ public class GastosServiciosController extends Controller implements Initializab
         colPeriod.setCellValueFactory((p) -> new SimpleStringProperty(periodicidad(p.getValue().getPerioricidad())));
         TableColumn<ServiciosGastosDTO, String> colEst = new TableColumn<>("Estado");
         colEst.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-
+        
         tablaGastosS.getColumns().addAll(colServi, colEmpresa, colNumC, colfecha, colPago, colGast, colPeriod, colEst);
     }
-
+    
     @FXML
     private void actBuscarGastosServicios(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Gasto"));
         } else {
-            if (cbxFiltro.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-            } else {
-                if (!txtBuscarGastosS.getText().isEmpty()) {
-                    cargarColumnasTabla();
-                    tablaGastosS.getItems().clear();
-                    Respuesta res;
-                    if (cbxFiltro.getValue().equals("Empresa")) {
-                        res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
-                    } else if (cbxFiltro.getValue().equals("Número de contrato")) {
-                        res = servGastService.getByContrato(txtBuscarGastosS.getText());
-                    } else {
-                        res = servGastService.findByServicio(txtBuscarGastosS.getText());
-                    }
-                    if (res.getEstado()) {
-                        tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
-                    }
-                }
-            }
+            AppContext.getInstance().set("Task", buscarGastosTask());
+            FlowController.getInstance().goViewCargar();
         }
     }
-
+    
+    private Task buscarGastosTask() {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                if (cbxFiltro.getValue() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
+                } else {
+                    if (!txtBuscarGastosS.getText().isEmpty()) {
+                        Platform.runLater(() -> {
+                            cargarColumnasTabla();
+                        });
+                        tablaGastosS.getItems().clear();
+                        Respuesta res;
+                        if (cbxFiltro.getValue().equals("Empresa")) {
+                            res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
+                        } else if (cbxFiltro.getValue().equals("Número de contrato")) {
+                            res = servGastService.getByContrato(txtBuscarGastosS.getText());
+                        } else {
+                            res = servGastService.findByServicio(txtBuscarGastosS.getText());
+                        }
+                        if (res.getEstado()) {
+                            tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+                        }
+                    }
+                }
+                return true;
+            }
+            
+        };
+    }
+    
     @FXML
     private void actBuscarResponsable(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
@@ -516,7 +559,7 @@ public class GastosServiciosController extends Controller implements Initializab
             }
         }
     }
-
+    
     @FXML
     private void actBuscarServicio(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
@@ -530,11 +573,11 @@ public class GastosServiciosController extends Controller implements Initializab
             }
         }
     }
-
+    
     @Override
     public void cargarTema() {
     }
-
+    
     private void addListner() {
         contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());
@@ -543,7 +586,7 @@ public class GastosServiciosController extends Controller implements Initializab
             adjustHeigth(contenedor.getHeight());
         });
     }
-
+    
     private void adjustWidth(double ancho) {
         bpRoot.setPrefWidth(ancho);
         vbRoot.setPrefWidth(ancho);
@@ -557,7 +600,7 @@ public class GastosServiciosController extends Controller implements Initializab
         cbxPerioricidad.setPrefWidth((ancho / 2) - 50);
         cbxTiempo.setPrefWidth((ancho / 2) - 50);
     }
-
+    
     private void adjustHeigth(double altura) {
         bpRoot.setPrefHeight(altura);
         vbRoot.setPrefHeight(altura);

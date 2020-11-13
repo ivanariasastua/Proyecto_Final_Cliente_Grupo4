@@ -119,7 +119,7 @@ public class ServiciosGastosService {
             try{
                 TransactionRecorder.registrarTransaccion("Inactivar Gasto de Servicio");
             }catch(Exception ex){}
-            return new Respuesta(true, "Empleados", result);
+            return new Respuesta(true, "Servicios_Gastos", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }

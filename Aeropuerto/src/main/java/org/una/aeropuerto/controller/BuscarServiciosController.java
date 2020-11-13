@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,6 +30,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.FlowController;
 
 /**
  * FXML Controller class
@@ -44,7 +47,7 @@ public class BuscarServiciosController extends Controller implements Initializab
     ServiciosDTO servicSelec;
     ServiciosService servService = new ServiciosService();
     List<ServiciosDTO> listServ;
-    Map<String,String> modoDesarrollo;
+    Map<String, String> modoDesarrollo;
     @FXML
     private VBox vbDevelop;
     @FXML
@@ -61,13 +64,13 @@ public class BuscarServiciosController extends Controller implements Initializab
         tabla.getItems().clear();
         servicSelec = new ServiciosDTO();
         listServ = new ArrayList<>();
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             vbDevelop.setPrefWidth(250);
             lvDevelop.setPrefWidth(250);
             vbDevelop.setVisible(true);
             lvDevelop.setVisible(true);
             asignarInfoModoDesarrollo();
-        }else{
+        } else {
             vbDevelop.setPrefWidth(0);
             lvDevelop.setPrefWidth(0);
             vbDevelop.setVisible(false);
@@ -75,21 +78,20 @@ public class BuscarServiciosController extends Controller implements Initializab
         }
     }
 
-    
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarServicios");
         modoDesarrollo.put("Buscar", "Buscar responde al método actBuscar");
         modoDesarrollo.put("Seleccionar", "Seleccionar responde al método actSeleccionarServicio");
     }
-    
-    private void asignarInfoModoDesarrollo(){
+
+    private void asignarInfoModoDesarrollo() {
         lvDevelop.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDevelop.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     public void cargarColumnas() {
         tabla.getColumns().clear();
         TableColumn<ServiciosDTO, String> colNombre = new TableColumn<>("Nombre");
@@ -98,7 +100,7 @@ public class BuscarServiciosController extends Controller implements Initializab
         colDescrip.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<ServiciosDTO, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
-        tabla.getColumns().addAll(colNombre,colDescrip,colEstado);
+        tabla.getColumns().addAll(colNombre, colDescrip, colEstado);
     }
 
     public String estado(boolean estad) {
@@ -111,27 +113,41 @@ public class BuscarServiciosController extends Controller implements Initializab
 
     @FXML
     private void actBuscar(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
-        }else{
-            if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
-                tabla.getItems().clear();
-                cargarColumnas();
-                Respuesta res = servService.getByNombre(txtBuscar.getText());
-                if (res.getEstado()) {
-                    tabla.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
-                }
-            }
+        } else {
+            AppContext.getInstance().set("Task", buscarServicioTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+
+    private Task buscarServicioTask() {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
+                    tabla.getItems().clear();
+                    Platform.runLater(() -> {
+                        cargarColumnas();
+                    });
+                    Respuesta res = servService.getByNombre(txtBuscar.getText());
+                    if (res.getEstado()) {
+                        tabla.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                    }
+                }
+                return true;
+            }
+
+        };
     }
 
     @FXML
     private void actSeleccionarServicio(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Seleccionar"));
-        }else{
+        } else {
             if (servicSelec.getNombre() != null) {
                 if (servicSelec.isEstado()) {
                     this.closeWindow();

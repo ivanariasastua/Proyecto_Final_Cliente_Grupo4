@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,6 +43,7 @@ import org.una.aeropuerto.dto.IncidentesCategoriasDTO;
 import org.una.aeropuerto.service.IncidentesCategoriasService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -60,7 +63,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private JFXTextField txtBuscarCateg;
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private IncidentesCategoriasDTO categoriaDTO = new IncidentesCategoriasDTO();
-    private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
+    private final IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias = new ArrayList<>();
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
@@ -94,6 +97,8 @@ public class CategoriasIncidentesController extends Controller implements Initia
         addListener();
         datosModoDesarrollo();
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
+        txtDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(25));
     }
 
     @Override
@@ -166,32 +171,46 @@ public class CategoriasIncidentesController extends Controller implements Initia
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            if (cbxFiltroCategorias.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-            } else {
-                if (!txtBuscarCateg.getText().isEmpty() || txtBuscarCateg.getText() != null) {
-                    cargarColumnas();
-                    tablaCategorias.getItems().clear();
-                    Respuesta res;
-                    if (cbxFiltroCategorias.getValue().equals("Nombre")) {
-                        res = categoriaService.getByNombre(txtBuscarCateg.getText());
-                    } else {
-                        if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
-                            res = categoriaService.getByEstado(true);
-                        } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
-                            res = categoriaService.getByEstado(false);
+            AppContext.getInstance().set("Task", buscarCategoriaTask());
+            FlowController.getInstance().goViewCargar();
+        }
+    }
+
+    private Task buscarCategoriaTask() {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                if (cbxFiltroCategorias.getValue() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
+                } else {
+                    if (!txtBuscarCateg.getText().isEmpty() || txtBuscarCateg.getText() != null) {
+                        Platform.runLater(() -> {
+                            cargarColumnas();
+                        });
+                        tablaCategorias.getItems().clear();
+                        Respuesta res;
+                        if (cbxFiltroCategorias.getValue().equals("Nombre")) {
+                            res = categoriaService.getByNombre(txtBuscarCateg.getText());
                         } else {
-                            res = categoriaService.getByNombre("");
+                            if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
+                                res = categoriaService.getByEstado(true);
+                            } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
+                                res = categoriaService.getByEstado(false);
+                            } else {
+                                res = categoriaService.getByNombre("");
+                            }
+                        }
+                        if (res.getEstado()) {
+                            tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías ", res.getMensaje());
                         }
                     }
-                    if (res.getEstado()) {
-                        tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías ", res.getMensaje());
-                    }
                 }
+                return true;
             }
-        }
+
+        };
     }
 
     @FXML
@@ -219,12 +238,25 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     Respuesta res = categoriaService.inactivar(categoriaSelec, categoriaSelec.getId(), cedula, codigo);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", "La categoría : " + categoriaSelec.getNombre() + " ha sido inactivada");
-
+                        IncidentesCategoriasDTO act = (IncidentesCategoriasDTO) res.getResultado("Incidentes_Categorias");
+                        actualizarDatos(tablaCategorias.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaCategorias.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", res.getMensaje());
                     }
                 }
                 catSelec = false;
+            }
+        }
+    }
+
+    private void actualizarDatos(List<IncidentesCategoriasDTO> list, IncidentesCategoriasDTO inci) {
+        for (IncidentesCategoriasDTO i : list) {
+            if (i.getId().equals(inci.getId())) {
+                i.setEstado(inci.isEstado());
+                i = inci;
             }
         }
     }
@@ -306,7 +338,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
             if (categoria.getId().equals(superior.getId())) {
                 Mensaje.show(Alert.AlertType.ERROR, "Error al guardar la Categoría", "La Categoría superior no puede ser ella misma");
                 return false;
-            }else{
+            } else {
                 return true;
             }
         }
@@ -330,6 +362,11 @@ public class CategoriasIncidentesController extends Controller implements Initia
                         Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
                         if (res.getEstado()) {
                             Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoría editada correctamente");
+                            IncidentesCategoriasDTO act = (IncidentesCategoriasDTO) res.getResultado("Incidentes_Categorias");
+                            actualizarDatos(tablaCategorias.getItems(), act);
+                            Platform.runLater(() -> {
+                                tablaCategorias.refresh();
+                            });
                         } else {
                             Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                         }
@@ -348,6 +385,11 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoría guardada correctamente");
+                        IncidentesCategoriasDTO act = (IncidentesCategoriasDTO) res.getResultado("Incidentes_Categorias");
+                        tablaCategorias.getItems().add(act);
+                        Platform.runLater(() -> {
+                            tablaCategorias.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }

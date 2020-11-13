@@ -15,8 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.service.ServiciosService;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -40,6 +42,8 @@ public class MantServiciosController extends Controller implements Initializable
     private ServiciosDTO servicioDTO = new ServiciosDTO();
     private ServiciosService servService = new ServiciosService();
     private Map<String,String> modoDesarrollo;
+    @FXML
+    private Label lblDesarrollo;
 
     /**
      * Initializes the controller class.
@@ -47,6 +51,8 @@ public class MantServiciosController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
+        txtDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(25));
     }
 
     @Override
@@ -56,12 +62,13 @@ public class MantServiciosController extends Controller implements Initializable
     @Override
     public void initialize() {
         servSelect = new ServiciosDTO();
+        lblDesarrollo.setText("");
     }
 
     @FXML
     private void actGuardar(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lblDesarrollo.setText(modoDesarrollo.get("Vista")+"\n"+modoDesarrollo.get("Guardar"));
         } else {
             if (servSeleccionado == true) {
                 if (validarActivos()) {
@@ -109,6 +116,8 @@ public class MantServiciosController extends Controller implements Initializable
     }
 
     public void limpiarServicios() {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"))
+            lblDesarrollo.setText(modoDesarrollo.get("Vista")+"\n"+modoDesarrollo.get("Guardar"));
         servSeleccionado = false;
         txtDescripcion.setText(null);
         txtNombre.setText(null);

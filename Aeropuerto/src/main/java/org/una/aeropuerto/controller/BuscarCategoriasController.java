@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +32,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.FlowController;
 
 /**
  * FXML Controller class
@@ -43,7 +46,7 @@ public class BuscarCategoriasController extends Controller implements Initializa
     @FXML
     private JFXTextField txtBuscar;
 
-    private Map<String,String> modoDesarrollo;
+    private Map<String, String> modoDesarrollo;
     private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias;
     IncidentesCategoriasDTO catSelect;
@@ -63,13 +66,13 @@ public class BuscarCategoriasController extends Controller implements Initializa
         cargarColumnas();
         listCategorias = new ArrayList<>();
         catSelect = new IncidentesCategoriasDTO();
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             vbDevelop.setPrefWidth(250);
             lvDevelop.setPrefWidth(250);
             vbDevelop.setVisible(true);
             lvDevelop.setVisible(true);
             asignarInfoModoDesarrollo();
-        }else{
+        } else {
             vbDevelop.setPrefWidth(0);
             lvDevelop.setPrefWidth(0);
             vbDevelop.setVisible(false);
@@ -78,41 +81,55 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     }
 
-    public void datosModoDesarrollo(){
+    public void datosModoDesarrollo() {
         modoDesarrollo = new HashMap();
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarCategorias");
         modoDesarrollo.put("Buscar", "Buscar responde al método actBuscar");
         modoDesarrollo.put("Seleccionar", "Seleccionar responde al método actSeleccionar");
         modoDesarrollo.put("Cancelar", "Cancelar responde al método actCancelar");
     }
-    
-    private void asignarInfoModoDesarrollo(){
+
+    private void asignarInfoModoDesarrollo() {
         lvDevelop.getItems().clear();
-        for(String info : modoDesarrollo.keySet()){
+        for (String info : modoDesarrollo.keySet()) {
             lvDevelop.getItems().add(modoDesarrollo.get(info));
         }
     }
-    
+
     @FXML
     private void actBuscar(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
-        }else{
-            if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
-                tablaCategorias.getItems().clear();
-                cargarColumnas();
-                Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
-                if (res.getEstado()) {
-                    listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
-                    if (listCategorias != null) {
-                        ObservableList items = FXCollections.observableArrayList(listCategorias);
-                        tablaCategorias.setItems(items);
-                    }
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías", res.getMensaje());
-                }
-            }
+        } else {
+            AppContext.getInstance().set("Task", buscarCategoriaTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+
+    private Task buscarCategoriaTask() {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
+                    tablaCategorias.getItems().clear();
+                    Platform.runLater(() -> {
+                        cargarColumnas();
+                    });
+                    Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
+                    if (res.getEstado()) {
+                        listCategorias = (List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias");
+                        if (listCategorias != null) {
+                            ObservableList items = FXCollections.observableArrayList(listCategorias);
+                            tablaCategorias.setItems(items);
+                        }
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías", res.getMensaje());
+                    }
+                }
+                return true;
+            }
+
+        };
     }
 
     public String estado(boolean estad) {
@@ -136,9 +153,9 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actSeleccionar(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Seleccionar"));
-        }else{
+        } else {
             if (catSelect.getNombre() != null) {
                 if (catSelect.isEstado()) {
                     this.closeWindow();
@@ -168,12 +185,12 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     @FXML
     private void actCancelar(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Cancelar"));
-        }else{
-           this.closeWindow(); 
+        } else {
+            this.closeWindow();
         }
-        
+
     }
 
     @Override

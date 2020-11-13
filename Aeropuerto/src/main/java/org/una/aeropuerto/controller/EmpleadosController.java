@@ -64,6 +64,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.util.UserAuthenticated;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
+import org.una.aeropuerto.util.Formato;
 
 /**
  * FXML Controller class
@@ -147,6 +148,14 @@ public class EmpleadosController extends Controller implements Initializable {
         cbViewPass.selectedProperty().addListener( s -> {
             txtViewPass.setText(cbViewPass.isSelected() ? txtPass.getText() : "");
         });
+        formatoCampo();
+    }
+    
+    private void formatoCampo(){
+        txtCedula.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
+        txtPass.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+        txtCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
     }
 
     @Override
@@ -260,45 +269,49 @@ public class EmpleadosController extends Controller implements Initializable {
         return new Task(){
             @Override
             protected Object call() throws Exception {
-                Platform.runLater(() -> {
-                    if (emplSeleccionado != null) {  //editar
-                        if (validarCampos()) {
-                            empleadoDTO = emplSeleccionado;
-                            empleadoDTO.setId(emplSeleccionado.getId());
-                            empleadoDTO.setCedula(txtCedula.getText());
-                            empleadoDTO.setCorreo(txtCorreo.getText());
-                            empleadoDTO.setJefe(jefeSelect);
-                            empleadoDTO.setNombre(txtNombre.getText());
-                            empleadoDTO.setRol(cbxRoles.getValue());
-                            Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
-                            if (res.getEstado()) {
-                                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
-                            } else {
-                                System.out.println(res.getMensajeInterno());
-                                Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
+                if (emplSeleccionado != null) {  //editar
+                    if (validarCampos()) {
+                        empleadoDTO = emplSeleccionado;
+                        empleadoDTO.setId(emplSeleccionado.getId());
+                        empleadoDTO.setCedula(txtCedula.getText());
+                        empleadoDTO.setCorreo(txtCorreo.getText());
+                        empleadoDTO.setJefe(jefeSelect);
+                        empleadoDTO.setNombre(txtNombre.getText());
+                        empleadoDTO.setRol(cbxRoles.getValue());
+                        Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
+                        if (res.getEstado()) {
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
+                            if(UserAuthenticated.getInstance().cambioDatosCriticos((EmpleadosDTO) res.getResultado("Empleados"))){
+                                Platform.runLater(() -> {
+                                    FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.DECORATED);
+                                    FlowController.getInstance().closeMain();
+                                });
                             }
-                        }
-                    } else {  //guardar nuevo
-                        if (validarCampos()) {
-                            empleadoDTO = new EmpleadosDTO();
-                            empleadoDTO.setCedula(txtCedula.getText());
-                            empleadoDTO.setCorreo(txtCorreo.getText());
-                            empleadoDTO.setContrasenaEncriptada(txtPass.getText());
-                            empleadoDTO.setJefe(jefeSelect);
-                            empleadoDTO.setNombre(txtNombre.getText());
-                            empleadoDTO.setRol(cbxRoles.getValue());
-                            Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
-                            if (res.getEstado()) {
-                                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
-                                emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
-                                tablaHorarios.getItems().clear();
-                                tvAreas.getItems().clear();
-                            } else {
-                                Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
-                            }
+                        } else {
+                            System.out.println(res.getMensajeInterno());
+                            Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
                         }
                     }
-                });
+                } else {  //guardar nuevo
+                    if (validarCampos()) {
+                        empleadoDTO = new EmpleadosDTO();
+                        empleadoDTO.setCedula(txtCedula.getText());
+                        empleadoDTO.setCorreo(txtCorreo.getText());
+                        empleadoDTO.setContrasenaEncriptada(txtPass.getText());
+                        empleadoDTO.setJefe(jefeSelect);
+                        empleadoDTO.setNombre(txtNombre.getText());
+                        empleadoDTO.setRol(cbxRoles.getValue());
+                        Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
+                        if (res.getEstado()) {
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
+                            emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
+                            tablaHorarios.getItems().clear();
+                            tvAreas.getItems().clear();
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
+                        }
+                    }
+                }
                 return true;
             }
         
@@ -434,7 +447,8 @@ public class EmpleadosController extends Controller implements Initializable {
                                 EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
                                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
                                 sustituirId(tablaHorarios.getItems(), save);
-                                sustituirId(emplSeleccionado.getHorarios(), save);
+                                if(emplSeleccionado.getId().equals(UserAuthenticated.getInstance().getUsuario().getId()))
+                                    sustituirId(UserAuthenticated.getInstance().getUsuario().getHorarios(), save);
                                 Platform.runLater(() -> {
                                     tablaHorarios.refresh();
                                     LimpiarCamposHorarios();
@@ -458,7 +472,8 @@ public class EmpleadosController extends Controller implements Initializable {
                                 EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
                                 Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
                                 tablaHorarios.getItems().add(save);
-                                emplSeleccionado.getHorarios().add(save);
+                                if(emplSeleccionado.getId().equals(UserAuthenticated.getInstance().getUsuario().getId()))
+                                    UserAuthenticated.getInstance().getUsuario().getHorarios().add(save);
                                 Platform.runLater(() -> {
                                     tablaHorarios.refresh();
                                     LimpiarCamposHorarios();

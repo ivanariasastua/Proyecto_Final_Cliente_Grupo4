@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,6 +46,7 @@ import org.una.aeropuerto.dto.IncidentesRegistradosDTO;
 import org.una.aeropuerto.service.IncidentesRegistradosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -109,6 +112,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         addListener();
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         datosModoDesarrollo();
+        txtDescripcionIncident.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
     }
 
     @Override
@@ -249,6 +253,11 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
+                        IncidentesRegistradosDTO act = (IncidentesRegistradosDTO) res.getResultado("Incidentes_Registrados");
+                        actualizarDatos(tablaIncident.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaIncident.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                     }
@@ -264,6 +273,11 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
+                        IncidentesRegistradosDTO act = (IncidentesRegistradosDTO) res.getResultado("Incidentes_Registrados");
+                        tablaIncident.getItems().add(act);
+                        Platform.runLater(() -> {
+                            tablaIncident.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                     }
@@ -315,6 +329,11 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
                         incidentSelec = false;
+                        IncidentesRegistradosDTO act = (IncidentesRegistradosDTO) res.getResultado("Incidentes_Registrados");
+                        actualizarDatos(tablaIncident.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaIncident.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
                     }
@@ -326,6 +345,14 @@ public class IncidentesRegistradosController extends Controller implements Initi
         }
     }
 
+    private void actualizarDatos(List<IncidentesRegistradosDTO> list, IncidentesRegistradosDTO inc){
+        for(IncidentesRegistradosDTO i : list){
+            if(i.getId().equals(inc.getId())){
+                i.setEstado(inc.isEstado());
+                i=inc;
+            }
+        }
+    }
     public String estado(boolean estad) {
         if (estad == true) {
             return "Activo";
@@ -356,28 +383,42 @@ public class IncidentesRegistradosController extends Controller implements Initi
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            llenarColumnas();
-            tablaIncident.getItems().clear();
-            if (cbxFiltro.getValue() != null) {
-                Respuesta res;
-                if (cbxFiltro.getValue().equals("Emisor")) {
-                    res = incidentService.findByEmisor(txtBuscarIncident.getText());
-                } else if (cbxFiltro.getValue().equals("Responsable")) {
-                    res = incidentService.findByResponsable(txtBuscarIncident.getText());
-                } else if (cbxFiltro.getValue().equals("Area")) {
-                    res = incidentService.findByArea(txtBuscarIncident.getText());
-                } else {
-                    res = incidentService.findByCategoria(txtBuscarIncident.getText());
-                }
-                if (res.getEstado()) {
-                    tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
-                }
-            } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar");
-            }
+            AppContext.getInstance().set("Task", buscarIncidenteTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task buscarIncidenteTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                Platform.runLater(() -> {
+                    llenarColumnas();
+                });
+                tablaIncident.getItems().clear();
+                if (cbxFiltro.getValue() != null) {
+                    Respuesta res;
+                    if (cbxFiltro.getValue().equals("Emisor")) {
+                        res = incidentService.findByEmisor(txtBuscarIncident.getText());
+                    } else if (cbxFiltro.getValue().equals("Responsable")) {
+                        res = incidentService.findByResponsable(txtBuscarIncident.getText());
+                    } else if (cbxFiltro.getValue().equals("Area")) {
+                        res = incidentService.findByArea(txtBuscarIncident.getText());
+                    } else {
+                        res = incidentService.findByCategoria(txtBuscarIncident.getText());
+                    }
+                    if (res.getEstado()) {
+                        tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
+                    }
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar");
+                }
+                return true;
+            }
+            
+        };
     }
 
     public void cargarDatos() {

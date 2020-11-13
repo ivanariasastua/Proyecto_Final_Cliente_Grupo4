@@ -77,4 +77,20 @@ public class UserAuthenticated {
             return false;
         return rol.getNombre().equals(rolName.toUpperCase());
     }
+    
+    public Boolean cambioDatosCriticos(EmpleadosDTO emp){
+        if(emp.getId().equals(this.usuario.getId())){
+            if(emp.getRol() != null){
+                if(!emp.getRol().getNombre().equals(this.usuario.getRol().getNombre())){
+                    return true;
+                }else{
+                    this.usuario = emp;
+                    return false;
+                }
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
 }

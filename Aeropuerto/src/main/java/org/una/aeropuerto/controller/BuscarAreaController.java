@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,6 +29,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.FlowController;
 
 /**
  * FXML Controller class
@@ -99,18 +101,29 @@ public class BuscarAreaController extends Controller implements Initializable {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            if (!txtBuscar.getText().isEmpty()) {
-                Respuesta res = service.getByNombre(txtBuscar.getText());
-                if (res.getEstado()) {
-                    tvAreas.getItems().clear();
-                    tvAreas.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas", res.getMensaje());
-                }
-            }
+            AppContext.getInstance().set("Task", buscarAreaTask());
+            FlowController.getInstance().goViewCargar();
         }
     }
 
+    private Task buscarAreaTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (!txtBuscar.getText().isEmpty()) {
+                    Respuesta res = service.getByNombre(txtBuscar.getText());
+                    if (res.getEstado()) {
+                        tvAreas.getItems().clear();
+                        tvAreas.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas", res.getMensaje());
+                    }
+                }
+                return true;
+            }
+        };
+    }
+    
     @FXML
     private void accionTabla(MouseEvent event) {
         areaSelec = tvAreas.getSelectionModel().getSelectedItem();

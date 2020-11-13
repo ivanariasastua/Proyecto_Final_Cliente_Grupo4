@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -165,35 +167,49 @@ public class ReporteIncidentesController extends Controller implements Initializ
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
         } else {
-            if (validarCampos()) {
-                Date ini = DateUtils.asDate(dpIni.getValue());
-                Date fin = DateUtils.asDate(dpFin.getValue());
-                Respuesta res;
-                if (rbActivo.isSelected()) {
-                    res = validarBusqueda(ini, fin,true,true);
-                } else if (rbInactivo.isSelected()) {
-                    res = validarBusqueda(ini, fin,false,true);
-                } else {
-                    res = validarBusqueda(ini, fin,false,false);
-                }
-                if (res.getEstado()) {
-                    String resp = (String) res.getResultado("Reporte");
-                    byte[] bytes = Base64.getDecoder().decode(resp);
-                    try {
-                        ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                        ObjectInputStream bytesArray = new ObjectInputStream(array);
-                        JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                        JasperViewer viewer = new JasperViewer(jp, false);
-                        viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                        viewer.setVisible(true);
-                    } catch (IOException | ClassNotFoundException ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    System.out.println("error " + res.getMensaje());
-                }
-            }
+            AppContext.getInstance().set("Task", reporteTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task reporteTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (validarCampos()) {
+                    Date ini = DateUtils.asDate(dpIni.getValue());
+                    Date fin = DateUtils.asDate(dpFin.getValue());
+                    Respuesta res;
+                    if (rbActivo.isSelected()) {
+                        res = validarBusqueda(ini, fin,true,true);
+                    } else if (rbInactivo.isSelected()) {
+                        res = validarBusqueda(ini, fin,false,true);
+                    } else {
+                        res = validarBusqueda(ini, fin,false,false);
+                    }
+                    if (res.getEstado()) {
+                        String resp = (String) res.getResultado("Reporte");
+                        byte[] bytes = Base64.getDecoder().decode(resp);
+                        try {
+                            ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                            ObjectInputStream bytesArray = new ObjectInputStream(array);
+                            JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                            JasperViewer viewer = new JasperViewer(jp, false);
+                            viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                            Platform.runLater(() -> {
+                                viewer.setVisible(true);
+                            });
+                        } catch (IOException | ClassNotFoundException ex) {
+                            System.out.println(ex);
+                        }
+                    } else {
+                        System.out.println("error " + res.getMensaje());
+                    }
+                }
+                return true;
+            }
+            
+        };
     }
 
     public Respuesta validarBusqueda(Date ini, Date fin,boolean estado,boolean est) {

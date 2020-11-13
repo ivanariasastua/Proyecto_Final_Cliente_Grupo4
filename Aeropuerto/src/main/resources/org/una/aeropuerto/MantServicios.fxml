@@ -14,5 +14,6 @@
       <JFXButton layoutX="499.0" layoutY="497.0" onAction="#actGuardar" prefHeight="43.0" prefWidth="119.0" styleClass="button_1" text="Guardar" />
       <JFXButton layoutX="360.0" layoutY="497.0" onAction="#actLimpiar" prefHeight="43.0" prefWidth="119.0" styleClass="button_3" text="Limpiar" />
       <JFXTextField fx:id="txtNombre" labelFloat="true" layoutX="106.0" layoutY="240.0" prefHeight="41.0" prefWidth="426.0" promptText="Nombre" styleClass="campos_texto_1" />
+      <Label fx:id="lblDesarrollo" layoutX="14.0" layoutY="447.0" prefHeight="94.0" prefWidth="333.0" styleClass="texto" />
    </children>
 </AnchorPane>

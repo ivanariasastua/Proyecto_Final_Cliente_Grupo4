@@ -70,7 +70,7 @@ public class ParametrosSistemaService {
         try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("codigo", codigo);
-            Request request = new Request("parametros_sistema/codigoIdentiicador", "/{codigo}", parametros);
+            Request request = new Request("parametros_sistema/codigoIdentificador", "/{codigo}", parametros);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "Error al obtener los parametros del sistema");
