@@ -272,6 +272,11 @@ public class EmpleadosController extends Controller implements Initializable {
                         Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
                         if (res.getEstado()) {
                             Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
+                            if(UserAuthenticated.getInstance().cambioDatosCriticos((EmpleadosDTO) res.getResultado("Empleados"))){
+                                PrincipalController controller = (PrincipalController) FlowController.getInstance().getController("Principal");
+                                FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.DECORATED);
+                                controller.closeWindow();
+                            }
                         } else {
                             System.out.println(res.getMensajeInterno());
                             Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
@@ -432,7 +437,8 @@ public class EmpleadosController extends Controller implements Initializable {
                                 EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
                                 Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Horario editado correctamente");
                                 sustituirId(tablaHorarios.getItems(), save);
-                                sustituirId(emplSeleccionado.getHorarios(), save);
+                                if(emplSeleccionado.getId().equals(UserAuthenticated.getInstance().getUsuario().getId()))
+                                    sustituirId(UserAuthenticated.getInstance().getUsuario().getHorarios(), save);
                                 Platform.runLater(() -> {
                                     tablaHorarios.refresh();
                                     LimpiarCamposHorarios();
@@ -456,7 +462,8 @@ public class EmpleadosController extends Controller implements Initializable {
                                 EmpleadosHorariosDTO save = (EmpleadosHorariosDTO)res.getResultado("Empleados_Horarios");
                                 Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Horario guardado correctamente");
                                 tablaHorarios.getItems().add(save);
-                                emplSeleccionado.getHorarios().add(save);
+                                if(emplSeleccionado.getId().equals(UserAuthenticated.getInstance().getUsuario().getId()))
+                                    UserAuthenticated.getInstance().getUsuario().getHorarios().add(save);
                                 Platform.runLater(() -> {
                                     tablaHorarios.refresh();
                                     LimpiarCamposHorarios();
