@@ -273,7 +273,7 @@ public class EmpleadosController extends Controller implements Initializable {
                         if (res.getEstado()) {
                             Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
                             if(UserAuthenticated.getInstance().cambioDatosCriticos((EmpleadosDTO) res.getResultado("Empleados"))){
-                                PrincipalController controller = (PrincipalController) FlowController.getInstance().getController("Principal");
+                                Controller controller = FlowController.getInstance().getController("Principal");
                                 FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.DECORATED);
                                 controller.closeWindow();
                             }

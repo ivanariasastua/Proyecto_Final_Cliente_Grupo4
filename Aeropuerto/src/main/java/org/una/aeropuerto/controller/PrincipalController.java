@@ -204,7 +204,7 @@ public class PrincipalController extends Controller implements Initializable {
     private void accionCerrarSecion(ActionEvent event) {
         if (Mensaje.showConfirmation("Cerrar Sesion", this.getStage(), "¿Seguro desea cerrar la sesión?")) {
             FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
-            exit(1);
+            this.closeWindow();
         }
     }
 
@@ -434,7 +434,7 @@ public class PrincipalController extends Controller implements Initializable {
         }
     }
     
-    public void closeWindow(){
+    public void cerrarWindow(){
         exit(1);
     }
 }
