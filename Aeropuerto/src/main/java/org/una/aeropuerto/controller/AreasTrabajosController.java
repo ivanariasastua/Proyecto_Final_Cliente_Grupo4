@@ -138,9 +138,9 @@ public class AreasTrabajosController extends Controller implements Initializable
             FlowController.getInstance().goViewCargar();
         }
     }
-    
-    private Task buscarAreaTask(){
-        return new Task(){
+
+    private Task buscarAreaTask() {
+        return new Task() {
             @Override
             protected Object call() throws Exception {
                 if (cbxFiltroAreas.getValue() == null) {
@@ -240,12 +240,27 @@ public class AreasTrabajosController extends Controller implements Initializable
                     Respuesta res = areasService.inactivar(areaSeleccionada, areaSeleccionada.getId(), cedula, codigo);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", "El área de trabajo: " + areaSeleccionada.getNombre() + " ha sido inactivada");
+                        AreasTrabajosDTO act = (AreasTrabajosDTO) res.getResultado("Areas_Trabajos");
+                        actualizarDatos(tablaAreasTrabajo.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaAreasTrabajo.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Áreas", res.getMensaje());
                     }
                 }
             } else {
                 Mensaje.show(Alert.AlertType.WARNING, "Inactivar Área", "No ha seleccionado ninguna área de trabajo");
+            }
+        }
+    }
+
+    private void actualizarDatos(List<AreasTrabajosDTO> list, AreasTrabajosDTO area) {
+        for (AreasTrabajosDTO a : list) {
+            if (a.getId().equals(area.getId())) {
+                a.setDescripcion(area.getDescripcion());
+                a.setEstado(area.isEstado());
+                a.setNombre(area.getNombre());
             }
         }
     }
