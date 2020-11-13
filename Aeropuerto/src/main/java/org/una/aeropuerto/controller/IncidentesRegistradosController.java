@@ -46,6 +46,7 @@ import org.una.aeropuerto.dto.IncidentesRegistradosDTO;
 import org.una.aeropuerto.service.IncidentesRegistradosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -111,6 +112,7 @@ public class IncidentesRegistradosController extends Controller implements Initi
         addListener();
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
         datosModoDesarrollo();
+        txtDescripcionIncident.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
     }
 
     @Override

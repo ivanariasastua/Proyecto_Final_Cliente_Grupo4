@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import org.una.aeropuerto.dto.ServiciosDTO;
 import org.una.aeropuerto.service.ServiciosService;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -50,6 +51,8 @@ public class MantServiciosController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
+        txtDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(25));
     }
 
     @Override

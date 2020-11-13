@@ -45,6 +45,7 @@ import org.una.aeropuerto.dto.ServiciosGastosDTO;
 import org.una.aeropuerto.service.ServiciosGastosService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -116,6 +117,8 @@ public class GastosServiciosController extends Controller implements Initializab
         clickTabla();
         addListner();
         datosModoDesarrollo();
+        txtEmpresa.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+        txtNumContrato.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
     }
     
     @Override

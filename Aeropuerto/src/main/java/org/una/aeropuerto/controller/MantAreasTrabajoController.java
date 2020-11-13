@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
+import org.una.aeropuerto.util.Formato;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -52,6 +53,8 @@ public class MantAreasTrabajoController extends Controller implements Initializa
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datosModoDesarrollo();
+        txtDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(35));
     }
 
     @Override
