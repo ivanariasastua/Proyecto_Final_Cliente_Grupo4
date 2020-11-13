@@ -87,7 +87,7 @@ public class LogInController extends Controller implements Initializable {
                     Mensaje.show(Alert.AlertType.INFORMATION, "Inicio de sesión", "Su usuario aun no esta aprobado");
                 }else if(UserAuthenticated.getInstance().isTemporal()){
                     this.closeWindow();
-                    FlowController.getInstance().goViewInNoResizableWindow("Restablecer", Boolean.FALSE, StageStyle.DECORATED);
+                    FlowController.getInstance().goViewInNoResizableWindow("Restablecer", Boolean.TRUE, StageStyle.DECORATED);
                 }
                 this.closeWindow();
             } else {
