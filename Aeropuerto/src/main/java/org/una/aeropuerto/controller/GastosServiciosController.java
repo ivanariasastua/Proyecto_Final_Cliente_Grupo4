@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -484,16 +485,18 @@ public class GastosServiciosController extends Controller implements Initializab
             FlowController.getInstance().goViewCargar();
         }
     }
-    
-    private Task buscarGastosTask(){
-        return new Task(){
+
+    private Task buscarGastosTask() {
+        return new Task() {
             @Override
             protected Object call() throws Exception {
                 if (cbxFiltro.getValue() == null) {
                     Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
                 } else {
                     if (!txtBuscarGastosS.getText().isEmpty()) {
-                        cargarColumnasTabla();
+                        Platform.runLater(() -> {
+                            cargarColumnasTabla();
+                        });
                         tablaGastosS.getItems().clear();
                         Respuesta res;
                         if (cbxFiltro.getValue().equals("Empresa")) {
@@ -512,7 +515,7 @@ public class GastosServiciosController extends Controller implements Initializab
                 }
                 return true;
             }
-            
+
         };
     }
 
