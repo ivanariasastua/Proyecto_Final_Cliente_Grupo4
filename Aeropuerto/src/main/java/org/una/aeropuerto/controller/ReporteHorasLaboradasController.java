@@ -32,6 +32,8 @@ import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import org.una.aeropuerto.util.AppContext;
@@ -114,35 +116,48 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Generar Reporte"));
         }else{
-            if(validarDatos()){
-                Date fecha1 = Date.from(dpInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-                Date fecha2 = Date.from(dpFinal.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-                Respuesta respuesta;
-                if(txtCedula.getText().isBlank()){
-                    respuesta = reporteService.reporteHorasLaboradas("null", fecha1, fecha2);
-                }else{
-                    respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
-                }
-                
-                if(respuesta.getEstado()){
-                    String res = (String) respuesta.getResultado("Reporte");
-                    byte[] bytes = Base64.getDecoder().decode(res);
-                    try{
-                        ByteArrayInputStream array = new ByteArrayInputStream(bytes);
-                        ObjectInputStream bytesArray = new ObjectInputStream(array);
-                        JasperPrint jp = (JasperPrint) bytesArray.readObject();
-                        JasperViewer viewer = new JasperViewer(jp, false);
-                        viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
-                        viewer.setVisible(true);
-                    }catch(IOException | ClassNotFoundException ex){
-                        System.out.println(ex);
-                    }
-                }else{
-                    System.out.println(respuesta.getMensajeInterno());
-                }
-            }
+            AppContext.getInstance().set("Task", reporteTask());
+            FlowController.getInstance().goViewCargar();
         }
         
+    }
+    
+    private Task reporteTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if(validarDatos()){
+                    Date fecha1 = Date.from(dpInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                    Date fecha2 = Date.from(dpFinal.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                    Respuesta respuesta;
+                    if(txtCedula.getText().isBlank()){
+                        respuesta = reporteService.reporteHorasLaboradas("null", fecha1, fecha2);
+                    }else{
+                        respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
+                    }
+
+                    if(respuesta.getEstado()){
+                        String res = (String) respuesta.getResultado("Reporte");
+                        byte[] bytes = Base64.getDecoder().decode(res);
+                        try{
+                            ByteArrayInputStream array = new ByteArrayInputStream(bytes);
+                            ObjectInputStream bytesArray = new ObjectInputStream(array);
+                            JasperPrint jp = (JasperPrint) bytesArray.readObject();
+                            JasperViewer viewer = new JasperViewer(jp, false);
+                            viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+                            Platform.runLater(() -> {
+                                viewer.setVisible(true);
+                            });
+                        }catch(IOException | ClassNotFoundException ex){
+                            System.out.println(ex);
+                        }
+                    }else{
+                        System.out.println(respuesta.getMensajeInterno());
+                    }
+                }
+                return true;
+            }
+        };
     }
     
     @Override

@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -479,28 +480,40 @@ public class GastosServiciosController extends Controller implements Initializab
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Gasto"));
         } else {
-            if (cbxFiltro.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-            } else {
-                if (!txtBuscarGastosS.getText().isEmpty()) {
-                    cargarColumnasTabla();
-                    tablaGastosS.getItems().clear();
-                    Respuesta res;
-                    if (cbxFiltro.getValue().equals("Empresa")) {
-                        res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
-                    } else if (cbxFiltro.getValue().equals("Número de contrato")) {
-                        res = servGastService.getByContrato(txtBuscarGastosS.getText());
-                    } else {
-                        res = servGastService.findByServicio(txtBuscarGastosS.getText());
-                    }
-                    if (res.getEstado()) {
-                        tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+            AppContext.getInstance().set("Task", buscarGastosTask());
+            FlowController.getInstance().goViewCargar();
+        }
+    }
+    
+    private Task buscarGastosTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (cbxFiltro.getValue() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
+                } else {
+                    if (!txtBuscarGastosS.getText().isEmpty()) {
+                        cargarColumnasTabla();
+                        tablaGastosS.getItems().clear();
+                        Respuesta res;
+                        if (cbxFiltro.getValue().equals("Empresa")) {
+                            res = servGastService.getByEmpresa(txtBuscarGastosS.getText());
+                        } else if (cbxFiltro.getValue().equals("Número de contrato")) {
+                            res = servGastService.getByContrato(txtBuscarGastosS.getText());
+                        } else {
+                            res = servGastService.findByServicio(txtBuscarGastosS.getText());
+                        }
+                        if (res.getEstado()) {
+                            tablaGastosS.getItems().addAll((List<ServiciosGastosDTO>) res.getResultado("Servicios_Gastos"));
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Buscar Gastos de servicios ", res.getMensaje());
+                        }
                     }
                 }
+                return true;
             }
-        }
+            
+        };
     }
 
     @FXML

@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +31,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.FlowController;
 
 /**
  * FXML Controller class
@@ -98,7 +100,16 @@ public class BuscarCategoriasController extends Controller implements Initializa
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
+            AppContext.getInstance().set("Task", buscarCategoriaTask());
+            FlowController.getInstance().goViewCargar();
+        }
+    }
+    
+    private Task buscarCategoriaTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
                 tablaCategorias.getItems().clear();
                 cargarColumnas();
                 Respuesta res = categoriaService.getByNombre(txtBuscar.getText());
@@ -112,7 +123,10 @@ public class BuscarCategoriasController extends Controller implements Initializa
                     Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías", res.getMensaje());
                 }
             }
-        }
+                return true;
+            }
+        
+        };
     }
 
     public String estado(boolean estad) {

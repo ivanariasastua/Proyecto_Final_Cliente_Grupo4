@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -132,32 +133,43 @@ public class AreasTrabajosController extends Controller implements Initializable
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            if (cbxFiltroAreas.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-            } else {
-                if (!txtBuscarAreasT.getText().isEmpty()) {
-                    llenarColumnas();
-                    tablaAreasTrabajo.getItems().clear();
-                    Respuesta res;
-                    if (cbxFiltroAreas.getValue().equals("Nombre")) {
-                        res = areasService.getByNombre(txtBuscarAreasT.getText());
-                    } else {
-                        if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
-                            res = areasService.getByEstado(true);
-                        } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
-                            res = areasService.getByEstado(false);
+            AppContext.getInstance().set("Task", buscarAreaTask());
+            FlowController.getInstance().goViewCargar();
+        }
+    }
+    
+    private Task buscarAreaTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (cbxFiltroAreas.getValue() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
+                } else {
+                    if (!txtBuscarAreasT.getText().isEmpty()) {
+                        llenarColumnas();
+                        tablaAreasTrabajo.getItems().clear();
+                        Respuesta res;
+                        if (cbxFiltroAreas.getValue().equals("Nombre")) {
+                            res = areasService.getByNombre(txtBuscarAreasT.getText());
                         } else {
-                            res = areasService.getByNombre("");
+                            if (txtBuscarAreasT.getText().equals("activo") || txtBuscarAreasT.getText().equals("Activo")) {
+                                res = areasService.getByEstado(true);
+                            } else if (txtBuscarAreasT.getText().equals("inactivo") || txtBuscarAreasT.getText().equals("Inactivo")) {
+                                res = areasService.getByEstado(false);
+                            } else {
+                                res = areasService.getByNombre("");
+                            }
+                        }
+                        if (res.getEstado()) {
+                            tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
                         }
                     }
-                    if (res.getEstado()) {
-                        tablaAreasTrabajo.getItems().addAll((List<AreasTrabajosDTO>) res.getResultado("Areas_Trabajos"));
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Areas de Trabajos", res.getMensaje());
-                    }
                 }
+                return true;
             }
-        }
+        };
     }
 
     public void cargarVista(AreasTrabajosDTO area) throws IOException {

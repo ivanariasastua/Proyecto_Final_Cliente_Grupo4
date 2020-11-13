@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,7 +29,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
-
+import org.una.aeropuerto.util.FlowController;
 /**
  * FXML Controller class
  *
@@ -114,17 +115,29 @@ public class BuscarServiciosController extends Controller implements Initializab
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         }else{
-            if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
-                tabla.getItems().clear();
-                cargarColumnas();
-                Respuesta res = servService.getByNombre(txtBuscar.getText());
-                if (res.getEstado()) {
-                    tabla.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
-                }
-            }
+            AppContext.getInstance().set("Task", buscarServicioTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task buscarServicioTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (txtBuscar.getText() != null || !txtBuscar.getText().isEmpty()) {
+                    tabla.getItems().clear();
+                    cargarColumnas();
+                    Respuesta res = servService.getByNombre(txtBuscar.getText());
+                    if (res.getEstado()) {
+                        tabla.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
+                    }
+                }
+                return true;
+            }
+        
+        };
     }
 
     @FXML

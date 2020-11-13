@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.service.AreasTrabajosService;
 import org.una.aeropuerto.util.Mensaje;
@@ -39,9 +40,11 @@ public class MantAreasTrabajoController extends Controller implements Initializa
 
     private AreasTrabajosDTO areaDto = new AreasTrabajosDTO();
     private AreasTrabajosDTO areaSelec = new AreasTrabajosDTO();
-    private AreasTrabajosService areasService = new AreasTrabajosService();
+    private final AreasTrabajosService areasService = new AreasTrabajosService();
     private Map<String,String> modoDesarrollo;
     boolean areaSelect = false;
+    @FXML
+    private Label lblDesarollo;
 
     /**
      * Initializes the controller class.
@@ -58,12 +61,13 @@ public class MantAreasTrabajoController extends Controller implements Initializa
     @Override
     public void initialize() {
         limpiarAreas();
+        lblDesarollo.setText("");
     }
 
     @FXML
     private void actGuardar(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-
+            lblDesarollo.setText(modoDesarrollo.get("Vista")+"\n"+modoDesarrollo.get("Guardar"));
         } else {
             if (areaSelect == true) {
                 if (validarActivos()) {
@@ -113,6 +117,8 @@ public class MantAreasTrabajoController extends Controller implements Initializa
 
     @FXML
     private void actLimpiar(ActionEvent event) {
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"))
+            lblDesarollo.setText(modoDesarrollo.get("Vista")+"\n"+modoDesarrollo.get("Guardar"));
         limpiarAreas();
     }
 

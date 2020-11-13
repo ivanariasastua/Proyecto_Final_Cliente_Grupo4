@@ -10,8 +10,6 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +25,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -40,6 +36,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.FlowController;
 
 public class ParametrosSistemaController extends Controller implements Initializable{
 
@@ -189,7 +186,8 @@ public class ParametrosSistemaController extends Controller implements Initializ
             if(dpInicio.getValue() != null && dpFinal.getValue() != null){
                 if(dpInicio.getValue().isBefore(dpFinal.getValue()) ){
                     tvParametros.getItems().clear();
-                    Mensaje.showProgressDialog(TaskFiltrarParametros(), "Filtrando Parámetros", "Obteniendo los parámetros de la base de datos");
+                    AppContext.getInstance().set("Task", TaskFiltrarParametros());
+                    FlowController.getInstance().goViewCargar();
                 }else{
                     Mensaje.show(Alert.AlertType.WARNING, "Fechas Incorrectas", "El orden de las fechas esta invertido");
                 }

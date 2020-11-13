@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -356,28 +358,42 @@ public class IncidentesRegistradosController extends Controller implements Initi
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            llenarColumnas();
-            tablaIncident.getItems().clear();
-            if (cbxFiltro.getValue() != null) {
-                Respuesta res;
-                if (cbxFiltro.getValue().equals("Emisor")) {
-                    res = incidentService.findByEmisor(txtBuscarIncident.getText());
-                } else if (cbxFiltro.getValue().equals("Responsable")) {
-                    res = incidentService.findByResponsable(txtBuscarIncident.getText());
-                } else if (cbxFiltro.getValue().equals("Area")) {
-                    res = incidentService.findByArea(txtBuscarIncident.getText());
-                } else {
-                    res = incidentService.findByCategoria(txtBuscarIncident.getText());
-                }
-                if (res.getEstado()) {
-                    tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
-                } else {
-                    Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
-                }
-            } else {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar");
-            }
+            AppContext.getInstance().set("Task", buscarIncidenteTask());
+            FlowController.getInstance().goViewCargar();
         }
+    }
+    
+    private Task buscarIncidenteTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                Platform.runLater(() -> {
+                    llenarColumnas();
+                });
+                tablaIncident.getItems().clear();
+                if (cbxFiltro.getValue() != null) {
+                    Respuesta res;
+                    if (cbxFiltro.getValue().equals("Emisor")) {
+                        res = incidentService.findByEmisor(txtBuscarIncident.getText());
+                    } else if (cbxFiltro.getValue().equals("Responsable")) {
+                        res = incidentService.findByResponsable(txtBuscarIncident.getText());
+                    } else if (cbxFiltro.getValue().equals("Area")) {
+                        res = incidentService.findByArea(txtBuscarIncident.getText());
+                    } else {
+                        res = incidentService.findByCategoria(txtBuscarIncident.getText());
+                    }
+                    if (res.getEstado()) {
+                        tablaIncident.getItems().addAll((List<IncidentesRegistradosDTO>) res.getResultado("Incidentes_Registrados"));
+                    } else {
+                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Incidentes Registrados", res.getMensaje());
+                    }
+                } else {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar");
+                }
+                return true;
+            }
+            
+        };
     }
 
     public void cargarDatos() {

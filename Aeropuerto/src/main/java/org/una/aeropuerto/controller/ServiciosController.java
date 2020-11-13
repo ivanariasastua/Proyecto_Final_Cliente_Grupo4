@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -202,32 +203,43 @@ public class ServiciosController extends Controller implements Initializable {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Servicio"));
         } else {
-            if (!txtBuscarServicio.getText().isEmpty()) {
-                cargarColumnas();
-                tablaServicios.getItems().clear();
-                if (cbxFiltroServicios.getValue() == null) {
-                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-                } else {
-                    Respuesta res;
-                    if (cbxFiltroServicios.getValue().equals("Nombre")) {
-                        res = servService.getByNombre(txtBuscarServicio.getText());
+            
+        }
+    }
+    
+    private Task buscarServicioTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (!txtBuscarServicio.getText().isEmpty()) {
+                    cargarColumnas();
+                    tablaServicios.getItems().clear();
+                    if (cbxFiltroServicios.getValue() == null) {
+                        Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
                     } else {
-                        if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
-                            res = servService.getByEstado(true);
-                        } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
-                            res = servService.getByEstado(false);
+                        Respuesta res;
+                        if (cbxFiltroServicios.getValue().equals("Nombre")) {
+                            res = servService.getByNombre(txtBuscarServicio.getText());
                         } else {
-                            res = servService.getByNombre("");
+                            if (txtBuscarServicio.getText().equals("activo") || txtBuscarServicio.getText().equals("Activo")) {
+                                res = servService.getByEstado(true);
+                            } else if (txtBuscarServicio.getText().equals("inactivo") || txtBuscarServicio.getText().equals("Inactivo")) {
+                                res = servService.getByEstado(false);
+                            } else {
+                                res = servService.getByNombre("");
+                            }
+                        }
+                        if (res.getEstado()) {
+                            tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
                         }
                     }
-                    if (res.getEstado()) {
-                        tablaServicios.getItems().addAll((List<ServiciosDTO>) res.getResultado("Servicios"));
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Servicios", res.getMensaje());
-                    }
                 }
+                return true;
             }
-        }
+            
+        };
     }
 
     @FXML

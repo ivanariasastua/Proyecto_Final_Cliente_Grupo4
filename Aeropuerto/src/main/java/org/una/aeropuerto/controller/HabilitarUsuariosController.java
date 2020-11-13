@@ -32,6 +32,7 @@ import org.una.aeropuerto.service.RolesService;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.FlowController;
 
 public class HabilitarUsuariosController extends Controller implements Initializable{
 
@@ -118,11 +119,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
             protected Object call() throws Exception {
                 Respuesta res;
                 RolesDTO rol = cbFiltro.getValue();
-                updateMessage("Filtrando empleados.");
-                updateProgress(1, 3);
                 res = empService.getNoAprobadosbyRol(rol.getId());
-                updateMessage("Filtrando empleados..");
-                updateProgress(2, 3);
                 Platform.runLater( () -> {
                     if(res.getEstado()){
                         tvEmpleados.getItems().addAll((List<EmpleadosDTO>)res.getResultado("Empleados"));
@@ -131,8 +128,6 @@ public class HabilitarUsuariosController extends Controller implements Initializ
                         Mensaje.show(Alert.AlertType.ERROR, "Buscar Empleados", res.getMensaje());
                     }
                 });
-                updateMessage("Filtrando empleados...");
-                updateProgress(3, 3);
                 return true;
             }
         };
@@ -145,7 +140,8 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         }else{
             if(cbFiltro.getSelectionModel().getSelectedItem() != null){
                 tvEmpleados.getItems().clear();
-                Mensaje.showProgressDialog(TaskFiltradoEmpleadoNoAprobado(), "Buscar Empleados", "Filtrando empleados");
+                AppContext.getInstance().set("Task", TaskFiltradoEmpleadoNoAprobado());
+                FlowController.getInstance().goViewCargar();
             }else{
                 Mensaje.show(Alert.AlertType.WARNING, "No es posible filtrar", "Elija un rol para filtrar los empleados no aprobados");
             }

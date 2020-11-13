@@ -63,7 +63,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
     @FXML
     private void accionBuscarEmpleado(ActionEvent event) {
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-            
+            lvDevelop.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
             if (cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()) {
                 tablaEmpleados.getItems().clear();
@@ -76,15 +76,11 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
 
     @FXML
     private void accionTablaEmpleados(MouseEvent event) {
-        if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
-            
-        } else {
-            if (tablaEmpleados.getSelectionModel().getSelectedItem() != null) {
-                if (tablaEmpleados.getSelectionModel().getSelectedItem().isEstado()) {
-                    AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
-                } else {
-                    Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
-                }
+        if (tablaEmpleados.getSelectionModel().getSelectedItem() != null) {
+            if (tablaEmpleados.getSelectionModel().getSelectedItem().isEstado()) {
+                AppContext.getInstance().set("empSelect", tablaEmpleados.getSelectionModel().getSelectedItem());
+            } else {
+                Mensaje.show(Alert.AlertType.INFORMATION, "Seleccionar Empleados", "Los empleados inactivo no se pueden seleccionar");
             }
         }
     }
@@ -114,6 +110,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         modoDesarrollo.put("Vista", "Nombre de la vista BuscarEmpleado");
         modoDesarrollo.put("Limpiar", "Limpiar responde al método accionLimpiar");
         modoDesarrollo.put("Seleccionar", "Seleccionar responde al método accionSeleccionar");
+        modoDesarrollo.put("Buscar", "Buscar: responde al método accionBuscarEmpleado");
     }
     
     private void asignarInfoModoDesarrollo(){

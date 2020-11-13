@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -60,7 +61,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
     private JFXTextField txtBuscarCateg;
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private IncidentesCategoriasDTO categoriaDTO = new IncidentesCategoriasDTO();
-    private IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
+    private final IncidentesCategoriasService categoriaService = new IncidentesCategoriasService();
     List<IncidentesCategoriasDTO> listCategorias = new ArrayList<>();
     boolean catSelec = false;
     IncidentesCategoriasDTO categoriaSelec = new IncidentesCategoriasDTO();
@@ -166,32 +167,44 @@ public class CategoriasIncidentesController extends Controller implements Initia
         if (UserAuthenticated.getInstance().isRol("ADMINISTRADOR")) {
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
         } else {
-            if (cbxFiltroCategorias.getValue() == null) {
-                Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
-            } else {
-                if (!txtBuscarCateg.getText().isEmpty() || txtBuscarCateg.getText() != null) {
-                    cargarColumnas();
-                    tablaCategorias.getItems().clear();
-                    Respuesta res;
-                    if (cbxFiltroCategorias.getValue().equals("Nombre")) {
-                        res = categoriaService.getByNombre(txtBuscarCateg.getText());
-                    } else {
-                        if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
-                            res = categoriaService.getByEstado(true);
-                        } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
-                            res = categoriaService.getByEstado(false);
+            AppContext.getInstance().set("Task", buscarCategoriaTask());
+            FlowController.getInstance().goViewCargar();
+        }
+    }
+    
+    private Task buscarCategoriaTask(){
+        return new Task(){
+            @Override
+            protected Object call() throws Exception {
+                if (cbxFiltroCategorias.getValue() == null) {
+                    Mensaje.show(Alert.AlertType.WARNING, "Seleccionar el tipo de filtro", "Debe seleccionar por cúal tipo desea filtrar la información");
+                } else {
+                    if (!txtBuscarCateg.getText().isEmpty() || txtBuscarCateg.getText() != null) {
+                        cargarColumnas();
+                        tablaCategorias.getItems().clear();
+                        Respuesta res;
+                        if (cbxFiltroCategorias.getValue().equals("Nombre")) {
+                            res = categoriaService.getByNombre(txtBuscarCateg.getText());
                         } else {
-                            res = categoriaService.getByNombre("");
+                            if (txtBuscarCateg.getText().equals("activo") || txtBuscarCateg.getText().equals("Activo")) {
+                                res = categoriaService.getByEstado(true);
+                            } else if (txtBuscarCateg.getText().equals("inactivo") || txtBuscarCateg.getText().equals("Inactivo")) {
+                                res = categoriaService.getByEstado(false);
+                            } else {
+                                res = categoriaService.getByNombre("");
+                            }
+                        }
+                        if (res.getEstado()) {
+                            tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías ", res.getMensaje());
                         }
                     }
-                    if (res.getEstado()) {
-                        tablaCategorias.getItems().addAll((List<IncidentesCategoriasDTO>) res.getResultado("Incidentes_Categorias"));
-                    } else {
-                        Mensaje.show(Alert.AlertType.ERROR, "Buscar Categorías ", res.getMensaje());
-                    }
                 }
+                return true;
             }
-        }
+            
+        };
     }
 
     @FXML
