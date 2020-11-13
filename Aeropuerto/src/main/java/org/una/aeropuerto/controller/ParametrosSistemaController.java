@@ -40,6 +40,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.Formato;
 
 public class ParametrosSistemaController extends Controller implements Initializable{
 
@@ -102,6 +103,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
         addListener();
         datosModoDesarrollo();
         lvDesarrollo = (ListView) AppContext.getInstance().get("ListView");
+        limitarCamposDeTexto();
     }
 
     public void initTableView(){
@@ -126,6 +128,12 @@ public class ParametrosSistemaController extends Controller implements Initializ
         for(String info : modoDesarrollo.keySet()){
             lvDesarrollo.getItems().add(modoDesarrollo.get(info));
         }
+    }
+    
+    private void limitarCamposDeTexto(){
+        txtCodigo.setTextFormatter(Formato.getInstance().maxLengthFormat(25));
+        txtValor.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+        txtDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
     }
     
     public Task TaskFiltrarParametros(){
