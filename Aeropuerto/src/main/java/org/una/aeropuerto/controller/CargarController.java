@@ -25,9 +25,6 @@ public class CargarController extends Controller implements Initializable {
     private ProgressIndicator piCargar;
 
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -45,6 +42,9 @@ public class CargarController extends Controller implements Initializable {
             Platform.runLater(() -> {
                 this.closeWindow();
             });
+        });
+        tarea.setOnFailed( t -> {
+            this.closeWindow();
         });
         Thread hilo = new Thread(tarea);
         hilo.start();
