@@ -16,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import org.una.aeropuerto.service.AuthenticationService;
@@ -71,9 +73,8 @@ public class LogInController extends Controller implements Initializable {
         txtPassword.setText("");
         txtViewPass.setText("");
     }
-
-    @FXML
-    private void accionLogIn(ActionEvent event) {
+    
+    private void LogIn(){
         if (camposValidos()) {
             Respuesta respuesta = service.LogIn(txtUserName.getText(), txtPassword.getText());
             if (respuesta.getEstado()) {
@@ -93,6 +94,11 @@ public class LogInController extends Controller implements Initializable {
                 Mensaje.show(Alert.AlertType.ERROR, "Inicio de sesión", respuesta.getMensaje());
             }
         }
+    }
+
+    @FXML
+    private void accionLogIn(ActionEvent event) {
+        LogIn();
     }
 
     @FXML
@@ -143,6 +149,12 @@ public class LogInController extends Controller implements Initializable {
                 Mensaje.show(Alert.AlertType.ERROR, "Restaurar Contraseña", res.getMensaje());
             }  
         }
+    }
+
+    @FXML
+    private void accionLoginKey(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER)
+            LogIn();
     }
 
 }
