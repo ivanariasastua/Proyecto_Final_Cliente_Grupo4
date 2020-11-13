@@ -165,7 +165,7 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Jefe");
         colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
         TableColumn<EmpleadosDTO, String> colrol = new TableColumn<>("Rol");
-        colrol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol())));
+        colrol.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getRol() == null ? "Sin rol" : String.valueOf(p.getValue().getRol())));
         TableColumn<EmpleadosDTO, String> colestado = new TableColumn<>("Estado");
         colestado.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactivo"));
         tablaEmpleados.getColumns().addAll(colNombre, colCedula, colJefe, colrol, colestado);

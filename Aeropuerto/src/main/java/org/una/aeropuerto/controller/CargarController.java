@@ -38,7 +38,6 @@ public class CargarController extends Controller implements Initializable {
     public void initialize() {
         Task tarea = (Task) AppContext.getInstance().get("Task");
         tarea.setOnSucceeded( t -> {
-            System.out.println("Fin");
             Platform.runLater(() -> {
                 this.closeWindow();
             });
