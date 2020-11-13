@@ -270,12 +270,25 @@ public class ServiciosController extends Controller implements Initializable {
                     Respuesta res = servService.inactivar(servicSeleccionado, servicSeleccionado.getId(), cedula, codigo);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", "El servicio ha sido inactivado");
+                        ServiciosDTO act = (ServiciosDTO) res.getResultado("Servicios");
+                        actualizarDatos(tablaServicios.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaServicios.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar servicio", res.getMensaje());
                     }
                 }
             } else {
                 Mensaje.show(Alert.AlertType.WARNING, "Inactivar servicio", "No ha seleccionado ningún servicio");
+            }
+        }
+    }
+    
+    private void actualizarDatos(List<ServiciosDTO> list, ServiciosDTO serv){
+        for(ServiciosDTO s : list){
+            if(s.getId().equals(serv.getId())){
+                s.setEstado(serv.isEstado());
             }
         }
     }

@@ -155,7 +155,7 @@ public class IncidentesRegistradosService {
             try{
                 TransactionRecorder.registrarTransaccion("Inactivar Incidente");
             }catch(Exception ex){}
-            return new Respuesta(true, "Empleados", result);
+            return new Respuesta(true, "Incidentes_Registrados", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }

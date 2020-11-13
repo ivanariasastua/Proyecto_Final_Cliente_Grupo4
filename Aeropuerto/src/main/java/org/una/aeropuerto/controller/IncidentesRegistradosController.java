@@ -251,6 +251,11 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     Respuesta res = incidentService.modificarIncidenteRegistrado(incidentSeleccionado.getId(), incidentSeleccionado);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Incidente editado correctamente");
+                        IncidentesRegistradosDTO act = (IncidentesRegistradosDTO) res.getResultado("Incidentes_Registrados");
+                        actualizarDatos(tablaIncident.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaIncident.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                     }
@@ -266,6 +271,11 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     Respuesta res = incidentService.guardarIncidenteRegistrado(incidentDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Incidente guardado correctamente");
+                        IncidentesRegistradosDTO act = (IncidentesRegistradosDTO) res.getResultado("Incidentes_Registrados");
+                        tablaIncident.getItems().add(act);
+                        Platform.runLater(() -> {
+                            tablaIncident.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error ", res.getMensaje());
                     }
@@ -317,6 +327,11 @@ public class IncidentesRegistradosController extends Controller implements Initi
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", "El Precio de Servicio ha sido inactivado");
                         incidentSelec = false;
+                        IncidentesRegistradosDTO act = (IncidentesRegistradosDTO) res.getResultado("Incidentes_Registrados");
+                        actualizarDatos(tablaIncident.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaIncident.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Precio de Servicio", res.getMensaje());
                     }
@@ -328,6 +343,14 @@ public class IncidentesRegistradosController extends Controller implements Initi
         }
     }
 
+    private void actualizarDatos(List<IncidentesRegistradosDTO> list, IncidentesRegistradosDTO inc){
+        for(IncidentesRegistradosDTO i : list){
+            if(i.getId().equals(inc.getId())){
+                i.setEstado(inc.isEstado());
+                i=inc;
+            }
+        }
+    }
     public String estado(boolean estad) {
         if (estad == true) {
             return "Activo";

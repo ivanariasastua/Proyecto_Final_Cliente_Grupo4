@@ -139,7 +139,7 @@ public class ServiciosService {
                 TransactionRecorder.registrarTransaccion("Inactivar Servicio");
             } catch (Exception ex) {
             }
-            return new Respuesta(true, "Empleados", result);
+            return new Respuesta(true, "Servicios", result);
         } catch (Exception ex) {
             return new Respuesta(false, ex.toString(), "No puedo establecerce conexion con el servidor");
         }

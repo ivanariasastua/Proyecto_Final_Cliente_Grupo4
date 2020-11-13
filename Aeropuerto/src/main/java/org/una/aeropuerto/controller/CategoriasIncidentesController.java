@@ -172,9 +172,9 @@ public class CategoriasIncidentesController extends Controller implements Initia
             FlowController.getInstance().goViewCargar();
         }
     }
-    
-    private Task buscarCategoriaTask(){
-        return new Task(){
+
+    private Task buscarCategoriaTask() {
+        return new Task() {
             @Override
             protected Object call() throws Exception {
                 if (cbxFiltroCategorias.getValue() == null) {
@@ -206,7 +206,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
                 }
                 return true;
             }
-            
+
         };
     }
 
@@ -235,12 +235,25 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     Respuesta res = categoriaService.inactivar(categoriaSelec, categoriaSelec.getId(), cedula, codigo);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", "La categoría : " + categoriaSelec.getNombre() + " ha sido inactivada");
-
+                        IncidentesCategoriasDTO act = (IncidentesCategoriasDTO) res.getResultado("Incidentes_Categorias");
+                        actualizarDatos(tablaCategorias.getItems(), act);
+                        Platform.runLater(() -> {
+                            tablaCategorias.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Inactivar Categoría", res.getMensaje());
                     }
                 }
                 catSelec = false;
+            }
+        }
+    }
+
+    private void actualizarDatos(List<IncidentesCategoriasDTO> list, IncidentesCategoriasDTO inci) {
+        for (IncidentesCategoriasDTO i : list) {
+            if (i.getId().equals(inci.getId())) {
+                i.setEstado(inci.isEstado());
+                i = inci;
             }
         }
     }
@@ -322,7 +335,7 @@ public class CategoriasIncidentesController extends Controller implements Initia
             if (categoria.getId().equals(superior.getId())) {
                 Mensaje.show(Alert.AlertType.ERROR, "Error al guardar la Categoría", "La Categoría superior no puede ser ella misma");
                 return false;
-            }else{
+            } else {
                 return true;
             }
         }
@@ -346,6 +359,11 @@ public class CategoriasIncidentesController extends Controller implements Initia
                         Respuesta res = categoriaService.modificarIncidentesCategorias(categoriaSelec.getId(), categoriaSelec);
                         if (res.getEstado()) {
                             Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Categoría editada correctamente");
+                            IncidentesCategoriasDTO act = (IncidentesCategoriasDTO) res.getResultado("Incidentes_Categorias");
+                            actualizarDatos(tablaCategorias.getItems(), act);
+                            Platform.runLater(() -> {
+                                tablaCategorias.refresh();
+                            });
                         } else {
                             Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                         }
@@ -364,6 +382,11 @@ public class CategoriasIncidentesController extends Controller implements Initia
                     Respuesta res = categoriaService.guardarIncidentesCategorias(categoriaDTO);
                     if (res.getEstado()) {
                         Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Categoría guardada correctamente");
+                        IncidentesCategoriasDTO act = (IncidentesCategoriasDTO) res.getResultado("Incidentes_Categorias");
+                        tablaCategorias.getItems().add(act);
+                        Platform.runLater(() -> {
+                            tablaCategorias.refresh();
+                        });
                     } else {
                         Mensaje.show(Alert.AlertType.ERROR, "Error", res.getMensaje());
                     }
