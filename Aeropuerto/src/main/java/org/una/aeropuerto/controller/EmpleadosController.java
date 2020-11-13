@@ -64,6 +64,7 @@ import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.dto.AreasTrabajosDTO;
 import org.una.aeropuerto.util.UserAuthenticated;
 import org.una.aeropuerto.dto.EmpleadosAreasTrabajosDTO;
+import org.una.aeropuerto.util.Formato;
 
 /**
  * FXML Controller class
@@ -147,6 +148,14 @@ public class EmpleadosController extends Controller implements Initializable {
         cbViewPass.selectedProperty().addListener( s -> {
             txtViewPass.setText(cbViewPass.isSelected() ? txtPass.getText() : "");
         });
+        formatoCampo();
+    }
+    
+    private void formatoCampo(){
+        txtCedula.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
+        txtPass.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+        txtCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
     }
 
     @Override
@@ -273,9 +282,10 @@ public class EmpleadosController extends Controller implements Initializable {
                         if (res.getEstado()) {
                             Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
                             if(UserAuthenticated.getInstance().cambioDatosCriticos((EmpleadosDTO) res.getResultado("Empleados"))){
-                                Controller controller = FlowController.getInstance().getController("Principal");
-                                FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.DECORATED);
-                                controller.closeWindow();
+                                Platform.runLater(() -> {
+                                    FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.DECORATED);
+                                    FlowController.getInstance().closeMain();
+                                });
                             }
                         } else {
                             System.out.println(res.getMensajeInterno());

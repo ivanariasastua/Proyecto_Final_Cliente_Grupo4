@@ -152,6 +152,7 @@ public class FlowController {
             stage.setOnCloseRequest( c -> {
                 c.consume();
             });
+            this.mainStage = stage;
         }
         Parent root = loader.getRoot();
         Scene scene = new Scene(root);
@@ -231,6 +232,10 @@ public class FlowController {
     
     public void clear(){
         loaders.clear();
+    }
+    
+    public void closeMain(){
+        this.mainStage.close();;
     }
 
 }
