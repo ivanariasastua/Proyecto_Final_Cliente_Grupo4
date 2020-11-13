@@ -260,45 +260,43 @@ public class EmpleadosController extends Controller implements Initializable {
         return new Task(){
             @Override
             protected Object call() throws Exception {
-                Platform.runLater(() -> {
-                    if (emplSeleccionado != null) {  //editar
-                        if (validarCampos()) {
-                            empleadoDTO = emplSeleccionado;
-                            empleadoDTO.setId(emplSeleccionado.getId());
-                            empleadoDTO.setCedula(txtCedula.getText());
-                            empleadoDTO.setCorreo(txtCorreo.getText());
-                            empleadoDTO.setJefe(jefeSelect);
-                            empleadoDTO.setNombre(txtNombre.getText());
-                            empleadoDTO.setRol(cbxRoles.getValue());
-                            Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
-                            if (res.getEstado()) {
-                                Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
-                            } else {
-                                System.out.println(res.getMensajeInterno());
-                                Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
-                            }
-                        }
-                    } else {  //guardar nuevo
-                        if (validarCampos()) {
-                            empleadoDTO = new EmpleadosDTO();
-                            empleadoDTO.setCedula(txtCedula.getText());
-                            empleadoDTO.setCorreo(txtCorreo.getText());
-                            empleadoDTO.setContrasenaEncriptada(txtPass.getText());
-                            empleadoDTO.setJefe(jefeSelect);
-                            empleadoDTO.setNombre(txtNombre.getText());
-                            empleadoDTO.setRol(cbxRoles.getValue());
-                            Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
-                            if (res.getEstado()) {
-                                Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
-                                emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
-                                tablaHorarios.getItems().clear();
-                                tvAreas.getItems().clear();
-                            } else {
-                                Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
-                            }
+                if (emplSeleccionado != null) {  //editar
+                    if (validarCampos()) {
+                        empleadoDTO = emplSeleccionado;
+                        empleadoDTO.setId(emplSeleccionado.getId());
+                        empleadoDTO.setCedula(txtCedula.getText());
+                        empleadoDTO.setCorreo(txtCorreo.getText());
+                        empleadoDTO.setJefe(jefeSelect);
+                        empleadoDTO.setNombre(txtNombre.getText());
+                        empleadoDTO.setRol(cbxRoles.getValue());
+                        Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
+                        if (res.getEstado()) {
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Editado", "Empleado editado correctamente");
+                        } else {
+                            System.out.println(res.getMensajeInterno());
+                            Mensaje.show(Alert.AlertType.ERROR, "Error al editar ", res.getMensaje());
                         }
                     }
-                });
+                } else {  //guardar nuevo
+                    if (validarCampos()) {
+                        empleadoDTO = new EmpleadosDTO();
+                        empleadoDTO.setCedula(txtCedula.getText());
+                        empleadoDTO.setCorreo(txtCorreo.getText());
+                        empleadoDTO.setContrasenaEncriptada(txtPass.getText());
+                        empleadoDTO.setJefe(jefeSelect);
+                        empleadoDTO.setNombre(txtNombre.getText());
+                        empleadoDTO.setRol(cbxRoles.getValue());
+                        Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
+                        if (res.getEstado()) {
+                            Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
+                            emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
+                            tablaHorarios.getItems().clear();
+                            tvAreas.getItems().clear();
+                        } else {
+                            Mensaje.show(Alert.AlertType.ERROR, "Error al guardar ", res.getMensaje());
+                        }
+                    }
+                }
                 return true;
             }
         
