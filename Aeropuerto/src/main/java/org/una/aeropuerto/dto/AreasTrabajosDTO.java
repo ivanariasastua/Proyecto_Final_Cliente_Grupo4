@@ -23,6 +23,7 @@ public class AreasTrabajosDTO {
     private String nombre;
     private String descripcion;
     private boolean estado;
+    private EmpleadoDTO jefe;
     
     @Override
     public String toString(){

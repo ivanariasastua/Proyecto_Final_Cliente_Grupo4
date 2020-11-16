@@ -12,9 +12,9 @@
       <JFXTextField fx:id="txtId" editable="false" focusTraversable="false" labelFloat="true" layoutX="121.0" layoutY="126.0" prefHeight="41.0" prefWidth="400.0" promptText="Id" styleClass="campos_texto_1" />
       <JFXTextField fx:id="txtNombre" labelFloat="true" layoutX="121.0" layoutY="218.0" prefHeight="41.0" prefWidth="400.0" promptText="Nombre" styleClass="campos_texto_1" />
       <JFXButton layoutX="496.0" layoutY="520.0" onAction="#actGuardar" prefHeight="44.0" prefWidth="124.0" styleClass="button_1" text="Guardar" />
-      <JFXTextField fx:id="txtEstado" editable="false" labelFloat="true" layoutX="121.0" layoutY="312.0" prefHeight="41.0" prefWidth="400.0" promptText="Estado" styleClass="campos_texto_1" />
       <JFXButton layoutX="360.0" layoutY="520.0" onAction="#actLimpiar" prefHeight="44.0" prefWidth="124.0" styleClass="button_3" text="Limpiar" />
-      <JFXTextArea fx:id="txtDescripcion" labelFloat="true" layoutX="121.0" layoutY="391.0" prefHeight="83.0" prefWidth="400.0" promptText="Descripción" styleClass="campos_texto_1" />
+      <JFXTextArea fx:id="txtDescripcion" labelFloat="true" layoutX="121.0" layoutY="306.0" prefHeight="83.0" prefWidth="400.0" promptText="Descripción" styleClass="campos_texto_1" />
       <Label fx:id="lblDesarollo" layoutX="14.0" layoutY="492.0" prefHeight="72.0" prefWidth="325.0" styleClass="texto" />
+      <JFXTextField fx:id="txtJefe" layoutX="121.0" layoutY="436.0" onMouseClicked="#actBuscarJefe" prefHeight="41.0" prefWidth="400.0" promptText="Jefe del área" styleClass="campos_texto_1" />
    </children>
 </AnchorPane>

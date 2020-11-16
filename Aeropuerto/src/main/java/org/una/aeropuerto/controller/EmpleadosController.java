@@ -79,7 +79,7 @@ public class EmpleadosController extends Controller implements Initializable {
     private final EmpleadosHorariosService horarioService = new EmpleadosHorariosService();
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
     private ObservableList itemsdias;
-    private EmpleadosDTO empleadoDTO = null, jefeSelect = null, emplSeleccionado = null;
+    private EmpleadosDTO empleadoDTO = null, emplSeleccionado = null;
     private EmpleadosHorariosDTO horarioSeleccionado = null, horarioDTO = null;
     private AreasTrabajosDTO area = null;
     private EmpleadosAreasTrabajosDTO areaSelected = null;
@@ -104,7 +104,6 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private JFXComboBox<String> cbxDiaSalida;
     @FXML private Tab tabArear;
     @FXML private JFXTextField txtId;
-    @FXML private JFXTextField txtJefe;
     @FXML private Label lblArea;
     @FXML private TableView<EmpleadosAreasTrabajosDTO> tvAreas;
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colArea;
@@ -112,7 +111,6 @@ public class EmpleadosController extends Controller implements Initializable {
     @FXML private TableColumn<EmpleadosAreasTrabajosDTO, String> colEstado;
     @FXML private JFXButton btnActInac;
     @FXML private JFXTextField txtCorreo;
-    @FXML private RowConstraints rowContrasena;
     @FXML private JFXPasswordField txtPass;
     @FXML private JFXCheckBox cbViewPass;
     @FXML private JFXTextField txtViewPass;
@@ -140,20 +138,27 @@ public class EmpleadosController extends Controller implements Initializable {
         txtId.setDisable(true);   
         addListener();
         datosModoDesarrollo();
-        txtPass.textProperty().addListener( t -> {
+        txtViewPass.setVisible(false);
+        cbViewPass.selectedProperty().addListener( s -> {
             if(cbViewPass.isSelected()){
-                txtViewPass.setText(txtPass.getText());
+                txtViewPass.toFront();
+                txtViewPass.setVisible(true);
+                txtPass.setVisible(false);
+            }else{
+                txtViewPass.toBack();
+                txtViewPass.setVisible(false);
+                txtPass.setVisible(true);
             }
         });
-        cbViewPass.selectedProperty().addListener( s -> {
-            txtViewPass.setText(cbViewPass.isSelected() ? txtPass.getText() : "");
-        });
         formatoCampo();
+        txtPass.textProperty().unbind();
+        txtPass.textProperty().bindBidirectional(txtViewPass.textProperty());
     }
     
     private void formatoCampo(){
         txtCedula.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
         txtPass.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
+        txtViewPass.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
         txtNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txtCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
     }
@@ -166,7 +171,6 @@ public class EmpleadosController extends Controller implements Initializable {
         btnGuardarHorario.setVisible(UserAuthenticated.getInstance().isRol("GESTOR") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         adjustWidth(contenedor.getWidth());
         adjustHeight(contenedor.getHeight());
-        rowContrasena.setPrefHeight((contenedor.getHeight()-100) / 4);
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             asignarInfoModoDesarrollo();
         }
@@ -275,7 +279,6 @@ public class EmpleadosController extends Controller implements Initializable {
                         empleadoDTO.setId(emplSeleccionado.getId());
                         empleadoDTO.setCedula(txtCedula.getText());
                         empleadoDTO.setCorreo(txtCorreo.getText());
-                        empleadoDTO.setJefe(jefeSelect);
                         empleadoDTO.setNombre(txtNombre.getText());
                         empleadoDTO.setRol(cbxRoles.getValue());
                         Respuesta res = empleadoService.modificarEmpleado(emplSeleccionado.getId(), empleadoDTO);
@@ -298,13 +301,14 @@ public class EmpleadosController extends Controller implements Initializable {
                         empleadoDTO.setCedula(txtCedula.getText());
                         empleadoDTO.setCorreo(txtCorreo.getText());
                         empleadoDTO.setContrasenaEncriptada(txtPass.getText());
-                        empleadoDTO.setJefe(jefeSelect);
                         empleadoDTO.setNombre(txtNombre.getText());
                         empleadoDTO.setRol(cbxRoles.getValue());
                         Respuesta res = empleadoService.guardarEmpleado(empleadoDTO);
                         if (res.getEstado()) {
                             Mensaje.show(Alert.AlertType.INFORMATION, "Guardado", "Empleado guardado correctamente");
                             emplSeleccionado = (EmpleadosDTO) res.getResultado("Empleados");
+                            emplSeleccionado.setEmpleadosAreasTrabajo(new ArrayList<>());
+                            emplSeleccionado.setHorarios(new ArrayList<>());
                             tablaHorarios.getItems().clear();
                             tvAreas.getItems().clear();
                         } else {
@@ -322,7 +326,6 @@ public class EmpleadosController extends Controller implements Initializable {
         txtNombre.setText(null);
         txtCedula.setText(null);
         txtCorreo.setText(null);
-        txtJefe.clear();
         cbxRoles.setValue(null);
         emplSeleccionado = null;
         tablaHorarios.getItems().clear();
@@ -333,19 +336,13 @@ public class EmpleadosController extends Controller implements Initializable {
         txtPass.setVisible(true);
         cbViewPass.setVisible(true);
         txtViewPass.setVisible(true);
-        rowContrasena.setPrefHeight((contenedor.getHeight()-100) / 4);
     }
 
     public void cargarDatos() {
         txtId.setText(emplSeleccionado.getId().toString());
         txtCedula.setText(emplSeleccionado.getCedula());
         txtNombre.setText(emplSeleccionado.getNombre());
-        txtJefe.setText(emplSeleccionado.getJefe() == null ? "Sin jefe directo" : emplSeleccionado.getJefe().getNombre());
-        if(emplSeleccionado.getJefe() != null){
-            jefeSelect = emplSeleccionado.getJefe();
-        }
         cbxRoles.setValue(emplSeleccionado.getRol());
-        rowContrasena.setPrefHeight(0);
         txtCorreo.setText(emplSeleccionado.getCorreo());
     }
 
@@ -619,39 +616,6 @@ public class EmpleadosController extends Controller implements Initializable {
                 txtPass.setVisible(false);
                 cbViewPass.setVisible(false);
                 txtViewPass.setVisible(false);
-            }
-        }
-    }
-
-    @FXML
-    private void accionBuscraJefe(MouseEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar Empleado"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
-        }else{
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
-            jefeSelect  = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-            if(jefeSelect != null){
-                String mensaje = "";
-                if(emplSeleccionado != null){
-                    if(jefeSelect.getJefe() != null){
-                       if(jefeSelect.getJefe().getId().equals(emplSeleccionado.getId())){
-                           Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Jefe", "El jefe seleccionado, tiene como jefe el empleado que esta siendo editando\nNo se puede proceder");
-                           jefeSelect = null;
-                       }else if(jefeSelect.getId().equals(emplSeleccionado.getId())){
-                           Mensaje.show(Alert.AlertType.WARNING, "Seleccionar Jefe", "El jefe seleccionado, es el empleado que esta siendo editando\nNo se puede proceder");
-                           jefeSelect = null;
-                       }else{
-                           txtJefe.setText(jefeSelect.getNombre());
-                       }
-                    }else{
-                        txtJefe.setText(jefeSelect.getNombre());
-                    }
-                }else{
-                    txtJefe.setText(jefeSelect.getNombre());
-                }
-            }else{
-                txtJefe.setText("Sin jefe directo");
             }
         }
     }

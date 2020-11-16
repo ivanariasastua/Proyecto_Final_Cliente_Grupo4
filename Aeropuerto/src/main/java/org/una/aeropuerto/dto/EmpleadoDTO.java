@@ -5,20 +5,20 @@
  */
 package org.una.aeropuerto.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
- * @author cordo
+ * @author Ivan Josué Arias Astua
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor 
-public class EmpleadosDTO {
+@ToString
+public class EmpleadoDTO {
     
     private Long id;
     private String nombre;
@@ -31,12 +31,8 @@ public class EmpleadosDTO {
     private Boolean solicitud;
     private Boolean aprobado;
     private String correo;
-    @JsonManagedReference
-    private List<EmpleadosAreasTrabajosDTO> empleadosAreasTrabajo;
-    @JsonManagedReference
-    private List<EmpleadosHorariosDTO> horarios;
     
-    public EmpleadosDTO(EmpleadoDTO emp){
+    public EmpleadoDTO(EmpleadosDTO emp){
         id = emp.getId();
         nombre = emp.getNombre();
         cedula = emp.getCedula();
@@ -49,10 +45,4 @@ public class EmpleadosDTO {
         aprobado = emp.getAprobado();
         correo = emp.getCorreo();
     }
-    
-    @Override
-    public String toString(){
-        return nombre;
-    }
-    
 }

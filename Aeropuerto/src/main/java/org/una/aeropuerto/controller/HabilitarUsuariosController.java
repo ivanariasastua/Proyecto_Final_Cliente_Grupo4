@@ -87,7 +87,7 @@ public class HabilitarUsuariosController extends Controller implements Initializ
         tvEmpleados.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         tcCedula.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCedula()));
-        tcJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
+        tcJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getEsJefe() == false ? "No" : "Sí"));
         tcRol.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(p.getValue().getRol() )));
         tcEstado.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().isEstado() ? "Activo" : "Inactivo"));
     }

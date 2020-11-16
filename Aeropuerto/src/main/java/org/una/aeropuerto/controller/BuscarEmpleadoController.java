@@ -67,7 +67,6 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         } else {
             if (cbBuscarEmpleado.getSelectionModel().getSelectedItem() != null && !txtBuscarEmpleados.getText().isEmpty()) {
                 tablaEmpleados.getItems().clear();
-                //Mensaje.showProgressDialog(TaskFiltrarEmpleado(), "Buscar Empleado", "Filtrando empleado");
                 AppContext.getInstance().set("Task", TaskFiltrarEmpleado());
                 FlowController.getInstance().goViewCargar();
             }
@@ -162,8 +161,8 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         colNombre.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getNombre()));
         TableColumn<EmpleadosDTO, String> colCedula = new TableColumn<>("Cédula");
         colCedula.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getCedula()));
-        TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Jefe");
-        colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "No tiene" : String.valueOf(p.getValue().getJefe())));
+        TableColumn<EmpleadosDTO, String> colJefe = new TableColumn<>("Es jefe");
+        colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getEsJefe() == false ? "No" : "Sí"));
         TableColumn<EmpleadosDTO, String> colrol = new TableColumn<>("Rol");
         colrol.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getRol() == null ? "Sin rol" : String.valueOf(p.getValue().getRol())));
         TableColumn<EmpleadosDTO, String> colestado = new TableColumn<>("Estado");
