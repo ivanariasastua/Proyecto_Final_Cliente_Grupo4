@@ -115,11 +115,12 @@ public class ReporteService {
             }
             parametros.put("responsable", responsable);
             parametros.put("emisor", emisor);
+            parametros.put("creador", UserAuthenticated.getInstance().getUsuario().getNombre()+" "+UserAuthenticated.getInstance().getUsuario().getCedula());
             Request request;
             if(est){
-                request = new Request("reportes/reporteIncidente", "/{fechaIni}/{fechaFin}/{estado}/{responsable}/{emisor}", parametros);
+                request = new Request("reportes/reporteIncidente", "/{fechaIni}/{fechaFin}/{estado}/{responsable}/{emisor}/{creador}", parametros);
             }else{
-                request = new Request("reportes/reporteIncidente2", "/{fechaIni}/{fechaFin}/{responsable}/{emisor}", parametros);
+                request = new Request("reportes/reporteIncidente2", "/{fechaIni}/{fechaFin}/{responsable}/{emisor}/{creador}", parametros);
             }
             request.get();
             if (request.isError()) {

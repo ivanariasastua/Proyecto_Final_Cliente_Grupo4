@@ -154,7 +154,6 @@ public class ReporteGastosController extends Controller implements Initializable
                     }
                     if(res.getEstado()){
                         String resp = (String) res.getResultado("Reporte");
-                        System.out.println("Exito: "+resp);
                         byte[] bytes = Base64.getDecoder().decode(resp);
                         try{
                             ByteArrayInputStream array = new ByteArrayInputStream(bytes);
