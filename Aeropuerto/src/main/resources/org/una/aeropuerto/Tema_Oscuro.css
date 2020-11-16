@@ -7,6 +7,10 @@ and open the template in the editor.
     Created on : 20 sep 2020, 1:29:39
     Author     : ivana
 */
+#imvLogo{
+    -fx-image:url('resources/Logo2.png')
+}
+
 .progreso{
     -fx-progress-color: white;
 }

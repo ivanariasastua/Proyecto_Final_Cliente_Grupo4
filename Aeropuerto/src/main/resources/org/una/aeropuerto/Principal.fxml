@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXHamburger?>
-<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
@@ -66,22 +66,37 @@
                            </styleClass></JFXButton>
                      </graphic>
                   </MenuItem>
+                  <MenuItem fx:id="miDesarollo" mnemonicParsing="false">
+                     <graphic>
+                        <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="300.0">
+                           <children>
+                              <Label styleClass="texto" text="Modo desarrollo">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <JFXCheckBox onAction="#cbDesarrollo" styleClass="cb" text="Activar">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </JFXCheckBox>
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </MenuItem>
               </items>
                <graphic>
                   <ImageView id="imvUser" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </MenuButton>
-            <Label fx:id="lblTitulo" layoutX="490.0" layoutY="10.0" prefHeight="50.0" prefWidth="501.0" styleClass="lblTitulo_1" text="SISTEMA AEROPUERTO">
+            <Label fx:id="lblTitulo" layoutX="490.0" layoutY="10.0" prefHeight="50.0" prefWidth="665.0" styleClass="lblTitulo_1" text="SISTEMA AEROPUERTO">
                <HBox.margin>
                   <Insets left="2.0" right="2.0" />
                </HBox.margin>
+               <graphic>
+                  <ImageView id="imvLogo" fitHeight="50.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+               </graphic>
             </Label>
-            <ImageView fx:id="imvDark" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
-            <JFXToggleButton fx:id="tbTema" ellipsisString="" onAction="#accionTema" prefHeight="56.0" prefWidth="0.0" />
-            <ImageView fx:id="imvLight" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin></ImageView>
             <Label alignment="CENTER" onMouseClicked="#accionMinimizar" prefHeight="46.0" prefWidth="46.0" styleClass="lblMarco">
                <graphic>
                   <ImageView id="imvMin" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />

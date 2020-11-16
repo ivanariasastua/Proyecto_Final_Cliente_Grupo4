@@ -29,10 +29,14 @@ public class AppContext {
     private void cargarTema(){
         try{
             File archivo = new File (App.class.getResource("resources/config.txt").getFile());
-            FileReader fr = new FileReader (archivo);
-            BufferedReader br = new BufferedReader(fr);
-            String linea = br.readLine();
-            set("Tema", linea);
+            if(archivo.exists()){
+                FileReader fr = new FileReader (archivo);
+                BufferedReader br = new BufferedReader(fr);
+                String linea = br.readLine();
+                set("Tema", linea);
+            }else{
+                set("Tema", "Tema_Oscura.css");
+            }
         }catch(IOException ex){
             System.out.println("Error cargando el tema ["+ex+"]");
             set("Tema", "Tema_Oscuro.css");

@@ -68,9 +68,9 @@
                         </HBox>
                      </top>
                      <bottom>
-                        <Button mnemonicParsing="false" onAction="#inactivarParametro" prefHeight="43.0" prefWidth="168.0" styleClass="button_3" text="Inactivar" BorderPane.alignment="CENTER">
+                        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#inactivarParametro" prefHeight="43.0" prefWidth="200.0" styleClass="button_2" text="Inactivar" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
-                              <Insets right="640.0" top="5.0" />
+                              <Insets right="570.0" top="5.0" />
                            </BorderPane.margin>
                         </Button>
                      </bottom>

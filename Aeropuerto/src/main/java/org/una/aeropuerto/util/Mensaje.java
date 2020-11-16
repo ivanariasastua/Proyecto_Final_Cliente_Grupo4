@@ -18,6 +18,7 @@ import javafx.stage.Window;
 import javafx.util.Pair;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.controlsfx.dialog.ProgressDialog;
@@ -71,7 +72,7 @@ public class Mensaje {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
         TextField cedula = new TextField();
-        TextField codigo = new TextField();
+        PasswordField codigo = new PasswordField();
         grid.add(new Label("Ingrese la cedula del gerente"), 0, 0);
         grid.add(cedula, 1, 0);
         grid.add(new Label("Codigo del gerente"), 0, 1);

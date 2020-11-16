@@ -13,6 +13,7 @@ import javax.ws.rs.core.GenericType;
 import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
+import org.una.aeropuerto.util.UserAuthenticated;
 
 /**
  *
@@ -30,7 +31,7 @@ public class ReporteService {
             parametros.put("estPago", estPago);
             parametros.put("estGasto", estGasto);
             parametros.put("responsable", responsable);
-            Request request = new Request("reportes/reporteGastos1", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estPago}/{estGasto}/{responsable}", parametros);
+            Request request = new Request("reportes/reporteGastos1", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estPago}/{estGasto}/{responsable}/{creador}", parametros);
             request.get();
             if(request.isError())
                 return new Respuesta(false, request.getError());
@@ -50,7 +51,8 @@ public class ReporteService {
             parametros.put("servicio", servicio);
             parametros.put("estPago", estPago);
             parametros.put("responsable", responsable);
-            Request request = new Request("reportes/reporteGastos3", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estPago}/{responsable}", parametros);
+            parametros.put("creador", UserAuthenticated.getInstance().getUsuario().getNombre()+" "+UserAuthenticated.getInstance().getUsuario().getCedula());
+            Request request = new Request("reportes/reporteGastos3", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estPago}/{responsable}/{creador}", parametros);
             request.get();
             if(request.isError())
                 return new Respuesta(false, request.getError());
@@ -70,7 +72,8 @@ public class ReporteService {
             parametros.put("servicio", servicio);
             parametros.put("estGasto", estGasto);
             parametros.put("responsable", responsable);
-            Request request = new Request("reportes/reporteGastos4", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estGasto}/{responsable}", parametros);
+            parametros.put("creador", UserAuthenticated.getInstance().getUsuario().getNombre()+" "+UserAuthenticated.getInstance().getUsuario().getCedula());
+            Request request = new Request("reportes/reporteGastos4", "/{fecha}/{fecha2}/{empresa}/{servicio}/{estGasto}/{responsable}/{creador}", parametros);
             request.get();
             if(request.isError())
                 return new Respuesta(false, request.getError());
@@ -89,7 +92,8 @@ public class ReporteService {
             parametros.put("empresa", empresa);
             parametros.put("servicio", servicio);
             parametros.put("responsable", responsable);
-            Request request = new Request("reportes/reporteGastos2", "/{fecha}/{fecha2}/{empresa}/{servicio}/{responsable}", parametros);
+            parametros.put("creador", UserAuthenticated.getInstance().getUsuario().getNombre()+" "+UserAuthenticated.getInstance().getUsuario().getCedula());
+            Request request = new Request("reportes/reporteGastos2", "/{fecha}/{fecha2}/{empresa}/{servicio}/{responsable}/{creador}", parametros);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError());

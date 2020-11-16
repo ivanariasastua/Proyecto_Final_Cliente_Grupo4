@@ -70,6 +70,8 @@ public class TransaccionesController extends Controller implements Initializable
     private GridPane gpRoot;
     
     private final Pane contenedor = (Pane) AppContext.getInstance().get("Contenedor");
+    private final SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+    private String fecha_inicio, fecha_final, emp = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -81,7 +83,6 @@ public class TransaccionesController extends Controller implements Initializable
     }    
 
     private void initTabla(){
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
         tablaTransac.getColumns().clear();
         TableColumn<TransaccionesDTO, String> colId = new TableColumn<>("ID");
         colId.setCellValueFactory((t) -> new SimpleStringProperty(t.getValue().getId().toString()));
@@ -156,6 +157,8 @@ public class TransaccionesController extends Controller implements Initializable
     private Boolean validarCampos(){
         if(dpDesde.getValue() != null && dpHasta.getValue() != null){
             if(dpDesde.getValue().isBefore(dpHasta.getValue()) && dpHasta.getValue().equals(LocalDate.now()) || dpHasta.getValue().isBefore(LocalDate.now())){
+                fecha_inicio = formato.format(dpDesde.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                fecha_final = formato.format(dpHasta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 if(txtBuscarTransacciones.getText() == null || txtBuscarTransacciones.getText().isEmpty())
                     empleado = "null";
                 else
@@ -177,8 +180,14 @@ public class TransaccionesController extends Controller implements Initializable
     private JasperPrint crearJasperPrint(){
         if(listaReporte != null && !listaReporte.isEmpty()){
             try {
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 HashMap<String, Object> parametros = new HashMap<>();
                 parametros.put("total", String.valueOf(listaReporte.size()));
+                parametros.put("fecha_creacion", format.format(new Date()));
+                parametros.put("fecha_inicio", fecha_inicio);
+                parametros.put("fecha_final", fecha_final);
+                parametros.put("empleado", emp.isBlank() ? "Todos" : emp);
+                parametros.put("creador", UserAuthenticated.getInstance().getUsuario().getNombre()+" "+UserAuthenticated.getInstance().getUsuario().getCedula());
                 File file = new File (App.class.getResource("resources/rep_transacciones.jrxml").getFile());
                 JasperReport report = JasperCompileManager.compileReport(file.getAbsolutePath());
                 return JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(listaReporte));
@@ -228,8 +237,13 @@ public class TransaccionesController extends Controller implements Initializable
             AppContext.getInstance().set("empSelect", null);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
-            if(emplSeleccionado != null)
+            if(emplSeleccionado != null){
                 txtBuscarTransacciones.setText(emplSeleccionado.getCedula());
+                emp = emplSeleccionado.getNombre()+" "+emplSeleccionado.getCedula();
+            }else{
+                txtBuscarTransacciones.setText("");
+                emp = null;
+            }
         }
     }
     

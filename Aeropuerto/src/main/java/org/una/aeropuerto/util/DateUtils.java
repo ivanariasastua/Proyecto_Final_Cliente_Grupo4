@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.una.aeropuerto.controller;
+package org.una.aeropuerto.util;
 
 import java.time.Instant;
 import java.time.LocalDate;

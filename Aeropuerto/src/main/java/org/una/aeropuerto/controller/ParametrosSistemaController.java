@@ -306,7 +306,7 @@ public class ParametrosSistemaController extends Controller implements Initializ
         bpRoot.setPrefWidth(ancho);
         vbRoot.setPrefWidth(ancho);
         tabPane.setPrefWidth(ancho);
-        tvParametros.setPrefWidth(ancho-314);
+        tvParametros.setPrefWidth(ancho-30);
         gpDatos.setPrefWidth(ancho);
     }
 

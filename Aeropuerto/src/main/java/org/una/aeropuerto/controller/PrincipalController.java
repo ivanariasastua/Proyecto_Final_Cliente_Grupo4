@@ -6,12 +6,7 @@
 package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.controls.JFXToggleButton;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import static java.lang.System.exit;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -44,7 +39,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
-import org.una.aeropuerto.App;
 import org.una.aeropuerto.dto.AuthenticationRequest;
 import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.UserAuthenticated;
@@ -64,9 +58,6 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML private Label lblCedula1;
     @FXML private Label lblRol1;
     @FXML private MenuItem miCodigo1;
-    @FXML private ImageView imvDark;
-    @FXML private JFXToggleButton tbTema;
-    @FXML private ImageView imvLight;
     @FXML private ImageView imvMaximizarRestaurar;
     @FXML private Label lblTitulo;
     @FXML private ScrollPane spMenu;
@@ -106,6 +97,8 @@ public class PrincipalController extends Controller implements Initializable {
     private ObservableList<TitledPane> menu;
     @FXML
     private Accordion acMenu;
+    @FXML
+    private MenuItem miDesarollo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -209,23 +202,6 @@ public class PrincipalController extends Controller implements Initializable {
     }
 
     @FXML
-    private void accionTema(ActionEvent event) {
-        PrintWriter pw = null;
-        try {
-            String tema = tbTema.isSelected() ? "Tema_Claro.css" : "Tema_Oscuro.css";
-            FileWriter file = new FileWriter(App.class.getResource("resources/config.txt").getFile());
-            file.write(tema);
-            file.flush();
-            file.close();
-            AppContext.getInstance().set("Tema", tema);
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error leyendo el archivo: [ " + ex + " ]");
-        } catch (IOException ex) {
-            System.out.println("Error leyendo el archivo: [ " + ex + " ]");
-        }
-    }
-
-    @FXML
     private void accionMinimizar(MouseEvent event) {
         this.minimizeWindow();
     }
@@ -283,11 +259,9 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        miDesarollo.setVisible(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
-        try {
-            miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
-        } catch (Exception ex) {
-        }
+        miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         smUser.setText(UserAuthenticated.getInstance().getUsuario().getNombre());
         lblCedula1.setText(UserAuthenticated.getInstance().getUsuario().getCedula());
         lblRol1.setText(UserAuthenticated.getInstance().getRol().getNombre());
@@ -328,7 +302,7 @@ public class PrincipalController extends Controller implements Initializable {
     }
 
     public void adjustWidth(double witdh) {
-        lblTitulo.setPrefWidth(witdh - 599);
+        lblTitulo.setPrefWidth(witdh - 445);
         if (isShow) {
             paneContenerdor.setPrefWidth(witdh - 300);
         } else {
@@ -375,7 +349,7 @@ public class PrincipalController extends Controller implements Initializable {
         String codigo = "";
         int cont = 0, aux = 0;
         char caracter;
-        while(cont < 25){
+        while(cont < 6){
             caracter = (char) (Math.floor(Math.random()*74) + 48);
             aux = caracter;
             System.out.println(aux+" : "+caracter);
@@ -436,5 +410,9 @@ public class PrincipalController extends Controller implements Initializable {
     
     public void cerrarWindow(){
         exit(1);
+    }
+
+    @FXML
+    private void cbDesarrollo(ActionEvent event) {
     }
 }

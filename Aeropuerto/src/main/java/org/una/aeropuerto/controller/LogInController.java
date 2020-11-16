@@ -20,12 +20,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
+import org.una.aeropuerto.App;
 import org.una.aeropuerto.service.AuthenticationService;
 import org.una.aeropuerto.util.FlowController;
 import org.una.aeropuerto.util.Mensaje;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.util.UserAuthenticated;
 import org.una.aeropuerto.service.CambioContrasenaService;
+import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.Formato;
 
 /**
@@ -69,9 +71,11 @@ public class LogInController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
+        cargarTema();
         txtUserName.setText("");
         txtPassword.setText("");
         txtViewPass.setText("");
+        cbPass.setSelected(false);
     }
     
     private void LogIn(){
@@ -135,6 +139,12 @@ public class LogInController extends Controller implements Initializable {
 
     @Override
     public void cargarTema() {
+        try{
+            this.getStage().getScene().getStylesheets().clear();
+            this.getStage().getScene().getStylesheets().add(App.class.getResource((String) AppContext.getInstance().get("Tema")).toString());
+        }catch(Exception ex){
+            System.out.println("Error cambiando tema: "+ex);
+        }
     }
 
     @FXML
