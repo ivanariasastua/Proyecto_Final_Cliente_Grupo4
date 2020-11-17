@@ -124,7 +124,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[id]]></text>
+				<text><![CDATA[Id]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="80" y="0" width="370" height="30" forecolor="#000000" backcolor="#003366" uuid="c412d789-4fd1-441c-adac-c4f4f449e10a">
@@ -133,7 +133,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[accion]]></text>
+				<text><![CDATA[Acción]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="450" y="0" width="230" height="30" forecolor="#000000" backcolor="#003366" uuid="8665bf1a-0fd2-4a18-bbb0-ab113267df5c">
@@ -142,7 +142,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[empleado]]></text>
+				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="680" y="0" width="140" height="30" forecolor="#000000" backcolor="#003366" uuid="903d5a8b-6b1e-4d37-b603-cbe320911bfe">
