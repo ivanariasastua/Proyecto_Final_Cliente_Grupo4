@@ -17,6 +17,7 @@
 	<parameter name="fecha_final" class="java.lang.String"/>
 	<parameter name="creador" class="java.lang.String"/>
 	<parameter name="empleado" class="java.lang.String"/>
+	<parameter name="logo" class="java.io.InputStream"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -35,12 +36,11 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="25" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Reporte de Transacciones
-]]></text>
+				<text><![CDATA[Reporte de Transacciones]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="180" height="120" uuid="40c8ba12-9441-4779-84dc-600e7f50326f"/>
-				<imageExpression><![CDATA["Logo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="0" y="120" width="820" height="30" uuid="9c7fd2a0-3305-49ec-89fb-cce7985a3d91"/>
@@ -237,7 +237,9 @@
 			</staticText>
 			<textField>
 				<reportElement x="180" y="0" width="640" height="42" uuid="d0e40078-6674-41a2-a17a-b1c235f92028"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 		</band>

@@ -7,6 +7,7 @@ package org.una.aeropuerto.controller;
 
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
+import org.springframework.util.ResourceUtils;
 import org.una.aeropuerto.App;
 import org.una.aeropuerto.dto.EmpleadosDTO;
 import org.una.aeropuerto.dto.TransaccionesDTO;
@@ -157,8 +159,8 @@ public class TransaccionesController extends Controller implements Initializable
     private Boolean validarCampos(){
         if(dpDesde.getValue() != null && dpHasta.getValue() != null){
             if(dpDesde.getValue().isBefore(dpHasta.getValue()) && dpHasta.getValue().equals(LocalDate.now()) || dpHasta.getValue().isBefore(LocalDate.now())){
-                fecha_inicio = formato.format(dpDesde.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-                fecha_final = formato.format(dpHasta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                fecha_inicio = formato.format(Date.from(dpHasta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                fecha_final = formato.format(Date.from(dpHasta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 if(txtBuscarTransacciones.getText() == null || txtBuscarTransacciones.getText().isEmpty())
                     empleado = "null";
                 else
@@ -177,7 +179,7 @@ public class TransaccionesController extends Controller implements Initializable
     public void cargarTema() {
     }
     
-    private JasperPrint crearJasperPrint(){
+    private JasperPrint crearJasperPrint() throws FileNotFoundException{
         if(listaReporte != null && !listaReporte.isEmpty()){
             try {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -186,8 +188,9 @@ public class TransaccionesController extends Controller implements Initializable
                 parametros.put("fecha_creacion", format.format(new Date()));
                 parametros.put("fecha_inicio", fecha_inicio);
                 parametros.put("fecha_final", fecha_final);
-                parametros.put("empleado", emp.isBlank() ? "Todos" : emp);
+                parametros.put("empleado", emp == null ? "Todos" : emp);
                 parametros.put("creador", UserAuthenticated.getInstance().getUsuario().getNombre()+" "+UserAuthenticated.getInstance().getUsuario().getCedula());
+                parametros.put("logo", App.class.getResourceAsStream("resources/logo.png"));
                 File file = new File (App.class.getResource("resources/rep_transacciones.jrxml").getFile());
                 JasperReport report = JasperCompileManager.compileReport(file.getAbsolutePath());
                 return JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(listaReporte));
@@ -262,5 +265,9 @@ public class TransaccionesController extends Controller implements Initializable
     
     private void ajustarAlto(Double Alto){
         gpRoot.setPrefHeight(Alto);
+    }
+
+    @FXML
+    private void actLimpiar(ActionEvent event) {
     }
 }
