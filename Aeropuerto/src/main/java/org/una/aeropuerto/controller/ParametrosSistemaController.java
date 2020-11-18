@@ -81,10 +81,6 @@ public class ParametrosSistemaController extends Controller implements Initializ
     @FXML
     private GridPane gpDatos;
 
-    @Override
-    public void cargarTema() {
-        
-    }
 
     @Override
     public void initialize() {

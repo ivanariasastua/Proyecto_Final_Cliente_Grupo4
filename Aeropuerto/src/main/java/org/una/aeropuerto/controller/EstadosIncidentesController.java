@@ -146,8 +146,4 @@ public class EstadosIncidentesController extends Controller implements Initializ
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
 }

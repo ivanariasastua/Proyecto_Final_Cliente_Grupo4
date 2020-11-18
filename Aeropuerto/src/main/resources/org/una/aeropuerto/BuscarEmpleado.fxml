@@ -60,7 +60,7 @@
    <right>
       <VBox fx:id="vbDevelop" minWidth="0.0" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
-            <ListView fx:id="lvDevelop" minWidth="0.0" prefHeight="536.0" prefWidth="250.0" />
+            <ListView fx:id="lvDevelop" minWidth="0.0" prefHeight="536.0" prefWidth="250.0" style="-fx-background-color: #2a2746;" styleClass="lv" />
          </children>
       </VBox>
    </right>

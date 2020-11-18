@@ -441,10 +441,6 @@ public class ServiciosController extends Controller implements Initializable {
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
     private void addListener() {
         contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());

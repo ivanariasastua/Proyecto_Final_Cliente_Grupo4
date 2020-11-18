@@ -56,10 +56,6 @@ public class MantServiciosController extends Controller implements Initializable
     }
 
     @Override
-    public void cargarTema() {
-    }
-
-    @Override
     public void initialize() {
         servSelect = new ServiciosDTO();
         lblDesarrollo.setText("");

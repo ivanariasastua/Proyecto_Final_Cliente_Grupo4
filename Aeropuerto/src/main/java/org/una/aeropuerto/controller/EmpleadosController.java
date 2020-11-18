@@ -722,10 +722,6 @@ public class EmpleadosController extends Controller implements Initializable {
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
     @FXML
     private void actTablaAreas(MouseEvent event) {
         if(tvAreas.getSelectionModel().getSelectedItem() != null){

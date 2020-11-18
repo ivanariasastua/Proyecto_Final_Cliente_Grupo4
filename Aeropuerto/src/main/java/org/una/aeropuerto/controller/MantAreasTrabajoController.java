@@ -67,10 +67,6 @@ public class MantAreasTrabajoController extends Controller implements Initializa
     }
 
     @Override
-    public void cargarTema() {
-    }
-
-    @Override
     public void initialize() {
         limpiarAreas();
         lblDesarollo.setText("");

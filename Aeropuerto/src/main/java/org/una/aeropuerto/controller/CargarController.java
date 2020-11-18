@@ -28,11 +28,7 @@ public class CargarController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    @Override
-    public void cargarTema() {
-    }
+    }  
 
     @Override
     public void initialize() {

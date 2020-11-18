@@ -71,7 +71,6 @@ public class LogInController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
-        cargarTema();
         txtUserName.setText("");
         txtPassword.setText("");
         txtViewPass.setText("");
@@ -135,16 +134,6 @@ public class LogInController extends Controller implements Initializable {
         }
         Mensaje.show(Alert.AlertType.WARNING, "Inicio de sesión", mensaje);
         return false;
-    }
-
-    @Override
-    public void cargarTema() {
-        try{
-            this.getStage().getScene().getStylesheets().clear();
-            this.getStage().getScene().getStylesheets().add(App.class.getResource((String) AppContext.getInstance().get("Tema")).toString());
-        }catch(Exception ex){
-            System.out.println("Error cambiando tema: "+ex);
-        }
     }
 
     @FXML

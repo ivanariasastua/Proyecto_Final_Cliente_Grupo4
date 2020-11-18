@@ -155,6 +155,17 @@ and open the template in the editor.
     -fx-background-color: #363f78;
 }
 
+.lv .list-cell{
+    -fx-background-color: #2a2746;
+    -fx-text-fill: white;
+    -fx-font: bold 14px "Courier";
+}
+
+.lv .list-cell:selected{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: black;
+}
+
 .button{ 
     -fx-rippler-fill:firebrick;
     -jfx-rippler-fill: transparent; 

@@ -193,8 +193,4 @@ public class BuscarEmpleadoController extends Controller implements Initializabl
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
 }

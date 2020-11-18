@@ -575,10 +575,6 @@ public class GastosServiciosController extends Controller implements Initializab
         }
     }
     
-    @Override
-    public void cargarTema() {
-    }
-    
     private void addListner() {
         contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());

@@ -92,12 +92,8 @@ public class ReporteGastosController extends Controller implements Initializable
         txtResponsable.setEditable(false);
         txtServicio.setEditable(false);
         ajustarPantalla();
-    }    
-
-    @Override
-    public void cargarTema() {
     }
-
+    
     @Override
     public void initialize() {
         rbA.setSelected(true);

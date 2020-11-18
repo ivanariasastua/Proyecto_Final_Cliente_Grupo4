@@ -261,10 +261,6 @@ public class CategoriasIncidentesController extends Controller implements Initia
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
     private void addListener() {
         contenedor.widthProperty().addListener(w -> {
             adjustWidth(contenedor.getWidth());

@@ -193,8 +193,4 @@ public class BuscarCategoriasController extends Controller implements Initializa
 
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
 }

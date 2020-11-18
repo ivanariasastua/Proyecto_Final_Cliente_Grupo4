@@ -467,9 +467,6 @@ public class IncidentesRegistradosController extends Controller implements Initi
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
 
     private void addListener() {
         contenedor.widthProperty().addListener(w -> {

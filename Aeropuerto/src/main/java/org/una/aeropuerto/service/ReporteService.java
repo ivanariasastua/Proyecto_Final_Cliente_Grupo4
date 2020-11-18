@@ -14,6 +14,7 @@ import org.una.aeropuerto.util.Request;
 import org.una.aeropuerto.util.Respuesta;
 import org.una.aeropuerto.dto.EmpleadosMarcajesDTO;
 import org.una.aeropuerto.util.UserAuthenticated;
+import org.una.aeropuerto.util.TransactionRecorder;
 
 /**
  *
@@ -36,6 +37,9 @@ public class ReporteService {
             if(request.isError())
                 return new Respuesta(false, request.getError());
             Object result = (String) request.readEntity(String.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Generar reporte de gastos");
+            }catch(Exception ex){}
             return new Respuesta(true, "Reporte", result);
         }catch(Exception ex){
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
@@ -57,6 +61,9 @@ public class ReporteService {
             if(request.isError())
                 return new Respuesta(false, request.getError());
             Object result = (String) request.readEntity(String.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Generar reporte de gastos");
+            }catch(Exception ex){}
             return new Respuesta(true, "Reporte", result);
         }catch(Exception ex){
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
@@ -78,6 +85,9 @@ public class ReporteService {
             if(request.isError())
                 return new Respuesta(false, request.getError());
             Object result = (String) request.readEntity(String.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Generar reporte de gastos");
+            }catch(Exception ex){}
             return new Respuesta(true, "Reporte", result);
         }catch(Exception ex){
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
@@ -99,6 +109,9 @@ public class ReporteService {
                 return new Respuesta(false, request.getError());
             }
             Object result = (String) request.readEntity(String.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Generar reporte de gastos");
+            }catch(Exception ex){}
             return new Respuesta(true, "Reporte", result);
         } catch (Exception ex) {
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
@@ -127,6 +140,9 @@ public class ReporteService {
                 return new Respuesta(false, request.getError());
             }
             Object result = (String) request.readEntity(String.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Generar reporte de incidentes");
+            }catch(Exception ex){}
             return new Respuesta(true, "Reporte", result);
         } catch (Exception ex) {
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");
@@ -145,6 +161,9 @@ public class ReporteService {
                 return new Respuesta(false, request.getError());
             }
             Object result = (String) request.readEntity(String.class);
+            try{
+                TransactionRecorder.registrarTransaccion("Generar reporte de horas laboradas");
+            }catch(Exception ex){}
             return new Respuesta(true, "Reporte", result);
         } catch (Exception ex) {
             return new Respuesta(false, "No se pudo establecer comunicación con el servidor");

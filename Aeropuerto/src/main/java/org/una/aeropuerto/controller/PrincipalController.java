@@ -5,6 +5,7 @@
  */
 package org.una.aeropuerto.controller;
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import static java.lang.System.exit;
@@ -63,6 +64,18 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML private ScrollPane spMenu;
     @FXML private VBox vbMenu;
     @FXML private BorderPane bpPrincipal;
+    @FXML private Accordion acMenu;
+    @FXML private TitledPane tpReportes;
+    @FXML private TitledPane tpAdministracion;
+    @FXML private TitledPane tpTransacciones;
+    @FXML private TitledPane tpInicio;
+    @FXML private TitledPane tpEmpleados;
+    @FXML private TitledPane tpAreas;
+    @FXML private TitledPane tpGastos;
+    @FXML private TitledPane tpIncidentes;
+    @FXML private VBox vbDesarrollo;
+    @FXML private ListView<String> lvDesarrollo;
+    @FXML private Pane paneContenerdor;
 
     private HamburgerBackArrowBasicTransition deslizar;
     private Boolean isShow = false;
@@ -70,35 +83,8 @@ public class PrincipalController extends Controller implements Initializable {
     private AuthenticationRequest authetication;
     private final ParametrosSistemaService service = new ParametrosSistemaService();
     private Map<String,String> modoDesarrollo;
-    
-    @FXML
-    private TitledPane tpReportes;
-    @FXML
-    private TitledPane tpAdministracion;
-    @FXML
-    private TitledPane tpTransacciones;
-    @FXML
-    private TitledPane tpInicio;
-    @FXML
-    private TitledPane tpEmpleados;
-    @FXML
-    private TitledPane tpAreas;
-    @FXML
-    private TitledPane tpGastos;
-    @FXML
-    private TitledPane tpIncidentes;
-    @FXML
-    private VBox vbDesarrollo;
-    @FXML
-    private ListView<String> lvDesarrollo;
-    @FXML
-    private Pane paneContenerdor;
-    
     private ObservableList<TitledPane> menu;
-    @FXML
-    private Accordion acMenu;
-    @FXML
-    private MenuItem miDesarollo;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -234,7 +220,6 @@ public class PrincipalController extends Controller implements Initializable {
     @FXML
     private void accionCategorias(ActionEvent event) {
         FlowController.getInstance().goViewPanel(paneContenerdor, "CategoriasIncidentes");
-
     }
 
     @FXML
@@ -259,13 +244,13 @@ public class PrincipalController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
-        miDesarollo.setVisible(UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         FlowController.getInstance().goViewPanel(paneContenerdor, "Inicio");
         miCodigo1.setVisible(UserAuthenticated.getInstance().getRol().getNombre().equals("GERENTE") || UserAuthenticated.getInstance().isRol("ADMINISTRADOR"));
         smUser.setText(UserAuthenticated.getInstance().getUsuario().getNombre());
         lblCedula1.setText(UserAuthenticated.getInstance().getUsuario().getCedula());
         lblRol1.setText(UserAuthenticated.getInstance().getRol().getNombre());
         visualizarTitledPane();
+        AppContext.getInstance().set("develop", false);
     }
 
     @FXML
@@ -373,10 +358,6 @@ public class PrincipalController extends Controller implements Initializable {
         return false;
     }
 
-    @Override
-    public void cargarTema() {
-    }
-    
     private void visualizarTitledPane(){
         acMenu.getPanes().clear();
         acMenu.getPanes().addAll(menu);
@@ -395,7 +376,7 @@ public class PrincipalController extends Controller implements Initializable {
         if(!UserAuthenticated.getInstance().isRol("AUDITOR") && !UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             acMenu.getPanes().remove(tpTransacciones);
         }
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR") && (boolean)AppContext.getInstance().get("develop")){
             lvDesarrollo.setVisible(true);
             vbDesarrollo.setVisible(true);
             lvDesarrollo.setPrefWidth(250);
@@ -410,9 +391,5 @@ public class PrincipalController extends Controller implements Initializable {
     
     public void cerrarWindow(){
         exit(1);
-    }
-
-    @FXML
-    private void cbDesarrollo(ActionEvent event) {
     }
 }

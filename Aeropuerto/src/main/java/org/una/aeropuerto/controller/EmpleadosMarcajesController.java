@@ -120,10 +120,6 @@ public class EmpleadosMarcajesController extends Controller implements Initializ
         colHoraSalida.setCellValueFactory((p) -> new SimpleStringProperty(String.valueOf(formatoHora.format(p.getValue().getHoraSalida()))));
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
     @FXML
     private void accionSeleccionar(ActionEvent event) {
         btnHacerMarcaje.setVisible(true);

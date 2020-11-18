@@ -160,11 +160,6 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         };
     }
     
-    @Override
-    public void cargarTema() {
-        
-    }
-    
     private void ajustarPantalla(){
         contenedor.widthProperty().addListener( w -> {
             ajustarAncho(contenedor.getWidth());

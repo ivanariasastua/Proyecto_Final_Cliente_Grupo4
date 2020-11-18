@@ -101,10 +101,6 @@ public class ReporteIncidentesController extends Controller implements Initializ
     }
 
     @Override
-    public void cargarTema() {
-    }
-
-    @Override
     public void initialize() {
         responsableSelec = new EmpleadosDTO();
         emisorSelec = new EmpleadosDTO();

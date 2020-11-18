@@ -80,6 +80,7 @@ public class AreasTrabajosController extends Controller implements Initializable
     @FXML
     private ColumnConstraints row;
     private ListView<String> lvDesarrollo;
+    private Controller controller;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -267,10 +268,6 @@ public class AreasTrabajosController extends Controller implements Initializable
         }
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
     private void addListener() {
         contenedor.widthProperty().addListener(W -> {
             adjustWidth(contenedor.getWidth());
@@ -305,4 +302,5 @@ public class AreasTrabajosController extends Controller implements Initializable
             FlowController.getInstance().goViewInNoResizableWindow("MantAreasTrabajo", false, StageStyle.DECORATED);
         }
     }
+
 }

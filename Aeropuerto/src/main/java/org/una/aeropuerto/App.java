@@ -19,6 +19,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         AppContext.getInstance();
+        AppContext.getInstance().set("develop", false);
         FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
     }
 

@@ -168,8 +168,4 @@ public class BuscarAreaController extends Controller implements Initializable {
         tvAreas.getItems().clear();
     }
 
-    @Override
-    public void cargarTema() {
-    }
-
 }

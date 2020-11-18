@@ -59,11 +59,6 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     private ListView<String> lvDesarrollo;
     @FXML
     private BorderPane bpRoot;
-    
-    @Override
-    public void cargarTema() {
-        
-    }
 
     @Override
     public void initialize() {

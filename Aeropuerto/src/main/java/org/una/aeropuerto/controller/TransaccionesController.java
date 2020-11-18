@@ -174,11 +174,7 @@ public class TransaccionesController extends Controller implements Initializable
         }
         return false;
     }
-    
-    @Override
-    public void cargarTema() {
-    }
-    
+
     private JasperPrint crearJasperPrint() throws FileNotFoundException{
         if(listaReporte != null && !listaReporte.isEmpty()){
             try {
