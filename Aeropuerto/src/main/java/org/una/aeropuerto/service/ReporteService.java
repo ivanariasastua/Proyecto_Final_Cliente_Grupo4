@@ -149,13 +149,14 @@ public class ReporteService {
         }
     }
     
-    public Respuesta reporteHorasLaboradas(String cedula, Date fechaInicial, Date fechaFinal) {
+    public Respuesta reporteHorasLaboradas(String cedula, Date fechaInicial, Date fechaFinal, String encargado) {
         try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("cedula", cedula);
             parametros.put("fecha1", fechaInicial);
             parametros.put("fecha2", fechaFinal);
-            Request request = new Request("reportes/reporteHoras", "/{cedula}/{fecha1}/{fecha2}", parametros);
+            parametros.put("encargado", encargado);
+            Request request = new Request("reportes/reporteHoras", "/{cedula}/{fecha1}/{fecha2}/{encargado}", parametros);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError());

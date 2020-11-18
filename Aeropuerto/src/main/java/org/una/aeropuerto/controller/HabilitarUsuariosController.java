@@ -130,44 +130,38 @@ public class HabilitarUsuariosController extends Controller implements Initializ
     
     @FXML
     private void actFiltrarEmpleados(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
+        lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Buscar"));
+        if(cbFiltro.getSelectionModel().getSelectedItem() != null){
+            tvEmpleados.getItems().clear();
+            AppContext.getInstance().set("Task", TaskFiltradoEmpleadoNoAprobado());
+            FlowController.getInstance().goViewCargar();
         }else{
-            if(cbFiltro.getSelectionModel().getSelectedItem() != null){
-                tvEmpleados.getItems().clear();
-                AppContext.getInstance().set("Task", TaskFiltradoEmpleadoNoAprobado());
-                FlowController.getInstance().goViewCargar();
-            }else{
-                Mensaje.show(Alert.AlertType.WARNING, "No es posible filtrar", "Elija un rol para filtrar los empleados no aprobados");
-            }
+            Mensaje.show(Alert.AlertType.WARNING, "No es posible filtrar", "Elija un rol para filtrar los empleados no aprobados");
         }
     }
 
     @FXML
     private void actHabilitarEmpleado(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Habilitar"));
-        }else{
-            Respuesta res;
-            String empAprobados = "";
-            empleadosSeleccionados = tvEmpleados.getSelectionModel().getSelectedItems();
-            if(!empleadosSeleccionados.isEmpty()){
-                for(EmpleadosDTO empleado : empleadosSeleccionados){
-                    res = empService.Aprobar(empleado.getId());
-                    if(res.getEstado()){
-                        empAprobados += empleado.getNombre()+" "+empleado.getCedula()+"\n";
-                        tvEmpleados.getItems().remove(empleado);
-                    }else{
-                        System.out.println(empleado.getId());
-                        System.out.println("error");
-                        System.out.println(res.getMensaje());
-                        System.out.println(res.getMensajeInterno());
-                    }
+        lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Habilitar"));
+        Respuesta res;
+        String empAprobados = "";
+        empleadosSeleccionados = tvEmpleados.getSelectionModel().getSelectedItems();
+        if(!empleadosSeleccionados.isEmpty()){
+            for(EmpleadosDTO empleado : empleadosSeleccionados){
+                res = empService.Aprobar(empleado.getId());
+                if(res.getEstado()){
+                    empAprobados += empleado.getNombre()+" "+empleado.getCedula()+"\n";
+                    tvEmpleados.getItems().remove(empleado);
+                }else{
+                    System.out.println(empleado.getId());
+                    System.out.println("error");
+                    System.out.println(res.getMensaje());
+                    System.out.println(res.getMensajeInterno());
                 }
-                Mensaje.show(Alert.AlertType.CONFIRMATION, "Empleados Aprobados", empAprobados);
-            }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Datos no seleccionados", "Seleccionar empleados de la tabla para aprobarlos.");
             }
+            Mensaje.show(Alert.AlertType.CONFIRMATION, "Empleados Aprobados", empAprobados);
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Datos no seleccionados", "Seleccionar empleados de la tabla para aprobarlos.");
         }
     }
     

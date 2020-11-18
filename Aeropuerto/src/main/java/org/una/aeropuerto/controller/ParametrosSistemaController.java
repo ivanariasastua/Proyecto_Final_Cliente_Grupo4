@@ -184,42 +184,35 @@ public class ParametrosSistemaController extends Controller implements Initializ
     
     @FXML
     private void filtrarParametros(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Filtrar"));
-        }else{
-            if(dpInicio.getValue() != null && dpFinal.getValue() != null){
-                if(dpInicio.getValue().isBefore(dpFinal.getValue()) ){
-                    tvParametros.getItems().clear();
-                    AppContext.getInstance().set("Task", TaskFiltrarParametros());
-                    FlowController.getInstance().goViewCargar();
-                }else{
-                    Mensaje.show(Alert.AlertType.WARNING, "Fechas Incorrectas", "El orden de las fechas esta invertido");
-                }
+        lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Filtrar"));
+        if(dpInicio.getValue() != null && dpFinal.getValue() != null){
+            if(dpInicio.getValue().isBefore(dpFinal.getValue()) ){
+                tvParametros.getItems().clear();
+                AppContext.getInstance().set("Task", TaskFiltrarParametros());
+                FlowController.getInstance().goViewCargar();
             }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Datos Faltantes", "El rango de fechas para filtrar no esta seleccionado");
-            } 
-        }
+                Mensaje.show(Alert.AlertType.WARNING, "Fechas Incorrectas", "El orden de las fechas esta invertido");
+            }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Datos Faltantes", "El rango de fechas para filtrar no esta seleccionado");
+        } 
     }
 
     @FXML
     private void inactivarParametro(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar"));
-        }else{
-            if(parametroSeleccionado != null){
-                parametroSeleccionado.setEstado(Boolean.FALSE);
-                Respuesta res = paramService.update(parametroSeleccionado, parametroSeleccionado.getId());
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.CONFIRMATION, "Éxito", "El parámetro del sistema fue inactivado con éxito");
-                    tvParametros.getItems().remove(parametroSeleccionado);
-                }else{
-                    Mensaje.show(Alert.AlertType.WARNING, "Error", "No se pudo inactivar el parámetro del sistema");
-                }
+        lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Inactivar"));
+        if(parametroSeleccionado != null){
+            parametroSeleccionado.setEstado(Boolean.FALSE);
+            Respuesta res = paramService.update(parametroSeleccionado, parametroSeleccionado.getId());
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Éxito", "El parámetro del sistema fue inactivado con éxito");
+                tvParametros.getItems().remove(parametroSeleccionado);
             }else{
-                Mensaje.show(Alert.AlertType.WARNING, "Datos Insuficientes", "No se ha seleccionado un parámetro para inactivar");
+                Mensaje.show(Alert.AlertType.WARNING, "Error", "No se pudo inactivar el parámetro del sistema");
             }
+        }else{
+            Mensaje.show(Alert.AlertType.WARNING, "Datos Insuficientes", "No se ha seleccionado un parámetro para inactivar");
         }
-        
     }
 
     @FXML
@@ -235,58 +228,52 @@ public class ParametrosSistemaController extends Controller implements Initializ
 
     @FXML
     private void agregarEditarParametro(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Agregar"));
-        }else{
-            Respuesta res;
-            ParametrosSistemaDTO parametro = new ParametrosSistemaDTO();
-            if(parametroSeleccionado != null){
-                parametro.setCodigoIdentificador(txtCodigo.getText());
-                parametro.setDescripcion(txtDescripcion.getText());
-                parametro.setEstado(parametroSeleccionado.isEstado());
-                parametro.setFechaModificacion(parametroSeleccionado.getFechaModificacion());
-                parametro.setFechaRegistro(parametroSeleccionado.getFechaRegistro());
-                parametro.setId(parametroSeleccionado.getId());
-                parametro.setValor(txtValor.getText());
-                res = paramService.modificarParametro(parametroSeleccionado.getId(), parametro);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.CONFIRMATION, "Actualización Éxitosa", "El parámetro del sistema se actualizó con éxito");
-                    parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
-                    tvParametros.getItems().remove(parametroSeleccionado);
-                    tvParametros.getItems().add(parametro);
-                    resetearCampos();
-                }else{
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló la acualización del parámetro del sistema");
-                }
+        lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Agregar"));
+        Respuesta res;
+        ParametrosSistemaDTO parametro = new ParametrosSistemaDTO();
+        if(parametroSeleccionado != null){
+            parametro.setCodigoIdentificador(txtCodigo.getText());
+            parametro.setDescripcion(txtDescripcion.getText());
+            parametro.setEstado(parametroSeleccionado.isEstado());
+            parametro.setFechaModificacion(parametroSeleccionado.getFechaModificacion());
+            parametro.setFechaRegistro(parametroSeleccionado.getFechaRegistro());
+            parametro.setId(parametroSeleccionado.getId());
+            parametro.setValor(txtValor.getText());
+            res = paramService.modificarParametro(parametroSeleccionado.getId(), parametro);
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Actualización Éxitosa", "El parámetro del sistema se actualizó con éxito");
+                parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                tvParametros.getItems().remove(parametroSeleccionado);
+                tvParametros.getItems().add(parametro);
+                resetearCampos();
             }else{
-                parametro.setCodigoIdentificador(txtCodigo.getText());
-                parametro.setDescripcion(txtDescripcion.getText());
-                parametro.setValor(txtValor.getText());
-                parametro.setEstado(Boolean.TRUE);
-                res = paramService.guardarParametro(parametro);
-                if(res.getEstado()){
-                    Mensaje.show(Alert.AlertType.CONFIRMATION, "Guardado Éxitosa", "El parámetro del sistema se guardó con éxito");
-                    parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
-                    tvParametros.getItems().add(parametro);
-                    resetearCampos();
-                }else{
-                    Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló el guardado del parámetro del sistema");
-                }
+                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló la acualización del parámetro del sistema");
+            }
+        }else{
+            parametro.setCodigoIdentificador(txtCodigo.getText());
+            parametro.setDescripcion(txtDescripcion.getText());
+            parametro.setValor(txtValor.getText());
+            parametro.setEstado(Boolean.TRUE);
+            res = paramService.guardarParametro(parametro);
+            if(res.getEstado()){
+                Mensaje.show(Alert.AlertType.CONFIRMATION, "Guardado Éxitosa", "El parámetro del sistema se guardó con éxito");
+                parametro = (ParametrosSistemaDTO) res.getResultado("Parametros_Sistema");
+                tvParametros.getItems().add(parametro);
+                resetearCampos();
+            }else{
+                Mensaje.show(Alert.AlertType.ERROR, "Error", "Falló el guardado del parámetro del sistema");
             }
         }
     }
 
     @FXML
     private void limpiarCampos(ActionEvent event) {
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
-            lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Campos"));
-        }else{
-            parametroSeleccionado = null;
-            txtCodigo.clear();
-            txtDescripcion.clear();
-            txtValor.clear();
-            txtCodigo.setEditable(true);
-        }
+        lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Limpiar Campos"));
+        parametroSeleccionado = null;
+        txtCodigo.clear();
+        txtDescripcion.clear();
+        txtValor.clear();
+        txtCodigo.setEditable(true);
     }
     
     private void addListener(){

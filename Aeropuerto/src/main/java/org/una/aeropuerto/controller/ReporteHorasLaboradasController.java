@@ -129,11 +129,12 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
                 if(validarDatos()){
                     Date fecha1 = Date.from(dpInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
                     Date fecha2 = Date.from(dpFinal.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                    EmpleadosDTO encargado = UserAuthenticated.getInstance().getUsuario();
                     Respuesta respuesta;
                     if(txtCedula.getText().isBlank()){
-                        respuesta = reporteService.reporteHorasLaboradas("null", fecha1, fecha2);
+                        respuesta = reporteService.reporteHorasLaboradas("null", fecha1, fecha2, encargado.getNombre());
                     }else{
-                        respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2);
+                        respuesta = reporteService.reporteHorasLaboradas(txtCedula.getText(), fecha1, fecha2, encargado.getNombre());
                     }
 
                     if(respuesta.getEstado()){
