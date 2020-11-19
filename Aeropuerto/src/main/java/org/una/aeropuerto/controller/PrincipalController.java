@@ -376,7 +376,7 @@ public class PrincipalController extends Controller implements Initializable {
         if(!UserAuthenticated.getInstance().isRol("AUDITOR") && !UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             acMenu.getPanes().remove(tpTransacciones);
         }
-        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR") && (boolean)AppContext.getInstance().get("develop")){
+        if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.setVisible(true);
             vbDesarrollo.setVisible(true);
             lvDesarrollo.setPrefWidth(250);

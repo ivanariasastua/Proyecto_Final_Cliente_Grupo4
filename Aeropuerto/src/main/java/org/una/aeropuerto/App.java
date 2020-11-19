@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import javafx.stage.StageStyle;
-import org.una.aeropuerto.util.AppContext;
 import org.una.aeropuerto.util.FlowController;
 
 /**
@@ -18,8 +17,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        AppContext.getInstance();
-        AppContext.getInstance().set("develop", false);
         FlowController.getInstance().goViewInNoResizableWindow("LogIn", Boolean.TRUE, StageStyle.UNDECORATED);
     }
 
