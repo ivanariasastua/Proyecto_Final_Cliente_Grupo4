@@ -104,7 +104,7 @@
                                     <Insets right="25.0" top="100.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXButton onAction="#actLimpiarGastoS" prefHeight="43.0" prefWidth="153.0" styleClass="button_3" text="Limpiar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                              <JFXButton minWidth="-Infinity" onAction="#actLimpiarGastoS" prefHeight="43.0" prefWidth="153.0" styleClass="button_3" text="Limpiar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets right="190.0" top="100.0" />
                                  </GridPane.margin>
