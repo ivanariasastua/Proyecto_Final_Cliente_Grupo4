@@ -184,6 +184,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
     private void actSeleccionarEmpleado(MouseEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Seleccionar Empleado"));
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", Boolean.FALSE, StageStyle.DECORATED);
         }else{
             AppContext.getInstance().set("empSelect", null);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", Boolean.FALSE, StageStyle.DECORATED);
