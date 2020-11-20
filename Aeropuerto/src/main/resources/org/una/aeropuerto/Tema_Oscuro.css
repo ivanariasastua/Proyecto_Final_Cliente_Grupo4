@@ -8,7 +8,8 @@ and open the template in the editor.
     Author     : ivana
 */
 #imvLogo{
-    -fx-image:url('resources/Logo2.png')
+    -fx-image:url('resources/Logo2.png');
+    -fx-opacity: 0.6;
 }
 
 .progreso{
