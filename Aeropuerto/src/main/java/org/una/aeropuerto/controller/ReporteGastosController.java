@@ -256,7 +256,7 @@ public class ReporteGastosController extends Controller implements Initializable
             ajustarAncho(contenedor.getWidth());
         });
         contenedor.heightProperty().addListener( h -> {
-            ajustarAlto(Double.NaN);
+            ajustarAlto(contenedor.getHeight());
         });
     }
     

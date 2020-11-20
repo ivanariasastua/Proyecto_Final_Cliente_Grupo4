@@ -168,7 +168,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
             ajustarAncho(contenedor.getWidth());
         });
         contenedor.heightProperty().addListener( h -> {
-            ajustarAlto(Double.NaN);
+            ajustarAlto(contenedor.getHeight());
         });
     }
     
