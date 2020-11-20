@@ -249,7 +249,7 @@ public class ReporteIncidentesController extends Controller implements Initializ
             ajustarAncho(contenedor.getWidth());
         });
         contenedor.heightProperty().addListener(h -> {
-            ajustarAlto(Double.NaN);
+            ajustarAlto(contenedor.getHeight());
         });
     }
 
