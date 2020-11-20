@@ -129,7 +129,7 @@ public class AreasTrabajosController extends Controller implements Initializable
         colEstado.setCellValueFactory((p) -> new SimpleStringProperty(estado(p.getValue().isEstado())));
         TableColumn<AreasTrabajosDTO, String> colJefe = new TableColumn<>("Jefe del área");
         colJefe.setCellValueFactory((p) -> new SimpleStringProperty(p.getValue().getJefe() == null ? "Sin jefe" : p.getValue().getJefe().getNombre()));
-        tablaAreasTrabajo.getColumns().addAll(colNombre, colDesc, colEstado);
+        tablaAreasTrabajo.getColumns().addAll(colNombre, colDesc, colEstado,colJefe);
     }
 
     @FXML
