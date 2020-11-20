@@ -204,6 +204,7 @@ public class ReporteIncidentesController extends Controller implements Initializ
                             System.out.println(ex);
                         }
                     } else {
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Reporte no generado", "No existen datos suficientes para generar el reporte");
                         System.out.println("error " + res.getMensaje());
                     }
                 }
