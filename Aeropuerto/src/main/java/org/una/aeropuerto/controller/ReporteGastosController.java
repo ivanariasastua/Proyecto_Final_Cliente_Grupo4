@@ -205,7 +205,7 @@ public class ReporteGastosController extends Controller implements Initializable
             EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
             txtResponsable.clear();
             if(emplSeleccionado != null)
-                txtServicio.setText(emplSeleccionado.getCedula());
+                txtResponsable.setText(emplSeleccionado.getCedula());
         }
         
     }
@@ -217,7 +217,7 @@ public class ReporteGastosController extends Controller implements Initializable
                     empresa = "null";
                 else
                     empresa = txtEmpresa.getText();
-                if(txtServicio.getText() == null || txtEmpresa.getText().isEmpty())
+                if(txtServicio.getText() == null || txtServicio.getText().isEmpty())
                     servicio = "null";
                 else
                     servicio = txtServicio.getText();
