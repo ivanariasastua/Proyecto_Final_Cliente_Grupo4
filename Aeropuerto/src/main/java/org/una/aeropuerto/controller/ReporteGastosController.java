@@ -168,7 +168,7 @@ public class ReporteGastosController extends Controller implements Initializable
                             System.out.println(ex);
                         }
                     }else{
-                        System.out.println("Error: "+res.getMensajeInterno());
+                        Mensaje.show(Alert.AlertType.WARNING, "Generar Reporte", res.getMensaje());
                     }
                 }
                 return true;
