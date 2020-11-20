@@ -126,6 +126,7 @@ public class ReporteIncidentesController extends Controller implements Initializ
             AppContext.getInstance().set("permisoFiltrar", true);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             responsableSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            txtResponsable.clear();
             if (responsableSelec != null) {
                 txtResponsable.setText(responsableSelec.getNombre());
             }
@@ -141,6 +142,7 @@ public class ReporteIncidentesController extends Controller implements Initializ
             AppContext.getInstance().set("permisoFiltrar", true);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             emisorSelec = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            txtEmisor.clear();
             if (emisorSelec != null) {
                 txtEmisor.setText(emisorSelec.getNombre());
             }
@@ -166,6 +168,8 @@ public class ReporteIncidentesController extends Controller implements Initializ
         } else {
             AppContext.getInstance().set("Task", reporteTask());
             FlowController.getInstance().goViewCargar();
+            txtEmisor.clear();
+            txtResponsable.clear();
         }
     }
     

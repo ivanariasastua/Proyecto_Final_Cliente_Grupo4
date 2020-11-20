@@ -30,6 +30,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
@@ -127,6 +128,9 @@ public class ReporteGastosController extends Controller implements Initializable
         }else{
             AppContext.getInstance().set("Task", reporteTask());
             FlowController.getInstance().goViewCargar();
+            txtEmpresa.clear();
+            txtResponsable.clear();
+            txtServicio.clear();
         }
     }
     
@@ -174,14 +178,15 @@ public class ReporteGastosController extends Controller implements Initializable
     }
 
     @FXML
-    private void actBuscarServicio(ActionEvent event) {
+    private void actBuscarServicio(MouseEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Servicio"));
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicio", false, StageStyle.DECORATED);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.DECORATED);
         }else{
             AppContext.getInstance().set("servSelect", null);
-            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicio", false, StageStyle.DECORATED);
+            FlowController.getInstance().goViewInNoResizableWindow("BuscarServicios", false, StageStyle.DECORATED);
             ServiciosDTO servicioDto = (ServiciosDTO) AppContext.getInstance().get("servSelect");
+            txtServicio.clear();
             if(servicioDto != null){
                 txtServicio.setText(servicioDto.getNombre());
             }
@@ -190,7 +195,7 @@ public class ReporteGastosController extends Controller implements Initializable
     }
 
     @FXML
-    private void actBuscarResponsable(ActionEvent event) {
+    private void actBuscarResponsable(MouseEvent event) {
         if(UserAuthenticated.getInstance().isRol("ADMINISTRADOR")){
             lvDesarrollo.getSelectionModel().select(modoDesarrollo.get("Responsable"));
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
@@ -198,6 +203,7 @@ public class ReporteGastosController extends Controller implements Initializable
             AppContext.getInstance().set("empSelect", null);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", false, StageStyle.DECORATED);
             EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            txtResponsable.clear();
             if(emplSeleccionado != null)
                 txtServicio.setText(emplSeleccionado.getCedula());
         }

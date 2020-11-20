@@ -118,6 +118,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
         }else{
             AppContext.getInstance().set("Task", reporteTask());
             FlowController.getInstance().goViewCargar();
+            txtCedula.clear();
         }
         
     }
@@ -154,6 +155,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
                         }
                     }else{
                         System.out.println(respuesta.getMensajeInterno());
+                        Mensaje.show(Alert.AlertType.INFORMATION, "Reporte no generado", "No existen datos suficientes para generar el reporte");
                     }
                 }
                 return true;
@@ -186,6 +188,7 @@ public class ReporteHorasLaboradasController extends Controller implements Initi
             AppContext.getInstance().set("empSelect", null);
             FlowController.getInstance().goViewInNoResizableWindow("BuscarEmpleado", Boolean.FALSE, StageStyle.DECORATED);
             EmpleadosDTO emplSeleccionado = (EmpleadosDTO) AppContext.getInstance().get("empSelect");
+            txtCedula.clear();
             if(emplSeleccionado != null){
                 txtCedula.setText(emplSeleccionado.getCedula());
             }  
